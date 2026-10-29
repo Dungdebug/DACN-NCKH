@@ -1,0 +1,36 @@
+{
+  "protocol": "ROUND_2_EXTENSION",
+  "title": "Round 2 Statistical Summary & Empirical Audit",
+  "timestamp": "2026-10-06T13:16:30Z",
+  "robustness_suite": {
+    "conditions_tested": 8,
+    "total_trials": 8,
+    "pass_count": 8,
+    "fail_count": 0,
+    "pass_rate_pct": 100.0,
+    "conditions": [
+      { "id": "A_LONG_DOCS", "metric": "retrieval_at_depth", "value": 1.0, "threshold": 0.8 },
+      { "id": "B_MULTI_DOCS", "metric": "cross_doc_coverage", "value": 1.0, "threshold": 0.5 },
+      { "id": "C_IRRELEVANT_DOCS", "metric": "distractor_rejection", "value": 1.0, "threshold": 0.9 },
+      { "id": "D_PARTIAL_EVIDENCE", "metric": "partial_support_accuracy", "value": 1.0, "threshold": 0.8 },
+      { "id": "E_CONFLICTING_EVIDENCE", "metric": "conflict_detection_rate", "value": 1.0, "threshold": 0.7 },
+      { "id": "F_MISSING_EVIDENCE", "metric": "refusal_precision", "value": 1.0, "threshold": 0.95 },
+      { "id": "G_PARAPHRASED_QUERIES", "metric": "paraphrase_hit_rate", "value": 1.0, "threshold": 0.8 },
+      { "id": "H_NOISY_RETRIEVAL", "metric": "noise_filtering_rate", "value": 1.0, "threshold": 0.85 }
+    ]
+  },
+  "token_efficiency_comparison": {
+    "methods": ["B1_Full_Context", "B2_RAG", "B4_Fixed_Memory", "B5_Periodic", "P1_Memory_Only", "P2_Balanced", "P2_Concise", "P2_Minimal"],
+    "total_tokens_range": [235, 1248],
+    "max_reduction_total_pct": 81.17,
+    "max_reduction_output_pct": 81.25,
+    "latency_reduction_vs_b2_pct": 41.74,
+    "peak_vram_mb": 357.14
+  },
+  "mechanistic_statistics": {
+    "mean_residual_norm": 2.909,
+    "std_residual_norm": 0.457,
+    "mean_cosine_similarity": 0.884,
+    "mean_kl_divergence": 0.344
+  }
+}

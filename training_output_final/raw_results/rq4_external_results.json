@@ -1,0 +1,104 @@
+{
+  "benchmark": "RQ4_Continual_Forgetting",
+  "runs": [
+    {
+      "method": "B4",
+      "seed": 42,
+      "acc_initial_d0": 20.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 30.0,
+      "forgetting_f5": 0.0,
+      "forgetting_f10": 0.0,
+      "forgetting_f20": -10.0
+    },
+    {
+      "method": "B4",
+      "seed": 43,
+      "acc_initial_d0": 10.0,
+      "acc_plus_5": 10.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 30.0,
+      "forgetting_f5": 0.0,
+      "forgetting_f10": -10.0,
+      "forgetting_f20": -20.0
+    },
+    {
+      "method": "B4",
+      "seed": 44,
+      "acc_initial_d0": 10.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 30.0,
+      "forgetting_f5": -10.0,
+      "forgetting_f10": -10.0,
+      "forgetting_f20": -20.0
+    },
+    {
+      "method": "B5",
+      "seed": 42,
+      "acc_initial_d0": 20.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 20.0,
+      "forgetting_f5": 0.0,
+      "forgetting_f10": 0.0,
+      "forgetting_f20": 0.0
+    },
+    {
+      "method": "B5",
+      "seed": 43,
+      "acc_initial_d0": 30.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 10.0,
+      "acc_plus_20": 20.0,
+      "forgetting_f5": 10.0,
+      "forgetting_f10": 20.0,
+      "forgetting_f20": 10.0
+    },
+    {
+      "method": "B5",
+      "seed": 44,
+      "acc_initial_d0": 10.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 10.0,
+      "forgetting_f5": -10.0,
+      "forgetting_f10": -10.0,
+      "forgetting_f20": 0.0
+    },
+    {
+      "method": "P1",
+      "seed": 42,
+      "acc_initial_d0": 10.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 10.0,
+      "forgetting_f5": -10.0,
+      "forgetting_f10": -10.0,
+      "forgetting_f20": 0.0
+    },
+    {
+      "method": "P1",
+      "seed": 43,
+      "acc_initial_d0": 30.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 20.0,
+      "forgetting_f5": 10.0,
+      "forgetting_f10": 10.0,
+      "forgetting_f20": 10.0
+    },
+    {
+      "method": "P1",
+      "seed": 44,
+      "acc_initial_d0": 20.0,
+      "acc_plus_5": 20.0,
+      "acc_plus_10": 20.0,
+      "acc_plus_20": 20.0,
+      "forgetting_f5": 0.0,
+      "forgetting_f10": 0.0,
+      "forgetting_f20": 0.0
+    }
+  ]
+}

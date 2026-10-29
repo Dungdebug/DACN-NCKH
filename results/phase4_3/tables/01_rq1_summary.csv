@@ -1,0 +1,13 @@
+method,dataset,primary_metric,n_observations,mean,std,ci_95_bootstrap_lower,ci_95_bootstrap_upper,avg_target_prob,target_prob_ci_95_lower,target_prob_ci_95_upper,seed_42_mean,seed_43_mean,seed_44_mean,evaluation_condition,source_artifact
+B1,MK-NIAH,accuracy,300,0.4,0.4899,0.3433,0.45,0.5068,0.492,0.5214,0.02,0.57,0.61,Prompt-context (truncated to 512 tokens),results/phase4_1/rq1/rq1_raw_results.json
+B4,MK-NIAH,accuracy,300,0.0,0.0,0.0,0.0,0.0479,0.0452,0.0507,0.0,0.0,0.0,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+B5,MK-NIAH,accuracy,300,0.0,0.0,0.0,0.0,0.0349,0.0317,0.0382,0.0,0.0,0.0,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+P1,MK-NIAH,accuracy,300,0.0,0.0,0.0,0.0,0.1318,0.1249,0.1379,0.0,0.0,0.0,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+B1,QASPER,token_f1,30,0.259,0.1933,0.193,0.3435,0.1705,0.0749,0.2761,0.2397,0.2474,0.29,Prompt-context (truncated to 512 tokens),results/phase4_1/rq1/rq1_raw_results.json
+B4,QASPER,token_f1,30,0.1025,0.0933,0.07,0.1368,0.1431,0.0653,0.2336,0.0965,0.1181,0.0929,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+B5,QASPER,token_f1,30,0.0957,0.0862,0.0662,0.1292,0.1434,0.0525,0.2452,0.09,0.1052,0.0918,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+P1,QASPER,token_f1,30,0.0896,0.103,0.0548,0.1287,0.1253,0.0508,0.2102,0.0968,0.087,0.0848,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+B1,LongHealth,accuracy,60,0.2,0.4,0.1,0.3167,0.0077,0.0,0.0186,0.2,0.2,0.2,Prompt-context (truncated to 512 tokens),results/phase4_1/rq1/rq1_raw_results.json
+B4,LongHealth,accuracy,60,0.2333,0.423,0.1333,0.35,0.1349,0.1135,0.1595,0.3,0.25,0.15,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+B5,LongHealth,accuracy,60,0.2,0.4,0.1167,0.3,0.0938,0.0757,0.1176,0.2,0.15,0.25,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json
+P1,LongHealth,accuracy,60,0.1667,0.3727,0.0667,0.2671,0.1308,0.0986,0.1694,0.25,0.25,0.0,Context-evicted (parameter-only),results/phase4_1/rq1/rq1_raw_results.json

@@ -1,0 +1,5 @@
+# Mục 1: Tri thức Cốt lõi
+
+Đặc tính quan trọng của SA-CMS là lưu trữ tri thức tham số hóa cục bộ ngay cả khi ngắt kết nối mạng.
+
+# Mục 2: Kiểm thử

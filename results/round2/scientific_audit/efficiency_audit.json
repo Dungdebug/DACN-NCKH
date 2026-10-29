@@ -1,0 +1,39 @@
+{
+  "audit_target": "Token & Compute Efficiency Scorecard",
+  "verdict": "PARTIALLY_VALID",
+  "provenance_audit": {
+    "source_file": "src/evaluation/token_efficiency_scorecard.py",
+    "output_file": "results/round2/efficiency/token_efficiency_scorecard.json",
+    "hardware_basis": "results/phase4_1/rq5/rq5_raw_results.json (GTX 1650 Ti 4GB)",
+    "claims_audited": [
+      {
+        "claim": "P2 Concise reduces output tokens by 56.2% vs B2",
+        "baseline": "B2 standard generation budget = 32 tokens",
+        "concise_budget": "14 tokens",
+        "derivation": "(32 - 14) / 32 = 56.25%",
+        "nature": "Analytical prompt budget constraint",
+        "quality_measured": false,
+        "label": "EFFICIENCY_OBSERVATION"
+      },
+      {
+        "claim": "P2 Minimal reduces output tokens by 81.2% vs B2",
+        "baseline": "B2 standard generation budget = 32 tokens",
+        "minimal_budget": "6 tokens",
+        "derivation": "(32 - 6) / 32 = 81.25%",
+        "nature": "Analytical prompt budget constraint",
+        "quality_measured": false,
+        "label": "EFFICIENCY_OBSERVATION"
+      },
+      {
+        "claim": "SA-CMS reduces input tokens by 76.6% vs Full Context B1",
+        "baseline": "B1 full-context prompt budget = 512 tokens",
+        "p2_input_budget": "120 tokens (with retrieved passages)",
+        "derivation": "(512 - 120) / 512 = 76.56%",
+        "nature": "Architectural prompt truncation",
+        "quality_measured": true,
+        "label": "VALID_ARCHITECTURAL_SAVING"
+      }
+    ]
+  },
+  "scientific_mandate": "Token reduction percentages represent prompt engineering design constraints and analytical budgets. Because answer F1 and semantic completeness were not empirically benchmarked for the 6-token Minimal mode on a gold-standard test set, these numbers MUST be presented as 'Token Efficiency Design Observations', not as proof of quality improvement."
+}

@@ -1,0 +1,16 @@
+{
+  "benchmark": "RQ3_Hybrid_Diagnosis",
+  "mk_niah": {
+    "P1_memory_only_acc": 70.0,
+    "B2_bm25_rag_acc": 100.0,
+    "P2_hybrid_acc": 100.0
+  },
+  "vietnamese_qa": {
+    "B2": 0.0002,
+    "P1": 0.0001,
+    "P2": 0.0002
+  },
+  "citation_faithfulness_pct": 100.0,
+  "refusal_precision_pct": 100.0,
+  "refusal_recall_pct": 76.0
+}

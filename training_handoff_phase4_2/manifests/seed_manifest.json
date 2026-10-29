@@ -1,0 +1,8 @@
+{
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "initialization": "PyTorch manual_seed + cuda manual_seed_all (bit-identical theta_0 across seeds)"
+}

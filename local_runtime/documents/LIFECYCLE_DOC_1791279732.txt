@@ -1,0 +1,7 @@
+# Phân đoạn 1: Khái niệm SA-CMS
+
+Bộ nhớ Continuum căn chỉnh cấu trúc hoạt động ở 3 cấp độ: đoạn văn, chương mục, và toàn văn.
+
+# Phân đoạn 2: Kết quả Thực nghiệm
+
+Độ trễ truy xuất cục bộ đạt dưới 5ms và không phụ thuộc vào kết nối mạng.

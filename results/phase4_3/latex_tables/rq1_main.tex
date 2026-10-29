@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{RQ1 Main Benchmark Evaluation across QASPER, LongHealth, and MK-NIAH (3 Seeds: 42, 43, 44).}
+\label{tab:rq1_main}
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Method} & \textbf{Evaluation Condition} & \multicolumn{2}{c}{\textbf{QASPER ($N=30$)}} & \multicolumn{2}{c}{\textbf{LongHealth ($N=60$)}} & \multicolumn{2}{c}{\textbf{MK-NIAH ($N=300$)}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
+ & & Token $F_1$ [95\% CI] & Target Prob & Accuracy [95\% CI] & Target Prob & Accuracy [95\% CI] & Target Prob \\
+\midrule
+B1 (ICL Context) & In-Context (Truncated 512) & 0.2590 [0.1930, 0.3435] & 0.1705 & 0.2000 [0.1000, 0.3167] & 0.0077 & 0.4000 [0.3433, 0.4500] & 0.5068 \\
+B4 (1-Level CMS) & Context-Evicted (Memory) & 0.1025 [0.0700, 0.1368] & 0.1431 & 0.2333 [0.1333, 0.3500] & 0.1349 & 0.0000 [0.0000, 0.0000] & 0.0479 \\
+B5 (3-Level CMS) & Context-Evicted (Memory) & 0.0957 [0.0662, 0.1292] & 0.1434 & 0.2000 [0.1167, 0.3000] & 0.0938 & 0.0000 [0.0000, 0.0000] & 0.0349 \\
+P1 (SA-CMS)      & Context-Evicted (Memory) & 0.0896 [0.0548, 0.1287] & 0.1253 & 0.1667 [0.0667, 0.2671] & 0.1308 & 0.0000 [0.0000, 0.0000] & 0.1318 \\
+\bottomrule
+\end{tabular}
+\end{table*}

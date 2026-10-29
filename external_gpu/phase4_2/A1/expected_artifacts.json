@@ -1,0 +1,19 @@
+{
+  "checkpoints": [
+    "cms_3lvl_random_seed_42.pt",
+    "cms_3lvl_random_seed_43.pt",
+    "cms_3lvl_random_seed_44.pt"
+  ],
+  "num_levels": 3,
+  "d_model": 576,
+  "d_ff": 1536,
+  "trainable_parameters": 5314752,
+  "keys_required": [
+    "cms_state_dict",
+    "cms_norm_state_dict",
+    "num_levels",
+    "seed",
+    "num_samples",
+    "num_epochs"
+  ]
+}

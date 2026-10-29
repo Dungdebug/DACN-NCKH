@@ -1,0 +1,43 @@
+{
+  "audit_target": "Memory Mechanistic Inspector & Level Breakdown",
+  "verdict": "PARTIALLY_VALID",
+  "operational_distinction": {
+    "tensor_inspection_tools": "VALID (inspect_mlp_chain, inspect_hidden_state_shift, inspect_logits_shift implement real PyTorch operations)",
+    "profile_synthesis": "DESCRIPTIVE_DIAGNOSTIC (synthesize_mechanistic_profile provides a calibrated analytical profile, NOT a causal intervention)"
+  },
+  "provenance_audit": {
+    "source_file": "src/memory/mechanistic_inspector.py",
+    "summary_file": "results/round2/mechanistic/mechanistic_trace_summary.json",
+    "metrics_evaluated": [
+      {
+        "metric": "Memory Residual Norm ||M_t||_2",
+        "reported_value": "2.909 ± 0.457",
+        "definition": "L2 norm of additive delta across CMS MLP blocks: ||chain(h) - h||_2",
+        "nature": "Descriptive geometric magnitude",
+        "status": "VALID_DESCRIPTIVE_METRIC"
+      },
+      {
+        "metric": "Cosine Similarity / Alignment",
+        "reported_value": "0.884 ± 0.041",
+        "definition": "Cosine similarity between base hidden states and memory-blended states",
+        "nature": "Descriptive vector alignment",
+        "status": "VALID_DESCRIPTIVE_METRIC"
+      },
+      {
+        "metric": "Logits KL Divergence",
+        "reported_value": "0.344 ± 0.082",
+        "definition": "Kullback-Leibler divergence between output Softmax distributions with vs without memory",
+        "nature": "Descriptive distributional shift",
+        "status": "VALID_DESCRIPTIVE_METRIC"
+      },
+      {
+        "metric": "Level Contributions (L1=50%, L2=30%, L3=20%)",
+        "reported_value": "50% Paragraph, 30% Section, 20% Document",
+        "definition": "Relative proportion of intermediate L2 block norms across CMS chain",
+        "nature": "Diagnostic activation ratio (NOT causal intervention)",
+        "status": "DESCRIPTIVE_DIAGNOSTIC_ONLY"
+      }
+    ]
+  },
+  "scientific_mandate": "Label all level contribution numbers as 'observed descriptive diagnostics' or 'activation norm proportions'. Do NOT claim causal conclusions (e.g., 'Level 1 causes 50% of the answer accuracy') because activation patching and causal ablation experiments have not been conducted."
+}

@@ -1,0 +1,38 @@
+{
+  "research_question": "RQ1",
+  "title": "Multi-level CMS Reproduction (Nested Learning Trend)",
+  "verdict": "PARTIALLY_VALID",
+  "formal_question": "Can a small-scale (135M backbone, 5.3M memory) continual memory system reproduce the hierarchical timescale performance trend reported in the Nested Learning paper (2512.24695v1)?",
+  "expected_comparison": "Controlled comparison of 1-level (B4) vs 2-level (A2) vs 3-level (B5/P1) memory under identical context and retrieval conditions.",
+  "audit_findings": {
+    "claim_in_round2_report": "P2 achieves 0.183 F1 on QASPER (+47.6% over B1: 0.124), demonstrating superior hierarchical compression.",
+    "scientific_flaw": "Conflation of retrieval effect with hierarchical memory effect. P2 is a hybrid system combining SA-CMS memory with BM25 retrieval, whereas B1 is an un-retrieved full-context prompt. The +47.6% improvement is primarily driven by BM25 evidence selection, NOT isolated hierarchical timescale dynamics.",
+    "actual_phase4_raw_data": {
+      "source_file": "results/phase4_1/rq1/rq1_raw_results.json",
+      "summary_table": "results/phase4_3/tables/01_rq1_summary.csv",
+      "qasper_token_f1": {
+        "B1_prompt_context_512": 0.2590,
+        "B4_1level_evicted": 0.1025,
+        "B5_3level_fixed_evicted": 0.0957,
+        "P1_3level_sacms_evicted": 0.0896
+      },
+      "longhealth_accuracy": {
+        "B1_prompt_context_512": 0.2000,
+        "B4_1level_evicted": 0.2333,
+        "B5_3level_fixed_evicted": 0.2000,
+        "P1_3level_sacms_evicted": 0.1667
+      },
+      "mkniah_accuracy": {
+        "B1_prompt_context_512": 0.4000,
+        "B4_1level_evicted": 0.0000,
+        "B5_3level_fixed_evicted": 0.0000,
+        "P1_3level_sacms_evicted": 0.0000,
+        "P1_target_prob": 0.1318,
+        "B4_target_prob": 0.0479,
+        "B5_target_prob": 0.0349
+      }
+    },
+    "trend_reproduction_analysis": "On QASPER and LongHealth under context-evicted conditions, 1-level B4 actually scored higher than 3-level B5 and P1. The monotonic improvement with memory levels (1-lvl < 2-lvl < 3-lvl) from the Nested Learning paper is ONLY observed in MK-NIAH target token probability (P1 0.1318 > B4 0.0479 > B5 0.0349), but does not translate into answer classification accuracy (0% across all memory models at 200 training samples).",
+    "required_remedy": "Re-label RQ1 claim. State honestly: At the 135M student scale with 200 training samples, hierarchical memory increases target token probability on key retrieval but does not reproduce full end-to-end task accuracy gains without hybrid non-parametric retrieval."
+  }
+}

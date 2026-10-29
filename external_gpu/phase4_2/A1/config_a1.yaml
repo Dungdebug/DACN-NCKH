@@ -1,0 +1,29 @@
+# ==============================================================================
+# PHASE 4.2: A1 CONFIGURATION — CMS LEVEL-3 RANDOM BOUNDARY (FROZEN PROTOCOL)
+# ==============================================================================
+meta:
+  protocol_version: "4.2-a1-random-boundary"
+  freeze_date: "2026-10-04"
+  target_gpu: ["RTX 3050 6GB", "RTX 3050 8GB"]
+
+model:
+  backbone: "HuggingFaceTB/SmolLM2-135M"
+  frozen_backbone: true
+  num_levels: 3
+  d_model: 576
+  d_ff: 1536
+  schedule_mode: "random"
+  expected_trainable_parameters: 5314752
+
+training:
+  samples_count: 200
+  corpus_range: "TR_DOC_001 to TR_DOC_020"
+  epochs: 3
+  learning_rate: 0.0001
+  optimizer: "AdamW"
+  weight_decay: 0.01
+  batch_size: 2
+  grad_accum_steps: 2
+  precision: "float32"
+  seeds: [42, 43, 44]
+  checkpoint_pattern: "cms_3lvl_random_seed_{seed}.pt"

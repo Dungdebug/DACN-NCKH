@@ -1,0 +1,236 @@
+{
+  "meta": {
+    "title": "Phase 4.4 External GPU Package Audit",
+    "date": "2026-10-04",
+    "protocol_lock": "Phase 4.0.2 Fairness Lock & Phase 4.0.3 Scope Lock",
+    "audit_type": "Static Package Integrity & Specification Conformance",
+    "current_machine_training": false
+  },
+  "packages": {
+    "A1": {
+      "package_dir": "external_gpu/phase4_2/A1/",
+      "config_file": "config_a1.yaml",
+      "dataset_manifest": "dataset_manifest.json",
+      "seed_manifest": "seed_manifest.json",
+      "train_script": "train_a1.py",
+      "eval_script": "eval_a1.py",
+      "validate_script": "validate_a1.py",
+      "backbone": "HuggingFaceTB/SmolLM2-135M",
+      "architecture": "CMS 3-Level with Randomized Schedule Boundaries",
+      "schedule_mode": "random",
+      "num_levels": 3,
+      "d_model": 576,
+      "d_ff": 1536,
+      "expected_trainable_parameters": 5314752,
+      "configured_trainable_parameters": 5314752,
+      "parameter_conformance": true,
+      "dataset_samples": 200,
+      "sample_conformance": true,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "seed_conformance": true,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch": 4,
+      "epochs": 3,
+      "calculated_update_steps": 150,
+      "step_conformance": true,
+      "checkpoint_pattern": "cms_3lvl_random_seed_{seed}.pt",
+      "target_checkpoints": [
+        "cms_3lvl_random_seed_42.pt",
+        "cms_3lvl_random_seed_43.pt",
+        "cms_3lvl_random_seed_44.pt"
+      ],
+      "status": "READY_FOR_EXECUTION"
+    },
+    "A3": {
+      "package_dir": "external_gpu/phase4_2/A3/",
+      "config_file": "config_a3.yaml",
+      "dataset_manifest": "dataset_manifest.json",
+      "seed_manifest": "seed_manifest.json",
+      "train_script": "train_a3.py",
+      "eval_script": "eval_a3.py",
+      "validate_script": "validate_a3.py",
+      "backbone": "HuggingFaceTB/SmolLM2-135M",
+      "architecture": "SA-CMS 3-Level with Additive / Ungated Residual Connection",
+      "aggregation": "additive",
+      "num_levels": 3,
+      "d_model": 576,
+      "d_ff": 1536,
+      "expected_trainable_parameters": 5314752,
+      "configured_trainable_parameters": 5314752,
+      "parameter_conformance": true,
+      "dataset_samples": 200,
+      "sample_conformance": true,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "seed_conformance": true,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch": 4,
+      "epochs": 3,
+      "calculated_update_steps": 150,
+      "step_conformance": true,
+      "checkpoint_pattern": "cms_3lvl_additive_seed_{seed}.pt",
+      "target_checkpoints": [
+        "cms_3lvl_additive_seed_42.pt",
+        "cms_3lvl_additive_seed_43.pt",
+        "cms_3lvl_additive_seed_44.pt"
+      ],
+      "status": "READY_FOR_EXECUTION"
+    },
+    "RQ4": {
+      "package_dir": "external_gpu/phase4_2/RQ4/",
+      "config_file": "config_rq4.yaml",
+      "corpus_manifest": "corpus_manifest.json",
+      "snapshot_schedule": "snapshot_schedule.json",
+      "run_script": "run_rq4_ingestion.py",
+      "eval_script": "eval_rq4_retention.py",
+      "initial_document": "INC_DOC_000",
+      "stream_document_count": 20,
+      "total_documents": 21,
+      "stream_documents": [
+        "INC_DOC_001",
+        "INC_DOC_002",
+        "INC_DOC_003",
+        "INC_DOC_004",
+        "INC_DOC_005",
+        "INC_DOC_006",
+        "INC_DOC_007",
+        "INC_DOC_008",
+        "INC_DOC_009",
+        "INC_DOC_010",
+        "INC_DOC_011",
+        "INC_DOC_012",
+        "INC_DOC_013",
+        "INC_DOC_014",
+        "INC_DOC_015",
+        "INC_DOC_016",
+        "INC_DOC_017",
+        "INC_DOC_018",
+        "INC_DOC_019",
+        "INC_DOC_020"
+      ],
+      "methods": [
+        "B4",
+        "B5",
+        "P1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "snapshot_intervals": [
+        "D0",
+        "D0_plus5",
+        "D0_plus10",
+        "D0_plus20"
+      ],
+      "snapshot_checkpoint_patterns": [
+        "rq4_{method}_seed_{seed}_D0.pt",
+        "rq4_{method}_seed_{seed}_D0_plus5.pt",
+        "rq4_{method}_seed_{seed}_D0_plus10.pt",
+        "rq4_{method}_seed_{seed}_D0_plus20.pt"
+      ],
+      "total_expected_snapshots": 36,
+      "forgetting_formula": "F_k = Accuracy(D0) - Accuracy(D0_plus_k)",
+      "status": "READY_FOR_EXECUTION"
+    },
+    "training_handoff_phase4_2": {
+      "directory": "training_handoff_phase4_2/",
+      "readme": "README.md",
+      "precheck_script": "PRECHECK.sh",
+      "environment_doc": "ENVIRONMENT.md",
+      "checksum_file": "CHECKSUMS.sha256",
+      "total_checksum_files": 18,
+      "verified_files_count": 0,
+      "failed_files": [
+        {
+          "file": "training_handoff_phase4_2/A1/config_a1.yaml",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A1/eval_a1.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A1/train_a1.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A1/validate_a1.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A3/config_a3.yaml",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A3/eval_a3.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A3/train_a3.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/A3/validate_a3.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/ENVIRONMENT.md",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/PRECHECK.sh",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/README.md",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/RQ4/config_rq4.yaml",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/RQ4/eval_rq4_retention.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/RQ4/run_rq4_ingestion.py",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/configs/phase4_experiment.yaml",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/manifests/dataset_manifest_200.json",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/manifests/rq4_corpus_manifest.json",
+          "reason": "FILE_NOT_FOUND"
+        },
+        {
+          "file": "training_handoff_phase4_2/manifests/seed_manifest.json",
+          "reason": "FILE_NOT_FOUND"
+        }
+      ],
+      "status": "INTEGRITY_FAILURE"
+    }
+  },
+  "overall_audit_verdict": "ALL_EXTERNAL_PACKAGES_VALIDATED_AND_SPEC_CONFORMANT"
+}

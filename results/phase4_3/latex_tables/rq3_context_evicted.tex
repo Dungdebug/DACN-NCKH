@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{RQ3 Context-Evicted QA Evaluation and Robustness on Vietnamese Benchmark (100 Items, 3 Seeds).}
+\label{tab:rq3_context_evicted}
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Method} & \textbf{Retriever} & \textbf{Token $F_1$ [95\% CI]} & \textbf{EM} & \textbf{Faithfulness [\%]} & \textbf{Corr. Refusal} & \textbf{False Refusal} & \textbf{False Ans.} & \textbf{Latency (ms)} & \textbf{VRAM (MB)} \\
+\midrule
+B1 (ICL Context) & None  & 0.0048 [0.0016, 0.0088] & 0.0 & 0.00\% [0.00, 0.00]   & 0.0\%  & 0.0\% & 100.0\% & 12,760.58 & 364.69 \\
+B2 (BM25 RAG)    & BM25  & 0.1596 [0.1164, 0.2057] & 0.0 & 95.70\% [92.47, 98.39] & 76.0\% & 0.0\% & 24.0\%  & 7,873.78  & 353.31 \\
+B5 (Fixed CMS)   & None  & 0.0502 [0.0346, 0.0679] & 0.0 & 0.00\% [0.00, 0.00]   & 0.0\%  & 0.0\% & 100.0\% & 4,634.92  & 317.73 \\
+P1 (SA-CMS)      & None  & 0.0753 [0.0563, 0.0958] & 0.0 & 0.00\% [0.00, 0.00]   & 0.0\%  & 0.0\% & 100.0\% & 4,626.27  & 331.24 \\
+P2 (Hybrid)      & BM25  & 0.1596 [0.1164, 0.2057] & 0.0 & 98.92\% [97.31, 100.0] & 76.0\% & 0.0\% & 24.0\%  & 7,768.73  & 369.48 \\
+\bottomrule
+\end{tabular}
+\end{table*}

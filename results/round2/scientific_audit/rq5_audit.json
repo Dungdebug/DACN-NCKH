@@ -1,0 +1,39 @@
+{
+  "research_question": "RQ5",
+  "title": "Computational and Memory Cost Profile (Pareto Trade-offs)",
+  "verdict": "PARTIALLY_VALID",
+  "formal_question": "What is the multi-dimensional trade-off between answer accuracy, parameter memory size, query latency, peak VRAM, and token consumption across methods?",
+  "audit_findings": {
+    "claim_in_round2_report": "P2 achieves 58.89 ms total latency (41.7% faster than B2 at 101.08 ms, 45.9% faster than B1 at 108.81 ms), peak VRAM of 357.14 MB, 20.28 MB checkpoint size, and cuts output tokens by 56.2% (Concise) to 81.2% (Minimal).",
+    "provenance_audit": {
+      "raw_results_file": "results/phase4_1/rq5/rq5_raw_results.json",
+      "summary_table": "results/phase4_3/tables/05_rq5_cost.csv",
+      "hardware": "NVIDIA GeForce GTX 1650 Ti (4GB VRAM), torch.float16, CUDA",
+      "verified_metrics": {
+        "peak_vram_mb": {
+          "B1": 294.94,
+          "B2": 296.38,
+          "B4": 328.78,
+          "B5": 345.08,
+          "P1": 357.14,
+          "P2": 357.14,
+          "status": "VALID_AND_VERIFIED"
+        },
+        "checkpoint_size_mb": {
+          "B1": 0.0,
+          "B2": 0.0,
+          "B4": 6.77,
+          "B5": 20.28,
+          "P1": 20.28,
+          "P2": 20.28,
+          "status": "VALID_AND_VERIFIED"
+        }
+      }
+    },
+    "discrepancies_identified": {
+      "latency_scope_conflation": "The 58.89 ms (P2) vs 101.08 ms (B2) vs 108.81 ms (B1) latency figures in rq5_raw_results.json were measured for FIRST-TOKEN GENERATION (answer_tokens_generated = 1), reflecting prefill + single decode step. Full-response query latency in table 05_rq5_cost.csv is 4,249.31 ms (P2), 4,119.49 ms (B2), and 5,168.39 ms (B1). Round 2 reports failed to label 58.89 ms as first-token latency.",
+      "token_reduction_provenance": "The -56.2% and -81.2% output token savings in token_efficiency_scorecard.json were derived from analytical prompt budget formulas (14 vs 32 tokens, 6 vs 32 tokens) rather than empirical generation logs evaluated across a standardized test set with measured F1 retention."
+    },
+    "valid_scientific_findings": "Memory footprint and VRAM measurements are empirically grounded: SA-CMS memory module runs under 360 MB VRAM and 20.28 MB disk footprint on consumer 4GB hardware. Pre-fill attention latency is substantially lower when long document contexts are evicted from the prompt."
+  }
+}

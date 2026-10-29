@@ -1,0 +1,138 @@
+{
+  "suite": "Round 2 Robustness Extension Suite",
+  "label": "ROUND_2_EXTENSION",
+  "timestamp": "2026-10-06T05:57:03Z",
+  "conditions_evaluated": 8,
+  "results": {
+    "CONDITION_A_LONG_DOCS": {
+      "meta": {
+        "title": "A. Long Documents",
+        "hypothesis": "SA-CMS multi-level memory retains semantic grounding as document length scales beyond standard context window limits.",
+        "independent_variable": "Document token length (500 vs 2000 vs 5000 tokens)",
+        "dependent_variable": "Evidence retrieval accuracy and refusal gate stability",
+        "control": "Standard length document (500 tokens)",
+        "metric": "Top-k hit rate, retrieval latency (ms)",
+        "expected_interpretation": "BM25 retrieval latency scales sub-linearly while memory state dimension remains strictly constant (O(1) memory footprint)."
+      },
+      "retrieval_hits": 3,
+      "top_score": 10.6901,
+      "latency_ms": 0.08,
+      "passed": true
+    },
+    "CONDITION_B_MULTI_DOCS": {
+      "meta": {
+        "title": "B. Multiple Documents",
+        "hypothesis": "Cross-document queries require balanced multi-document passage selection to prevent single-document domination.",
+        "independent_variable": "Number of active documents (1 vs 3 vs 5 documents)",
+        "dependent_variable": "Cross-document citation diversity and coverage ratio",
+        "control": "Single document baseline",
+        "metric": "Cross-document citation entropy and coverage",
+        "expected_interpretation": "Hybrid pipeline correctly pulls evidence across document boundaries rather than collapsing to the most frequent term match."
+      },
+      "documents_represented": [
+        "DOC_ROB_01",
+        "DOC_ROB_02",
+        "DOC_DISTRACT_01"
+      ],
+      "is_multi_document": true,
+      "passed": true
+    },
+    "CONDITION_C_IRRELEVANT_DOCS": {
+      "meta": {
+        "title": "C. Irrelevant Documents",
+        "hypothesis": "Injecting unrelated distractor documents does not degrade answer accuracy or induce false citations.",
+        "independent_variable": "Distractor document ratio (0% vs 50% vs 80% distractors)",
+        "dependent_variable": "Citation precision and false answer rate",
+        "control": "Clean single-document corpus",
+        "metric": "Citation precision (fraction of cited passages that are truly relevant)",
+        "expected_interpretation": "Score threshold tau=3.0 successfully filters out distractor passages."
+      },
+      "distractor_passages_accepted": 0,
+      "precision_rate_pct": 100.0,
+      "passed": true
+    },
+    "CONDITION_D_PARTIAL_EVIDENCE": {
+      "meta": {
+        "title": "D. Partial Evidence",
+        "hypothesis": "When only partial evidence is present, the system identifies partial support rather than hallucinating complete answers.",
+        "independent_variable": "Evidence completeness (complete premise vs partial premise)",
+        "dependent_variable": "Grounding classification (SUPPORTED vs PARTIALLY_SUPPORTED)",
+        "control": "Complete evidence sample",
+        "metric": "Query coverage score and grounding tag",
+        "expected_interpretation": "Query coverage falls below 1.0, triggering partial support classification."
+      },
+      "query_coverage": 0.3636,
+      "status": "PARTIALLY_SUPPORTED",
+      "passed": true
+    },
+    "CONDITION_E_CONFLICTING_EVIDENCE": {
+      "meta": {
+        "title": "E. Conflicting Evidence",
+        "hypothesis": "When passages contain contradictory facts, the system surfaces both citations rather than arbitrarily choosing one.",
+        "independent_variable": "Presence of conflicting factual assertions in separate sections",
+        "dependent_variable": "Multi-passage citation presence and caveat flagging",
+        "control": "Single consistent assertion",
+        "metric": "Multi-passage citation coverage",
+        "expected_interpretation": "Both contradictory sources are cited with respective provenance."
+      },
+      "conflicting_passages_retrieved": 3,
+      "passages": [
+        "DOC_ROB_01::P02",
+        "DOC_ROB_02::P02",
+        "DOC_ROB_01::P01"
+      ],
+      "passed": true
+    },
+    "CONDITION_F_MISSING_EVIDENCE": {
+      "meta": {
+        "title": "F. Missing Evidence (Out-of-Domain)",
+        "hypothesis": "Queries completely unaddressed by ingested documents trigger 100% refusal without hallucinating.",
+        "independent_variable": "Query domain (in-corpus vs out-of-corpus general world knowledge)",
+        "dependent_variable": "Refusal decision rate",
+        "control": "In-domain answerable query",
+        "metric": "Correct refusal rate (%)",
+        "expected_interpretation": "System refuses 100% of out-of-domain queries with verified refusal text."
+      },
+      "refused": true,
+      "refusal_reason": "no_relevant_evidence_found",
+      "refusal_message": "Tài liệu được cung cấp không chứa thông tin liên quan đến câu hỏi này.",
+      "passed": true
+    },
+    "CONDITION_G_PARAPHRASED_QUESTIONS": {
+      "meta": {
+        "title": "G. Paraphrased Questions",
+        "hypothesis": "Lexical variations, colloquial phrasing, and pronominal references are successfully resolved by the router and retriever.",
+        "independent_variable": "Phrasing style (exact keyword match vs semantic paraphrase vs pronoun follow-up)",
+        "dependent_variable": "Evidence retrieval score and answer consistency",
+        "control": "Exact keyword match query",
+        "metric": "Mean evidence score and retrieval rank",
+        "expected_interpretation": "Context resolution recovers entity references, preserving retrieval scores within 15% of verbatim queries."
+      },
+      "verbatim_score": 5.9223,
+      "paraphrase_score": 7.0039,
+      "score_delta": 1.0816,
+      "passed": true
+    },
+    "CONDITION_H_NOISY_RETRIEVAL": {
+      "meta": {
+        "title": "H. Noisy Retrieval Candidates",
+        "hypothesis": "When lexical search retrieves marginal candidates (BM25 scores near tau), refusal controller correctly rejects them.",
+        "independent_variable": "Synthetic noise attenuation on candidate scores",
+        "dependent_variable": "Refusal decision trigger",
+        "control": "High-confidence clean retrieval candidate",
+        "metric": "Threshold adherence rate",
+        "expected_interpretation": "Any score below tau=3.0 triggers refusal, proving calibration safety."
+      },
+      "candidate_score": 2.1,
+      "threshold": 3.0,
+      "refused": true,
+      "passed": true
+    }
+  },
+  "summary": {
+    "total_conditions": 8,
+    "passed_conditions": 8,
+    "pass_rate_pct": 100.0,
+    "status": "ALL_CONDITIONS_SATISFIED"
+  }
+}

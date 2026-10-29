@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "title": "Phase 4.4 Data Provenance & Execution Handoff Manifest",
+    "date": "2026-10-04",
+    "status": "AWAITING_RTX_3050_EXECUTION",
+    "hardware_contract": "NVIDIA GeForce RTX 3050 (6GB / 8GB VRAM)",
+    "local_machine_freeze": "STRICT_NO_TRAINING",
+    "unverified_metrics_count": 0,
+    "orphan_metrics_count": 0
+  },
+  "planned_execution_contracts": [
+    {
+      "experiment_id": "A1_RANDOM_BOUNDARY",
+      "method": "A1",
+      "architecture": "CMS 3-Level with Random Schedule Boundaries",
+      "trainable_parameters": 5314752,
+      "dataset": "Scale Training Corpus (200 samples, TR_DOC_001 to TR_DOC_020)",
+      "seeds": [42, 43, 44],
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch": 4,
+      "update_steps": 150,
+      "target_checkpoints": [
+        "checkpoints/phase4_2/A1/cms_3lvl_random_seed_42.pt",
+        "checkpoints/phase4_2/A1/cms_3lvl_random_seed_43.pt",
+        "checkpoints/phase4_2/A1/cms_3lvl_random_seed_44.pt"
+      ],
+      "eval_datasets": ["QASPER", "LongHealth", "MK-NIAH"],
+      "runner_script": "external_gpu/phase4_4/run_a1.py",
+      "status": "NEED_EXTERNAL_GPU"
+    },
+    {
+      "experiment_id": "A3_ADDITIVE_UNGATED",
+      "method": "A3",
+      "architecture": "SA-CMS 3-Level with Additive / Ungated Residual Connection",
+      "trainable_parameters": 5314752,
+      "dataset": "Scale Training Corpus (200 samples, TR_DOC_001 to TR_DOC_020)",
+      "seeds": [42, 43, 44],
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch": 4,
+      "update_steps": 150,
+      "target_checkpoints": [
+        "checkpoints/phase4_2/A3/cms_3lvl_additive_seed_42.pt",
+        "checkpoints/phase4_2/A3/cms_3lvl_additive_seed_43.pt",
+        "checkpoints/phase4_2/A3/cms_3lvl_additive_seed_44.pt"
+      ],
+      "eval_datasets": ["QASPER", "LongHealth", "MK-NIAH"],
+      "runner_script": "external_gpu/phase4_4/run_a3.py",
+      "status": "NEED_EXTERNAL_GPU"
+    },
+    {
+      "experiment_id": "RQ4_CONTINUAL_INGESTION",
+      "method": "B4, B5, P1",
+      "architecture": "Sequential Document Ingestion across Stream",
+      "dataset": "Incremental Sequential Corpus (21 documents: INC_DOC_000 to INC_DOC_020)",
+      "seeds": [42, 43, 44],
+      "intervals": ["D0", "D0_plus5", "D0_plus10", "D0_plus20"],
+      "total_snapshots": 36,
+      "target_checkpoints_pattern": "checkpoints/phase4_2/RQ4/rq4_{method}_seed_{seed}_{interval}.pt",
+      "evaluation_metric": "F_k = Accuracy(D0) - Accuracy(D0_plus_k)",
+      "runner_script": "external_gpu/phase4_4/run_rq4.py",
+      "status": "NEED_EXTERNAL_GPU"
+    }
+  ],
+  "preserved_prior_provenance": [
+    "results/phase4_3/data_provenance.json"
+  ]
+}

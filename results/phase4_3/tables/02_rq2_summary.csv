@@ -1,0 +1,7 @@
+comparison_or_ablation,dataset,metric,n_observations,mean_p1,mean_b5,mean_diff,std_diff,t_statistic,t_pvalue,wilcoxon_stat,wilcoxon_pvalue,cohens_d,ci_95_bootstrap_lower,ci_95_bootstrap_upper,status,statistical_significance,source_artifact
+P1 vs B5 (Pooled All),QASPER + LongHealth,token_f1 (QASPER) || accuracy (LongHealth),90,0.157,0.1477,0.0093,0.1073,0.8203,0.4143,31.0,0.8589,0.0865,-0.0051,0.034,COMPLETED,NOT_SIGNIFICANT (p > 0.05),results/phase4_2/rq2_statistical_audit.json
+P1 vs B5 (QASPER Only),QASPER,token_f1,30,0.1042,0.1097,-0.0055,0.0328,-0.9199,0.3652,20.0,0.4446,-0.168,-0.0186,0.005,COMPLETED,NOT_SIGNIFICANT (p > 0.05),results/phase4_2/rq2_statistical_audit.json
+P1 vs B5 (LongHealth Only),LongHealth,accuracy,60,0.1833,0.1667,0.0167,0.1291,1.0,0.3214,0.0,0.3173,0.1291,0.0,0.05,COMPLETED,NOT_SIGNIFICANT (p > 0.05),results/phase4_2/rq2_statistical_audit.json
+A2 (Two-Level SA-CMS),QASPER / LongHealth,token_f1 (QASPER=0.0970) / accuracy (LH=0.2667),90,0.2101,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,COMPLETED,Ablation Baseline (2 levels),results/phase4_1/non_training/rq2/rq2_summary.json
+A1 (Random Boundary CMS),QASPER / LongHealth,token_f1 / accuracy,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,NEED_EXTERNAL_GPU,Awaiting external GPU execution,external_gpu/phase4_2/A1/config_a1.yaml
+A3 (SA-CMS Additive Ungated),QASPER / LongHealth,token_f1 / accuracy,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,NEED_EXTERNAL_GPU,Awaiting external GPU execution,external_gpu/phase4_2/A3/config_a3.yaml

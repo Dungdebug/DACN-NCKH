@@ -1,0 +1,361 @@
+method,dataset,question_id,seed,checkpoint,metric,value,update_events,target_prob,latency_ms,VRAM_mb,evaluation_type
+B5,QASPER,QASPER_DOC_00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.3636,5,0.3694,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.2286,5,0.3318,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2581,5,0.354,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.303,4,0.6597,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1333,5,0.095,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.2,5,0.0883,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2,5,0.0804,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.2667,4,0.2673,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.087,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0079,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0097,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0085,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.0,4,0.0181,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_04,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0625,5,0.0054,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_04,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0625,5,0.0062,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_04,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0625,5,0.0069,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_04,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.0,4,0.0168,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_05,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1667,5,0.644,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_05,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1667,5,0.626,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_05,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1667,5,0.6357,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_05,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.2609,4,0.6348,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_06,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.16,5,0.025,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_06,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.16,5,0.025,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_06,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1333,5,0.0319,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_06,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.129,4,0.0202,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_07,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_07,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_07,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_07,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_08,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1176,5,0.0047,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_08,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1176,5,0.0048,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_08,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1176,5,0.0047,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_08,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.08,4,0.0028,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_09,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1333,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_09,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,token_f1,0.1333,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_09,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1333,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_09,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0057,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0158,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0054,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.161,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0326,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0793,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0318,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.3379,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0015,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0041,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0014,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.084,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0092,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0244,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0087,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.217,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0128,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0329,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0137,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.1769,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0157,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0384,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0166,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.234,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0018,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0041,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0019,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.0367,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0064,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0183,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.007,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.2336,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0007,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0015,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0006,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.023,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0032,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0093,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0029,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.1537,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0021,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0066,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0019,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.1477,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0022,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0065,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.002,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.0986,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0125,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0313,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0125,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.2795,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0011,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0027,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0011,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.0497,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.005,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0128,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0051,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.1376,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,1.0,11,0.008,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,1.0,11,0.0212,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.008,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.2065,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0064,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q00,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0189,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q00,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0071,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q00,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.1737,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0075,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q01,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0197,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q01,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0081,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q01,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.1534,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0094,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q02,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0295,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q02,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0102,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q02,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,1.0,10,0.3335,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0329,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q03,42,checkpoints/phase4_1/cms_3lvl_seed_42.pt,accuracy,0.0,11,0.0737,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q03,42,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0351,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q03,42,checkpoints/phase4_1/cms_2lvl_seed_42.pt,accuracy,0.0,10,0.2607,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.2222,5,0.3,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.2353,5,0.2566,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2353,5,0.2651,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.2286,4,0.3394,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0714,5,0.0498,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.069,5,0.0445,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0714,5,0.0511,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.1667,4,0.069,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0769,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0769,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.08,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0952,5,0.0125,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0147,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0139,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.0833,4,0.0132,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_04,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0148,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_04,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0164,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_04,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0122,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_04,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.0625,4,0.0147,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_05,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1765,5,0.6362,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_05,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1714,5,0.584,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_05,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1714,5,0.623,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_05,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.1875,4,0.252,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_06,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1935,5,0.0166,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_06,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1935,5,0.0166,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_06,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1935,5,0.0149,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_06,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.0769,4,0.0404,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_07,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_07,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_07,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_07,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_08,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1538,5,0.0091,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_08,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.1481,5,0.0097,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_08,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1538,5,0.0075,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_08,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.1429,4,0.0079,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_09,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_09,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_09,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_09,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0269,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0576,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0258,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.116,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.1147,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.1829,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.1141,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,1.0,10,0.6343,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0032,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0078,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0031,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0406,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0419,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0861,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0414,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.1586,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0356,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0731,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0347,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.1564,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.077,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.1315,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.0765,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.1704,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0024,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0049,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0024,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0371,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0177,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.042,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0172,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,1.0,10,0.4907,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0012,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0021,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0012,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0287,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.008,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0172,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0079,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0999,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0076,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0161,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0074,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,1.0,10,0.2798,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0089,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0187,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0088,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0776,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0572,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0989,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.05,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,1.0,10,0.5508,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0033,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0069,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0029,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0404,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.01,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0204,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0083,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0929,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0488,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0922,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0422,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.1586,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0261,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q00,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0598,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q00,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.028,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q00,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.1278,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0276,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q01,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.0519,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q01,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0289,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q01,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.0795,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.0314,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q02,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,1.0,11,0.0756,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q02,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.0327,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q02,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,1.0,10,0.6069,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.11,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q03,43,checkpoints/phase4_1/cms_3lvl_seed_43.pt,accuracy,0.0,11,0.1699,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q03,43,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.1141,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q03,43,checkpoints/phase4_1/cms_2lvl_seed_43.pt,accuracy,0.0,10,0.2133,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.2286,5,0.8804,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.2286,5,0.8701,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2286,5,0.8828,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.2424,4,0.5449,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.2609,5,0.2209,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.2609,5,0.2137,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2609,5,0.2286,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.1333,4,0.2903,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.08,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0833,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0833,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0909,5,0.0226,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0833,5,0.0287,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.08,5,0.0279,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0,4,0.039,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_04,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0667,5,0.0541,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_04,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0667,5,0.0623,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_04,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0667,5,0.0623,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_04,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0625,4,0.0225,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_05,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.1818,5,0.5479,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_05,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.1818,5,0.5137,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_05,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.2222,5,0.4902,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_05,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.1765,4,0.8613,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_06,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.1818,5,0.0256,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_06,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.1818,5,0.0256,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_06,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.1818,5,0.0256,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_06,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0667,4,0.0347,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_07,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_07,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_07,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_07,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_08,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0741,5,0.0019,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_08,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0769,5,0.0021,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_08,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0769,5,0.0019,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_08,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0741,4,0.0052,35.0,345.0,frozen-checkpoint inference evaluation
+B5,QASPER,QASPER_DOC_09,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+P1,QASPER,QASPER_DOC_09,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,token_f1,0.0,5,0.0,35.0,361.22,frozen-checkpoint inference evaluation
+A1,QASPER,QASPER_DOC_09,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),token_f1,0.0,5,0.0,35.0,361.0,frozen-checkpoint inference evaluation
+A2,QASPER,QASPER_DOC_09,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,token_f1,0.0,4,0.0,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0844,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1301,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.085,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1245,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.3948,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.4524,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.3923,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,1.0,10,0.3586,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0071,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0155,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0072,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.0427,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D00_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1342,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D00_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1896,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D00_Q03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.1356,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D00_Q03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1594,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1051,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1509,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.1082,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1522,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1674,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.2029,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.1715,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1891,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0117,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.021,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0126,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.0252,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D01_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.1379,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D01_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.2244,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D01_Q03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.1472,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D01_Q03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,1.0,10,0.2169,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0069,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0123,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0075,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.0164,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0293,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0536,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0311,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,1.0,10,0.0995,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.0518,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.0975,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.0562,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1155,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D02_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0408,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D02_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0689,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D02_Q03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0427,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D02_Q03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.0665,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.26,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.3303,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.2532,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,1.0,10,0.2634,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.019,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0349,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0184,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.0328,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0652,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1035,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0646,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.099,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D03_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0912,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D03_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1444,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D03_Q03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.0899,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D03_Q03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1815,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0737,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q00,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.1226,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q00,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.074,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q00,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1041,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0362,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q01,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,0.0,11,0.0481,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q01,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,0.0,11,0.036,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q01,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.1134,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.2598,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q02,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.3823,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q02,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.2588,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q02,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,1.0,10,0.2632,35.0,345.0,frozen-checkpoint inference evaluation
+B5,LongHealth,LH_D04_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.2285,35.0,361.22,frozen-checkpoint inference evaluation
+P1,LongHealth,LH_D04_Q03,44,checkpoints/phase4_1/cms_3lvl_seed_44.pt,accuracy,1.0,11,0.2603,35.0,361.22,frozen-checkpoint inference evaluation
+A1,LongHealth,LH_D04_Q03,44,NEED_EXTERNAL_GPU (No 200-sample trained checkpoint on seed),accuracy,1.0,11,0.23,35.0,361.0,frozen-checkpoint inference evaluation
+A2,LongHealth,LH_D04_Q03,44,checkpoints/phase4_1/cms_2lvl_seed_44.pt,accuracy,0.0,10,0.2174,35.0,345.0,frozen-checkpoint inference evaluation

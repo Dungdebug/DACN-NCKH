@@ -1,0 +1,76 @@
+Research_Question,Benchmark_Dataset,Method,Metric_Name,Mean,SD,Bootstrap_95_CI_Low,Bootstrap_95_CI_High,Notes
+RQ1,QASPER,B1,Token_F1,0.2590,0.0271,0.1930,0.3435,QASPER 10 docs frozen backbone
+RQ1,QASPER,B4,Token_F1,0.1025,0.0136,0.0700,0.1368,QASPER 10 docs Level 1 CMS
+RQ1,QASPER,B5,Token_F1,0.0957,0.0083,0.0662,0.1292,QASPER 10 docs Level 3 Fixed Token
+RQ1,QASPER,P1,Token_F1,0.0895,0.0064,0.0548,0.1287,QASPER 10 docs Level 3 SA-CMS
+RQ1,LongHealth,B1,Accuracy_Pct,20.0000,0.0000,10.0000,31.6667,LongHealth native accuracy
+RQ1,LongHealth,B4,Accuracy_Pct,23.3333,7.6376,13.3333,35.0000,LongHealth native accuracy
+RQ1,LongHealth,B5,Accuracy_Pct,20.0000,5.0000,11.6667,30.0000,LongHealth native accuracy
+RQ1,LongHealth,P1,Accuracy_Pct,16.6667,14.4338,6.6667,26.7083,LongHealth native accuracy
+RQ1,MK-NIAH,B1,Accuracy_Pct,40.0000,32.9697,34.3333,45.0000,MK-NIAH native accuracy
+RQ1,MK-NIAH,B4,Accuracy_Pct,0.0000,0.0000,0.0000,0.0000,MK-NIAH without retrieval
+RQ1,MK-NIAH,B5,Accuracy_Pct,0.0000,0.0000,0.0000,0.0000,MK-NIAH without retrieval
+RQ1,MK-NIAH,P1,Accuracy_Pct,0.0000,0.0000,0.0000,0.0000,MK-NIAH without retrieval
+RQ2,Multi_Dataset,P1_SA_CMS,Token_F1,0.0421,0.1188,0.0278,0.0565,Multi-token greedy max_new_tokens=32 N=1140
+RQ2,Multi_Dataset,B5_FixedToken,Token_F1,0.0036,0.0202,0.0012,0.0060,Multi-token greedy max_new_tokens=32 N=1140
+RQ2,Multi_Dataset,P1_vs_B5,Mean_Difference,+0.0385,,,Paired t-test p=3.03e-7 STATISTICALLY SIGNIFICANT
+RQ2,Multi_Dataset,P1_SA_CMS,Exact_Match,0.0000,0.0000,0.0000,0.0000,Academic Exact Match on normalized answers
+RQ2,Multi_Dataset,B5_FixedToken,Exact_Match,0.0000,0.0000,0.0000,0.0000,Academic Exact Match on normalized answers
+RQ2,Multi_Dataset,P1_SA_CMS,Target_Logprob,-12.1731,4.2100,,,Target sequence log-probability
+RQ2,Multi_Dataset,B5_FixedToken,Target_Logprob,-11.7730,4.3500,,,Target sequence log-probability
+Ablation_A1,QASPER,A1_Random_Boundary,Token_F1,0.1866,0.0153,0.1724,0.2028,Retrained 150 steps on RTX 3050 seeds 42/43/44
+Ablation_A1,LongHealth,A1_Random_Boundary,Accuracy_Pct,58.3333,2.8868,55.0000,60.0000,Random boundaries ablation evaluation
+Ablation_A1,MK-NIAH,A1_Random_Boundary,Accuracy_Pct,63.3333,11.5470,50.0000,70.0000,Random boundaries ablation evaluation
+Ablation_A3,QASPER,A3_Additive_Ungated,Token_F1,0.1579,0.0190,0.1376,0.1752,Retrained 150 steps on RTX 3050 seeds 42/43/44
+Ablation_A3,LongHealth,A3_Additive_Ungated,Accuracy_Pct,43.3333,10.4083,35.0000,55.0000,Ungated additive ablation evaluation
+Ablation_A3,MK-NIAH,A3_Additive_Ungated,Accuracy_Pct,70.0000,0.0000,70.0000,70.0000,Ungated additive ablation evaluation
+Ablation_P1,QASPER,P1_Full_Learned_Gate,Token_F1,0.2014,0.0125,0.1847,0.2140,Full Structure-Aligned CMS with learned gating
+Ablation_P1,LongHealth,P1_Full_Learned_Gate,Accuracy_Pct,63.3333,5.7735,60.0000,70.0000,Full Structure-Aligned CMS with learned gating
+Ablation_P1,MK-NIAH,P1_Full_Learned_Gate,Accuracy_Pct,70.0000,0.0000,70.0000,70.0000,Full Structure-Aligned CMS with learned gating
+RQ3,MK-NIAH_Diagnosis,P1_Memory_Only,Accuracy_Pct,70.0000,0.0000,70.0000,70.0000,Parametric CMS memory only
+RQ3,MK-NIAH_Diagnosis,B2_BM25_RAG,Accuracy_Pct,100.0000,0.0000,100.0000,100.0000,Explicit text retrieval RAG
+RQ3,MK-NIAH_Diagnosis,P2_Hybrid_SA_CMS_BM25,Accuracy_Pct,100.0000,0.0000,100.0000,100.0000,Hybrid architecture combining P1 and B2
+RQ3,Context_Evicted_QA,B2_BM25_RAG,Token_F1,0.0002,0.0001,,,Vietnamese context-evicted QA
+RQ3,Context_Evicted_QA,P1_Memory_Only,Token_F1,0.0001,0.0001,,,Vietnamese context-evicted QA
+RQ3,Context_Evicted_QA,P2_Hybrid,Token_F1,0.0002,0.0001,,,Vietnamese context-evicted QA
+RQ3,Context_Evicted_QA,P2_Hybrid,Faithfulness_Rate_Pct,100.0000,0.0000,100.0000,100.0000,Citation-supported answer rate
+RQ3,Context_Evicted_QA,P2_Hybrid,Refusal_Precision_Pct,100.0000,0.0000,100.0000,100.0000,Precision on ungrounded/unanswerable
+RQ3,Context_Evicted_QA,P2_Hybrid,Refusal_Recall_Pct,76.0000,0.0000,76.0000,76.0000,Recall on ungrounded/unanswerable
+RQ4,Continual_Ingestion,B4_Level1,Retention_Token_F1_Plus20,0.0369,0.0097,0.0261,0.0443,Continuous F1 on D0 after +20 documents
+RQ4,Continual_Ingestion,B4_Level1,Continuous_Forgetting_Delta_F20,-0.0134,0.0163,-0.0300,0.0025,D0 F1 change (F1_initial - F1_plus20)
+RQ4,Continual_Ingestion,B4_Level1,Target_Logprob_D0,-14.0499,,,,Continuous log-likelihood on D0 initially
+RQ4,Continual_Ingestion,B4_Level1,Target_Logprob_Plus20,-14.1241,,,,Continuous log-likelihood on D0 after +20 docs
+RQ4,Continual_Ingestion,B5_FixedToken,Retention_Token_F1_Plus20,0.0386,0.0076,0.0307,0.0458,Continuous F1 on D0 after +20 documents
+RQ4,Continual_Ingestion,B5_FixedToken,Continuous_Forgetting_Delta_F20,-0.0147,0.0129,-0.0260,-0.0007,D0 F1 change (F1_initial - F1_plus20)
+RQ4,Continual_Ingestion,B5_FixedToken,Target_Logprob_D0,-14.3546,,,,Continuous log-likelihood on D0 initially
+RQ4,Continual_Ingestion,B5_FixedToken,Target_Logprob_Plus20,-14.1253,,,,Continuous log-likelihood on D0 after +20 docs
+RQ4,Continual_Ingestion,P1_SA_CMS,Retention_Token_F1_Plus20,0.0281,0.0027,0.0258,0.0310,Continuous F1 on D0 after +20 documents
+RQ4,Continual_Ingestion,P1_SA_CMS,Continuous_Forgetting_Delta_F20,-0.0034,0.0086,-0.0133,0.0021,D0 F1 change (F1_initial - F1_plus20)
+RQ4,Continual_Ingestion,P1_SA_CMS,Target_Logprob_D0,-14.4743,,,,Continuous log-likelihood on D0 initially
+RQ4,Continual_Ingestion,P1_SA_CMS,Target_Logprob_Plus20,-14.0753,,,,Continuous log-likelihood on D0 after +20 docs (+0.399 improvement)
+RQ5,Hardware_Profiling,B4_Level1,Peak_VRAM_MB,672.6000,0.8500,,,NVIDIA GeForce RTX 3050 Laptop GPU (6GB)
+RQ5,Hardware_Profiling,B4_Level1,Training_Time_s,46.0700,13.1700,,,150 gradient steps
+RQ5,Hardware_Profiling,A2_Level2,Peak_VRAM_MB,708.2000,0.0000,,,NVIDIA GeForce RTX 3050 Laptop GPU (6GB)
+RQ5,Hardware_Profiling,A2_Level2,Training_Time_s,54.1267,0.2730,,,150 gradient steps
+RQ5,Hardware_Profiling,B5_P1_Level3,Peak_VRAM_MB,743.8600,0.0000,,,NVIDIA GeForce RTX 3050 Laptop GPU (6GB)
+RQ5,Hardware_Profiling,B5_P1_Level3,Training_Time_s,55.3767,0.4269,,,150 gradient steps
+RQ5,Token_Budget_Comparison,B1_Full_Context,avg_input_tokens_per_query,1048.1250,12.1082,1044.4737,1051.7763,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B1_Full_Context,avg_output_tokens_per_answer,16.0000,0.0000,16.0000,16.0000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B1_Full_Context,latency_ms_per_query,6159.3293,81.8072,6140.7748,6188.9904,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B1_Full_Context,Token_F1,0.0036,0.0223,0.0000,0.0107,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B1_Full_Context,Exact_Match,0.0000,0.0000,0.0000,0.0000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B2_Standard_RAG,avg_input_tokens_per_query,1051.4500,212.2970,991.1406,1124.0044,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B2_Standard_RAG,avg_output_tokens_per_answer,11.8000,5.4000,10.1500,13.6000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B2_Standard_RAG,latency_ms_per_query,4972.7697,1900.0583,4384.2118,5583.2323,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B2_Standard_RAG,Token_F1,0.0497,0.1089,0.0155,0.0851,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,B2_Standard_RAG,Exact_Match,0.0000,0.0000,0.0000,0.0000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P1_Memory_Only,avg_input_tokens_per_query,117.1250,12.0441,113.4750,120.7756,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P1_Memory_Only,avg_output_tokens_per_answer,16.0250,0.3527,15.9000,16.1250,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P1_Memory_Only,latency_ms_per_query,2179.1995,342.1398,2071.8955,2287.4504,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P1_Memory_Only,Token_F1,0.0286,0.1245,0.0000,0.0718,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P1_Memory_Only,Exact_Match,0.0000,0.0000,0.0000,0.0000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P2_Hybrid_SA_CMS,avg_input_tokens_per_query,313.0000,45.7493,299.7463,328.6019,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P2_Hybrid_SA_CMS,avg_output_tokens_per_answer,17.6750,5.7593,15.7744,19.4756,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P2_Hybrid_SA_CMS,latency_ms_per_query,136.7474,14.8195,132.0125,141.1526,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P2_Hybrid_SA_CMS,Token_F1,1.0000,0.0000,1.0000,1.0000,RQ5 Token Budget Benchmark (N=40 offline queries)
+RQ5,Token_Budget_Comparison,P2_Hybrid_SA_CMS,Exact_Match,1.0000,0.0000,1.0000,1.0000,RQ5 Token Budget Benchmark (N=40 offline queries)

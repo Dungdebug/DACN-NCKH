@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "title": "Phase 4.3 Master Data Provenance Manifest",
+    "date": "2026-10-04",
+    "total_tracked_metric_groups": 8,
+    "unverified_metrics_count": 0,
+    "orphan_metrics_count": 0,
+    "status": "ALL_METRICS_TRACEABLE_TO_AUDITED_RAW_ARTIFACTS"
+  },
+  "provenance_records": [
+    {
+      "metric_id": "RQ1_MKNIAH_ACCURACY",
+      "metric": "accuracy",
+      "dataset": "MK-NIAH",
+      "methods": [
+        "B1",
+        "B4",
+        "B5",
+        "P1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "MK_NIAH_S000 to MK_NIAH_S099 (100 items per seed, 300 total)",
+      "result_file": "results/phase4_1/rq1/rq1_raw_results.json",
+      "audit_file": "results/phase4_2/rq1_data_audit.json",
+      "checkpoints": {
+        "B1": "None (frozen backbone)",
+        "B4": "checkpoints/phase4_1/cms_1lvl_seed_{seed}.pt",
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Audited in Phase 4.2; 100% item matching across all 12 runs."
+    },
+    {
+      "metric_id": "RQ1_QASPER_TOKEN_F1",
+      "metric": "token_f1",
+      "dataset": "QASPER",
+      "methods": [
+        "B1",
+        "B4",
+        "B5",
+        "P1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "QASPER_DOC_00 to QASPER_DOC_09 (10 docs per seed, 30 total)",
+      "result_file": "results/phase4_1/rq1/rq1_raw_results.json",
+      "audit_file": "results/phase4_2/rq1_data_audit.json",
+      "checkpoints": {
+        "B1": "None (frozen backbone)",
+        "B4": "checkpoints/phase4_1/cms_1lvl_seed_{seed}.pt",
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Audited in Phase 4.2; 100% document index matching across all 12 runs."
+    },
+    {
+      "metric_id": "RQ1_LONGHEALTH_ACCURACY",
+      "metric": "accuracy",
+      "dataset": "LongHealth",
+      "methods": [
+        "B1",
+        "B4",
+        "B5",
+        "P1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "LH_D00_Q00 to LH_D04_Q03 (20 MCQs per seed, 60 total)",
+      "result_file": "results/phase4_1/rq1/rq1_raw_results.json",
+      "audit_file": "results/phase4_2/rq1_data_audit.json",
+      "checkpoints": {
+        "B1": "None (frozen backbone)",
+        "B4": "checkpoints/phase4_1/cms_1lvl_seed_{seed}.pt",
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Audited in Phase 4.2; 100% MCQ matching across all 12 runs."
+    },
+    {
+      "metric_id": "RQ2_PAIRED_MEAN_DIFF_POOLED",
+      "metric": "mean_diff (P1 - B5)",
+      "dataset": "QASPER + LongHealth",
+      "methods": [
+        "P1",
+        "B5"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "30 QASPER items + 60 LongHealth items = 90 paired tuples (dataset, item_id, seed)",
+      "result_file": "results/phase4_1/rq2/rq2_raw_results.json",
+      "audit_file": "results/phase4_2/rq2_statistical_audit.json",
+      "checkpoints": {
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Mean Diff = +0.0093, t=0.8203, p=0.4143, Wilcoxon=31.0, p=0.8589, Cohen's d=0.0865. Zero sample filtering."
+    },
+    {
+      "metric_id": "RQ2_ABLATION_A2_2LEVEL",
+      "metric": "token_f1 (QASPER) & accuracy (LongHealth)",
+      "dataset": "QASPER + LongHealth",
+      "methods": [
+        "A2"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "30 QASPER items + 60 LongHealth items = 90 observations",
+      "result_file": "results/phase4_1/non_training/rq2/rq2_summary.json",
+      "audit_file": "results/phase4_1/checkpoint_inventory.json",
+      "checkpoints": {
+        "A2": "checkpoints/phase4_1/cms_2lvl_seed_{seed}.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Mean F1 (QASPER) = 0.0970, Mean Acc (LongHealth) = 0.2667."
+    },
+    {
+      "metric_id": "RQ3_CONTEXT_EVICTED_F1_FAITHFULNESS_REFUSAL",
+      "metric": "token_f1, faithfulness_pct, correct_refusal_pct, false_refusal_pct, false_answer_pct",
+      "dataset": "Vietnamese_Context_Evicted_100",
+      "methods": [
+        "B1",
+        "B2",
+        "B5",
+        "P1",
+        "P2"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "100 standardized questions (50 answerable, 25 unanswerable, 25 insufficient evidence)",
+      "result_file": "results/phase4_1/non_training/rq3/rq3_summary.json",
+      "audit_file": "results/phase4_2/rq3_consistency_audit.json",
+      "checkpoints": {
+        "B1": "None (frozen backbone)",
+        "B2": "None (frozen backbone) + BM25",
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt",
+        "P2": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt + BM25"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Manual blinded verification on 100 items (results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv)."
+    },
+    {
+      "metric_id": "RQ5_COMPUTATIONAL_COST_PROFILE",
+      "metric": "retrieval_time_ms, memory_load_time_ms, generation_time_ms, total_query_latency_ms, peak_vram_mb, checkpoint_size_mb",
+      "dataset": "Standardized_Cost_Profile",
+      "methods": [
+        "B1",
+        "B2",
+        "B4",
+        "B5",
+        "P1",
+        "P2"
+      ],
+      "seeds": [
+        42
+      ],
+      "question_or_item_scope": "Standardized evaluation query (COST_QUERY_001) over 20-doc corpus",
+      "result_file": "results/phase4_1/non_training/rq5/rq5_cost_profile.csv",
+      "audit_file": "results/phase4_1/non_training/rq5/rq5_summary.json",
+      "checkpoints": {
+        "B1": "None",
+        "B2": "None",
+        "B4": "checkpoints/phase4_1/cms_1lvl_seed_42.pt",
+        "B5": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+        "P1": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+        "P2": "checkpoints/phase4_1/cms_3lvl_seed_42.pt"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Measured with PyTorch CUDA memory tracking and high-resolution timing."
+    },
+    {
+      "metric_id": "VIETNAMESE_FINAL_BENCHMARK_FULL_350",
+      "metric": "exact_match_rate, refusal_match_rate, citation_match_rate",
+      "dataset": "Vietnamese (Final 350 items)",
+      "methods": [
+        "B2",
+        "P2"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "question_or_item_scope": "350 questions (300 answerable, 50 unanswerable)",
+      "result_file": "results/phase4_1/vietnamese/vietnamese_raw_results.json",
+      "audit_file": "results/phase4_1_vietnamese_p2_b2_audit.json",
+      "checkpoints": {
+        "B2": "None + BM25",
+        "P2": "checkpoints/phase4_1/cms_3lvl_seed_{seed}.pt + BM25"
+      },
+      "verification_flag": "VERIFIED",
+      "audit_notes": "Audited in Phase 4.1; per-question diff in results/phase4_1_vietnamese_p2_b2_per_question.csv."
+    }
+  ]
+}

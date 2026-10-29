@@ -1,0 +1,30 @@
+{
+  "dataset_name": "Scale Training Corpus 200 Samples",
+  "source": "src/training/training_corpus.py (get_scale_training_corpus(200))",
+  "documents": [
+    "TR_DOC_001",
+    "TR_DOC_002",
+    "TR_DOC_003",
+    "TR_DOC_004",
+    "TR_DOC_005",
+    "TR_DOC_006",
+    "TR_DOC_007",
+    "TR_DOC_008",
+    "TR_DOC_009",
+    "TR_DOC_010",
+    "TR_DOC_011",
+    "TR_DOC_012",
+    "TR_DOC_013",
+    "TR_DOC_014",
+    "TR_DOC_015",
+    "TR_DOC_016",
+    "TR_DOC_017",
+    "TR_DOC_018",
+    "TR_DOC_019",
+    "TR_DOC_020"
+  ],
+  "num_samples": 200,
+  "tokens_per_epoch": 21905,
+  "total_tokens_3_epochs": 65715,
+  "hash_verification": "ZERO_LEAKAGE_WITH_TEST_BENCHMARKS"
+}

@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{RQ5 Computational and Memory Cost Profiles under Standardized Evaluation Conditions.}
+\label{tab:rq5_cost}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Method} & \textbf{Checkpoint (MB)} & \textbf{Trainable Params} & \textbf{Retrieval (ms)} & \textbf{Generation (ms)} & \textbf{Total Query (ms)} & \textbf{Peak VRAM (MB)} \\
+\midrule
+B1 (ICL Context) & 0.00  & 0         & 0.00 & 5,168.39 & 5,168.39 & 364.69 \\
+B2 (BM25 RAG)    & 0.00  & 0         & 2.13 & 4,117.37 & 4,119.49 & 353.31 \\
+B4 (1-Level CMS) & 6.77  & 1,771,584 & 0.00 & 978.59   & 978.59   & 310.67 \\
+B5 (3-Level CMS) & 20.28 & 5,314,752 & 0.00 & 1,009.40 & 1,009.40 & 317.73 \\
+P1 (SA-CMS)      & 20.28 & 5,314,752 & 0.00 & 1,036.54 & 1,036.54 & 331.24 \\
+P2 (Hybrid)      & 20.28 & 5,314,752 & 1.35 & 4,247.96 & 4,249.31 & 369.48 \\
+\bottomrule
+\end{tabular}
+\end{table*}

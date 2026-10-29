@@ -1,0 +1,4 @@
+experiment_id,rq,method,dataset,seeds,missing_reason,required_hardware,handoff_package_path,status,source_artifact
+EXP_A1_RANDOM_BOUNDARY,RQ2,A1,QASPER / LongHealth,"42, 43, 44",Training 200 samples with randomized chunk boundaries required; prohibited on current machine,RTX 3050 (6GB/8GB),external_gpu/phase4_2/A1/,NEED_EXTERNAL_GPU,external_gpu/phase4_2/A1/config_a1.yaml
+EXP_A3_ADDITIVE_UNGATED,RQ2,A3,QASPER / LongHealth,"42, 43, 44",Training 200 samples with additive residual architecture required; prohibited on current machine,RTX 3050 (6GB/8GB),external_gpu/phase4_2/A3/,NEED_EXTERNAL_GPU,external_gpu/phase4_2/A3/config_a3.yaml
+EXP_RQ4_SEQUENTIAL_INGESTION,RQ4,"B4, B5, P1",Incremental_QASPER_RQ4 (INC_DOC_000 to INC_DOC_020),"42, 43, 44",Sequential document ingestion updates require online gradient steps across D0 -> +5 -> +10 -> +20,RTX 3050 (6GB/8GB),external_gpu/phase4_2/RQ4/,NEED_EXTERNAL_GPU,external_gpu/phase4_2/RQ4/config_rq4.yaml

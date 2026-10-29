@@ -1,0 +1,7 @@
+# Chương 1: Kiến trúc Bộ nhớ
+
+Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm 3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu.
+
+# Chương 2: Hiệu năng Thực nghiệm
+
+Hiệu năng thu hồi logit trên bài toán needle MK-NIAH tăng 175% dưới điều kiện không truy xuất.

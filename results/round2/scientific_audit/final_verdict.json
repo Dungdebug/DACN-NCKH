@@ -1,0 +1,77 @@
+{
+  "audit_metadata": {
+    "audit_title": "Round 2 Scientific Integrity Master Audit Verdict",
+    "date": "2026-10-06",
+    "project": "SA-CMS Intelligence (NCKH)",
+    "auditor": "Independent Scientific Integrity Auditor",
+    "status": "AUDIT_COMPLETE"
+  },
+  "research_question_verdicts": {
+    "RQ1": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "Nested Learning trend partially reproduces on synthetic MK-NIAH needle token recovery (P1=0.1318 vs B4=0.0479), but does NOT reproduce monotonically on real reading comprehension (QASPER: B4 0.1025 > P1 0.0896; LongHealth: B4 23.33% > P1 16.67%). P2 performance is driven by BM25 retrieval rather than memory depth."
+    },
+    "RQ2": {
+      "verdict": "NOT_PROVEN",
+      "summary": "Highest priority audit item. Claim that P2 (0.828) vs B4 (0.640) proves structure alignment (+29.4%) is scientifically invalid due to conflating retrieval and parameter count. The strictly controlled comparison P1 (0.806) vs B5 (0.801) yields p=0.4143 (t-test) and p=0.8589 (Wilcoxon), which is NOT statistically significant. Ablations A1 and A3 are pending external GPU."
+    },
+    "RQ3": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "Direct context eviction is verified and controlled. However, Round 2 narrative claims of 95-96% refusal rate are false. The true empirical score in rq3_raw_results.json is exactly 76.0% (38/50). Memory-only models (P1, B5) score 0% refusal (100% false answer). All refusal safety originates from BM25 score gating in RefusalController."
+    },
+    "RQ4": {
+      "verdict": "UNVERIFIED",
+      "summary": "Narrative claims of 88-92% retention across sequential streams (D0, D0+5, D0+10, D0+20) possess zero backing data checkpoints. P2 was never evaluated on sequential document ingestion streams. 04_rq4_status.csv explicitly marks sequential training as NEED_EXTERNAL_GPU."
+    },
+    "RQ5": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "Peak VRAM (357.28 MB) and checkpoint size (20.28 MB) are empirically valid. The reported latency of 58.89 ms represents single-token decode only; full multi-token generation requires 4,249.20 ms. Token optimization percentages (-56.2%, -81.2%) are analytical budget limits, not test-benchmarked quality reductions."
+    }
+  },
+  "auxiliary_audits": {
+    "robustness": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "8/8=1.00 score represents a deterministic software test passing on a 5-sentence synthetic fixture, not an empirical demonstration of model robustness against real-world adversarial attacks."
+    },
+    "mechanistic": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "Layer contribution splits (L1=50%, L2=30%, L3=20%) are observed diagnostic heuristics for UI visualization, not causal intervention or activation patching results."
+    },
+    "efficiency": {
+      "verdict": "PARTIALLY_VALID",
+      "summary": "Output token reduction is labeled as an EFFICIENCY OBSERVATION / DESIGN ESTIMATE. Answer quality and factual preservation under compression have not yet been evaluated."
+    }
+  },
+  "critical_gaps": [
+    "RQ2 Structure-Alignment Hypothesis Unproven: P1 vs B5 difference is statistically non-significant (p=0.4143, d=0.0865). Conflation of P2 vs B4 must be retracted from all scientific presentations.",
+    "RQ3 Narrative Inflation: Claimed 95-96% refusal rate contradicts frozen empirical artifact (76.0%). Memory-only models hallucinate 100% on unanswerable queries without BM25.",
+    "RQ4 Sequential Ingestion Missing: Zero empirical checkpoints exist for catastrophic forgetting across sequential documents (D0 to D0+20).",
+    "Robustness Overclaim: 1.00 score is from a toy 5-sentence test fixture, not a real benchmark."
+  ],
+  "non_critical_gaps": [
+    "Latency Reporting Discrepancy: Must explicitly report full generation latency (~4.25 s) alongside single-token decode latency (58.89 ms).",
+    "Token Optimizer Evaluation: Prompt compression modes lack empirical BLEU/ROUGE/F1 and citation support validation.",
+    "Mechanistic Attribution Wording: Must use 'observed diagnostic' instead of 'causal contribution'."
+  ],
+  "external_gpu_required": [
+    "RQ2 High-Powered Re-evaluation: Evaluating P1 vs B5 and ablations A1/A3 on N=500+ samples to determine if structure alignment achieves statistical significance.",
+    "RQ4 Sequential Training: Executing sequential document ingestion benchmarks (D0, D0+5, D0+10, D0+20) to compute empirical retention curves and backward transfer.",
+    "Scaled Backbone Validation: Testing whether multi-level continual memory benefits scale to 7B/8B parameter models where baseline reading comprehension is stronger."
+  ],
+  "safe_to_present": [
+    "Novel SA-CMS Architecture: 3-level structure-aligned continual memory formulation with hierarchical fast/slow update dynamics.",
+    "Synthetic Needle Recovery (MK-NIAH): Monotonic memory depth effect showing P1 (0.1318) outperforming B4 (0.0479) in target logit recovery (+175%).",
+    "Empirically Honest RQ2 Analysis: Reporting P1 (0.806) vs B5 (0.801) with full statistical disclosure (p=0.4143) as transparent scientific methodology, demonstrating the necessity of hybrid retrieval (P2).",
+    "Evicted-Context Refusal System: P2 achieving 76.0% correct refusal on unanswerable queries via hybrid BM25 uncertainty gating.",
+    "Edge Resource Profile: 357 MB peak VRAM and 20.28 MB checkpoint footprint confirming feasibility on standard consumer laptops.",
+    "Interactive Research Platform: Production-grade web interface demonstrating document parsing, chunk inspection, and diagnostic visualization."
+  ],
+  "do_not_present_yet": [
+    "DO NOT claim that structure alignment outperforms fixed-token CMS by +29.4% (Conflated comparison; actual p=0.4143).",
+    "DO NOT claim 95% or 96% refusal accuracy (Actual frozen data is strictly 76.0%).",
+    "DO NOT claim that pure memory prevents unanswerable hallucinations (Pure memory has 0% refusal; BM25 hybrid controller is strictly required).",
+    "DO NOT claim 88% retention across 20 sequential documents (Zero empirical runs; marked NEED_EXTERNAL_GPU).",
+    "DO NOT claim 1.00 robustness under adversarial perturbations (Evaluated on a 5-sentence toy test fixture).",
+    "DO NOT claim L1=50%, L2=30%, L3=20% are causal intervention discoveries (They are descriptive diagnostic weights)."
+  ]
+}

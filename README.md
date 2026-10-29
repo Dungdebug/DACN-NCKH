@@ -1,11 +1,15 @@
 # HỆ THỐNG CHATBOT HỎI ĐÁP TÀI LIỆU DỰA TRÊN NESTED LEARNING (SA-CMS & HYBRID QA)
 > **Dự án Nghiên cứu Khoa học Sinh viên (NCKH)**  
 > **Cơ sở lý thuyết**: Nested Learning & Continuum Memory System (arXiv:2512.24695v1) kết hợp Structure-Aligned Memory (SA-CMS) và Retrieval-Augmented Generation (Hybrid QA).  
-> **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` (134.5M tham số, frozen weights)  
-> **Môi trường phần cứng**: NVIDIA GeForce RTX 3050 Laptop GPU / GTX 1650 Ti, Windows 11, Python 3.9  
-> **Cập nhật lần cuối**: 04/10/2026 (🎉 **Hoàn thành 100% Phase 4.1 Full Controlled Benchmark & Master Reports**)  
-> 📢 **BÀN GIAO TOÀN DIỆN**: Vui lòng tham khảo file 👉 [`README_HANDOVER.md`](README_HANDOVER.md) để xem chi tiết kết quả và danh mục báo cáo chính thức!
+> **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` Base (134.5M tham số, frozen weights)  
+> **Bộ nhớ tham số**: SA-CMS 3 cấp độ (Level 1, 2, 3: **5,314,752 tham số** có thể huấn luyện)  
+> **Môi trường phần cứng**: NVIDIA GeForce RTX 3050 Laptop GPU (6GB VRAM) / GTX 1650 Ti, VRAM đỉnh: **743.86 MB**  
+> **Cập nhật lần cuối**: 15/10/2026 (🎉 **Nghiệm thu toàn diện Stage 2, 3 & 4 — 53/53 SHA-256 Pass, 161/161 Unit Tests Pass**)  
+> 📢 **BÁO CÁO KHOA HỌC CHÍNH THỨC**: Vui lòng tham khảo 👉 [`docs/final_scientific_report.md`](docs/final_scientific_report.md) và Bảng kết quả tổng hợp [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv)!
 
+lệnh thực thi 
+
+python scripts/run_training.py --seed all
 ---
 
 ## 📌 BẢN ĐỒ TIẾN ĐỘ DỰ ÁN (PROJECT STATUS)
@@ -382,11 +386,15 @@ DACN-NCKH/
 │   ├── run_phase3_3_e2e.py        # [PHASE 3.3] Runner backend 3 cấp & tiếng Việt
 │   └── run_training_pilot.py
 ├── tests/
+│   ├── test_strict_offline_mode.py # [STAGE 5] 100% Strict Offline Socket-Blocked Test Suite
 │   ├── test_phase3_3_backend.py   # [PHASE 3.3] 8 bài test backend 3 cấp, tiếng Việt, CLI & versioning
 │   ├── test_training_pipeline.py  # [PHASE 3.2] 7 bài test kiểm chứng pipeline huấn luyện
 │   ├── test_phase3_1_e2e.py       # [PHASE 3.1] 17 bài test E2E kiểm chứng 11 task
 │   └── test_hybrid_qa.py          # 41 bài kiểm thử tự động cho Phase 3.0
 ├── docs/                          # Hồ sơ khoa học, phân tích lỗi & báo cáo các phase
+│   ├── demo_and_defense_guide.md  # [STAGE 5] HƯỚNG DẪN DEMO OFFLINE & LỘ TRÌNH BẢO VỆ 1 THÁNG
+│   ├── final_scientific_report.md # [STAGE 4] BÁO CÁO KHOA HỌC TỔNG KẾT SA-CMS CHUẨN BÀI BÁO Q1
+│   ├── post_push_training_audit.md# [STAGE 1] Kiểm toán liêm chính trọng số & kết quả huấn luyện
 │   ├── phase4_0_protocol_freeze.md# [PHASE 4.0] BÁO CÁO ĐÓNG BĂNG GIAO THỨC THỰC NGHIỆM CHÍNH THỨC
 │   ├── phase3_3_backend_integration.md # [PHASE 3.3] Báo cáo tích hợp backend 3 cấp & smoke test tiếng Việt
 │   ├── phase3_2_1_scale_audit.md  # [PHASE 3.2.1] Báo cáo Scale Audit (100–1000) & 3-Level Feasibility
@@ -398,6 +406,13 @@ DACN-NCKH/
 │   ├── phase2_5_2_final_reconciliation.md
 │   └── phase2_5_1_statistical_audit.md
 └── results/                       # Toàn bộ dữ liệu kết quả thực nghiệm CSV & JSON
+    ├── figures/                   # [STAGE 5] BỘ 4 BIỂU ĐỒ KHOA HỌC CHUẨN Q1 (300 DPI PNG & PDF)
+    │   ├── fig1_rq2_sa_cms_vs_baselines.png / .pdf
+    │   ├── fig2_ablation_study.png / .pdf
+    │   ├── fig3_rq4_continual_forgetting_curve.png / .pdf
+    │   └── fig4_rq3_hybrid_faithfulness.png / .pdf
+    ├── phase4_2_verified_master_results.csv # [STAGE 4] BẢNG SỐ LIỆU ĐỐI CHỨNG CUỐI CÙNG RQ1-RQ5
+    ├── raw_predictions/           # [STAGE 4] Lưu vết 100% dự đoán thô (.jsonl)
     ├── phase4_0_sanity_check.json # [PHASE 4.0] Kết quả Pilot Sanity Check ALL PASSED trên 7 methods
     ├── phase3_3_e2e_results.json  # [PHASE 3.3] Dữ liệu thực nghiệm phần cứng, ma trận nhầm lẫn & trích dẫn
     ├── phase3_3_vietnamese_smoke.csv # [PHASE 3.3] Bảng kết quả 40 câu hỏi smoke test tiếng Việt
@@ -415,3 +430,6 @@ DACN-NCKH/
 
 ---
 *Ghi chú: Giữ nguyên các cam kết khoa học, không chỉnh sửa thuật toán đã chốt, không dùng kết quả chưa kiểm soát ngân sách.*
+
+NOTE Kiệt
+tui chỉ mới train AI còn về giao diện tui sẽ chỉnh sau 

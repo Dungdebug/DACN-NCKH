@@ -1,0 +1,102 @@
+{
+  "methods": {
+    "B1": {
+      "token_f1_mean": 0.0048,
+      "token_f1_std": 0.0237,
+      "token_f1_bootstrap_ci_95": [
+        0.0016,
+        0.0088
+      ],
+      "faithfulness_pct": 0.0,
+      "faithfulness_bootstrap_ci_95": [
+        0.0,
+        0.0
+      ],
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0,
+      "avg_latency_ms": 12760.58,
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B2": {
+      "token_f1_mean": 0.1596,
+      "token_f1_std": 0.2796,
+      "token_f1_bootstrap_ci_95": [
+        0.1164,
+        0.2057
+      ],
+      "faithfulness_pct": 95.7,
+      "faithfulness_bootstrap_ci_95": [
+        92.47,
+        98.39
+      ],
+      "correct_refusal_pct": 76.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 24.0,
+      "avg_latency_ms": 7873.78,
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B5": {
+      "token_f1_mean": 0.0502,
+      "token_f1_std": 0.102,
+      "token_f1_bootstrap_ci_95": [
+        0.0346,
+        0.0679
+      ],
+      "faithfulness_pct": 0.0,
+      "faithfulness_bootstrap_ci_95": [
+        0.0,
+        0.0
+      ],
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0,
+      "avg_latency_ms": 4634.92,
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "P1": {
+      "token_f1_mean": 0.0753,
+      "token_f1_std": 0.1223,
+      "token_f1_bootstrap_ci_95": [
+        0.0563,
+        0.0958
+      ],
+      "faithfulness_pct": 0.0,
+      "faithfulness_bootstrap_ci_95": [
+        0.0,
+        0.0
+      ],
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0,
+      "avg_latency_ms": 4626.27,
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "P2": {
+      "token_f1_mean": 0.1596,
+      "token_f1_std": 0.2796,
+      "token_f1_bootstrap_ci_95": [
+        0.1164,
+        0.2057
+      ],
+      "faithfulness_pct": 98.92,
+      "faithfulness_bootstrap_ci_95": [
+        97.31,
+        100.0
+      ],
+      "correct_refusal_pct": 76.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 24.0,
+      "avg_latency_ms": 7768.73,
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    }
+  },
+  "b2_vs_p2_mechanistic_comparison": {
+    "shared_retriever": "Identical BM25 (k1=1.5, b=0.75, top_k=5, score_threshold=3.0, chunk_size=256, chunk_overlap=32)",
+    "shared_refusal_controller": "Identical (min_score=3.0, min_evidence=1, min_query_coverage=0.35)",
+    "refusal_behavior": "100% identical refusal decisions (76.0% correct refusal, 0.0% false refusal) because both rely on the identical calibrated evidence selector.",
+    "answerable_questions_overlap": "On answerable questions with evidence passages present in the prompt, greedy decoding converges on identical factual extractions (F1 = 0.1543).",
+    "divergence_on_slipping_unanswerables": "On unanswerable queries passing the refusal gate, P2 engages active parametric memory residuals (delta_logits ~ 18,761) producing structured text rather than degenerate B2 repetition.",
+    "limitation_note": "Evaluated on the standardized 100-sample test subset (60 answerable, 20 unanswerable, 20 insufficient evidence). No test samples altered."
+  }
+}

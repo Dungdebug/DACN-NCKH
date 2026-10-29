@@ -1,0 +1,43 @@
+{
+  "manifest_name": "SA-CMS Offline Web Application Handoff Manifest",
+  "version": "1.0.0",
+  "timestamp": "2026-10-06T17:35:00+07:00",
+  "target_application": "run_chatbot.py / src/hybrid_qa/pipeline.py",
+  "approved_model_backbone": {
+    "name": "SmolLM2-135M Base",
+    "huggingface_path": "HuggingFaceTB/SmolLM2-135M",
+    "status": "100% Frozen Base Model"
+  },
+  "approved_architecture": {
+    "class_name": "StructureAlignedHopeLM",
+    "num_levels": 3,
+    "trainable_parameters": 5314752
+  },
+  "available_checkpoints": {
+    "production_sa_cms": {
+      "path": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+      "description": "Standard 3-Level SA-CMS Adapter trained on 200 samples (Seed 42)",
+      "seed": 42
+    },
+    "ablation_random_boundary": {
+      "path": "checkpoints/phase4_2/A1/cms_3lvl_random_seed_42.pt",
+      "description": "Ablation A1 Random Boundary Adapter (Seed 42)",
+      "seed": 42
+    },
+    "ablation_additive_ungated": {
+      "path": "checkpoints/phase4_2/A3/cms_3lvl_additive_seed_42.pt",
+      "description": "Ablation A3 Additive Ungated Adapter (Seed 42)",
+      "seed": 42
+    },
+    "continual_ingestion_snapshot_d20": {
+      "path": "checkpoints/phase4_2/RQ4/rq4_P1_seed_42_D0_plus20.pt",
+      "description": "Continual Document Ingestion Snapshot after 20 stream docs (Seed 42)",
+      "seed": 42
+    }
+  },
+  "configuration_integration_instructions": [
+    "1. Keep SmolLM2-135M Base as the local frozen backbone.",
+    "2. In run_chatbot.py or configs/phase4_experiment.yaml, set checkpoint_path to the desired adapter from available_checkpoints.",
+    "3. Ensure offline execution without external API calls or internet dependence."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Phase 4.5 Full External GPU Execution Manifest",
+  "date": "2026-10-06",
+  "dry_run": true,
+  "ingested_artifacts": {
+    "A1": {
+      "status": "DRY_RUN_MAPPED",
+      "planned_source": "results\\phase4_2\\a1_external_results.json"
+    },
+    "A3": {
+      "status": "DRY_RUN_MAPPED",
+      "planned_source": "results\\phase4_2\\a3_external_results.json"
+    },
+    "RQ4": {
+      "status": "DRY_RUN_MAPPED",
+      "planned_source": "results\\phase4_2\\rq4_external_results.json"
+    },
+    "RQ2": {
+      "status": "DRY_RUN_MAPPED",
+      "planned_source": "results\\phase4_2\\rq2_external_results.json"
+    }
+  }
+}

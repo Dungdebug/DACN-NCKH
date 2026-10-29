@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "title": "Phase 4.3 Comprehensive Contradiction & Discrepancy Audit",
+    "date": "2026-10-04",
+    "total_discrepancies_audited": 6,
+    "status": "ALL_CONTRADICTIONS_RECONCILED_WITHOUT_RAW_DATA_MODIFICATION"
+  },
+  "contradictions": [
+    {
+      "id": "CONTRA-01",
+      "category": "Parsing Key Lookup Mismatch",
+      "severity": "HIGH (Impacted Intermediate Summary File)",
+      "description": "results/phase4_1/non_training/rq1/rq1_summary.json reported 0.0000 for QASPER and LongHealth metrics.",
+      "affected_files": [
+        "results/phase4_1/non_training/rq1/rq1_summary.json",
+        "results/phase4_1/non_training/rq1/rq1_standardized_items.csv"
+      ],
+      "root_cause": "The conversion script generate_non_training_benchmarks.py looked up 'token_f1' instead of 'f1' in detailed items for QASPER, and 'accuracy' instead of 'is_correct' for LongHealth.",
+      "ground_truth_artifact": "results/phase4_1/rq1/rq1_raw_results.json",
+      "audited_ground_truth": {
+        "QASPER_F1": {
+          "B1": 0.259,
+          "B4": 0.1025,
+          "B5": 0.0957,
+          "P1": 0.0896
+        },
+        "LongHealth_Accuracy": {
+          "B1": 0.2,
+          "B4": 0.2333,
+          "B5": 0.2,
+          "P1": 0.1667
+        }
+      },
+      "resolution_policy": "Raw results in results/phase4_1/rq1/rq1_raw_results.json are preserved untouched. Master table 01_rq1_summary.csv in Phase 4.3 extracts directly from verified raw detailed items."
+    },
+    {
+      "id": "CONTRA-02",
+      "category": "Clerical Typo in Summary Text",
+      "severity": "MEDIUM (Narrative Text Only)",
+      "description": "An early progress draft reported QASPER F1 as 0.2869 for B5 and 0.2818 for P1 in the narrative text.",
+      "affected_files": [
+        "docs/phase4_1_progress.md (early section)"
+      ],
+      "root_cause": "The value 0.2818 was a clerical typo inadvertently transcribed from an earlier A2 exploratory run.",
+      "ground_truth_artifact": "results/phase4_1/rq2/rq2_raw_results.json and results/phase4_2/rq2_statistical_audit.json",
+      "audited_ground_truth": {
+        "QASPER_F1_B5": 0.1097,
+        "QASPER_F1_P1": 0.1042,
+        "mean_diff": -0.0055,
+        "pooled_90_items_mean_diff": "+0.0093 (t=0.8203, p=0.4143)"
+      },
+      "resolution_policy": "Raw json results were verified 100% accurate. Audited and corrected in Phase 4.2 statistical audit without modifying raw files."
+    },
+    {
+      "id": "CONTRA-03",
+      "category": "Scientific Conceptual Conflation",
+      "severity": "CRITICAL (Interpretation Boundary)",
+      "description": "Early drafts risked implying that P2's high faithfulness (98.92%) meant parametric memory provided citation evidence support on unanswerable queries.",
+      "affected_files": [
+        "docs/phase4_1_non_training_progress.md"
+      ],
+      "root_cause": "Misattribution of fluency stabilization to evidence retrieval.",
+      "ground_truth_artifact": "results/phase4_2/rq3_consistency_audit.json and results/phase4_3/rq3_anomaly_audit.json",
+      "audited_ground_truth": {
+        "refusal_decisions": "100% identical between B2 and P2 (76.0% correct refusal, 0.0% false refusal) via shared RefusalController.",
+        "residual_behavior": "P2's memory residual (norm ~ 631.5) regularizes syntax on the 12 slipping unanswerable queries, preventing degeneration, but does NOT constitute citation evidence support."
+      },
+      "resolution_policy": "Enforced strict scientific disclaimer: residual memory modulation is NOT evidence support."
+    },
+    {
+      "id": "CONTRA-04",
+      "category": "Method Execution Scope for RQ4",
+      "severity": "HIGH (Protocol Enforcement)",
+      "description": "Preliminary script run_phase4_1.py executed a single-step gradient update test for RQ4, creating an apparent conflict with the non-training mandate.",
+      "affected_files": [
+        "results/phase4_1/rq4/rq4_raw_results.json"
+      ],
+      "root_cause": "Early script execution prior to complete freeze lock; no intermediate snapshot checkpoints exist on disk for D0 -> +5 -> +10 -> +20.",
+      "ground_truth_artifact": "results/phase4_1/non_training/rq4/rq4_status.json",
+      "audited_ground_truth": {
+        "status": "NEED_EXTERNAL_GPU",
+        "available_snapshots": []
+      },
+      "resolution_policy": "RQ4 status locked to NEED_EXTERNAL_GPU. Standalone external GPU package prepared in external_gpu/phase4_2/RQ4/."
+    },
+    {
+      "id": "CONTRA-05",
+      "category": "Seed Aggregation Scope (RQ5 Cost vs RQ1-RQ3 Performance)",
+      "severity": "LOW (Methodological Clarification)",
+      "description": "RQ5 cost profiling was executed on Seed 42, whereas RQ1-RQ3 performance benchmarks were evaluated on 3 seeds (42, 43, 44).",
+      "affected_files": [
+        "results/phase4_1/non_training/rq5/rq5_cost_profile.csv"
+      ],
+      "root_cause": "Computational latency and peak VRAM are hardware-deterministic properties measured under static model evaluation on seed 42.",
+      "ground_truth_artifact": "results/phase4_1/non_training/rq5/rq5_summary.json",
+      "audited_ground_truth": {
+        "rq5_seeds": [
+          42
+        ],
+        "rq1_rq3_seeds": [
+          42,
+          43,
+          44
+        ]
+      },
+      "resolution_policy": "Explicitly documented in manifest and tables: RQ5 is a single-seed hardware benchmark, while RQ1-RQ3 are 3-seed statistical benchmarks."
+    },
+    {
+      "id": "CONTRA-06",
+      "category": "Context Truncation Disclosure",
+      "severity": "MEDIUM (Baseline Transparency)",
+      "description": "B1 full-document prompt context exceeds the 512-token context window of SmolLM2-135M on QASPER and LongHealth.",
+      "affected_files": [
+        "results/phase4_1/rq1/rq1_raw_results.json"
+      ],
+      "root_cause": "Architectural limit of 512 tokens on SmolLM2-135M.",
+      "ground_truth_artifact": "results/phase4_2/rq1_data_audit.json",
+      "audited_ground_truth": {
+        "mkniah_truncation_rate": "0.0%",
+        "qasper_truncation_rate": "100.0%",
+        "longhealth_truncation_rate": "100.0%"
+      },
+      "resolution_policy": "Full disclosure maintained in all tables: B1 is evaluated with prompt-context truncated to 512 tokens."
+    }
+  ]
+}

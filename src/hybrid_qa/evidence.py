@@ -76,11 +76,15 @@ class EvidenceSelector:
         max_evidence: int = 5,
         min_evidence: int = 1,
         min_query_coverage: float = 0.0,
+        dynamic_top_k: bool = False,
+        dominance_ratio: float = 0.55,
     ):
         self.score_threshold = score_threshold
         self.max_evidence = max_evidence
         self.min_evidence = min_evidence
         self.min_query_coverage = min_query_coverage
+        self.dynamic_top_k = dynamic_top_k
+        self.dominance_ratio = dominance_ratio
 
     def _tokenize_content(self, text: str) -> List[str]:
         import re
@@ -88,10 +92,48 @@ class EvidenceSelector:
         text = re.sub(r'[^\w\s]', ' ', text)
         return [w for w in text.split() if len(w) > 1 and w not in self.STOPWORDS]
 
+    def _apply_dynamic_top_k(
+        self,
+        query_tokens: set,
+        candidates: List[RetrievalResult],
+    ) -> List[RetrievalResult]:
+        """
+        Dynamic Top-K Early-Stopping & Marginal Coverage Pruning:
+        Instead of blindly feeding all k passages into the prompt, retains the top passage
+        and only includes subsequent passages if they:
+        1) Contribute new query token coverage (marginal gain > 0), OR
+        2) Have a competitive BM25 score (>= dominance_ratio * top_score) and non-zero query overlap.
+        Stops early once cumulative query coverage >= 0.85 and subsequent scores drop sharply.
+        """
+        if len(candidates) <= 1 or not query_tokens:
+            return candidates
+
+        top_score = candidates[0].score
+        selected = [candidates[0]]
+        covered_tokens = set(self._tokenize_content(candidates[0].text)) & query_tokens
+
+        for cand in candidates[1:]:
+            cand_tokens = set(self._tokenize_content(cand.text)) & query_tokens
+            new_tokens = cand_tokens - covered_tokens
+            current_cov = len(covered_tokens) / max(1, len(query_tokens))
+            score_ratio = (cand.score / top_score) if top_score > 0 else 0.0
+
+            # If we already covered >= 85% of query terms and score drops below dominance ratio, stop early
+            if current_cov >= 0.85 and score_ratio < self.dominance_ratio and not new_tokens:
+                break
+
+            # Keep passage if it brings new query terms or has strong relevance score with query overlap
+            if new_tokens or (score_ratio >= self.dominance_ratio and len(cand_tokens) > 0):
+                selected.append(cand)
+                covered_tokens.update(cand_tokens)
+
+        return selected
+
     def select_evidence(
         self,
         query: str,
         retrieval_results: List[RetrievalResult],
+        dynamic_top_k: Optional[bool] = None,
     ) -> EvidencePackage:
         """
         Select evidence from retrieval results.
@@ -102,6 +144,12 @@ class EvidenceSelector:
 
         # Take top-k
         qualified = qualified[:self.max_evidence]
+
+        q_tokens = set(self._tokenize_content(query))
+        use_dynamic = self.dynamic_top_k if dynamic_top_k is None else dynamic_top_k
+        pre_prune_count = len(qualified)
+        if use_dynamic and len(qualified) > 1:
+            qualified = self._apply_dynamic_top_k(q_tokens, qualified)
 
         # Build citations
         citations = []
@@ -116,7 +164,6 @@ class EvidenceSelector:
             ))
 
         # Compute query term coverage
-        q_tokens = set(self._tokenize_content(query))
         if q_tokens and citations:
             matched = set()
             for c in citations:
@@ -138,6 +185,11 @@ class EvidenceSelector:
             max_evidence_score=max_score,
             total_passages_searched=len(retrieval_results),
             query_coverage=coverage,
+            metadata={
+                "dynamic_top_k_applied": bool(use_dynamic),
+                "candidates_above_threshold": pre_prune_count,
+                "selected_count": len(citations),
+            },
         )
 
 

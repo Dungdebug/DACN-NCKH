@@ -1,0 +1,547 @@
+{
+  "summary": {
+    "B1_Full_Context": {
+      "avg_input_tokens_per_query": {
+        "mean": 1048.125,
+        "sd": 12.1082,
+        "ci_95": [
+          1044.4737,
+          1051.7763
+        ]
+      },
+      "avg_output_tokens_per_answer": {
+        "mean": 16.0,
+        "sd": 0.0,
+        "ci_95": [
+          16.0,
+          16.0
+        ]
+      },
+      "latency_ms_per_query": {
+        "mean": 6159.3293,
+        "sd": 81.8072,
+        "ci_95": [
+          6140.7748,
+          6188.9904
+        ]
+      },
+      "Token_F1": {
+        "mean": 0.0036,
+        "sd": 0.0223,
+        "ci_95": [
+          0.0,
+          0.0107
+        ]
+      },
+      "Exact_Match": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "B2_Standard_RAG": {
+      "avg_input_tokens_per_query": {
+        "mean": 1051.45,
+        "sd": 212.297,
+        "ci_95": [
+          991.1406,
+          1124.0044
+        ]
+      },
+      "avg_output_tokens_per_answer": {
+        "mean": 11.8,
+        "sd": 5.4,
+        "ci_95": [
+          10.15,
+          13.6
+        ]
+      },
+      "latency_ms_per_query": {
+        "mean": 4972.7697,
+        "sd": 1900.0583,
+        "ci_95": [
+          4384.2118,
+          5583.2323
+        ]
+      },
+      "Token_F1": {
+        "mean": 0.0497,
+        "sd": 0.1089,
+        "ci_95": [
+          0.0155,
+          0.0851
+        ]
+      },
+      "Exact_Match": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "P1_Memory_Only": {
+      "avg_input_tokens_per_query": {
+        "mean": 117.125,
+        "sd": 12.0441,
+        "ci_95": [
+          113.475,
+          120.7756
+        ]
+      },
+      "avg_output_tokens_per_answer": {
+        "mean": 16.025,
+        "sd": 0.3527,
+        "ci_95": [
+          15.9,
+          16.125
+        ]
+      },
+      "latency_ms_per_query": {
+        "mean": 2179.1995,
+        "sd": 342.1398,
+        "ci_95": [
+          2071.8955,
+          2287.4504
+        ]
+      },
+      "Token_F1": {
+        "mean": 0.0286,
+        "sd": 0.1245,
+        "ci_95": [
+          0.0,
+          0.0718
+        ]
+      },
+      "Exact_Match": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "P2_Hybrid_SA_CMS": {
+      "avg_input_tokens_per_query": {
+        "mean": 313.0,
+        "sd": 45.7493,
+        "ci_95": [
+          299.7463,
+          328.6019
+        ]
+      },
+      "avg_output_tokens_per_answer": {
+        "mean": 17.675,
+        "sd": 5.7593,
+        "ci_95": [
+          15.7744,
+          19.4756
+        ]
+      },
+      "latency_ms_per_query": {
+        "mean": 136.7474,
+        "sd": 14.8195,
+        "ci_95": [
+          132.0125,
+          141.1526
+        ]
+      },
+      "Token_F1": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "Exact_Match": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  "num_evaluated_queries": 40,
+  "timestamp": "2026-10-15T16:09:28Z",
+  "device": "cuda",
+  "raw_records": [
+    {
+      "question_id": "VN_FINAL_ANS_001",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "Trí tuệ Nhân tạo",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1025,
+        "out_tok": 16,
+        "lat_ms": 6638.7029,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "ợp trong việc chuẩn hó",
+        "in_tok": 1190,
+        "out_tok": 16,
+        "lat_ms": 6702.724499999998,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Nếu bạn đã đặt",
+        "in_tok": 97,
+        "out_tok": 16,
+        "lat_ms": 2015.7438000000027,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "Trí tuệ Nhân tạo",
+        "in_tok": 303,
+        "out_tok": 13,
+        "lat_ms": 114.65240000000065,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_002",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "giai đoạn 2024-2030",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1058,
+        "out_tok": 16,
+        "lat_ms": 6145.533800000003,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "các báo cáo thẩm đ�",
+        "in_tok": 1649,
+        "out_tok": 16,
+        "lat_ms": 6448.031999999997,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Nếu bạn đã đến",
+        "in_tok": 130,
+        "out_tok": 16,
+        "lat_ms": 2691.8662,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "giai đoạn 2024-2030",
+        "in_tok": 442,
+        "out_tok": 18,
+        "lat_ms": 143.05730000000239,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_003",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "35% hiệu suất vận hành",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1052,
+        "out_tok": 16,
+        "lat_ms": 6219.070099999996,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "ực tế so với phươ",
+        "in_tok": 997,
+        "out_tok": 16,
+        "lat_ms": 6430.635300000005,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Việc hiện đạt trả",
+        "in_tok": 124,
+        "out_tok": 16,
+        "lat_ms": 2485.213399999999,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "35% hiệu suất vận hành",
+        "in_tok": 309,
+        "out_tok": 19,
+        "lat_ms": 145.13269999999778,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_004",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "3 tầng chức năng độc lập",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1048,
+        "out_tok": 16,
+        "lat_ms": 6123.689000000006,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "� mô.",
+        "in_tok": 903,
+        "out_tok": 4,
+        "lat_ms": 2202.1694000000025,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Hệ thống vận hành �",
+        "in_tok": 120,
+        "out_tok": 17,
+        "lat_ms": 1994.7312000000038,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "3 tầng chức năng độc lập",
+        "in_tok": 287,
+        "out_tok": 21,
+        "lat_ms": 144.19519999999864,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_005",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "thu thập dữ liệu cơ sở",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1044,
+        "out_tok": 16,
+        "lat_ms": 6156.352500000011,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "� mô.",
+        "in_tok": 899,
+        "out_tok": 4,
+        "lat_ms": 2205.320999999998,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Trong phân cấp trong kiến tr",
+        "in_tok": 116,
+        "out_tok": 16,
+        "lat_ms": 1828.4212999999882,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "thu thập dữ liệu cơ sở",
+        "in_tok": 283,
+        "out_tok": 19,
+        "lat_ms": 145.22569999999746,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_006",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "phân tích xử lý trung gian",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1027,
+        "out_tok": 16,
+        "lat_ms": 6179.570699999999,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "� mô.",
+        "in_tok": 882,
+        "out_tok": 4,
+        "lat_ms": 2200.431899999998,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Trong bạn bạn bắt đ",
+        "in_tok": 99,
+        "out_tok": 16,
+        "lat_ms": 1711.2426999999998,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "phân tích xử lý trung gian",
+        "in_tok": 266,
+        "out_tok": 15,
+        "lat_ms": 107.35280000000103,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_007",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "báo cáo điều hành vĩ mô",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1023,
+        "out_tok": 16,
+        "lat_ms": 6121.096999999992,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "� mô.",
+        "in_tok": 878,
+        "out_tok": 4,
+        "lat_ms": 2201.539700000012,
+        "f1": 0.25,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Trong bạn bạn bắt đ",
+        "in_tok": 95,
+        "out_tok": 16,
+        "lat_ms": 1702.813599999999,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "báo cáo điều hành vĩ mô",
+        "in_tok": 262,
+        "out_tok": 21,
+        "lat_ms": 108.81879999999455,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_008",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "dưới 200 mili-giây",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1045,
+        "out_tok": 16,
+        "lat_ms": 6116.462200000001,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "ữ liệu và tuân thủ cá",
+        "in_tok": 1025,
+        "out_tok": 16,
+        "lat_ms": 6425.282699999997,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Nếu bạn đã đặt",
+        "in_tok": 117,
+        "out_tok": 16,
+        "lat_ms": 2178.278999999989,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "dưới 200 mili-giây",
+        "in_tok": 309,
+        "out_tok": 16,
+        "lat_ms": 144.750700000003,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_009",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "5 đơn vị cơ sở",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1057,
+        "out_tok": 16,
+        "lat_ms": 6128.691000000003,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "�a người dùng đạt",
+        "in_tok": 942,
+        "out_tok": 16,
+        "lat_ms": 6419.546199999999,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Giai đoạn thử nghi�",
+        "in_tok": 129,
+        "out_tok": 16,
+        "lat_ms": 2626.720500000005,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "5 đơn vị cơ sở",
+        "in_tok": 302,
+        "out_tok": 15,
+        "lat_ms": 141.139200000012,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    },
+    {
+      "question_id": "VN_FINAL_ANS_010",
+      "document_id": "VN_DOC_001",
+      "ground_truth": "15,8 tỷ đồng",
+      "B1": {
+        "ans": "phản trong phản hoặc phâ",
+        "in_tok": 1050,
+        "out_tok": 16,
+        "lat_ms": 6178.440099999989,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "B2": {
+        "ans": "�a người dùng đạt",
+        "in_tok": 935,
+        "out_tok": 16,
+        "lat_ms": 6422.958399999999,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P1": {
+        "ans": "Nếu bạn đã đặt",
+        "in_tok": 122,
+        "out_tok": 16,
+        "lat_ms": 2357.3966000000155,
+        "f1": 0.0,
+        "em": 0.0
+      },
+      "P2": {
+        "ans": "15,8 tỷ đồng",
+        "in_tok": 295,
+        "out_tok": 12,
+        "lat_ms": 145.4287999999906,
+        "f1": 1.0,
+        "em": 1.0
+      }
+    }
+  ]
+}

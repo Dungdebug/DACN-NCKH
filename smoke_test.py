@@ -1,5 +1,6 @@
 """
 Smoke Test for Hope-Attention Baseline (Phase 1).
+code train :python external_gpu/phase4_4/run_all.py
 
 Verifies the 6 mandatory gates:
 1. Model initialization

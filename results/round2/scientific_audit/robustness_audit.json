@@ -1,0 +1,65 @@
+{
+  "audit_target": "Round 2 Robustness Extension Suite (Conditions A-H)",
+  "verdict": "PARTIALLY_VALID",
+  "operational_distinction": {
+    "pipeline_sanity_test": "VALID (All 8 software tests executed and verified logic)",
+    "scientific_model_robustness": "INVALID / UNPROVEN (Values originated from a 5-passage synthetic toy fixture, not an empirical benchmark)"
+  },
+  "provenance_breakdown": {
+    "source_file": "src/evaluation/robustness_suite.py",
+    "output_file": "results/round2/robustness/robustness_results.json",
+    "test_corpus": "5 synthetic in-memory sentences (DOC_ROB_01, DOC_ROB_02, DOC_DISTRACT_01)",
+    "evaluation_mode": "Deterministic in-memory Python assertions",
+    "conditions": [
+      {
+        "id": "CONDITION_A_LONG_DOCS",
+        "claim": "Retrieval @ Depth = 1.00 on long documents (>50k tokens)",
+        "actual_provenance": "Executed on 2 short synthetic sentences (100 chars each). Did NOT evaluate documents > 50,000 tokens.",
+        "scientific_status": "UNPROVEN_ON_REAL_LONG_DOCS"
+      },
+      {
+        "id": "CONDITION_B_MULTI_DOCS",
+        "claim": "Cross-doc coverage = 1.00 on multi-document corpus",
+        "actual_provenance": "Retrieved across 2 synthetic document tags in memory fixture.",
+        "scientific_status": "DETERMINISTIC_FIXTURE"
+      },
+      {
+        "id": "CONDITION_C_IRRELEVANT_DOCS",
+        "claim": "Distractor rejection = 1.00 (100% precision)",
+        "actual_provenance": "Rejected 1 synthetic weather sentence ('Thời tiết Hà Nội hôm nay...').",
+        "scientific_status": "DETERMINISTIC_FIXTURE"
+      },
+      {
+        "id": "CONDITION_D_PARTIAL_EVIDENCE",
+        "claim": "Partial support accuracy = 1.00",
+        "actual_provenance": "Tested query coverage formula on a single synthetic query string.",
+        "scientific_status": "DETERMINISTIC_FIXTURE"
+      },
+      {
+        "id": "CONDITION_E_CONFLICTING_EVIDENCE",
+        "claim": "Conflict detection rate = 1.00",
+        "actual_provenance": "Checked if BM25 returns 2 passages containing the phrase 'thời gian huấn luyện'.",
+        "scientific_status": "DETERMINISTIC_FIXTURE"
+      },
+      {
+        "id": "CONDITION_F_MISSING_EVIDENCE",
+        "claim": "Refusal precision = 1.00 on out-of-domain queries",
+        "actual_provenance": "Tested refusal on 'Thủ đô của nước Pháp là thành phố nào?'. Correctly refused.",
+        "scientific_status": "VALID_UNIT_TEST"
+      },
+      {
+        "id": "CONDITION_G_PARAPHRASED_QUESTIONS",
+        "claim": "Paraphrase hit rate = 1.00",
+        "actual_provenance": "Tested 1 lexical variation query pair against BM25 index.",
+        "scientific_status": "DETERMINISTIC_FIXTURE"
+      },
+      {
+        "id": "CONDITION_H_NOISY_RETRIEVAL",
+        "claim": "Noise filtering rate = 1.00",
+        "actual_provenance": "Hardcoded synthetic candidate with score 2.1 vs threshold 3.0. Correctly rejected.",
+        "scientific_status": "VALID_UNIT_TEST"
+      }
+    ]
+  },
+  "critical_audit_rule": "A passing unit test is NOT equivalent to scientific model robustness. These 8 conditions demonstrate that the software pipeline's filtering and refusal logic functions correctly, but CANNOT be cited as empirical proof of model robustness on large-scale datasets."
+}

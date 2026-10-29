@@ -30,6 +30,11 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+# Enforce strict offline execution
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["SA_CMS_OFFLINE_MODE"] = "1"
+
 # Project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent if "scripts" in __file__ else Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -46,10 +51,16 @@ from src.hybrid_qa.pipeline import HybridQAPipeline, QAMode, QAResult
 def build_chatbot_pipeline(
     store_dir: str = "data/document_store",
     use_model: bool = True,
-    model_name: str = "HuggingFaceTB/SmolLM2-135M",
+    model_name: Optional[str] = None,
     device: str = "cuda",
 ) -> HybridQAPipeline:
-    """Builds the 3-level SA-CMS chatbot pipeline."""
+    """Builds the 3-level SA-CMS chatbot pipeline strictly offline."""
+    if model_name is None:
+        local_dir = PROJECT_ROOT / "local_runtime" / "model"
+        if local_dir.exists() and (local_dir / "model.safetensors").exists():
+            model_name = str(local_dir)
+        else:
+            model_name = "HuggingFaceTB/SmolLM2-135M"
     store = DocumentStore(store_dir=store_dir)
     chunker = DocumentChunker(chunk_size=256, chunk_overlap=32)
     retriever = BM25Retriever(k1=1.5, b=0.75)

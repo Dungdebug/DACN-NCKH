@@ -1,0 +1,20 @@
+# ==============================================================================
+# PHASE 4.2: RQ4 CONFIGURATION — CONTINUAL FORGETTING (EXTERNAL GPU)
+# ==============================================================================
+meta:
+  protocol_version: "4.2-rq4-continual-forgetting"
+  freeze_date: "2026-10-04"
+  target_gpu: ["RTX 3050 6GB", "RTX 3050 8GB"]
+
+experiment:
+  corpus: "src/evaluation/incremental_corpus.py (get_incremental_corpus)"
+  initial_document: "INC_DOC_000 (D0)"
+  stream_documents: 20
+  snapshot_intervals: [0, 5, 10, 20]
+  methods: ["B4", "B5", "P1"]
+  seeds: [42, 43, 44]
+
+metric:
+  formula: "F_k = Accuracy_before - Accuracy_after_k"
+  diagnostic_queries: 10
+  target_evaluation_doc: "D0"

@@ -45,14 +45,33 @@ class PretrainedHopeLM(nn.Module):
         # Determine whether to attach CMS (supports B4 single-level adapter when enable_cms=True)
         should_attach_cms = enable_cms if enable_cms is not None else (self.num_levels > 1)
 
-        # 1. Load pretrained tokenizer and causal LM backbone
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+        # 1. Resolve local offline path if model directory exists
+        import os
+        from pathlib import Path
+        resolved_path = model_name_or_path
+        if not os.path.exists(resolved_path):
+            local_candidate = Path("local_runtime/model")
+            if local_candidate.exists() and (local_candidate / "model.safetensors").exists():
+                resolved_path = str(local_candidate)
+
+        is_offline = (
+            os.path.isdir(resolved_path)
+            or os.environ.get("TRANSFORMERS_OFFLINE") == "1"
+            or os.environ.get("HF_HUB_OFFLINE") == "1"
+            or os.environ.get("SA_CMS_OFFLINE_MODE") == "1"
+        )
+
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            resolved_path,
+            local_files_only=is_offline,
+        )
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
         self.backbone = AutoModelForCausalLM.from_pretrained(
-            model_name_or_path,
+            resolved_path,
             torch_dtype=torch_dtype,
+            local_files_only=is_offline,
         ).to(self.device)
 
         # Freeze 100% of backbone parameters

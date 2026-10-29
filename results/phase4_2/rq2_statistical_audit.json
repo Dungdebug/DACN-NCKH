@@ -1,0 +1,1092 @@
+{
+  "meta": {
+    "audit_target": "RQ2 Paired Statistical Comparison & Discrepancy Investigation",
+    "protocol_source": "Phase 4.0.2 Fairness Lock & Phase 4.1 Specification",
+    "date": "2026-10-04",
+    "status": "AUDITED_VERIFIED"
+  },
+  "ten_audit_questions": {
+    "1_metric_used": {
+      "question": "Mean Diff duoc tinh tu metric nao?",
+      "finding": "Gop tu hai metric: token_f1 tren tap QASPER va accuracy tren tap LongHealth.",
+      "details": "Vector quan sat ghép noi truc tiep [token_f1 (30) || accuracy (60)] thanh 90 phan tu."
+    },
+    "2_datasets_included": {
+      "question": "Dataset nao?",
+      "finding": "Bao gom ca QASPER (10 docs x 3 seeds = 30 items) va LongHealth (20 MCQs x 3 seeds = 60 items)."
+    },
+    "3_is_qasper_item_level_only": {
+      "question": "Co phai QASPER item-level khong?",
+      "finding": "Khong phai chi QASPER. QASPER chi chiem 30/90 phan tu. Neu tinh rieng QASPER, Mean Diff la -0.0055 (P1 thap hon B5). LongHealth chiem 60/90 phan tu voi Mean Diff = +0.0167 (P1 cao hon B5)."
+    },
+    "4_subset_sample_count": {
+      "question": "Co tinh tren 90 cau hoi hay subset khac?",
+      "finding": "Chinh xac tinh tren toan bo 90 cap quan sat (30 QASPER + 60 LongHealth)."
+    },
+    "5_seed_aggregation_order": {
+      "question": "Co gop 3 seeds truoc hay sau paired test?",
+      "finding": "Gop SAU khi ghep cap tung item tren tung seed (Item-level pairing with N=90 observations). Khong phai tinh trung binh 3 seed roi moi test (N=3)."
+    },
+    "6_question_id_pairing": {
+      "question": "Pairing chinh xac theo question_id chua?",
+      "finding": "Chinh xac 100%. Khoa ghep cap: (dataset, item_id, seed). Khong co su lech thu tu hay sai lech cap."
+    },
+    "7_duplicate_question_ids": {
+      "question": "Co duplication question_id khong?",
+      "finding": "Khong. Co dung 90 khoa duy nhat tren 90 hang du lieu cua moi method."
+    },
+    "8_same_document_id": {
+      "question": "B5 va P1 co cung document_id khong?",
+      "finding": "Cung 100%. Ca hai phuong phap deu nạp va tra loi tren cung mot tai lieu goc."
+    },
+    "9_sample_filtering": {
+      "question": "Co filter sample nao truoc statistical test khong?",
+      "finding": "Khong co bat ky sample nao bi loai bo (Zero filtering)."
+    },
+    "10_mean_diff_verification": {
+      "question": "Mean Diff co thuc su la mean(P1-B5) tren paired item-level metric khong?",
+      "finding": "Co. Gia tri tinh toan lai: mean(P1 - B5) = +0.009276 (lam tron: +0.0093). t = 0.8203, p = 0.4143, Wilcoxon p = 0.8589, Cohen's d = 0.0865. Khop 100% voi ket qua Phase 4.1."
+    }
+  },
+  "reconciled_statistics": {
+    "pooled_all_90_items": {
+      "n_observations": 90,
+      "p1_mean": 0.157,
+      "b5_mean": 0.1477,
+      "mean_difference": 0.0093,
+      "std_difference": 0.1073,
+      "t_statistic": 0.8203,
+      "t_pvalue": 0.4142528237009049,
+      "wilcoxon_stat": 31.0,
+      "wilcoxon_pvalue": 0.8588630128278887,
+      "cohens_d": 0.0865,
+      "statistical_significance": "NOT_SIGNIFICANT (p > 0.05)"
+    },
+    "qasper_only_30_items": {
+      "metric": "token_f1",
+      "n_observations": 30,
+      "p1_mean": 0.1042,
+      "b5_mean": 0.1097,
+      "mean_difference": -0.0055,
+      "std_difference": 0.0328,
+      "t_statistic": -0.9199,
+      "t_pvalue": 0.3652028740925616,
+      "wilcoxon_stat": 20.0,
+      "wilcoxon_pvalue": 0.4445867389117455,
+      "cohens_d": -0.168,
+      "statistical_significance": "NOT_SIGNIFICANT (p > 0.05)"
+    },
+    "longhealth_only_60_items": {
+      "metric": "accuracy",
+      "n_observations": 60,
+      "p1_mean": 0.1833,
+      "b5_mean": 0.1667,
+      "mean_difference": 0.0167,
+      "std_difference": 0.1291,
+      "t_statistic": 1.0,
+      "t_pvalue": 0.32139427976944523,
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_pvalue": 0.31731050786291415,
+      "cohens_d": 0.1291,
+      "statistical_significance": "NOT_SIGNIFICANT (p > 0.05)"
+    }
+  },
+  "discrepancy_explanation": {
+    "issue": "Su xuat hien cua hai con so 0.2869 (B5) va 0.2818 (P1) trong phan text tong thuat cua bao cao cu",
+    "root_cause": "Trong file rq1_raw_results.json, gia tri thuc te cua QASPER F1 la B5=0.0957 va P1=0.0896 (seed 42, 43, 44 deu trong khoang 0.08 - 0.11). Con so 0.2818 thuc chat la gia tri token_f1 trung binh cua bien the A2 tren tap QASPER tu mot ban thu nghiem cu duoc chep nham vao phan text tong thuat.",
+    "raw_data_impact": "Raw result json hoan toan chinh xac va nhat quan; chi co text dien giai trong file bao cao cu co loi nham chu ky tu (clerical typo).",
+    "correction": "Da ghi nhan trong audit report nay, khong can sua de vao raw results cu ma bao ton tai results/phase4_2/."
+  },
+  "items": [
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q00",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q00",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q00",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q01",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q01",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q01",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q02",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q02",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q02",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q03",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q03",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D00_Q03",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q00",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q00",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q00",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q01",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q01",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q01",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q02",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q02",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q02",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q03",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q03",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 1.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D01_Q03",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q00",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q00",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q00",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q01",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q01",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q01",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q02",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q02",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q02",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q03",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q03",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D02_Q03",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q00",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q00",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q00",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q01",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q01",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q01",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q02",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q02",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q02",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q03",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q03",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D03_Q03",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q00",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q00",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q00",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q01",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q01",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q01",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q02",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q02",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q02",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q03",
+      "seed": 42,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q03",
+      "seed": 43,
+      "metric": "accuracy",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "LongHealth",
+      "item_id": "LH_D04_Q03",
+      "seed": 44,
+      "metric": "accuracy",
+      "b5_value": 1.0,
+      "p1_value": 1.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 11,
+      "p1_updates": 11
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_00",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.3636,
+      "p1_value": 0.2286,
+      "difference_p1_minus_b5": -0.1351,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_00",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.2222,
+      "p1_value": 0.2353,
+      "difference_p1_minus_b5": 0.0131,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_00",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.2286,
+      "p1_value": 0.2286,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_01",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.1333,
+      "p1_value": 0.2,
+      "difference_p1_minus_b5": 0.0667,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_01",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0714,
+      "p1_value": 0.069,
+      "difference_p1_minus_b5": -0.0025,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_01",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.2609,
+      "p1_value": 0.2609,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_02",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_02",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0769,
+      "p1_value": 0.0769,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_02",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.08,
+      "p1_value": 0.0833,
+      "difference_p1_minus_b5": 0.0033,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_03",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_03",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0952,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": -0.0952,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_03",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.0909,
+      "p1_value": 0.0833,
+      "difference_p1_minus_b5": -0.0076,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_04",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.0625,
+      "p1_value": 0.0625,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_04",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_04",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.0667,
+      "p1_value": 0.0667,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_05",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.1667,
+      "p1_value": 0.1667,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_05",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.1765,
+      "p1_value": 0.1714,
+      "difference_p1_minus_b5": -0.005,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_05",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.1818,
+      "p1_value": 0.1818,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_06",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.16,
+      "p1_value": 0.16,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_06",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.1935,
+      "p1_value": 0.1935,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_06",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.1818,
+      "p1_value": 0.1818,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_07",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_07",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_07",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_08",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.1176,
+      "p1_value": 0.1176,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_08",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.1538,
+      "p1_value": 0.1481,
+      "difference_p1_minus_b5": -0.0057,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_08",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.0741,
+      "p1_value": 0.0769,
+      "difference_p1_minus_b5": 0.0028,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_09",
+      "seed": 42,
+      "metric": "token_f1",
+      "b5_value": 0.1333,
+      "p1_value": 0.1333,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_09",
+      "seed": 43,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    },
+    {
+      "dataset": "QASPER",
+      "item_id": "QASPER_DOC_09",
+      "seed": 44,
+      "metric": "token_f1",
+      "b5_value": 0.0,
+      "p1_value": 0.0,
+      "difference_p1_minus_b5": 0.0,
+      "b5_updates": 5,
+      "p1_updates": 5
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+method,QASPER,LongHealth,MK-NIAH,Vietnamese,Incremental_QASPER,source_artifact
+B1,COMPLETED,COMPLETED,COMPLETED,COMPLETED,NOT_RUN,results/phase4_1/rq1/rq1_raw_results.json
+B2,NOT_RUN,NOT_RUN,NOT_RUN,COMPLETED,NOT_RUN,results/phase4_1/vietnamese/vietnamese_raw_results.json
+B4,COMPLETED,COMPLETED,COMPLETED,COMPLETED,NEED_EXTERNAL_GPU,results/phase4_1/rq1/rq1_raw_results.json
+B5,COMPLETED,COMPLETED,COMPLETED,COMPLETED,NEED_EXTERNAL_GPU,results/phase4_1/rq1/rq1_raw_results.json
+P1,COMPLETED,COMPLETED,COMPLETED,COMPLETED,NEED_EXTERNAL_GPU,results/phase4_1/rq1/rq1_raw_results.json
+P2,NOT_RUN,NOT_RUN,NOT_RUN,COMPLETED,NOT_RUN,results/phase4_1/rq3/rq3_raw_results.json
+A1,NEED_EXTERNAL_GPU,NEED_EXTERNAL_GPU,NOT_RUN,NOT_RUN,NOT_RUN,external_gpu/phase4_2/A1/config_a1.yaml
+A2,COMPLETED,COMPLETED,NOT_RUN,NOT_RUN,NOT_RUN,results/phase4_1/non_training/rq2/rq2_summary.json
+A3,NEED_EXTERNAL_GPU,NEED_EXTERNAL_GPU,NOT_RUN,NOT_RUN,NOT_RUN,external_gpu/phase4_2/A3/config_a3.yaml

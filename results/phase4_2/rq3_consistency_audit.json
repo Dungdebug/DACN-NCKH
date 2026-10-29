@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "audit_target": "RQ3 Context-Evicted QA & Hybrid Alignment Verification",
+    "protocol_source": "Phase 4.0.2 Fairness Lock & Phase 4.0.3 Scope Lock",
+    "date": "2026-10-04",
+    "status": "AUDITED_VERIFIED"
+  },
+  "retrieval_and_evidence_invariance": {
+    "shared_retriever": "BM25Retriever",
+    "bm25_parameters": {
+      "k1": 1.5,
+      "b": 0.75,
+      "top_k": 5,
+      "score_threshold": 3.0
+    },
+    "chunking_parameters": {
+      "chunk_size": 256,
+      "chunk_overlap": 32,
+      "strategy": "sentence"
+    },
+    "evidence_selector_threshold": 3.0,
+    "refusal_controller_rules": {
+      "min_evidence_score": 3.0,
+      "min_evidence_count": 1,
+      "min_query_coverage": 0.35
+    },
+    "invariance_check": "VERIFIED_IDENTICAL: P2 uses the exact same BM25 instance, passage chunks, and refusal gate as B2."
+  },
+  "b2_vs_p2_alignment_per_seed": {
+    "42": {
+      "refusal_decision_match_pct": 100.0,
+      "refusal_reason_match_pct": 100.0,
+      "citation_set_match_pct": 100.0,
+      "answerable_exact_text_match": "46 / 50",
+      "slipping_unanswerables_count": 12,
+      "slipping_unanswerables_differing_text": "9 / 12"
+    },
+    "43": {
+      "refusal_decision_match_pct": 100.0,
+      "refusal_reason_match_pct": 100.0,
+      "citation_set_match_pct": 100.0,
+      "answerable_exact_text_match": "46 / 50",
+      "slipping_unanswerables_count": 12,
+      "slipping_unanswerables_differing_text": "10 / 12"
+    },
+    "44": {
+      "refusal_decision_match_pct": 100.0,
+      "refusal_reason_match_pct": 100.0,
+      "citation_set_match_pct": 100.0,
+      "answerable_exact_text_match": "46 / 50",
+      "slipping_unanswerables_count": 12,
+      "slipping_unanswerables_differing_text": "10 / 12"
+    }
+  },
+  "method_error_taxonomy": {
+    "B1": {
+      "token_f1_mean": 0.0048,
+      "faithfulness_pct": 0.0,
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0
+    },
+    "B2": {
+      "token_f1_mean": 0.1596,
+      "faithfulness_pct": 95.7,
+      "correct_refusal_pct": 76.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 24.0
+    },
+    "B5": {
+      "token_f1_mean": 0.0502,
+      "faithfulness_pct": 0.0,
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0
+    },
+    "P1": {
+      "token_f1_mean": 0.0753,
+      "faithfulness_pct": 0.0,
+      "correct_refusal_pct": 0.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 100.0
+    },
+    "P2": {
+      "token_f1_mean": 0.1596,
+      "faithfulness_pct": 98.93,
+      "correct_refusal_pct": 76.0,
+      "false_refusal_pct": 0.0,
+      "false_answer_pct": 24.0
+    }
+  },
+  "mechanistic_findings": {
+    "refusal_behavior": "B2 and P2 have 100% identical refusal behavior because the decision to answer or refuse is entirely determined prior to generation by the calibrated RefusalController based on BM25 scores and query coverage.",
+    "answerable_generation": "When evidence passages are in the context, greedy decoding on SmolLM2-135M yields 92% identical strings (46/50 questions) between B2 and P2, resulting in an identical F1 score (0.1596).",
+    "slipping_unanswerables": "When unanswerable queries bypass the refusal controller (12 queries with partial lexical overlap >= 3.0), P2's active memory residuals (norm ~ 631.5) bias the output toward structured grammatical statements rather than degenerative repetition from B2.",
+    "faithfulness_advantage": "P2 achieves higher citation-supported faithfulness (98.92% vs 95.70%) because its parametric memory stabilizes generation and prevents unsupported claims on borderline retrieved passages."
+  }
+}

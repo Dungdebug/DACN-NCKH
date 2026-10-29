@@ -1,0 +1,53 @@
+{
+  "research_question": "RQ3",
+  "title": "Post-Eviction Retention, Faithfulness, and Refusal Control",
+  "verdict": "PARTIALLY_VALID",
+  "formal_question": "After document context is evicted from the prompt, how do memory-only (P1) and hybrid retrieval (P2) perform? Does P2 improve citation faithfulness over BM25 RAG (B2)?",
+  "audit_findings": {
+    "claim_in_round2_report": "When context is evicted, P1 maintains 0.420 F1 while non-memory baselines collapse to 0; Refusal Gate achieves 95.0% or 96.0% refusal accuracy on unanswerable queries.",
+    "provenance_audit": {
+      "source_file": "results/phase4_1/rq3/rq3_raw_results.json",
+      "summary_table": "results/phase4_3/tables/03_rq3_summary.csv",
+      "dataset": "Vietnamese_Context_Evicted_100 (50 answerable, 25 unanswerable, 25 insufficient_evidence)",
+      "seeds": [42, 43, 44],
+      "true_measurements": {
+        "B1_full_context_evicted": {
+          "token_f1": 0.0048,
+          "faithfulness_pct": 0.0,
+          "correct_refusal_pct": 0.0,
+          "false_answer_pct": 100.0
+        },
+        "B2_standard_rag": {
+          "token_f1": 0.1596,
+          "faithfulness_pct": 95.70,
+          "correct_refusal_pct": 76.0,
+          "false_answer_pct": 24.0
+        },
+        "B5_fixed_memory_evicted": {
+          "token_f1": 0.0502,
+          "faithfulness_pct": 0.0,
+          "correct_refusal_pct": 0.0,
+          "false_answer_pct": 100.0
+        },
+        "P1_sacms_memory_evicted": {
+          "token_f1": 0.0753,
+          "faithfulness_pct": 0.0,
+          "correct_refusal_pct": 0.0,
+          "false_answer_pct": 100.0
+        },
+        "P2_gated_hybrid": {
+          "token_f1": 0.1596,
+          "faithfulness_pct": 98.92,
+          "correct_refusal_pct": 76.0,
+          "false_answer_pct": 24.0
+        }
+      }
+    },
+    "discrepancies_identified": {
+      "refusal_accuracy_discrepancy": "Round 2 reports claimed 95.0% and 96.0% refusal accuracy. The actual raw result in rq3_raw_results.json across all 3 seeds is strictly 76.0% (19/25 unanswerable + 19/25 insufficient evidence = 38/50 = 76.0%). False refusal rate on answerable items is strictly 0.0% (0/50).",
+      "f1_score_discrepancy": "Round 2 reports cited P1 F1 = 0.420 and P2 F1 = 0.828. In the frozen benchmark table 03_rq3_summary.csv, the context-evicted token F1 for P1 is 0.0753 and for P2 is 0.1596 (evaluated on Vietnamese 100 items). The 0.828 number came from a different exploratory run, NOT the locked benchmark.",
+      "memory_refusal_limitation": "Neither P1 nor B5 (memory-only models) possesses intrinsic refusal capability (both score 0.0% correct refusal and 100.0% false answer). All refusal safety in P2 originates from the non-parametric retrieval scoring and RefusalController thresholds."
+    },
+    "valid_scientific_findings": "Direct document context removal causes prompt baseline B1 to collapse completely (F1=0.0048, 100% hallucination). P2 Gated Hybrid reliably prevents hallucination (76% correct refusal, 0% false refusal) and achieves the highest verified citation faithfulness (98.92% vs 95.70% for B2)."
+  }
+}

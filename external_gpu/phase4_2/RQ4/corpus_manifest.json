@@ -1,0 +1,33 @@
+{
+  "corpus_name": "Incremental Sequential Document Ingestion Corpus",
+  "d0_document_id": "INC_DOC_000",
+  "stream_document_ids": [
+    "INC_DOC_001",
+    "INC_DOC_002",
+    "INC_DOC_003",
+    "INC_DOC_004",
+    "INC_DOC_005",
+    "INC_DOC_006",
+    "INC_DOC_007",
+    "INC_DOC_008",
+    "INC_DOC_009",
+    "INC_DOC_010",
+    "INC_DOC_011",
+    "INC_DOC_012",
+    "INC_DOC_013",
+    "INC_DOC_014",
+    "INC_DOC_015",
+    "INC_DOC_016",
+    "INC_DOC_017",
+    "INC_DOC_018",
+    "INC_DOC_019",
+    "INC_DOC_020"
+  ],
+  "diagnostic_qa_count": 10,
+  "evaluation_checkpoints": [
+    "D0",
+    "D0_plus5",
+    "D0_plus10",
+    "D0_plus20"
+  ]
+}

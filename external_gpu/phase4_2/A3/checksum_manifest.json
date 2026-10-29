@@ -1,0 +1,9 @@
+{
+  "external_gpu/phase4_2/A3/config_a3.yaml": "8dc7fe3e8d097b85058ee319550f1fe55d5a50761feed535e021c912cf93368d",
+  "external_gpu/phase4_2/A3/dataset_manifest.json": "def8797c078da5c04fd9867afcb34184f0af036cf9b8a8f088793bd198c7f2db",
+  "external_gpu/phase4_2/A3/seed_manifest.json": "6b933e06c7522cfb3d0e06f6e98f55b8459c781dd5bd779d23160feba4a822b7",
+  "external_gpu/phase4_2/A3/expected_artifacts.json": "20b7cc7a95f528d07ee3ec659ad5cf627c72d64e5ef399e466991f9f2f27166a",
+  "external_gpu/phase4_2/A3/train_a3.py": "f7b5b49697dd8d02ae6eabcf9b5a0810a6cb604e86be488c161b22e59bfd0738",
+  "external_gpu/phase4_2/A3/validate_a3.py": "4096a359514e3c073871a67be23a240081b67a01f8172dcff6a0daa9518d8970",
+  "external_gpu/phase4_2/A3/eval_a3.py": "ceb471badb5bf28413e6dfc4cdf4bf84ea10d31a6beb66cde9639c3204fc5655"
+}

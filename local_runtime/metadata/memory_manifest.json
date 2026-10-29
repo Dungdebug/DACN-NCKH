@@ -1,0 +1,1794 @@
+{
+  "active_memory_id": "mem_snap_1793313216_ac7f35",
+  "memories": {
+    "mem_sa_cms_phase4_1": {
+      "memory_id": "mem_sa_cms_phase4_1",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/checkpoints/memory/cms_3lvl_seed_42.pt",
+      "document_ids": [],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T07:55:54Z",
+      "config_hash": "cfg_phase4_frozen_seed42",
+      "dataset_hash": "official_phase4_benchmark_corpus",
+      "checkpoint_sha256": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791273527_7cd09a": {
+      "memory_id": "mem_rollback_snap_1791273527_7cd09a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791273527_7cd09a.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T07:58:47Z",
+      "config_hash": "cfg_5c126c8a",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "e0d268df66718d3ec811eb10aceb4d651d26f471644c43ca36425f7f2d3aa58f",
+      "status": "VALID"
+    },
+    "mem_snap_1791273530_2308e3": {
+      "memory_id": "mem_snap_1791273530_2308e3",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791273530_2308e3.pt",
+      "document_ids": [
+        "DOC_1791273529914_47066c",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T07:58:50Z",
+      "config_hash": "cfg_f65f38b4",
+      "dataset_hash": "c238b06f1df787ac0ed97c8aebfd1b8d38dbb26fa0859bdbff1fa10ee1d19d02",
+      "checkpoint_sha256": "20d55cb1a76670ebf179938db975371170a99adc38bc7dfe6d1b984a016fc27f",
+      "status": "VALID"
+    },
+    "mem_multi_corpus": {
+      "memory_id": "mem_multi_corpus",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/checkpoints/memory/cms_3lvl_seed_42.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-29T22:26:28Z",
+      "config_hash": "cfg_966be38f",
+      "dataset_hash": "fe250a12b10b12cfc8aafaef450ea425719b2e3f8e7a998946a5496f3daf21e0",
+      "checkpoint_sha256": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791273621_1da0bf": {
+      "memory_id": "mem_rollback_snap_1791273621_1da0bf",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791273621_1da0bf.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T08:00:21Z",
+      "config_hash": "cfg_92388019",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "f163ccf658c9270d0fb98ad35939192ebf9985244ed7455647201138ee92ee8e",
+      "status": "VALID"
+    },
+    "mem_snap_1791273621_a84e14": {
+      "memory_id": "mem_snap_1791273621_a84e14",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791273621_a84e14.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791273621"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T08:00:21Z",
+      "config_hash": "cfg_adcf3182",
+      "dataset_hash": "0cfca9cd63a35b65bf21247fd904a20fa0a9b228851ada6662eabecc58c7a988",
+      "checkpoint_sha256": "4e139e19652076caab384117763fd864fd44401ef81ac4bbe1467d7b5f0d6754",
+      "status": "VALID"
+    },
+    "mem_snap_1791273625_414b9c": {
+      "memory_id": "mem_snap_1791273625_414b9c",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791273625_414b9c.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791273621",
+        "DOC_1791273624201_8c7163"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T08:00:25Z",
+      "config_hash": "cfg_0affa95b",
+      "dataset_hash": "ff7ca703ce210a362ab80988aed64a1cc3566b513b8d23382d2abdd3de67611a",
+      "checkpoint_sha256": "2951451cab805a3f6726991a6d8a4cc3b0037552f8d6201c71a76a90d261691d",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791274447_cb6cb8": {
+      "memory_id": "mem_rollback_snap_1791274447_cb6cb8",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274447_cb6cb8.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T08:14:07Z",
+      "config_hash": "cfg_ebcae190",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "42add5c7813ca4237af8ca3116fcaad5d244248232a250eb282abb5cdc3811fa",
+      "status": "VALID"
+    },
+    "mem_snap_1791274447_98f1cf": {
+      "memory_id": "mem_snap_1791274447_98f1cf",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274447_98f1cf.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791274447",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T08:14:07Z",
+      "config_hash": "cfg_6a687d26",
+      "dataset_hash": "805e5eb49d0e80eb0cbb1c09760b59994c4d8f76218b05e58ec52227a7db6ad3",
+      "checkpoint_sha256": "fb45a577fad06fa0c163f679791142d0c63f9c05847c265298ea10fe03dd0a48",
+      "status": "VALID"
+    },
+    "mem_snap_1791274450_72f8e8": {
+      "memory_id": "mem_snap_1791274450_72f8e8",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274450_72f8e8.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791274447",
+        "DOC_1791274450135_c31b43",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T08:14:11Z",
+      "config_hash": "cfg_286cc93e",
+      "dataset_hash": "d5cf39bcab5285e04d4a72db254e593f1d94097e8132474c757e9e33195c4662",
+      "checkpoint_sha256": "80a7c1bd16c66c3e282d559b3b518ab883405c7d1a86b44e97b938d2138d8338",
+      "status": "VALID"
+    },
+    "mem_snap_1791274541_ab6ea9": {
+      "memory_id": "mem_snap_1791274541_ab6ea9",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274541_ab6ea9.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "DOC_ALPHA",
+        "DOC_1791274540510_8300aa"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T08:15:41Z",
+      "config_hash": "cfg_0dffbab5",
+      "dataset_hash": "1fce4d1b652e9de5ad27eb8fca74cc05b4d8f171a78e844908fe09a65761e1cc",
+      "checkpoint_sha256": "6b86e38913693972cfe43d1fdba87cf3108bc54c6f3a1521e21121e2f1664f54",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791274542_b9cd63": {
+      "memory_id": "mem_rollback_snap_1791274542_b9cd63",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274542_b9cd63.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T08:15:42Z",
+      "config_hash": "cfg_54ff7b48",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "8fd9c22adacf64d00564822d2f304d3a53a20266c3f45eb82f18658ea56de370",
+      "status": "VALID"
+    },
+    "mem_snap_1791274542_8472f8": {
+      "memory_id": "mem_snap_1791274542_8472f8",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274542_8472f8.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791274542"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T08:15:42Z",
+      "config_hash": "cfg_27ebce06",
+      "dataset_hash": "c812699269d181388568270dcbf5397bb62f9993946e7f67d0df523dfe7012fc",
+      "checkpoint_sha256": "f4956ba6f42352efce19c1f7e15d30dac742559f7e168da8c00e424a6ea91b0c",
+      "status": "VALID"
+    },
+    "mem_snap_1791274543_084ba6": {
+      "memory_id": "mem_snap_1791274543_084ba6",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274543_084ba6.pt",
+      "document_ids": [
+        "DOC_1791274542551_d13cb6",
+        "DOC_A",
+        "LIFECYCLE_DOC_1791274542"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T08:15:43Z",
+      "config_hash": "cfg_241a9d69",
+      "dataset_hash": "db521c786596b18eb7fe302442ace7b7f897fbc38af500654ee64d1974557c84",
+      "checkpoint_sha256": "e3ef3f5dbd3fc630f1556972ee6c449cac875176aff1fa86e0b1f782ba619185",
+      "status": "VALID"
+    },
+    "mem_snap_1791274566_1134c1": {
+      "memory_id": "mem_snap_1791274566_1134c1",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274566_1134c1.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T08:16:06Z",
+      "config_hash": "cfg_155040b1",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "8e2ba0840900e3f51d3ed33a794f2dd4178d912af16cb17461a6cc3be43b3242",
+      "status": "VALID"
+    },
+    "mem_snap_1791274682_659e07": {
+      "memory_id": "mem_snap_1791274682_659e07",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274682_659e07.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_1791274681",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T08:18:02Z",
+      "config_hash": "cfg_17216929",
+      "dataset_hash": "7cc49a15661731c8e45d0d4dcf0b2c9455775d9231bd9abb109b8982403f1ea2",
+      "checkpoint_sha256": "32dfcc827113adf6aee2280507365348be03911914de835f01ea16779c961a78",
+      "status": "VALID"
+    },
+    "mem_snap_1791274683_952cd0": {
+      "memory_id": "mem_snap_1791274683_952cd0",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791274683_952cd0.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_1791274681",
+        "DOC_1791274682971_c76266",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T08:18:03Z",
+      "config_hash": "cfg_f2f0a15a",
+      "dataset_hash": "accff7e267c75b7e178962343accb3a149387de2a22b078a470ff1158ef48653",
+      "checkpoint_sha256": "f8a0572800cc1c856f80e2acfe2cdf3b942565525a49125748899d9d898b022c",
+      "status": "VALID"
+    },
+    "mem_snap_1791276829_876aeb": {
+      "memory_id": "mem_snap_1791276829_876aeb",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276829_876aeb.pt",
+      "document_ids": [
+        "DOC_1791274682971_c76266",
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "DOC_1791276828404_fb1f1a",
+        "DOC_1791274681",
+        "TEST_DOC_842",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T08:53:50Z",
+      "config_hash": "cfg_d4960503",
+      "dataset_hash": "3fbfe5edb490b7d43b88903a9c58cfb014668e43b02058448890710c48031cf8",
+      "checkpoint_sha256": "de0aee61c438cf7ecd0b83a13299fada8522d85572ee14ae1de8a3814a613bcb",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791276830_f9d29e": {
+      "memory_id": "mem_rollback_snap_1791276830_f9d29e",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276830_f9d29e.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T08:53:50Z",
+      "config_hash": "cfg_bcfa2102",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "4cbca6d27835d866cffeddc882491275b9bcf3185b999b130229d9cdde7e68d8",
+      "status": "VALID"
+    },
+    "mem_snap_1791276830_da4bbe": {
+      "memory_id": "mem_snap_1791276830_da4bbe",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276830_da4bbe.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791276830",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T08:53:50Z",
+      "config_hash": "cfg_98ebf328",
+      "dataset_hash": "dfc05a9014786277e6d5d47389c90488ee68cee21413ac94dad0c107abfed9af",
+      "checkpoint_sha256": "4a1faa75b38edccb914d3974cf9b091f1d20ec0c2294b633a3226b059ea33a1a",
+      "status": "VALID"
+    },
+    "mem_snap_1791276831_cc0844": {
+      "memory_id": "mem_snap_1791276831_cc0844",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276831_cc0844.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791276830",
+        "DOC_A",
+        "DOC_1791276830784_3a2ad9"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T08:53:51Z",
+      "config_hash": "cfg_d79625c3",
+      "dataset_hash": "efac793e495031e61d1ba675f8b1a141d5590889fb5206b7b48d0cbc475d6ae6",
+      "checkpoint_sha256": "3315c7a0414a5a2aa32f5e6414c621a5c6fde49e660a1dfe7c1f1cd1c2709317",
+      "status": "VALID"
+    },
+    "mem_snap_1791276855_853f7e": {
+      "memory_id": "mem_snap_1791276855_853f7e",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276855_853f7e.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "TEST_DOC_842",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T08:54:15Z",
+      "config_hash": "cfg_d4401280",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "56f2e1ab250e68eabf9782e28dc8e2eb181ba96bfa736c3ad2fedc5f5ab0c234",
+      "status": "VALID"
+    },
+    "mem_snap_1791276975_afde6d": {
+      "memory_id": "mem_snap_1791276975_afde6d",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276975_afde6d.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "DOC_1791276975",
+        "TEST_DOC_842",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T08:56:15Z",
+      "config_hash": "cfg_b819643e",
+      "dataset_hash": "4b2a541cbfa8b91411047a3334c48281ebcd8cf62d39f1718886eb521feacf7d",
+      "checkpoint_sha256": "2b5ed3dd366273a8fe363f423517fd68a399bae22d82b574a1a0346781a0c57a",
+      "status": "VALID"
+    },
+    "mem_snap_1791276976_40464c": {
+      "memory_id": "mem_snap_1791276976_40464c",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791276976_40464c.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_1791276976206_945df4",
+        "DOC_BETA",
+        "DOC_1791276975",
+        "TEST_DOC_842",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T08:56:16Z",
+      "config_hash": "cfg_d8aa5b25",
+      "dataset_hash": "6fa4592206d03bb34523bb9656a5f373d40c0a473e5c351b93f4d1891ca5bfa3",
+      "checkpoint_sha256": "3d1a71ad02cebd3bd4e9dcdd58b0aee5ecdab4a8cca5df950af5510523f53dcd",
+      "status": "VALID"
+    },
+    "mem_snap_1791277968_bb677b": {
+      "memory_id": "mem_snap_1791277968_bb677b",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791277968_bb677b.pt",
+      "document_ids": [
+        "DOC_1791276975",
+        "DOC_GAMMA",
+        "DOC_1791277967376_74fa5b",
+        "TEST_DOC_842",
+        "DOC_1791276976206_945df4",
+        "DOC_BETA",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T09:12:48Z",
+      "config_hash": "cfg_4c6904be",
+      "dataset_hash": "43cd93b3954e2db1519e7cd80acbd666ad3adda81d406edd831aba62326613e7",
+      "checkpoint_sha256": "d3faa252062f90250fc59e187e16ebe0844f96bec0d4c3df67a9d0f24c0e861b",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791277969_1831cf": {
+      "memory_id": "mem_rollback_snap_1791277969_1831cf",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791277969_1831cf.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T09:12:49Z",
+      "config_hash": "cfg_9d2f7006",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "fb21a6443bb9436f25f224f7e60dd96507dd64dbc63278c62adaa3ea95889078",
+      "status": "VALID"
+    },
+    "mem_snap_1791277969_d31fd0": {
+      "memory_id": "mem_snap_1791277969_d31fd0",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791277969_d31fd0.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791277969",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T09:12:49Z",
+      "config_hash": "cfg_c5779a38",
+      "dataset_hash": "61e2d74ea4af989b6a1af87a8e54bb4517fd2627b1379fef500b683efa2b6ce8",
+      "checkpoint_sha256": "274cea46ef70a0b8b6f898adf258e706ef6a1d69061882115471e32f190ee189",
+      "status": "VALID"
+    },
+    "mem_snap_1791277970_ea3db5": {
+      "memory_id": "mem_snap_1791277970_ea3db5",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791277970_ea3db5.pt",
+      "document_ids": [
+        "DOC_1791277969256_ce3a89",
+        "LIFECYCLE_DOC_1791277969",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T09:12:50Z",
+      "config_hash": "cfg_8b25676b",
+      "dataset_hash": "98e67ae4f97f59c9eb7c881b99208b13af78ef86be19717db7ecbaf4ce214cdf",
+      "checkpoint_sha256": "f8ea615a4e34faaedb10bdbe71e66ecc92d8f0959d34517c675889b84fe3990f",
+      "status": "VALID"
+    },
+    "mem_snap_1791277993_1a2a17": {
+      "memory_id": "mem_snap_1791277993_1a2a17",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791277993_1a2a17.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_ALPHA",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T09:13:13Z",
+      "config_hash": "cfg_f0c85961",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "e7cd8aae83b184c0ba07b8662291f018dd3f26b990e14ea9dafe0069509d839f",
+      "status": "VALID"
+    },
+    "mem_snap_1791278113_985768": {
+      "memory_id": "mem_snap_1791278113_985768",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278113_985768.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_ALPHA",
+        "DOC_1791278112"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T09:15:13Z",
+      "config_hash": "cfg_8e16b158",
+      "dataset_hash": "8365d7f2c0fbe6d704d900271c32141069d50c3e90e27389334abce8e891b4a1",
+      "checkpoint_sha256": "b4a20aa237bc8d1243838043f685a6ff8347eb4ed19264cba8dd190f321c3048",
+      "status": "VALID"
+    },
+    "mem_snap_1791278114_d16f43": {
+      "memory_id": "mem_snap_1791278114_d16f43",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278114_d16f43.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_1791278113919_067040",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_ALPHA",
+        "DOC_1791278112"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T09:15:14Z",
+      "config_hash": "cfg_150a2a6d",
+      "dataset_hash": "0ba1a5a1d9dc2e84c1ba4a34909def54159962a62f9d02a68f1eac6fc914e016",
+      "checkpoint_sha256": "a94b3ce26c7d19599d4320e852493a72797fe9c9952748914c4ef1fcf62e8912",
+      "status": "VALID"
+    },
+    "mem_snap_1791278803_0bb5fd": {
+      "memory_id": "mem_snap_1791278803_0bb5fd",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278803_0bb5fd.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_ALPHA",
+        "DOC_1791278113919_067040",
+        "DOC_BETA",
+        "DOC_1791278112",
+        "DOC_GAMMA",
+        "DOC_1791278802053_657344"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T09:26:43Z",
+      "config_hash": "cfg_955c16ee",
+      "dataset_hash": "63d5b69a1de1c1526808657bb1df9afc64db3b6c780d5ff42437672a8c30368b",
+      "checkpoint_sha256": "902780b401ed2f2de2c0c7997397efc354f5265c37305b937377ef894cc796b9",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791278803_4493bd": {
+      "memory_id": "mem_rollback_snap_1791278803_4493bd",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278803_4493bd.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T09:26:43Z",
+      "config_hash": "cfg_7ae710b5",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "d53b3fb03b85a87aff223f8e0f6c17858d99f4872fb4e84b665da6be48dac2e5",
+      "status": "VALID"
+    },
+    "mem_snap_1791278803_923b2a": {
+      "memory_id": "mem_snap_1791278803_923b2a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278803_923b2a.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791278803"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T09:26:43Z",
+      "config_hash": "cfg_91fb3460",
+      "dataset_hash": "0a9896a6b0084f3cd07bd642d39ecbea989797c0ef7ac793b266becea8daea2b",
+      "checkpoint_sha256": "9928387648e6ab3e1a2965ab21a6695fbd7515c85a73fa0570fafca6d32475a8",
+      "status": "VALID"
+    },
+    "mem_snap_1791278804_f1bc35": {
+      "memory_id": "mem_snap_1791278804_f1bc35",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278804_f1bc35.pt",
+      "document_ids": [
+        "DOC_A",
+        "DOC_1791278803919_dccbf3",
+        "LIFECYCLE_DOC_1791278803"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T09:26:44Z",
+      "config_hash": "cfg_eacad956",
+      "dataset_hash": "df899494303818fe5d72abfe4ec6bef87b0784b951ae65a96cc0e33653f575dc",
+      "checkpoint_sha256": "5915f0d06d9bc6a450abff2270ae0bb12aab35ff992f9b7a273fd04c0af79085",
+      "status": "VALID"
+    },
+    "mem_snap_1791278828_1c5a64": {
+      "memory_id": "mem_snap_1791278828_1c5a64",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278828_1c5a64.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T09:27:08Z",
+      "config_hash": "cfg_f58b930c",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "a10913f66710bc96c2ab165066b429bae30edc98a108994a004cb6134303a41e",
+      "status": "VALID"
+    },
+    "mem_snap_1791278945_ba11df": {
+      "memory_id": "mem_snap_1791278945_ba11df",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278945_ba11df.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_1791278945",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T09:29:05Z",
+      "config_hash": "cfg_ec6ff454",
+      "dataset_hash": "4feaee10f33241a80b84bed119be33db845a9d786529f5b21b942b8fdb449037",
+      "checkpoint_sha256": "c0e7a3cbc19731e513e606de4699df31eb05cc00f0e32cba74a51fdfa0bea34f",
+      "status": "VALID"
+    },
+    "mem_snap_1791278946_4c19fb": {
+      "memory_id": "mem_snap_1791278946_4c19fb",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278946_4c19fb.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_ALPHA",
+        "DOC_1791278946182_631110",
+        "DOC_BETA",
+        "DOC_1791278945",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T09:29:06Z",
+      "config_hash": "cfg_293d661e",
+      "dataset_hash": "f3bf656fbf61199be471b25613779f45867dda02bf6cccad3d2d5551ad46ae2d",
+      "checkpoint_sha256": "c808344cfaee671b956cae892a8059fadeea5596abc779e39a34cd6e3687eaba",
+      "status": "VALID"
+    },
+    "mem_snap_1791278987_5e3f83": {
+      "memory_id": "mem_snap_1791278987_5e3f83",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791278987_5e3f83.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_1791278945",
+        "DOC_BETA",
+        "DOC_1791278986",
+        "DOC_1791278946182_631110",
+        "TEST_DOC_842"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T09:29:47Z",
+      "config_hash": "cfg_d7e9b713",
+      "dataset_hash": "697627e7e8bbff173e1f6ba13ff432c8864fe7ca237f748e68ce9dc4411888c8",
+      "checkpoint_sha256": "61ff2eccdd6b4393a1f48c38c7321df7d5336a1dac5d6a900e18f186575d11ae",
+      "status": "VALID"
+    },
+    "mem_snap_1791279021_6681e2": {
+      "memory_id": "mem_snap_1791279021_6681e2",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279021_6681e2.pt",
+      "document_ids": [
+        "DOC_1791278946182_631110",
+        "DOC_1791278986",
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_1791278945",
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_1791279020411_1bde9f"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 8,
+      "created_at": "2026-10-06T09:30:21Z",
+      "config_hash": "cfg_0204fc44",
+      "dataset_hash": "4d9261a6cf801df60c8979e35a552a9ed96ddcf47f90e5b16e0f7cf0b0ad8fe4",
+      "checkpoint_sha256": "ce92c5694ea2b5e98a4296520493ebda5d66ac5763b6fd88f32a991ea346aec6",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791279022_f887a7": {
+      "memory_id": "mem_rollback_snap_1791279022_f887a7",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279022_f887a7.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T09:30:22Z",
+      "config_hash": "cfg_6e0bdc6d",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "7a44268ff041704570cb5868116806ceffd5c1d45ce926b7d8ab53caa6202872",
+      "status": "VALID"
+    },
+    "mem_snap_1791279022_b2c687": {
+      "memory_id": "mem_snap_1791279022_b2c687",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279022_b2c687.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791279022"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T09:30:22Z",
+      "config_hash": "cfg_3859238c",
+      "dataset_hash": "e7108097f1ad35fc1ebed7e289c4d3ef4a1fa28c12474d2f0627be8b38dee6f9",
+      "checkpoint_sha256": "a5ba4011d25e0df5322b2f8984e14b75bad9d040dcc798ce8f859ebbdf1cf470",
+      "status": "VALID"
+    },
+    "mem_snap_1791279023_e2f0b1": {
+      "memory_id": "mem_snap_1791279023_e2f0b1",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279023_e2f0b1.pt",
+      "document_ids": [
+        "DOC_A",
+        "DOC_1791279022658_47d6ab",
+        "LIFECYCLE_DOC_1791279022"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T09:30:23Z",
+      "config_hash": "cfg_1187f5cf",
+      "dataset_hash": "a9a501763f367df61afd8bd68b00078a52e69ac9ad87480019d3499a163b64a0",
+      "checkpoint_sha256": "4f1ea49d840216282bb642c8539ba52df6a200e9e138bb2d33c94dfa91178de6",
+      "status": "VALID"
+    },
+    "mem_snap_1791279050_89f22f": {
+      "memory_id": "mem_snap_1791279050_89f22f",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279050_89f22f.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "TEST_DOC_842"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T09:30:50Z",
+      "config_hash": "cfg_13d97988",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "81cd51fceb8b2359dc431420f5044d57c869692cdc531277b2fe42eb1b52179e",
+      "status": "VALID"
+    },
+    "mem_snap_1791279172_c92daa": {
+      "memory_id": "mem_snap_1791279172_c92daa",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279172_c92daa.pt",
+      "document_ids": [
+        "TEST_DOC_842",
+        "DOC_GAMMA",
+        "DOC_1791279172",
+        "DOC_ALPHA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T09:32:52Z",
+      "config_hash": "cfg_a005569d",
+      "dataset_hash": "b4c9da4526a5c99f1e660f23707d6bb6f0345a5f09e494dc99dd8e2774b179bd",
+      "checkpoint_sha256": "75c4124d621c52d46f625101411a2e4bb97cabf29288f9104b1e8157ba9796d0",
+      "status": "VALID"
+    },
+    "mem_snap_1791279173_f2ae39": {
+      "memory_id": "mem_snap_1791279173_f2ae39",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279173_f2ae39.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_1791279172",
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_1791279173294_5c4180"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T09:32:53Z",
+      "config_hash": "cfg_afda185f",
+      "dataset_hash": "f0d72800a232ff2457775147aaaa62559bfcf4c69a9963d2d227425705a5f757",
+      "checkpoint_sha256": "adf2dd6157c69752edc59e63d8bd94b703865579595605ed60a09877550628ec",
+      "status": "VALID"
+    },
+    "mem_snap_1791279731_5c08f2": {
+      "memory_id": "mem_snap_1791279731_5c08f2",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279731_5c08f2.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_1791279730294_4663e7",
+        "DOC_1791279172",
+        "DOC_1791279173294_5c4180",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T09:42:11Z",
+      "config_hash": "cfg_5bd723a6",
+      "dataset_hash": "f6fa0c7e9a315432b543396d53b4c29b8bd0a93cdee5deb4da7142399760c432",
+      "checkpoint_sha256": "4b24b21cc369c84f0ec9dcfe9a926899127e3433de940ed0d53753b8340af328",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791279732_05178a": {
+      "memory_id": "mem_rollback_snap_1791279732_05178a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279732_05178a.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T09:42:12Z",
+      "config_hash": "cfg_20df9025",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "a8922a4721f1a2a290de9da4fdebb0e077def5449a004f422f48bb6b3651bf30",
+      "status": "VALID"
+    },
+    "mem_snap_1791279732_87cdfa": {
+      "memory_id": "mem_snap_1791279732_87cdfa",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279732_87cdfa.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791279732"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T09:42:12Z",
+      "config_hash": "cfg_21c00687",
+      "dataset_hash": "da3dd5cf98ee632ac5a3ba279091e28e2bbb05828183c1482938171d89b13333",
+      "checkpoint_sha256": "ea059858b71d7c2e58231f81f254d31566cf54eb083adc02ed067976717c8118",
+      "status": "VALID"
+    },
+    "mem_snap_1791279733_58d811": {
+      "memory_id": "mem_snap_1791279733_58d811",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279733_58d811.pt",
+      "document_ids": [
+        "DOC_1791279732245_fd87dd",
+        "DOC_A",
+        "LIFECYCLE_DOC_1791279732"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T09:42:13Z",
+      "config_hash": "cfg_3a20ebd9",
+      "dataset_hash": "fccc7786832e184617f561e79017490e89ea8e0a58886407a0ccf94909d58c0a",
+      "checkpoint_sha256": "290a6a525633b7e657536af755561f3094ccee3a3b62f592f19971295b4cea81",
+      "status": "VALID"
+    },
+    "mem_snap_1791279762_e620ca": {
+      "memory_id": "mem_snap_1791279762_e620ca",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279762_e620ca.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_GAMMA",
+        "DOC_BETA",
+        "TEST_DOC_842"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T09:42:42Z",
+      "config_hash": "cfg_fe8d30b0",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "4fcc0ee63e7451c3f868ae124561488d63a8623b133dc0fb1c2c3da6a7ea471f",
+      "status": "VALID"
+    },
+    "mem_snap_1791279874_36842a": {
+      "memory_id": "mem_snap_1791279874_36842a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279874_36842a.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_1791279874",
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "TEST_DOC_842"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T09:44:35Z",
+      "config_hash": "cfg_a335aaa5",
+      "dataset_hash": "4d298dcfd7c8b3924a19416a6f13e24e82e299cc091a0abaa2ebb98f99319d6a",
+      "checkpoint_sha256": "d8cbc2641115b2b270635d8f8745bee948ec4fefc279841682cae6f02d61886a",
+      "status": "VALID"
+    },
+    "mem_snap_1791279889_c72ab1": {
+      "memory_id": "mem_snap_1791279889_c72ab1",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279889_c72ab1.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_1791279888",
+        "DOC_1791279874",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T09:44:49Z",
+      "config_hash": "cfg_5f91edc1",
+      "dataset_hash": "f09ae172fe0dbe2507ad63452dbc42ddf290e9c29efadefdfa4c42fe67bc9c64",
+      "checkpoint_sha256": "496e52143542c56f6ee15ac19431fd20433379f1053f61a3e2bb7bdca69d5a43",
+      "status": "VALID"
+    },
+    "mem_snap_1791279890_2235a7": {
+      "memory_id": "mem_snap_1791279890_2235a7",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791279890_2235a7.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_1791279890132_64639b",
+        "TEST_DOC_842",
+        "DOC_BETA",
+        "DOC_1791279888",
+        "DOC_1791279874",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T09:44:50Z",
+      "config_hash": "cfg_54372686",
+      "dataset_hash": "fd38d25e05a91c48826ae24fec489489ac15682fe5083caf91a224b295e7ad84",
+      "checkpoint_sha256": "b9a9c16c52b8fdc6283deafece8e92bc9305cbb5d7e22d6781e104be304274e3",
+      "status": "VALID"
+    },
+    "mem_snap_1791280752_490041": {
+      "memory_id": "mem_snap_1791280752_490041",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280752_490041.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_1791279890132_64639b",
+        "TEST_DOC_842",
+        "DOC_1791279874",
+        "DOC_1791280751",
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_1791279888"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 8,
+      "created_at": "2026-10-06T09:59:12Z",
+      "config_hash": "cfg_4799a7c1",
+      "dataset_hash": "1cf8cc03315d72926c79ac628a74f1bb73b20f3722f9ca525c47c72c53d53dc3",
+      "checkpoint_sha256": "97e3c17a753b8f22911492a258fb0f03f872c24015936431d346a5518249a34a",
+      "status": "VALID"
+    },
+    "mem_snap_1791280774_e735f3": {
+      "memory_id": "mem_snap_1791280774_e735f3",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280774_e735f3.pt",
+      "document_ids": [
+        "DOC_1791279890132_64639b",
+        "DOC_BETA",
+        "DOC_1791280773091_734fb4",
+        "TEST_DOC_842",
+        "DOC_1791279874",
+        "DOC_1791279888",
+        "DOC_GAMMA",
+        "DOC_1791280751",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 9,
+      "created_at": "2026-10-06T09:59:34Z",
+      "config_hash": "cfg_862daae7",
+      "dataset_hash": "a36a75cef0348ca8140889f6d80d477a746ebcf91dc922d624761046960a4f7f",
+      "checkpoint_sha256": "a8f9299d29bb80dbbe57a2b9ec000122329a3f6c43fc8026fea814420025fd9a",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791280774_affcf8": {
+      "memory_id": "mem_rollback_snap_1791280774_affcf8",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280774_affcf8.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T09:59:35Z",
+      "config_hash": "cfg_3b3ed57c",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "3e299c41b956087b6b4580b2e2d3f819778583627cce576f0e7cd83c6bbf66ce",
+      "status": "VALID"
+    },
+    "mem_snap_1791280775_717f78": {
+      "memory_id": "mem_snap_1791280775_717f78",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280775_717f78.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791280775",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T09:59:35Z",
+      "config_hash": "cfg_4eb6023c",
+      "dataset_hash": "4a23b657d92e1fc2abb49e6be9a497fb03f26be3013cb52d2e6d3aa197d030c7",
+      "checkpoint_sha256": "dc46aa28612302689315abf6054768de36b37c31475192eb201ff875ed59e649",
+      "status": "VALID"
+    },
+    "mem_snap_1791280776_dad80e": {
+      "memory_id": "mem_snap_1791280776_dad80e",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280776_dad80e.pt",
+      "document_ids": [
+        "DOC_1791280775153_9cd2b3",
+        "LIFECYCLE_DOC_1791280775",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T09:59:36Z",
+      "config_hash": "cfg_0b5c5fdd",
+      "dataset_hash": "04a810b61b70f487d2364791f5f8eee359fa90790afe60e2deb09e9155e8cafd",
+      "checkpoint_sha256": "653293aa0f9e1e9b05ef22239f93bdebf434fb91ab4e7e1f110d078ecd54cc26",
+      "status": "VALID"
+    },
+    "mem_snap_1791280801_be9e4f": {
+      "memory_id": "mem_snap_1791280801_be9e4f",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280801_be9e4f.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_GAMMA",
+        "TEST_DOC_842",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T10:00:01Z",
+      "config_hash": "cfg_d3044583",
+      "dataset_hash": "3ce5de86b223f27a19af2419cd5e4931e8cbcd97b39eae09463683f23946f6ad",
+      "checkpoint_sha256": "a09dd8e1becd300945e4ba13822fed4c9cd0d3a0e8fcca71516b25cbacabb953",
+      "status": "VALID"
+    },
+    "mem_snap_1791280954_0165a8": {
+      "memory_id": "mem_snap_1791280954_0165a8",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280954_0165a8.pt",
+      "document_ids": [
+        "DOC_1791280954",
+        "DOC_BETA",
+        "TEST_DOC_842",
+        "DOC_GAMMA",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T10:02:35Z",
+      "config_hash": "cfg_fd5d7009",
+      "dataset_hash": "f80957fca2ae45ac9fd59fe994bdc965cf5fc4f893af0400c8a27b06cdc2dc85",
+      "checkpoint_sha256": "2b58d40239863c1e433d5c189cc2c26cc2fe2ae1e54bd092e7046dc8a0e44059",
+      "status": "VALID"
+    },
+    "mem_snap_1791280956_af3d67": {
+      "memory_id": "mem_snap_1791280956_af3d67",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791280956_af3d67.pt",
+      "document_ids": [
+        "DOC_1791280955936_93e4e6",
+        "DOC_1791280954",
+        "DOC_BETA",
+        "TEST_DOC_842",
+        "DOC_GAMMA",
+        "DOC_ALPHA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T10:02:37Z",
+      "config_hash": "cfg_46cc276e",
+      "dataset_hash": "e60213cc7e8dfa7ce1e4d41499c108cfc3730a6a9009346644a05b2fda00dde0",
+      "checkpoint_sha256": "55b64cdf1e204fe0463701e8d85d7b476084848bdf22c22d754851b2d0187a24",
+      "status": "VALID"
+    },
+    "mem_snap_1791281441_5ffe3a": {
+      "memory_id": "mem_snap_1791281441_5ffe3a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791281441_5ffe3a.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_1791280954",
+        "DOC_1791281440",
+        "DOC_1791280955936_93e4e6",
+        "DOC_GAMMA",
+        "TEST_DOC_842"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T10:10:42Z",
+      "config_hash": "cfg_f149b585",
+      "dataset_hash": "783823a214b43ee9a4a28f15ac5cf3dd58f2e8474c9621a3dceb4232de4ab6da",
+      "checkpoint_sha256": "cf1b3beb058b5cc64a9ece2cdaf60a641598323808247abcbfebcf6f72d94762",
+      "status": "VALID"
+    },
+    "mem_snap_1791283042_613ff6": {
+      "memory_id": "mem_snap_1791283042_613ff6",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283042_613ff6.pt",
+      "document_ids": [
+        "DOC_1791283042337_9b86a7",
+        "TEST_DOC_842",
+        "DOC_1791280954",
+        "DOC_1791280955936_93e4e6",
+        "DOC_1791281440",
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 8,
+      "created_at": "2026-10-06T10:37:22Z",
+      "config_hash": "cfg_f27ba2d2",
+      "dataset_hash": "9e10e593204308e14690c31bd5f2ad92a6d4be63187fecf4ef0c3d145ed8c8f8",
+      "checkpoint_sha256": "9826dddfe475413adddff93ea33e4d3e6aae72c98d8dd5a14f2c969ceb244d79",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791283042_2e4217": {
+      "memory_id": "mem_rollback_snap_1791283042_2e4217",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283042_2e4217.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T10:37:22Z",
+      "config_hash": "cfg_edea3055",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "ca7a0469eb22e875639dbd0304d0a779369cbc94b9daa5769079b7a409b09903",
+      "status": "VALID"
+    },
+    "mem_snap_1791283042_297e79": {
+      "memory_id": "mem_snap_1791283042_297e79",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283042_297e79.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791283042",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T10:37:22Z",
+      "config_hash": "cfg_cabb9252",
+      "dataset_hash": "f450a66a4ee6b1a4cb2bf9afa5ac049e03d0ca2a978bda8be17cdb7a51d82b2e",
+      "checkpoint_sha256": "55e2f58b4e09d517ca819a2f48894ca85afb2399446821fe31a7a514d540fa4c",
+      "status": "VALID"
+    },
+    "mem_snap_1791283043_6667cc": {
+      "memory_id": "mem_snap_1791283043_6667cc",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283043_6667cc.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1791283042",
+        "DOC_A",
+        "DOC_1791283042968_18bef2"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T10:37:23Z",
+      "config_hash": "cfg_b50133cf",
+      "dataset_hash": "51c4d7d2fc0c22daccbd88ca018e5ec5aed5509cfb7a9ddd48b5088826539e48",
+      "checkpoint_sha256": "98149abf3d7dd221316f0757e0c7c75d5d65de5e3bb591d948daa1f1783598ad",
+      "status": "VALID"
+    },
+    "mem_snap_1791283056_9fcaf7": {
+      "memory_id": "mem_snap_1791283056_9fcaf7",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283056_9fcaf7.pt",
+      "document_ids": [
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "TEST_DOC_911"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T10:37:37Z",
+      "config_hash": "cfg_cdc314e7",
+      "dataset_hash": "a9d0c0ab9dbe85e05e219ef5e2933e9a44ba4d3691a116e8452fd124024f9e13",
+      "checkpoint_sha256": "96be606d60cdf186c10e76587eb955e7b95fbeac68fb01bb4c60d0a0b888b3ce",
+      "status": "VALID"
+    },
+    "mem_snap_1791283057_2884de": {
+      "memory_id": "mem_snap_1791283057_2884de",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283057_2884de.pt",
+      "document_ids": [
+        "TEST_DOC_911",
+        "DOC_GAMMA",
+        "DOC_1791283057",
+        "DOC_ALPHA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T10:37:37Z",
+      "config_hash": "cfg_ea3e41e8",
+      "dataset_hash": "76223b7c8e207eb02ab86269f0d0c82acdd7a6d68bf93e2caef65f108d6cf368",
+      "checkpoint_sha256": "4531117b9747f5dd8c566d42bdd0ccc58184b82c6f0f01c57184b5b619564d50",
+      "status": "VALID"
+    },
+    "mem_snap_1791283058_3f5a7c": {
+      "memory_id": "mem_snap_1791283058_3f5a7c",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283058_3f5a7c.pt",
+      "document_ids": [
+        "TEST_DOC_911",
+        "DOC_1791283057937_0958a8",
+        "DOC_GAMMA",
+        "DOC_1791283057",
+        "DOC_ALPHA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T10:37:38Z",
+      "config_hash": "cfg_ea72d2aa",
+      "dataset_hash": "e33a0b765eaff06a80bfe7b3ab8bfb4a205982811c6d06aa97ac5f635a3fa9a7",
+      "checkpoint_sha256": "042eb4840e9b72a260fda9b954a023f11660ad80ec539cee271700a35630aac5",
+      "status": "VALID"
+    },
+    "mem_snap_1791283100_927af0": {
+      "memory_id": "mem_snap_1791283100_927af0",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283100_927af0.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_1791283098620_4bf746",
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "DOC_1791283057937_0958a8",
+        "TEST_DOC_911",
+        "DOC_1791283057"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-06T10:38:20Z",
+      "config_hash": "cfg_99fd9811",
+      "dataset_hash": "727918a33ab7e023cc96b0c4888098d2eaa62ede69d8f2291e0dad412e287185",
+      "checkpoint_sha256": "ffa145cfaae9d17e18045ba37e93f2699610401a3a3191ee4491f3e3a4e66ada",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1791283100_fee8d3": {
+      "memory_id": "mem_rollback_snap_1791283100_fee8d3",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283100_fee8d3.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-06T10:38:20Z",
+      "config_hash": "cfg_6a5096aa",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "11ed18d2987eca0a4d34c01fb487f25362029853444065df5e680cd1ab143a86",
+      "status": "VALID"
+    },
+    "mem_snap_1791283100_09c3bd": {
+      "memory_id": "mem_snap_1791283100_09c3bd",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283100_09c3bd.pt",
+      "document_ids": [
+        "DOC_A",
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-06T10:38:20Z",
+      "config_hash": "cfg_9c987529",
+      "dataset_hash": "078a0313f0b38b194fb901ee02977c63c401235c1570fa60247d494d8e338d51",
+      "checkpoint_sha256": "a7376e952019fa8794ee7090373d07d9b3cd83280125e3b96778cb4d720b6d12",
+      "status": "VALID"
+    },
+    "mem_snap_1791283101_4da12b": {
+      "memory_id": "mem_snap_1791283101_4da12b",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283101_4da12b.pt",
+      "document_ids": [
+        "DOC_1791283100781_bbd126",
+        "DOC_A",
+        "LIFECYCLE_DOC_1791283100"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-06T10:38:21Z",
+      "config_hash": "cfg_d1b01a1a",
+      "dataset_hash": "807dbd43db09824017e119ee7b429b3c534d030f2efc0b250b5afaf09db9a75d",
+      "checkpoint_sha256": "d5da89fc6c00a0c9d0d78571495136aa3070264eceb3f99459c76144a7f3c144",
+      "status": "VALID"
+    },
+    "mem_snap_1791283116_ffde69": {
+      "memory_id": "mem_snap_1791283116_ffde69",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283116_ffde69.pt",
+      "document_ids": [
+        "TEST_DOC_911",
+        "DOC_ALPHA",
+        "DOC_GAMMA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-06T10:38:36Z",
+      "config_hash": "cfg_989e3351",
+      "dataset_hash": "a9d0c0ab9dbe85e05e219ef5e2933e9a44ba4d3691a116e8452fd124024f9e13",
+      "checkpoint_sha256": "ae4df45c04febfe5683d72f2927375a2deafc0ef73002beca902858c1a9679fe",
+      "status": "VALID"
+    },
+    "mem_snap_1791283205_5412ec": {
+      "memory_id": "mem_snap_1791283205_5412ec",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283205_5412ec.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_1791283205",
+        "DOC_ALPHA",
+        "DOC_GAMMA",
+        "TEST_DOC_911"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-06T10:40:05Z",
+      "config_hash": "cfg_f95a2d85",
+      "dataset_hash": "d6f873e1e1d937ffd2264a38646bfbe8b5f580520ea53253e8dd566b62666eb9",
+      "checkpoint_sha256": "7e56ff5b048e594cebefe0894cf8101fc56acaf743b38d5bf700c88f92aae27c",
+      "status": "VALID"
+    },
+    "mem_snap_1791283206_cdd91b": {
+      "memory_id": "mem_snap_1791283206_cdd91b",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791283206_cdd91b.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_1791283205",
+        "DOC_1791283205834_afe706",
+        "DOC_GAMMA",
+        "DOC_ALPHA",
+        "TEST_DOC_911"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-06T10:40:06Z",
+      "config_hash": "cfg_2b15c1b7",
+      "dataset_hash": "69011ede22a86ba7d4a379b8331cb04ce22006ab2193ccc42b7561b54573fe33",
+      "checkpoint_sha256": "a72fa9219d69410d151a36bbcf87658664691c4b01292d712b79bb1b43153d96",
+      "status": "VALID"
+    },
+    "mem_snap_1791376891_ee56a4": {
+      "memory_id": "mem_snap_1791376891_ee56a4",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1791376891_ee56a4.pt",
+      "document_ids": [
+        "DOC_1791283205",
+        "DOC_GAMMA",
+        "DOC_1791376866",
+        "DOC_ALPHA",
+        "TEST_DOC_911",
+        "DOC_BETA",
+        "DOC_1791283205834_afe706"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-07T12:41:31Z",
+      "config_hash": "cfg_7839afcd",
+      "dataset_hash": "e691b3f083b01c0aac2ad564f9ca49dfc58f98c5d21cb7494b9cab1fdeb90be8",
+      "checkpoint_sha256": "8da4f37ab67fbd57bcc1561a5244478501d7519025d96ec4870b39cb22642fb0",
+      "status": "VALID"
+    },
+    "mem_snap_1792043655_36618a": {
+      "memory_id": "mem_snap_1792043655_36618a",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1792043655_36618a.pt",
+      "document_ids": [
+        "DOC_BETA",
+        "DOC_GAMMA",
+        "DOC_1792043655",
+        "DOC_1791283205",
+        "TEST_DOC_911",
+        "DOC_1791376866",
+        "DOC_ALPHA",
+        "DOC_1791283205834_afe706"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 8,
+      "created_at": "2026-10-15T05:54:16Z",
+      "config_hash": "cfg_33053c6d",
+      "dataset_hash": "494a472fd94acd08d7d1bb21ed4c78de4e121b97d929b387ca78aaf46207b407",
+      "checkpoint_sha256": "3d398fa089c080c8be36924ea352f5fa12e808a97a5b0a14205cb121c97d4401",
+      "status": "VALID"
+    },
+    "mem_snap_1793312785_ebfc0e": {
+      "memory_id": "mem_snap_1793312785_ebfc0e",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312785_ebfc0e.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "TEST_DOC_911",
+        "DOC_GAMMA",
+        "DOC_1791376866",
+        "DOC_BETA",
+        "DOC_1791283205834_afe706",
+        "DOC_1792043655",
+        "DOC_1791283205",
+        "DOC_1793312784795_a661f6"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 9,
+      "created_at": "2026-10-29T22:26:25Z",
+      "config_hash": "cfg_05b921fb",
+      "dataset_hash": "53aa37ba917e2221257d8167358ff7aa577e33919c37e761322fa303830b1ce6",
+      "checkpoint_sha256": "612c7970dc81a1a5b80833ef7cb2e8b93107f11d16d4d79af0d66efd54e5eb29",
+      "status": "VALID"
+    },
+    "mem_rollback_snap_1793312786_db5fe5": {
+      "memory_id": "mem_rollback_snap_1793312786_db5fe5",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312786_db5fe5.pt",
+      "document_ids": [
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 0,
+      "created_at": "2026-10-29T22:26:26Z",
+      "config_hash": "cfg_10db25bb",
+      "dataset_hash": "69164bc3d9525859fad19f4bf3e53f3db6cc851edd6cfefde8f0bd4c251f4368",
+      "checkpoint_sha256": "b8ae10ecd197600519232b325199de1521e0efa928199b5ed16b897594b45d2d",
+      "status": "VALID"
+    },
+    "mem_snap_1793312787_abdcd3": {
+      "memory_id": "mem_snap_1793312787_abdcd3",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312787_abdcd3.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1793312786",
+        "DOC_A"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 2,
+      "created_at": "2026-10-29T22:26:27Z",
+      "config_hash": "cfg_85f073f4",
+      "dataset_hash": "12f540b7b2d7c3633642fb5724e051e753a6d13bafd4023362393283fa269c14",
+      "checkpoint_sha256": "4a40dc27c9769875c049817a8ffdc01bbc69e037e231bb12f459d6c7d367de75",
+      "status": "VALID"
+    },
+    "mem_snap_1793312787_f19fc2": {
+      "memory_id": "mem_snap_1793312787_f19fc2",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312787_f19fc2.pt",
+      "document_ids": [
+        "LIFECYCLE_DOC_1793312786",
+        "DOC_A",
+        "DOC_1793312787080_5f3e47"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 3,
+      "created_at": "2026-10-29T22:26:27Z",
+      "config_hash": "cfg_3aa36118",
+      "dataset_hash": "3ff291d16573b7179c11964a731c0b3cd71224fcf62bcd2a23c0b1bb15ca8595",
+      "checkpoint_sha256": "2743a7f9e19b02780e68dbbe6b05fe2028be41238dac21799c157ed87e0dc8fd",
+      "status": "VALID"
+    },
+    "mem_snap_1793312809_2140d2": {
+      "memory_id": "mem_snap_1793312809_2140d2",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312809_2140d2.pt",
+      "document_ids": [
+        "TEST_DOC_911",
+        "DOC_ALPHA",
+        "DOC_GAMMA",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 4,
+      "created_at": "2026-10-29T22:26:49Z",
+      "config_hash": "cfg_bc3ae139",
+      "dataset_hash": "a9d0c0ab9dbe85e05e219ef5e2933e9a44ba4d3691a116e8452fd124024f9e13",
+      "checkpoint_sha256": "05907eff1777cd2d2050c5ea4bf5bb9ddd701384c37ce7281e4ac8a7d9227bd9",
+      "status": "VALID"
+    },
+    "mem_snap_1793312847_5b62f4": {
+      "memory_id": "mem_snap_1793312847_5b62f4",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312847_5b62f4.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "TEST_DOC_911",
+        "DOC_GAMMA",
+        "DOC_1793312847",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 5,
+      "created_at": "2026-10-29T22:27:27Z",
+      "config_hash": "cfg_8bbca8e3",
+      "dataset_hash": "0ddc50000f7cfe49583f845c72a70c04f39bb7821b89d9097b73351ca7f94527",
+      "checkpoint_sha256": "f0ce749858e6a55614794a62de8c3f9c68a5253446e251c1b2d4610e880dc508",
+      "status": "VALID"
+    },
+    "mem_snap_1793312848_231d25": {
+      "memory_id": "mem_snap_1793312848_231d25",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793312848_231d25.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_1793312847963_010c36",
+        "TEST_DOC_911",
+        "DOC_GAMMA",
+        "DOC_1793312847",
+        "DOC_BETA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-29T22:27:28Z",
+      "config_hash": "cfg_1d9dc391",
+      "dataset_hash": "f5c278981d95e147a69d672e96d179189c0808fa92f2c813d9ad7f8ae2447b39",
+      "checkpoint_sha256": "cbc8f52c6c045904ca2c5ea888be1ac8fecdec8afe925206e7d11aa220c32272",
+      "status": "VALID"
+    },
+    "mem_snap_1793313171_845bc6": {
+      "memory_id": "mem_snap_1793313171_845bc6",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793313171_845bc6.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_BETA",
+        "DOC_1793312847963_010c36",
+        "DOC_1793312847",
+        "TEST_DOC_911",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 6,
+      "created_at": "2026-10-29T22:32:51Z",
+      "config_hash": "cfg_a2d4f947",
+      "dataset_hash": "f5c278981d95e147a69d672e96d179189c0808fa92f2c813d9ad7f8ae2447b39",
+      "checkpoint_sha256": "63f05d699138388d3861579a75824e21971a6a2866f1ef19ed93971378ed629c",
+      "status": "VALID"
+    },
+    "mem_snap_1793313214_ae238d": {
+      "memory_id": "mem_snap_1793313214_ae238d",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793313214_ae238d.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_1793313214",
+        "DOC_BETA",
+        "DOC_1793312847963_010c36",
+        "DOC_1793312847",
+        "TEST_DOC_911",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 7,
+      "created_at": "2026-10-29T22:33:34Z",
+      "config_hash": "cfg_7e3389cc",
+      "dataset_hash": "df5dc8fb99a9b963541e239268e496d928c1fd1f6386981f74b8465da005d594",
+      "checkpoint_sha256": "93428b471d29c7a7ceff610c22f6c0a4e4c90b1634765360469faf1ca8d739f3",
+      "status": "VALID"
+    },
+    "mem_snap_1793313216_ac7f35": {
+      "memory_id": "mem_snap_1793313216_ac7f35",
+      "base_model": "HuggingFaceTB/SmolLM2-135M",
+      "tokenizer": "SmolLM2 Fast Tokenizer",
+      "checkpoint_path": "local_runtime/snapshots/snap_1793313216_ac7f35.pt",
+      "document_ids": [
+        "DOC_ALPHA",
+        "DOC_1793313214",
+        "DOC_BETA",
+        "DOC_1793313215358_1d46f3",
+        "DOC_1793312847963_010c36",
+        "DOC_1793312847",
+        "TEST_DOC_911",
+        "DOC_GAMMA"
+      ],
+      "memory_levels": 3,
+      "update_schedule": "structure: L1=paragraph, L2=section, L3=document",
+      "update_count": 8,
+      "created_at": "2026-10-29T22:33:36Z",
+      "config_hash": "cfg_42a502cc",
+      "dataset_hash": "20c40e7c07576e5d05dec8c224d59cccc8b064eb9ef922954ebccd4b74cd98a1",
+      "checkpoint_sha256": "97cbd2b83110c8f724402c22678c65bd8dad61b200bae355370781c7e0a7f0e6",
+      "status": "VALID"
+    }
+  }
+}

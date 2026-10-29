@@ -1,0 +1,36 @@
+{
+  "research_question": "RQ2",
+  "title": "Structure-Aligned vs Fixed-Token Updating Under Matched Budget",
+  "priority": "HIGHEST_PRIORITY",
+  "verdict": "NOT_PROVEN",
+  "formal_question": "Does structure-aligned memory updating (P1) outperform fixed-token updating (B5) at the exact same number of gradient updates and parameter budget?",
+  "expected_primary_comparison": "P1 (SA-CMS, 3-level) vs B5 (Fixed-token CMS, 3-level) under controlled conditions: identical SmolLM2-135M frozen backbone, identical 5,314,752 parameters, identical 200 training samples, identical seeds (42, 43, 44), identical context-evicted evaluation set.",
+  "audit_findings": {
+    "claim_in_round2_report": "P2 achieves 0.828 F1 on Vietnamese QA vs B4 (0.640 F1), proving structure alignment improves semantic retention by +29.4%.",
+    "scientific_flaw": "SEVERE RQ-DRIFT AND CONFLATION. P2 is a 3-level Gated Hybrid system (5.3M params + BM25 retrieval). B4 is a 1-level adapter (1.77M params, zero retrieval). Comparing P2 vs B4 conflates retrieval presence (+BM25), parameter count (5.3M vs 1.77M), and architectural levels (3-level vs 1-level). It provides ZERO scientific evidence for structure-aligned vs fixed-token update boundaries.",
+    "actual_phase4_statistical_test": {
+      "source_file": "results/phase4_2/rq2_statistical_audit.json",
+      "summary_table": "results/phase4_3/tables/02_rq2_summary.csv",
+      "sample_size": 90,
+      "pooled_datasets": "QASPER (30 items) + LongHealth (60 items) across Seeds 42, 43, 44",
+      "mean_p1": 0.1570,
+      "mean_b5": 0.1477,
+      "mean_difference": 0.0093,
+      "std_difference": 0.1073,
+      "t_statistic": 0.8203,
+      "t_pvalue": 0.4143,
+      "wilcoxon_statistic": 31.0,
+      "wilcoxon_pvalue": 0.8589,
+      "cohens_d": 0.0865,
+      "bootstrap_95_ci": [-0.0051, 0.0340],
+      "official_verdict": "NOT_SIGNIFICANT (p > 0.05)"
+    },
+    "ablation_status": {
+      "A1_random_boundary_cms": "NEED_EXTERNAL_GPU (0 samples executed)",
+      "A2_two_level_sacms": "COMPLETED (F1=0.0970 QASPER, Acc=0.2667 LongHealth)",
+      "A3_additive_ungated_cms": "NEED_EXTERNAL_GPU (0 samples executed)"
+    },
+    "scientific_conclusion": "The hypothesis that structure-aligned updating outperforms fixed-token updating is NOT PROVEN on the controlled Phase 4 benchmark. The observed difference (mean delta = +0.0093) has a p-value of 0.4143 (t-test) and 0.8589 (Wilcoxon), with Cohen's d = 0.0865, which is statistically indistinguishable from null noise.",
+    "required_action": "Strictly prohibit claiming RQ2 is 'proven' by P2 vs B4. Accurately report: At the 200-sample budget, P1 vs B5 showed no statistically significant difference (p=0.4143); full validation of structural boundary advantages requires the larger training corpus on the external RTX 3050 GPU."
+  }
+}

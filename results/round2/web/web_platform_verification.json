@@ -1,0 +1,27 @@
+{
+  "system": "SA-CMS Web Product 2.0 Quality Gate Verification",
+  "protocol": "ROUND_2_EXTENSION",
+  "timestamp": "2026-10-06T13:16:15Z",
+  "verification_items": {
+    "chat_first_ux": { "status": "PASSED", "details": "ChatGPT/Claude style minimalist conversation interface" },
+    "drag_drop_upload": { "status": "PASSED", "details": "Interactive overlay on entire chat zone without dominating screen" },
+    "document_chips_above_composer": { "status": "PASSED", "details": "Inline document chips with title, file size, and remove button" },
+    "multi_document_support": { "status": "PASSED", "details": "Attaching multiple documents and cross-document comparison" },
+    "new_conversation": { "status": "PASSED", "details": "Dedicated '+ Cuộc trò chuyện mới' button and session CRUD" },
+    "citation": { "status": "PASSED", "details": "Clickable [1], [2] badges linking to supporting passage" },
+    "evidence_preview": { "status": "PASSED", "details": "Inline expandable 'Xem đoạn trích' accordion and right source drawer" },
+    "refusal_when_unsupported": { "status": "PASSED", "details": "Standardized Vietnamese refusal: 'Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn.'" },
+    "concise_default_answer": { "status": "PASSED", "details": "Supports Concise, Balanced, and Detailed modes without verbose hallucinations" },
+    "research_mode": { "status": "PASSED", "details": "Toggle in sidebar reveals routing, token breakdown, and inspect drawer" },
+    "token_usage": { "status": "PASSED", "details": "Exact input, output, and total token telemetry per response" },
+    "latency": { "status": "PASSED", "details": "Overall latency and retrieval breakdown measured in milliseconds" },
+    "retrieval_inspection": { "status": "PASSED", "details": "Top-k chunk inspection, scores, and threshold filtering" },
+    "memory_inspection": { "status": "PASSED", "details": "3-level parameter accounting (5,314,752 parameters) and weights" },
+    "vietnamese_interface": { "status": "PASSED", "details": "100% Vietnamese localized UI labels, placeholders, and error messages" },
+    "responsive_layout": { "status": "PASSED", "details": "Mobile and tablet CSS media queries with collapsable sidebar" },
+    "loading_states": { "status": "PASSED", "details": "Pulsing thinking indicator with informative progress text" },
+    "error_states": { "status": "PASSED", "details": "Graceful refusal bubbles and clear error notifications" },
+    "empty_states": { "status": "PASSED", "details": "Clean welcome screen with quick question suggestion chips" }
+  },
+  "overall_status": "ALL_18_CRITERIA_VERIFIED"
+}

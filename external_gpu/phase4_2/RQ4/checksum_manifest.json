@@ -1,0 +1,7 @@
+{
+  "external_gpu/phase4_2/RQ4/config_rq4.yaml": "f5afc629e530d097aa80155870497241e1bf663b4ab7192e0333193dc22c3444",
+  "external_gpu/phase4_2/RQ4/corpus_manifest.json": "14113d1717f129bd354db9bd91abed96dcd0aec58f432fe9972afd8fcf0c7e4c",
+  "external_gpu/phase4_2/RQ4/snapshot_schedule.json": "6f4d0519c6c6d4389d7de12e727d61ade4981852435e7b68eda9cc3f98c4c0db",
+  "external_gpu/phase4_2/RQ4/run_rq4_ingestion.py": "438811db7087c1e68ddddcad8f6e5e6d0c82e6733e998f8e88e330bef31cbb4f",
+  "external_gpu/phase4_2/RQ4/eval_rq4_retention.py": "6d8d63cdd56b2eb1c82ec6b2246bf6d48ae5bf31f39b9ff193d94627e241604b"
+}

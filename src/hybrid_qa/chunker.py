@@ -24,17 +24,24 @@ class DocumentChunker:
         r'(?<=\n)\s*\n+'                             # Blank line
     )
 
+    ABBREVIATIONS = {
+        "tp.", "ts.", "pgs.", "gs.", "ths.", "ks.", "cn.", "bs.", "đc.", "tr.",
+        "dr.", "mr.", "mrs.", "ms.", "prof.", "fig.", "eq.", "sec.", "vol.", "no.", "vs.", "al.",
+    }
+
     def __init__(
         self,
         chunk_size: int = 256,
         chunk_overlap: int = 32,
         min_chunk_size: int = 64,
         strategy: str = "sentence",  # "sentence" or "fixed"
+        adaptive_overlap: bool = True,
     ):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.min_chunk_size = min_chunk_size
         self.strategy = strategy
+        self.adaptive_overlap = adaptive_overlap
 
     def chunk_document(self, doc: DocumentRecord) -> List[Passage]:
         """
@@ -80,7 +87,12 @@ class DocumentChunker:
         return passages
 
     def _sentence_chunk(self, text: str) -> List[Tuple[str, int, int]]:
-        """Sentence-aware chunking with overlap."""
+        """
+        Sentence-aware chunking with Adaptive Structural Boundary Overlap:
+        - If a chunk ends at a natural paragraph boundary (blank line) or before a new section heading,
+          overlap is set to 0 to eliminate redundant token duplication across paragraphs.
+        - If a single long paragraph is split mid-paragraph, sentence overlap is preserved.
+        """
         # Split into sentences
         sentences = self._split_sentences(text)
         if not sentences:
@@ -101,18 +113,28 @@ class DocumentChunker:
                 chunk_end = current_sentences[-1][2]
                 chunks.append((chunk_text.strip(), chunk_start, chunk_end))
 
-                # Overlap: keep last few sentences
-                overlap_len = 0
-                overlap_start = len(current_sentences)
-                for i in range(len(current_sentences) - 1, -1, -1):
-                    overlap_len += len(current_sentences[i][0])
-                    if overlap_len >= self.chunk_overlap:
-                        overlap_start = i
-                        break
+                # Check if boundary between chunk_end and sent_start is a natural paragraph/section break
+                gap_text = text[chunk_end:sent_start] if sent_start >= chunk_end else ""
+                is_natural_boundary = ("\n\n" in gap_text) or sent_text.lstrip().startswith("#")
 
-                current_sentences = current_sentences[overlap_start:]
-                current_len = sum(len(s[0]) for s in current_sentences)
-                current_start = current_sentences[0][1] if current_sentences else sent_start
+                if self.adaptive_overlap and is_natural_boundary:
+                    # Zero-overlap on natural structural boundaries to save tokens
+                    current_sentences = []
+                    current_len = 0
+                    current_start = sent_start
+                else:
+                    # Mid-paragraph split: keep last few sentences for continuity
+                    overlap_len = 0
+                    overlap_start = len(current_sentences)
+                    for i in range(len(current_sentences) - 1, -1, -1):
+                        overlap_len += len(current_sentences[i][0])
+                        if overlap_len >= self.chunk_overlap:
+                            overlap_start = i
+                            break
+
+                    current_sentences = current_sentences[overlap_start:]
+                    current_len = sum(len(s[0]) for s in current_sentences)
+                    current_start = current_sentences[0][1] if current_sentences else sent_start
 
             current_sentences.append((sent_text, sent_start, sent_end))
             current_len += sent_len
@@ -128,6 +150,8 @@ class DocumentChunker:
                 # Merge short trailing chunk with previous
                 prev_text, prev_start, prev_end = chunks[-1]
                 chunks[-1] = (prev_text + " " + chunk_text.strip(), prev_start, chunk_end)
+            else:
+                chunks.append((chunk_text.strip(), chunk_start, chunk_end))
 
         return chunks
 
@@ -144,13 +168,24 @@ class DocumentChunker:
         return chunks
 
     def _split_sentences(self, text: str) -> List[Tuple[str, int, int]]:
-        """Split text into (sentence_text, start_char, end_char) tuples."""
+        """
+        Split text into (sentence_text, start_char, end_char) tuples.
+        Protects common Vietnamese/English abbreviations and numbering from false splits.
+        """
         sentences = []
         last_end = 0
         for match in self.SENTENCE_BOUNDARY.finditer(text):
-            sent_text = text[last_end:match.start()].strip()
-            if sent_text:
-                sentences.append((sent_text, last_end, match.start()))
+            candidate = text[last_end:match.start()].strip()
+            if not candidate:
+                last_end = match.end()
+                continue
+
+            # Check if split occurred right after an abbreviation (e.g. 'TS.', 'Tp.', 'Fig.', 'Eq.')
+            last_word = candidate.split()[-1].lower() if candidate.split() else ""
+            if last_word in self.ABBREVIATIONS and "\n" not in match.group(0):
+                continue
+
+            sentences.append((candidate, last_end, match.start()))
             last_end = match.end()
 
         # Last sentence

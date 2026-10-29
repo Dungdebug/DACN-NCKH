@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Benchmark Execution Matrix across Methods, Research Questions, and Datasets.}
+\label{tab:benchmark_status}
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Method} & \textbf{Category} & \textbf{RQ1} & \textbf{RQ2} & \textbf{RQ3} & \textbf{RQ4} & \textbf{RQ5} & \textbf{Overall Status} & \textbf{External GPU} \\
+\midrule
+B1 & Baseline (ICL Context) & COMPLETED & NOT\_RUN & COMPLETED & NOT\_RUN & COMPLETED & COMPLETED & False \\
+B2 & Baseline (BM25 RAG)    & NOT\_RUN  & NOT\_RUN & COMPLETED & NOT\_RUN & COMPLETED & COMPLETED & False \\
+B3 & Baseline (Cartridges)  & EXCLUDED  & EXCLUDED & EXCLUDED  & EXCLUDED & EXCLUDED  & EXCLUDED  & False \\
+B4 & Baseline (1-Level)     & COMPLETED & NOT\_RUN & NOT\_RUN  & NEED\_GPU& COMPLETED & PARTIAL   & True \\
+B5 & Baseline (Fixed CMS)   & COMPLETED & COMPLETED& COMPLETED & NEED\_GPU& COMPLETED & PARTIAL   & True \\
+P1 & Proposed (SA-CMS)      & COMPLETED & COMPLETED& COMPLETED & NEED\_GPU& COMPLETED & PARTIAL   & True \\
+P2 & Proposed (Hybrid)      & NOT\_RUN  & NOT\_RUN & COMPLETED & NOT\_RUN & COMPLETED & COMPLETED & False \\
+\midrule
+A1 & Ablation (Random Bound)& NOT\_RUN  & NEED\_GPU& NOT\_RUN  & NOT\_RUN & NOT\_RUN  & NEED\_EXTERNAL\_GPU & True \\
+A2 & Ablation (2-Level)     & NOT\_RUN  & COMPLETED& NOT\_RUN  & NOT\_RUN & NOT\_RUN  & COMPLETED & False \\
+A3 & Ablation (Additive)    & NOT\_RUN  & NEED\_GPU& NOT\_RUN  & NOT\_RUN & NOT\_RUN  & NEED\_EXTERNAL\_GPU & True \\
+\bottomrule
+\end{tabular}
+\end{table*}

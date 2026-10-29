@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "title": "Phase 4.3 RQ4 External GPU Package Readiness Audit",
+    "date": "2026-10-04",
+    "target_rq": "RQ4 (Continual Document Ingestion & Catastrophic Forgetting)",
+    "status": "NEED_EXTERNAL_GPU",
+    "hardware_target": "RTX 3050 (6GB / 8GB)"
+  },
+  "audit_findings": {
+    "corpus_manifest_verification": {
+      "status": "VERIFIED_READY",
+      "file": "external_gpu/phase4_2/RQ4/corpus_manifest.json",
+      "initial_document": "INC_DOC_000",
+      "stream_document_count": 20,
+      "total_documents": 21,
+      "stream_document_range": "INC_DOC_001 to INC_DOC_020",
+      "diagnostic_qa_count": 10
+    },
+    "document_ordering_verification": {
+      "status": "VERIFIED_STRICT",
+      "ordering": "Deterministic sequential stream: INC_DOC_001 -> INC_DOC_002 -> ... -> INC_DOC_020",
+      "shuffle": false
+    },
+    "snapshot_schedule_verification": {
+      "status": "VERIFIED_MATCHED",
+      "file": "external_gpu/phase4_2/RQ4/snapshot_schedule.json",
+      "intervals": [
+        {
+          "id": "D0",
+          "stream_docs": 0,
+          "checkpoint_pattern": "rq4_{method}_seed_{seed}_D0.pt"
+        },
+        {
+          "id": "D0_plus5",
+          "stream_docs": 5,
+          "checkpoint_pattern": "rq4_{method}_seed_{seed}_D0_plus5.pt"
+        },
+        {
+          "id": "D0_plus10",
+          "stream_docs": 10,
+          "checkpoint_pattern": "rq4_{method}_seed_{seed}_D0_plus10.pt"
+        },
+        {
+          "id": "D0_plus20",
+          "stream_docs": 20,
+          "checkpoint_pattern": "rq4_{method}_seed_{seed}_D0_plus20.pt"
+        }
+      ],
+      "total_snapshots_per_seed": 4,
+      "total_snapshots_required": 36
+    },
+    "evaluation_script_verification": {
+      "status": "VERIFIED_STANDALONE",
+      "file": "external_gpu/phase4_2/RQ4/eval_rq4_retention.py",
+      "runner_script": "external_gpu/phase4_2/RQ4/run_rq4_ingestion.py",
+      "config_file": "external_gpu/phase4_2/RQ4/config_rq4.yaml",
+      "checksums_file": "external_gpu/phase4_2/RQ4/checksum_manifest.json"
+    },
+    "forgetting_metric_verification": {
+      "status": "VERIFIED_MATHEMATICAL",
+      "formula": "F_k = Accuracy(D0) - Accuracy(D0_plus_k) for k in {5, 10, 20}",
+      "primary_metric": "D0 Knowledge Retention (%) and Retention Drop F_k (percentage points)"
+    },
+    "checkpoint_naming_verification": {
+      "status": "VERIFIED_CONVENTION",
+      "convention": "rq4_{method}_seed_{seed}_{interval}.pt",
+      "methods": [
+        "B4",
+        "B5",
+        "P1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "intervals": [
+        "D0",
+        "D0_plus5",
+        "D0_plus10",
+        "D0_plus20"
+      ]
+    }
+  },
+  "local_machine_freeze_compliance": {
+    "rule": "ZERO training on current machine (GTX 1650 Ti 4GB).",
+    "action": "Execution halted; package sealed for RTX 3050 external handoff.",
+    "fake_data_policy": "NO simulated or placeholder results generated."
+  }
+}

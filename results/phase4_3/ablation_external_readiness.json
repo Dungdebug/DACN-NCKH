@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "title": "Phase 4.3 Ablation Readiness Audit (A1 & A3)",
+    "date": "2026-10-04",
+    "protocol": "Phase 4.0.2 Final Fairness Lock",
+    "status": "ALL_CHECKS_PASSED_ZERO_MISMATCH"
+  },
+  "expected_parameter_count": 5314752,
+  "ablation_checks": {
+    "A1": {
+      "status": "VERIFIED_COMPLIANT",
+      "backbone": "HuggingFaceTB/SmolLM2-135M",
+      "samples_count": 200,
+      "d_model": 576,
+      "d_ff": 1536,
+      "num_levels": 3,
+      "trainable_parameters": 5314752,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch_size": 4,
+      "update_budget_steps": 150,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "package_path": "external_gpu/phase4_2/A1/",
+      "execution_status": "NEED_EXTERNAL_GPU"
+    },
+    "A3": {
+      "status": "VERIFIED_COMPLIANT",
+      "backbone": "HuggingFaceTB/SmolLM2-135M",
+      "samples_count": 200,
+      "d_model": 576,
+      "d_ff": 1536,
+      "num_levels": 3,
+      "trainable_parameters": 5314752,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "batch_size": 2,
+      "grad_accum_steps": 2,
+      "effective_batch_size": 4,
+      "update_budget_steps": 150,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "package_path": "external_gpu/phase4_2/A3/",
+      "execution_status": "NEED_EXTERNAL_GPU"
+    }
+  },
+  "verdict": "READY_FOR_EXTERNAL_GPU_EXECUTION"
+}

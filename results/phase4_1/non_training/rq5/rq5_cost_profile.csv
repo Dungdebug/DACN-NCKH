@@ -1,0 +1,7 @@
+method,dataset,question_id,seed,checkpoint,checkpoint_size_mb,retrieval_time_ms,memory_load_time_ms,generation_time_ms,total_query_latency_ms,answer_tokens,peak_vram_mb,existing_ingest_time_per_1k_tokens_sec,evaluation_type
+B1,Standardized_Cost_Profile,COST_QUERY_001,42,None (frozen backbone),0.0,0.0,3845.48,5168.39,5168.39,16,364.69,0.0,frozen-checkpoint inference profiling
+B2,Standardized_Cost_Profile,COST_QUERY_001,42,None (frozen backbone),0.0,2.13,2116.48,4117.37,4119.49,16,353.31,0.0,frozen-checkpoint inference profiling
+B4,Standardized_Cost_Profile,COST_QUERY_001,42,D:\NCKH\checkpoints\phase4_1\cms_1lvl_seed_42.pt,6.77,0.0,2078.2,978.59,978.59,16,310.67,1.2752,frozen-checkpoint inference profiling
+B5,Standardized_Cost_Profile,COST_QUERY_001,42,D:\NCKH\checkpoints\phase4_1\cms_3lvl_seed_42.pt,20.28,0.0,2313.94,1009.4,1009.4,16,317.73,2.1845,frozen-checkpoint inference profiling
+P1,Standardized_Cost_Profile,COST_QUERY_001,42,D:\NCKH\checkpoints\phase4_1\cms_3lvl_seed_42.pt,20.28,0.0,2108.18,1036.54,1036.54,16,331.24,2.213,frozen-checkpoint inference profiling
+P2,Standardized_Cost_Profile,COST_QUERY_001,42,D:\NCKH\checkpoints\phase4_1\cms_3lvl_seed_42.pt,20.28,1.35,2062.26,4247.96,4249.31,16,369.48,2.213,frozen-checkpoint inference profiling

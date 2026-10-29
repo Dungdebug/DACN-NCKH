@@ -1,0 +1,200 @@
+{
+  "MK-NIAH": {
+    "B1": {
+      "primary_metric": "accuracy",
+      "n_observations": 300,
+      "mean": 0.4,
+      "std": 0.4907,
+      "ci_95_bootstrap": [
+        0.3433,
+        0.45
+      ],
+      "avg_target_prob": 0.5068,
+      "target_prob_ci_95": [
+        0.492,
+        0.5214
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B4": {
+      "primary_metric": "accuracy",
+      "n_observations": 300,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.0479,
+      "target_prob_ci_95": [
+        0.0452,
+        0.0507
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B5": {
+      "primary_metric": "accuracy",
+      "n_observations": 300,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.0349,
+      "target_prob_ci_95": [
+        0.0317,
+        0.0382
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "P1": {
+      "primary_metric": "accuracy",
+      "n_observations": 300,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1318,
+      "target_prob_ci_95": [
+        0.1249,
+        0.1379
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    }
+  },
+  "QASPER": {
+    "B1": {
+      "primary_metric": "token_f1",
+      "n_observations": 30,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1705,
+      "target_prob_ci_95": [
+        0.0749,
+        0.2761
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B4": {
+      "primary_metric": "token_f1",
+      "n_observations": 30,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1431,
+      "target_prob_ci_95": [
+        0.0653,
+        0.2337
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B5": {
+      "primary_metric": "token_f1",
+      "n_observations": 30,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1434,
+      "target_prob_ci_95": [
+        0.0525,
+        0.2452
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "P1": {
+      "primary_metric": "token_f1",
+      "n_observations": 30,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1253,
+      "target_prob_ci_95": [
+        0.0507,
+        0.2102
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    }
+  },
+  "LongHealth": {
+    "B1": {
+      "primary_metric": "accuracy",
+      "n_observations": 60,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.0077,
+      "target_prob_ci_95": [
+        0.0,
+        0.0185
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B4": {
+      "primary_metric": "accuracy",
+      "n_observations": 60,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1349,
+      "target_prob_ci_95": [
+        0.1135,
+        0.1595
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "B5": {
+      "primary_metric": "accuracy",
+      "n_observations": 60,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.0938,
+      "target_prob_ci_95": [
+        0.0757,
+        0.1176
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    },
+    "P1": {
+      "primary_metric": "accuracy",
+      "n_observations": 60,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci_95_bootstrap": [
+        0.0,
+        0.0
+      ],
+      "avg_target_prob": 0.1308,
+      "target_prob_ci_95": [
+        0.0986,
+        0.1694
+      ],
+      "evaluation_type": "frozen-checkpoint inference evaluation"
+    }
+  }
+}

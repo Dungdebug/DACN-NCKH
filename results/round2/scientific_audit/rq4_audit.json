@@ -1,0 +1,20 @@
+{
+  "research_question": "RQ4",
+  "title": "Continual Document Ingestion Catastrophic Forgetting",
+  "verdict": "UNVERIFIED",
+  "formal_question": "How much catastrophic forgetting of initial document knowledge (D0) occurs after sequentially ingesting 5, 10, and 20 new documents?",
+  "audit_findings": {
+    "claim_in_round2_report": "After 5 sequential documents, P2 retains 88.0% of knowledge (-12.0% drop), significantly outperforming fixed model B4 (-27.5% drop).",
+    "provenance_audit": {
+      "status_table": "results/phase4_3/tables/04_rq4_status.csv",
+      "status_verdict": "NEED_EXTERNAL_GPU",
+      "official_reason": "Sequential memory updates require online gradient steps; training prohibited on current local hardware (GTX 1650 Ti 4GB). Requires external RTX 3050 (6GB/8GB).",
+      "raw_results_file": "results/phase4_1/rq4/rq4_raw_results.json",
+      "sample_size_in_raw_file": 10,
+      "methods_in_raw_file": ["B4", "B5", "P1"],
+      "p2_presence": "ABSENT (P2 is not present in rq4_raw_results.json)"
+    },
+    "scientific_flaw": "The claim that 'P2 retains 88.0% knowledge vs B4 -27.5%' is an unsupported narrative claim with NO backing in any checkpoint or raw evaluation file. P2 was never evaluated in RQ4. The 10-sample pilot in rq4_raw_results.json is statistically underpowered (granularity of 10% per question) and cannot support broad claims about catastrophic forgetting curves.",
+    "required_action": "Mark RQ4 as UNVERIFIED pending execution of the external training package on the RTX 3050 GPU (as specified in scripts/run_external_rq4.py and external_gpu/phase4_2/RQ4/). Do NOT present retention numbers for P2 until external checkpoints arrive."
+  }
+}

@@ -21,16 +21,16 @@
     "precision": "float32",
     "random_seed": 42,
     "device": "cuda",
-    "wall_clock_time_sec": 10.95,
-    "token_throughput_tps": 3062.44,
-    "peak_vram_mb": 826.47,
+    "wall_clock_time_sec": 12.19,
+    "token_throughput_tps": 2752.47,
+    "peak_vram_mb": 826.48,
     "checkpoint_size_mb": 13.52,
     "epoch_train_losses": [
-      4.5745,
+      4.5746,
       3.7465,
-      3.3757
+      3.3759
     ],
-    "final_train_loss": 3.3757,
+    "final_train_loss": 3.3759,
     "pre_train_validation": {
       "val_loss": 5.0655,
       "val_ppl": 158.46,
@@ -38,8 +38,8 @@
       "exact_match": 0.0
     },
     "post_train_validation": {
-      "val_loss": 4.4886,
-      "val_ppl": 89.0,
+      "val_loss": 4.4889,
+      "val_ppl": 89.02,
       "token_f1": 0.2487,
       "exact_match": 0.02
     }
@@ -66,9 +66,9 @@
     "precision": "float32",
     "random_seed": 42,
     "device": "cuda",
-    "wall_clock_time_sec": 22.54,
-    "token_throughput_tps": 2915.2,
-    "peak_vram_mb": 828.58,
+    "wall_clock_time_sec": 24.2,
+    "token_throughput_tps": 2715.55,
+    "peak_vram_mb": 828.59,
     "checkpoint_size_mb": 13.52,
     "epoch_train_losses": [
       4.5972,
@@ -83,7 +83,7 @@
       "exact_match": 0.0
     },
     "post_train_validation": {
-      "val_loss": 4.5738,
+      "val_loss": 4.5739,
       "val_ppl": 96.92,
       "token_f1": 0.2431,
       "exact_match": 0.0

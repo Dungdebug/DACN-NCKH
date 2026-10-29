@@ -1,0 +1,55 @@
+{
+  "scoreboard_metadata": {
+    "title": "Authoritative Research Question Scoreboard",
+    "protocol": "ROUND_2_RECOVERY_EXPERIMENT_LOCK",
+    "date": "2026-10-06",
+    "status_taxonomy": ["VALID", "PARTIALLY_VALID", "NOT_PROVEN", "UNVERIFIED"]
+  },
+  "scoreboard": [
+    {
+      "rq": "RQ1",
+      "status": "PARTIALLY_VALID",
+      "title": "Small-scale CMS replication of Nested Learning trends",
+      "current_evidence": "P1 (3-level) achieves 0.1318 target token logit probability on MK-NIAH vs B4 (1-level) at 0.0479 (+175.2%) under zero retrieval. However, on QASPER and LongHealth, 1-level B4 outperforms 3-level P1 (QASPER F1: 0.1025 vs 0.0896; LongHealth Acc: 23.33% vs 16.67%). P2 performance (0.1830 F1) is driven by BM25 retrieval.",
+      "valid_metric": "Target token logit probability on synthetic MK-NIAH needle probe (controlled for retrieval).",
+      "limitation": "Trend does not hold monotonically on natural reading comprehension tasks. Conflation occurs if P2 is used instead of pure memory P1.",
+      "next_experiment": "Scale backbone beyond 135M to 1B-3B parameters on external GPU to test whether reading comprehension benefits emerge with greater model capacity."
+    },
+    {
+      "rq": "RQ2",
+      "status": "NOT_PROVEN",
+      "title": "Structure-aligned updating vs fixed-token updating at matched budget",
+      "current_evidence": "Strictly controlled Phase 4.2 comparison P1 (SA-CMS 3-level, 0.8056) vs B5 (Token-CMS 3-level, 0.8007) on 90 samples yields p=0.4143 (paired t-test), p=0.8589 (Wilcoxon), Cohen's d=0.0865. Difference is statistically non-significant.",
+      "valid_metric": "Controlled paired difference (mean diff = +0.0049), two-tailed p-values, and effect size under identical 5.3M param budget and update counts.",
+      "limitation": "Insufficient sample size (N=90) and single seed statistical power. P2 vs B4 comparison in prior report was invalid due to retrieval conflation.",
+      "next_experiment": "High-powered controlled evaluation: P1 vs B5 on N >= 500 evaluation items across 3 seeds (42, 43, 44) on external GPU."
+    },
+    {
+      "rq": "RQ3",
+      "status": "PARTIALLY_VALID",
+      "title": "Context eviction retention and hybrid refusal safety",
+      "current_evidence": "In Phase 4.2 context-evicted evaluation, P2 achieves 76.0% correct refusal accuracy (38/50) and 0% false refusal (0/50) on unanswerable queries. However, pure memory models (P1, B5) score 0% refusal (100% false answering).",
+      "valid_metric": "Empirical refusal accuracy (76.0%) and faithfulness under verified context eviction (direct document context removed from prompt).",
+      "limitation": "Parametric memory alone has zero refusal capability; all unanswerable detection and refusal behavior originates from the BM25 retrieval score threshold.",
+      "next_experiment": "Calibrate adaptive dual-threshold refusal controller combining BM25 uncertainty with memory hidden state perplexity/entropy on external GPU."
+    },
+    {
+      "rq": "RQ4",
+      "status": "UNVERIFIED",
+      "title": "Catastrophic forgetting during sequential document ingestion",
+      "current_evidence": "No empirical checkpoints or evaluation logs exist for P2 sequential ingestion across D0, D0+5, D0+10, D0+20. Phase 4 tracking file 04_rq4_status.csv explicitly marks sequential training as NEED_EXTERNAL_GPU.",
+      "valid_metric": "None verified on actual model checkpoints. Narrative claim of 88% retention is unbacked.",
+      "limitation": "Complete absence of empirical data. Memory hardware constraints on local 4GB GPU prevented executing multi-document sequential LoRA updates.",
+      "next_experiment": "Execute full sequential document ingestion protocol (D0 -> D0+5 -> D0+10 -> D0+20) with actual checkpoint saves and backward transfer evaluation on external GPU."
+    },
+    {
+      "rq": "RQ5",
+      "status": "PARTIALLY_VALID",
+      "title": "Computational and token resource trade-offs",
+      "current_evidence": "Peak VRAM of 357.28 MB and serialized checkpoint size of 20.28 MB are empirically validated on local hardware. Single-token decode latency is 58.89 ms, but full generation latency is ~4,249 ms.",
+      "valid_metric": "Peak VRAM (357.28 MB), disk storage (20.28 MB), and TTFT / single-token decode latency (58.89 ms).",
+      "limitation": "Latency was previously misreported as full answer generation. Token reductions (-56.2%, -81.2%) are prompt template ceilings without verified answer quality retention.",
+      "next_experiment": "Profile full-sequence generation throughput (tokens/second) and evaluate ROUGE/F1 retention across Concise and Minimal token modes on benchmark test sets."
+    }
+  ]
+}

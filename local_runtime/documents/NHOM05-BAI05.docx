@@ -1,0 +1,321 @@
+Mã nhóm: 05(sửa xx thành mã nhóm trong danh sách)
+
+Lớp:23DTHB4
+
+Thành viên nhóm:
+
+01.Đỗ Tiến Dũng 	MSSV:2380600292
+
+02.Trần Thái Dương 	MSSV:230600401
+
+03.Nguyễn Tấn Kiệt	MSSV:2380601152
+
+04.Tô Thế Kiệt	MSSV:2380601161
+
+05.	MSSV:
+
+BAI05_BT21: Web Server
+
+ĐỐI TƯỢNG MẠNG
+
+1 Serversocket
+
+Vai trò: Đại diện cho socket phía server, làm nhiệm vụ lắng nghe kết nối TCP trên một cổng cố định (8080).
+
+2 Socket
+
+Vai trò: Đại diện cho một kết nối cụ thể giữa server và một client (trình duyệt, curl, Postman...). Mỗi client kết nối → tạo 1 Socket mới.
+
+Phương thức:
+
+new ServerSocket(PORT) : Tạo socket server lắng nghe kết nối TCP trên cổng 8080.
+
+serverSocket.accept() : Chờ và nhận kết nối từ client (blocking), trả về đối tượng Socket.
+
+serverSocket.close() : Đóng server socket, giải phóng cổng.
+
+client.getInputStream() : Lấy luồng đọc dữ liệu client gửi lên (HTTP request).
+
+client.getOutputStream() : Lấy luồng ghi dữ liệu trả về client (HTTP response).
+
+client.close() : Đóng kết nối với client.
+
+Đối tượng I/O
+
+1 InputStreamReader + BufferedReader
+
+Code khai báo trong bài:
+
+BufferedReader in = new BufferedReader(
+
+New InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+
+Vai trò — giải thích theo tầng (decorator pattern):
+
+client.getInputStream() → luồng byte thô từ socket.
+
+InputStreamReader → chuyển byte → ký tự (theo charset UTF-8).
+
+BufferedReader → đệm dữ liệu để đọc theo dòng hiệu quả.
+
+2 OutputStream
+
+Code khai báo trong bài :
+
+OutputStream out = client.getOutputStream();
+
+Vai trò: Luồng ghi byte ra socket để gửi response về client.
+
+Phương thức :
+
+new InputStreamReader(inputStream, UTF_8) : Chuyển luồng byte thành luồng ký tự theo charset UTF-8.
+
+new BufferedReader(reader) : Bọc luồng để đọc theo dòng hiệu quả.
+
+in.readLine() : Đọc 1 dòng HTTP (request line, header), trả về null nếu hết.
+
+in.read(char[], 0, n) : Đọc n ký tự body của POST/PUT vào mảng.
+
+out.write(byte[]) : Ghi mảng byte response xuống socket.
+
+out.flush() : Đẩy dữ liệu trong buffer đi ngay (bắt buộc gọi).
+
+Đối tượng File
+
+1 Paths + Path
+
+Code khai báo trong bài:
+
+private static final Path WEB_ROOT = Paths.get("www").toAbsolutePath().normalize();
+
+Vai trò:
+
+Paths.get("www") → tạo đường dẫn tương đối tới thư mục www.
+
+.toAbsolutePath() → chuyển thành đường dẫn tuyệt đối (ví dụ C:\project\www).
+
+.normalize() → loại bỏ .. và . trong đường dẫn, phục vụ việc chống path traversal.
+
+Phương thức:
+
+Paths.get("www") : Tạo đối tượng Path trỏ tới thư mục www.
+
+path.toAbsolutePath() : Chuyển path tương đối thành tuyệt đối.
+
+path.normalize() : Chuẩn hóa path, loại bỏ .. và . (chống path traversal).
+
+path.resolve(String) : Ghép đường dẫn con vào đường dẫn cha.
+
+path.startsWith(WEB_ROOT) : Kiểm tra path có nằm trong thư mục gốc không (chặn ../).
+
+Files.isRegularFile(path) : Kiểm tra path có phải file thường không.
+
+Files.readAllBytes(path) : Đọc toàn bộ nội dung file thành mảng byte.
+
+Files.write(path, bytes) : Ghi mảng byte vào file (dùng khi mở rộng PUT).
+
+Đối Tượng đa luồng
+
+1 Executors + ExecutorService
+
+Code khai báo trong bài:
+
+ExecutorService pool = Executors.newFixedThreadPool(10);
+
+...
+
+pool.execute(() -> handle(client));
+
+Vai trò:
+
+Executors.newFixedThreadPool(10) → tạo thread pool cố định 10 luồng.
+
+pool.execute(Runnable) → đẩy một nhiệm vụ vào hàng đợi; pool sẽ chọn 1 luồng rảnh để chạy.
+
+2 Handle(Socket client)
+
+Vai trò: Hàm trung tâm xử lý 1 kết nối — chạy trong 1 luồng riêng.
+
+Luồng xử lý:
+
+Đọc request line → tách method, path.
+
+Đọc headers → lấy Content-Length.
+
+Đọc body nếu có.
+
+switch(method) → gọi hàm xử lý phù hợp (GET/POST/PUT/default).
+
+3 serveFile(OutputStream out, String path)
+
+Vai trò: Xử lý riêng cho GET — đọc file HTML tĩnh và trả về.
+
+Luồng xử lý:
+
+Nếu path là / → đổi thành /index.html (trang mặc định).
+
+Ghép path vào WEB_ROOT, chuẩn hóa.
+
+Kiểm tra path traversal → nếu sai, trả 403 Forbidden.
+
+Nếu file tồn tại → đọc và trả về 200 OK.
+
+Nếu không → trả 404 Not Found.
+
+Phương thức:
+
+Executors.newFixedThreadPool(10) : Tạo thread pool cố định 10 luồng.
+
+pool.execute(Runnable) : Giao nhiệm vụ cho 1 luồng rảnh trong pool chạy.
+
+Thread.currentThread().getName() : Lấy tên luồng hiện tại (dùng để log).
+
+handle(Socket client) : Xử lý toàn bộ 1 kết nối client (đọc request → xử lý → gửi response).
+
+serveFile(out, path) : Xử lý GET — đọc file HTML tĩnh trong www/ và trả về.
+
+send(out, code, status, type, body) : Tạo và gửi HTTP response chuẩn (status line + header + body).
+
+contentType(String name) : Xác định MIME type dựa vào đuôi file (.html, .css, .png...).
+
+escape(String s) : Thay thế &, <, > để chống XSS.
+
+page(String content) : Bọc nội dung vào khung HTML hoàn chỉnh (<!DOCTYPE html>...)
+
+BAI05_BT22: Web Client
+
+Đối tượng mạng :
+
+1 Socket
+
+Vai trò:
+
+Đại diện cho kết nối TCP hai chiều giữa client và web server.
+
+Cách dùng: new Socket(host, port) — kết nối tới server.
+
+Ý nghĩa: Là điểm khởi đầu của mọi request HTTP. Client chủ động mở kết nối (khác với server là ServerSocket.accept()).
+
+new Socket(host, port) : Kết nối TCP tới web server.
+
+socket.getOutputStream() : Lấy luồng ghi request.
+
+socket.getInputStream() : Lấy luồng đọc response.
+
+socket.close() : Đóng kết nối (tự động nhờ try-with-resources).
+
+Đối tượng I/O
+
+1 OutputStream (từ socket.getOutputStream())
+
+Vai trò: Luồng ghi byte request HTTP gửi lên server.
+
+Ý nghĩa: Chuyển chuỗi request ("GET / HTTP/1.0\r\n...") thành byte UTF-8 và gửi qua mạng.
+
+2 InputStream (từ socket.getInputStream())
+
+Vai trò: Luồng đọc byte response từ server trả về.
+
+Ý nghĩa: Đọc toàn bộ response (header + body) dưới dạng mảng byte thô.
+
+Phương Thức:
+
+out.write(byte[]) : Ghi mảng byte request xuống socket.
+
+out.flush() : Đẩy dữ liệu trong buffer đi ngay.
+
+inputStream.readAllBytes() : Đọc toàn bộ response thành mảng byte.
+
+Xử lý dữ liệu:
+
+1 byte[] — Mảng byte
+
+Vai trò: Lưu response thô dưới dạng byte.
+
+Tại sao dùng byte thay vì String? Vì body có thể là ảnh, PDF, ZIP... (dữ liệu nhị phân). Nếu đọc thẳng thành String sẽ làm hỏng file.
+
+2 String + charset (ISO_8859_1 và UTF-8)
+
+Vai trò: Chuyển byte → chuỗi.
+
+Quy tắc quan trọng:
+
+Header dùng ISO_8859_1 (đúng chuẩn HTTP, vì header chỉ chứa ký tự ASCII mở rộng).
+
+Body HTML dùng UTF-8 (để hiển thị tiếng Việt đúng).
+
+3 Arrays.copyOfRange(byte[], from, to)
+
+Vai trò: Cắt mảng byte — tách body ra khỏi response sau khi đã xác định vị trí \r\n\r\n.
+
+Map<String, String> + HashMap
+
+Vai trò: Lưu các header dưới dạng cặp key-value (ví dụ content-type → text/html).
+
+Ý nghĩa: Cho phép tra cứu header nhanh bằng headers.get("location") thay vì duyệt mảng.
+
+Phương thức:
+
+new String(byte[], charset) : Chuyển byte → chuỗi theo charset.
+
+Arrays.copyOfRange(arr, from, to) : Cắt mảng byte lấy body.
+
+split("\r\n") : Tách response thành các dòng.
+
+indexOf(':') : Tìm dấu : để tách tên header / giá trị header.
+
+substring(int, int) : Cắt chuỗi con (lấy tên header, giá trị header, status code).
+
+trim() : Xóa khoảng trắng đầu/cuối chuỗi.
+
+toLowerCase() : Chuẩn hóa tên header về chữ thường.
+
+Integer.parseInt(String) : Chuyển chuỗi port / status code thành số nguyên.
+
+headers.get(key) : Lấy giá trị header theo tên.
+
+headers.getOrDefault(key, default) : Lấy header an toàn, tránh NullPointerException.
+
+headers.put(key, value) : Lưu header vào Map.
+
+type.startsWith("text/") : Kiểm tra Content-Type có phải văn bản không.
+
+path.lastIndexOf('/') : Tìm vị trí dấu / cuối cùng để lấy tên file.
+
+name.isEmpty() : Kiểm tra tên file rỗng.
+
+Đối tượng File:
+
+1 Paths + Path + Files
+
+Vai trò: Tạo thư mục downloads/, ghi file nhị phân (ảnh, PDF) xuống ổ đĩa.
+
+Ý nghĩa: Hiện thực hóa yêu cầu nâng cao "tải tệp tin và lưu trữ vào ổ đĩa".
+
+2 handleOk(byte[] body, Map headers, String path)
+
+Vai trò: Xử lý response khi status = 200 OK.
+
+Logic: Nếu Content-Type bắt đầu bằng text/ → in HTML ra màn hình; ngược lại → lưu file nhị phân.
+
+3 indexOf(byte[] data, byte[] pattern)
+
+Vai trò: Tìm vị trí chuỗi \r\n\r\n trong mảng byte (không phải String).
+
+Tại sao tự viết? Vì String.indexOf() chỉ hoạt động trên chuỗi — mà chuỗi có thể làm hỏng dữ liệu nhị phân.
+
+Phương thức:
+
+Paths.get("downloads") : Tạo đường dẫn thư mục downloads.
+
+Files.createDirectories(dir) : Tạo thư mục (và các thư mục cha nếu thiếu).
+
+dir.resolve(name) : Ghép tên file vào thư mục.
+
+Files.write(path, bytes) : Ghi mảng byte vào file.
+
+target.toAbsolutePath() : Lấy đường dẫn tuyệt đối để in ra màn hình.
+
+handleOk(body, headers, path) : Xử lý response 200 — in HTML hoặc lưu file nhị phân.
+
+indexOf(data, pattern) : Tìm chuỗi byte trong mảng byte (tự viết vì String không an toàn với dữ liệu nhị phân).

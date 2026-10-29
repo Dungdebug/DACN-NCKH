@@ -1,0 +1,27 @@
+{
+  "title": "Phase 4.4 Results Ingestion Manifest",
+  "date": "2026-10-04",
+  "dry_run": true,
+  "ingested_artifacts": {
+    "A1": {
+      "status": "AWAITING_EXTERNAL_GPU_RESULTS",
+      "planned_source": "results\\phase4_2\\a1_external_results.json",
+      "destination": "results\\phase4_4\\A1"
+    },
+    "A3": {
+      "status": "AWAITING_EXTERNAL_GPU_RESULTS",
+      "planned_source": "results\\phase4_2\\a3_external_results.json",
+      "destination": "results\\phase4_4\\A3"
+    },
+    "RQ4": {
+      "status": "AWAITING_EXTERNAL_GPU_RESULTS",
+      "planned_source": "results\\phase4_2\\rq4_external_results.json",
+      "destination": "results\\phase4_4\\RQ4"
+    }
+  },
+  "preserved_prior_phases": [
+    "results/phase4_1/",
+    "results/phase4_2/",
+    "results/phase4_3/"
+  ]
+}

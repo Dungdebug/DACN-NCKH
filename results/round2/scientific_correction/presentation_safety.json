@@ -1,0 +1,84 @@
+{
+  "presentation_safety_guidelines": {
+    "protocol": "ROUND_2_FUNDING_PRESENTATION_SAFETY_LOCK",
+    "date": "2026-10-06",
+    "target_audience": "Academic Scientific Council & Funding Committee"
+  },
+  "presentation_categories": {
+    "VERIFIED_RESULT": [
+      {
+        "item": "Architecture Design of SA-CMS",
+        "description": "3-level hierarchical continual memory (fast, medium, slow timescales) aligning updates to paragraphs, sections, and documents with 5.3M trainable parameters."
+      },
+      {
+        "item": "MK-NIAH Target Needle Token Recovery",
+        "description": "3-level P1 achieves 0.1318 target token logit probability vs 1-level B4 at 0.0479 (+175.2%) under strictly controlled zero-retrieval conditions."
+      },
+      {
+        "item": "Controlled RQ2 Statistical Transparency",
+        "description": "Controlled P1 (0.806) vs B5 (0.801) result on N=90 samples demonstrates p=0.4143, proving high scientific rigor and motivating why hybrid retrieval (P2) is practically required."
+      },
+      {
+        "item": "Context Eviction Refusal Rate",
+        "description": "P2 achieves 76.0% correct refusal accuracy on unanswerable questions under evicted context via BM25 uncertainty thresholding (0% false refusals)."
+      },
+      {
+        "item": "Low-Resource Hardware Feasibility",
+        "description": "Peak VRAM of 357.28 MB and checkpoint storage of 20.28 MB enabling local deployment on entry-level laptops."
+      },
+      {
+        "item": "Usable Document Intelligence Web Platform",
+        "description": "Fully functional document parser, chunk inspector, and research visualization dashboard."
+      }
+    ],
+    "PARTIAL_RESULT": [
+      {
+        "item": "Inference Latency Profile",
+        "guideline": "Must explicitly distinguish TTFT (58.89 ms for single-token decode) from end-to-end multi-token answer generation (~4.25 s)."
+      },
+      {
+        "item": "Token Budget Ceilings",
+        "guideline": "Label concise (-56.2%) and minimal (-81.2%) modes as 'output-token budget reductions' rather than verified quality improvements."
+      },
+      {
+        "item": "Mechanistic Diagnostics",
+        "guideline": "Label layer weights (L1=50%, L2=30%, L3=20%) as 'observed diagnostic visualization parameters', never as causal intervention discoveries."
+      },
+      {
+        "item": "Software Exception Handling",
+        "guideline": "Label 8/8=1.00 as 'software robustness scenarios passed' on test fixtures, not neural model robustness against real adversarial attacks."
+      }
+    ],
+    "NOT_PROVEN": [
+      {
+        "item": "RQ2 Structure Alignment Superiority",
+        "guideline": "State transparently: 'RQ2 chưa được chứng minh trong thực nghiệm hiện tại (p=0.4143). Cần thực nghiệm N>=500 trên external GPU.'"
+      }
+    ],
+    "PENDING_EXTERNAL_GPU": [
+      {
+        "item": "RQ4 Catastrophic Forgetting Curve",
+        "guideline": "Display as 'PENDING EXTERNAL GPU'. Do not display 88% or any simulated curve. Explain that sequential LoRA fine-tuning exceeds local 4GB VRAM limits."
+      },
+      {
+        "item": "RQ2 High-Powered N=500 Evaluation",
+        "guideline": "Display as 'PENDING EXTERNAL GPU'. Explain that evaluating 500 long documents across 3 seeds requires 24GB-class compute."
+      },
+      {
+        "item": "Ablations A1 and A3",
+        "guideline": "Display as 'PENDING EXTERNAL GPU'. Fixed vs structure boundary ablation requires external batch runs."
+      }
+    ]
+  },
+  "funding_narrative_alignment": {
+    "core_thesis": "Research system designed, baseline calibrated, critical gaps identified, compute requirements concrete and testable.",
+    "pitch_flow": [
+      "1. Motivation: Long-document QA suffers from context-window bloat; Nested Learning motivates multi-timescale parametric memory.",
+      "2. Innovation: We designed SA-CMS aligning memory updates with natural document headings and paragraphs.",
+      "3. Initial Evidence: Tested on 135M backbone; observed strong needle-token logit recovery on MK-NIAH (+175%).",
+      "4. Rigorous Transparency: Controlled comparison on N=90 samples showed p=0.4143, meaning structure alignment is not yet statistically significant at small sample sizes.",
+      "5. System Solution: Hybrid coupling (P2) achieves 76% refusal accuracy on unanswerable questions under evicted context.",
+      "6. Funding Justification: Requested external GPU resources are directly allocated to resolve the pending high-priority experiments (RQ2 at N>=500 across 3 seeds, and RQ4 sequential ingestion curves)."
+    ]
+  }
+}

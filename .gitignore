@@ -31,3 +31,11 @@ htmlcov/
 .env.local
 *.pem
 *.key
+
+# Local offline runtime generated files & heavy weights (>100MB)
+local_runtime/model/*.safetensors
+local_runtime/snapshots/
+
+# Temporary scratch files and test scripts
+scratch/
+scratch_bench.py

@@ -1,0 +1,81 @@
+{
+  "comparison": "P1 (SA-CMS) vs B5 (Fixed-Token CMS) under strictly identical update budget",
+  "paired_analysis_all_items": {
+    "n_items": 90,
+    "mean_diff": 0.0093,
+    "std_diff": 0.1073,
+    "t_statistic": 0.8203,
+    "t_pvalue": 0.4142141953105911,
+    "wilcoxon_stat": 31.0,
+    "wilcoxon_pvalue": 0.8588630128278887,
+    "cohens_d": 0.0865
+  },
+  "paired_analysis_qasper": {
+    "n_items": 30,
+    "mean_diff": -0.0055,
+    "std_diff": 0.0328,
+    "t_statistic": -0.9199,
+    "t_pvalue": 0.3652350146654365,
+    "wilcoxon_stat": 20.0,
+    "wilcoxon_pvalue": 0.4445867389117455,
+    "cohens_d": -0.1679
+  },
+  "paired_analysis_longhealth": {
+    "n_items": 60,
+    "mean_diff": 0.0167,
+    "std_diff": 0.1291,
+    "t_statistic": 1.0,
+    "t_pvalue": 0.32139427976944523,
+    "wilcoxon_stat": 0.0,
+    "wilcoxon_pvalue": 0.31731050786291415,
+    "cohens_d": 0.1291
+  },
+  "seed_specific_analysis": {
+    "42": {
+      "n_items": 30,
+      "mean_diff": -0.0023,
+      "std_diff": 0.0279,
+      "t_statistic": -0.4475,
+      "t_pvalue": 0.6578409355306845,
+      "wilcoxon_stat": 1.0,
+      "wilcoxon_pvalue": 0.6547208460185769,
+      "cohens_d": -0.0817
+    },
+    "43": {
+      "n_items": 30,
+      "mean_diff": 0.0302,
+      "std_diff": 0.184,
+      "t_statistic": 0.8976,
+      "t_pvalue": 0.3767898203191121,
+      "wilcoxon_stat": 10.0,
+      "wilcoxon_pvalue": 0.916511907863894,
+      "cohens_d": 0.1639
+    },
+    "44": {
+      "n_items": 30,
+      "mean_diff": -0.0001,
+      "std_diff": 0.0016,
+      "t_statistic": -0.1687,
+      "t_pvalue": 0.867196125009905,
+      "wilcoxon_stat": 3.0,
+      "wilcoxon_pvalue": 1.0,
+      "cohens_d": -0.0308
+    }
+  },
+  "ablations": {
+    "A2_two_levels": {
+      "status": "COMPLETED",
+      "checkpoint": "checkpoints/phase4_1/cms_2lvl_seed_{seed}.pt (Available on seeds 42, 43, 44)",
+      "mean_f1_qasper": 0.097,
+      "mean_acc_lh": 0.2667
+    },
+    "A1_random_boundary": {
+      "status": "NEED_EXTERNAL_GPU",
+      "reason": "Generating new 200-sample trained checkpoints on seeds 42, 43, 44 requires training; prohibited on current machine."
+    },
+    "A3_no_gating": {
+      "status": "NEED_EXTERNAL_GPU",
+      "reason": "Additive architecture requires separate trained checkpoints; prohibited on current machine."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+method,seed,checkpoint_path,file_size_mb,trainable_parameters,total_parameters,status,source_artifact
+B1,"All (42, 43, 44)",None (frozen backbone),0.0,0,134515008,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B2,"All (42, 43, 44)",None (frozen backbone),0.0,0,134515008,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B3,None,None,0.0,0,0,EXCLUDED,configs/phase4_experiment.yaml
+B4,42,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B4,43,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B4,44,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B5,42,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B5,43,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+B5,44,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P1,42,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P1,43,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P1,44,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P2,42,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P2,43,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+P2,44,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+A2_two_levels,42,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+A2_two_levels,43,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+A2_two_levels,44,N/A,0.0,0,0,AVAILABLE,results/phase4_1/checkpoint_inventory.json
+A1_random_boundary,42,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json
+A1_random_boundary,43,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json
+A1_random_boundary,44,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json
+A3_no_gating,42,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json
+A3_no_gating,43,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json
+A3_no_gating,44,N/A,0.0,0,0,NEED_EXTERNAL_GPU,results/phase4_1/checkpoint_inventory.json

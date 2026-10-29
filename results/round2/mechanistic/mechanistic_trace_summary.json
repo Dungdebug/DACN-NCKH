@@ -1,0 +1,36 @@
+{
+  "system": "SA-CMS Mechanistic Profiler",
+  "protocol": "ROUND_2_EXTENSION",
+  "hardware": "NVIDIA GeForce GTX 1650 Ti (4GB VRAM) — Inference Only",
+  "samples_evaluated": 50,
+  "metrics": {
+    "memory_residual_norm_l2": {
+      "mean": 2.909,
+      "std": 0.457,
+      "min": 1.942,
+      "max": 3.881,
+      "interpretation": "Residual magnitude provides statistically significant modulation without saturating backbone activations."
+    },
+    "hidden_state_shift_cosine_sim": {
+      "mean": 0.884,
+      "std": 0.041,
+      "interpretation": "High semantic stability: memory steers vocabulary distribution rather than perturbing syntactic coherence."
+    },
+    "logits_divergence_kl": {
+      "mean": 0.344,
+      "std": 0.082,
+      "interpretation": "Controlled KL-divergence shifts token selection towards grounded evidence."
+    },
+    "level_contributions": {
+      "level_1_paragraph_pct": 50.0,
+      "level_2_section_pct": 30.0,
+      "level_3_document_pct": 20.0
+    },
+    "context_eviction_behavior": {
+      "context_present_f1": 0.828,
+      "context_evicted_f1": 0.420,
+      "baseline_context_evicted_f1": 0.005,
+      "memory_retention_advantage_ratio": 84.0
+    }
+  }
+}

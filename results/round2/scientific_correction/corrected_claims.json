@@ -1,0 +1,59 @@
+{
+  "correction_metadata": {
+    "protocol": "ROUND_2_SCIENTIFIC_CORRECTION",
+    "date": "2026-10-06",
+    "status": "COMPLETED",
+    "auditor": "Independent Scientific Integrity Auditor"
+  },
+  "corrected_claims": [
+    {
+      "claim_id": "CLAIM_01_RQ2_STRUCTURE_VS_TOKEN",
+      "original_unsupported_claim": "SA-CMS beats fixed-token by +29.4% (P2 0.828 vs B4 0.640 on Vietnamese QA)",
+      "scientific_defect": "Conflated comparison. P2 has BM25 retrieval and 3 memory levels (5.3M params); B4 has no retrieval and 1 memory level (1.77M params). Controlled comparison P1 (0.806) vs B5 (0.801) yields p=0.4143 (t-test), p=0.8589 (Wilcoxon), d=0.0865.",
+      "corrected_statement": "RQ2 chưa được chứng minh trong thực nghiệm hiện tại. Chưa có bằng chứng thống kê cho thấy cập nhật theo cấu trúc vượt trội hơn cập nhật theo token cố định ở quy mô 90 mẫu (p=0.4143). Cần thực nghiệm quy mô N>=500 trên External GPU.",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_02_RQ3_REFUSAL_ACCURACY",
+      "original_unsupported_claim": "Refusal accuracy đạt 95.0% - 96.0% trên tập câu hỏi không thể trả lời",
+      "scientific_defect": "Narrative inflation. Frozen raw data in results/phase4_2/rq3_raw_results.json records exactly 38/50 correct refusals (76.0%), 12/50 false answers (24.0%), and 0/50 false refusals (0.0%). Moreover, pure memory models (P1, B5) score 0% refusal rate; all refusal safety comes from BM25 score gating in RefusalController.",
+      "corrected_statement": "P2 đạt 76.0% refusal accuracy trong bộ dữ liệu hiện tại (38/50 câu hỏi không thể trả lời được từ chối chính xác, 0% từ chối sai). Toàn bộ khả năng từ chối bắt nguồn từ bộ kiểm soát ngưỡng truy xuất BM25, không phải từ bộ nhớ tham số.",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_03_RQ4_SEQUENTIAL_RETENTION",
+      "original_unsupported_claim": "88% knowledge retained over 20 documents / 92% retention rate",
+      "scientific_defect": "Complete lack of experimental data. Sequential document ingestion was never evaluated on P2 checkpoints. In results/phase4_2/04_rq4_status.csv, sequential ingestion is explicitly marked as NEED_EXTERNAL_GPU.",
+      "corrected_statement": "RQ4 chưa có dữ liệu thực nghiệm; external GPU required. Chưa có đường cong quên lãng thực nghiệm cho chuỗi nạp tuần tự D0 đến D0+20.",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_04_ROBUSTNESS_EVALUATION",
+      "original_unsupported_claim": "8/8 robustness = 1.00 proves model robustness across adversarial conditions",
+      "scientific_defect": "Equating deterministic software unit test on a 5-sentence synthetic text fixture (DOC_ROB_01, DOC_ROB_02, DOC_DISTRACT_01) with empirical neural language model robustness under long-document adversarial perturbation.",
+      "corrected_statement": "8/8 software robustness scenarios passed. Pipeline xử lý ngoại lệ và luồng điều khiển vượt qua 8 kịch bản kiểm thử phần mềm; chưa chứng minh được độ bền vững nơ-ron trên văn bản dài thực tế.",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_05_MECHANISTIC_ATTRIBUTION",
+      "original_unsupported_claim": "Mechanistic analysis proves layer contributions: L1 50%, L2 30%, L3 20%",
+      "scientific_defect": "Attributing heuristic visualization parameters / descriptive diagnostic norms to causal interventions without causal activation patching or layer knockout ablations.",
+      "corrected_statement": "Observed diagnostic / visualization parameter. Not causal evidence. Tỷ lệ 50%/30%/20% là tham số chẩn đoán quan sát và trực quan hóa giao diện, không phải bằng chứng can thiệp nhân quả.",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_06_RQ5_LATENCY_REPORTING",
+      "original_unsupported_claim": "Inference latency = 58.89 ms (faster than full-context and RAG)",
+      "scientific_defect": "Conflating time to generate first token (TTFT / decode step with answer_tokens_generated=1) with complete multi-token answer generation latency (~4,249.20 ms).",
+      "corrected_statement": "58.89 ms là thời gian giải mã sinh token đầu tiên (TTFT / single-token decode), không phải tổng thời gian sinh câu trả lời đầy đủ (trung bình ~4.25 s).",
+      "status": "CORRECTED_AND_LOCKED"
+    },
+    {
+      "claim_id": "CLAIM_07_TOKEN_OPTIMIZATION_NATURE",
+      "original_unsupported_claim": "Concise mode (-56.2%) and Minimal mode (-81.2%) improve answering efficiency and quality",
+      "scientific_defect": "Reporting prompt max_tokens budget ceiling reduction as empirical token saving without evaluating preservation of answer quality, BLEU/ROUGE/F1, or citation support.",
+      "corrected_statement": "Output-token budget reduction (-56.2% ở chế độ Concise, -81.2% ở chế độ Minimal) là mức cắt giảm ngân sách token thiết kế trong prompt template, chưa được đo lường mức độ bảo toàn chất lượng câu trả lời trên tập kiểm thử.",
+      "status": "CORRECTED_AND_LOCKED"
+    }
+  ]
+}

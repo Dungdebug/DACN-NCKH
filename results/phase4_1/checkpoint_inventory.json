@@ -1,0 +1,531 @@
+{
+  "meta": {
+    "title": "Phase 4.1 Checkpoint Inventory",
+    "protocol": "Phase 4.0.2 Final Fairness Lock & Phase 4.1 Non-Training Mandate",
+    "backbone": "HuggingFaceTB/SmolLM2-135M (frozen)",
+    "allowed_operations": [
+      "load_existing_checkpoint",
+      "frozen_inference",
+      "retrieval",
+      "answer_generation",
+      "metric_calculation",
+      "statistical_aggregation",
+      "latency_vram_measurement",
+      "audit_validation"
+    ],
+    "prohibited_operations": [
+      "train_new_checkpoints",
+      "fine_tuning",
+      "backprop",
+      "optimizer_step",
+      "gradient_adapter_update",
+      "online_memory_update_without_precomputed_states"
+    ]
+  },
+  "methods": {
+    "B1": {
+      "name": "ICL Full-Document Context",
+      "type": "baseline",
+      "requires_adapter_checkpoint": false,
+      "backbone": "HuggingFaceTB/SmolLM2-135M (100% frozen)",
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_zero_adaptation"
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_zero_adaptation"
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_zero_adaptation"
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "B2": {
+      "name": "Standard BM25 RAG",
+      "type": "baseline",
+      "requires_adapter_checkpoint": false,
+      "backbone": "HuggingFaceTB/SmolLM2-135M (100% frozen) + BM25 Retriever",
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_plus_bm25"
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_plus_bm25"
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "source": "pretrained_backbone_plus_bm25"
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "B3": {
+      "name": "Cartridges / Context Compression",
+      "type": "baseline",
+      "requires_adapter_checkpoint": false,
+      "overall_status": "EXCLUDED",
+      "reason": "Excluded per Phase 4.0.2 / 4.0.3 protocol freeze. Cannot be reproduced within controlled student-scale hardware budget; substitution strictly prohibited."
+    },
+    "B4": {
+      "name": "Single-Level Adapter",
+      "type": "baseline",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 1,
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_1lvl_seed_42.pt",
+            "size_bytes": 7094050,
+            "size_mb": 6.77,
+            "sha256": "8819bbfcf4a361c26130242ca045fc50731c9aa9cd98d6e1e3be231419d580c8",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 1771584,
+            "num_levels": 1,
+            "seed": 42,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 1-level adapter, 1,771,584 params."
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_1lvl_seed_43.pt",
+            "size_bytes": 7094050,
+            "size_mb": 6.77,
+            "sha256": "cae071a847976d1b4524c19dba4eb6923181dc3744c611cfde5c31174bba8451",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 1771584,
+            "num_levels": 1,
+            "seed": 43,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 1-level adapter, 1,771,584 params."
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_1lvl_seed_44.pt",
+            "size_bytes": 7094050,
+            "size_mb": 6.77,
+            "sha256": "839f1392015b0a7a4d5b5475ac259b038a670110d48e7a0f9aa4eaa18fbd185c",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 1771584,
+            "num_levels": 1,
+            "seed": 44,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 1-level adapter, 1,771,584 params."
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "B5": {
+      "name": "Fixed-Token CMS",
+      "type": "baseline",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 3,
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 42,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params. Evaluated with fixed_token schedule."
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "1f218da279121857921dc9cf3f3b2a6a10395c22afbef5fe4dc4b035dd27f2e7",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 43,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params. Evaluated with fixed_token schedule."
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_44.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "19035f792db025cd7fb0c3eb362740bfb1f1074f15ffb6f4501462608a5dadf0",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 44,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params. Evaluated with fixed_token schedule."
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "P1": {
+      "name": "SA-CMS Memory-Only (Proposed)",
+      "type": "proposed",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 3,
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 42,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params (identical theta_0 with B5 per fairness lock). Evaluated with structure-aligned schedule."
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "1f218da279121857921dc9cf3f3b2a6a10395c22afbef5fe4dc4b035dd27f2e7",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 43,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params (identical theta_0 with B5 per fairness lock). Evaluated with structure-aligned schedule."
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_44.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "19035f792db025cd7fb0c3eb362740bfb1f1074f15ffb6f4501462608a5dadf0",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 44,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 3-level adapter, 5,314,752 params (identical theta_0 with B5 per fairness lock). Evaluated with structure-aligned schedule."
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "P2": {
+      "name": "SA-CMS + Retrieval Hybrid (Proposed)",
+      "type": "proposed",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 3,
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 42,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Uses identical memory checkpoint as P1 (cms_3lvl_seed_*.pt) combined with frozen BM25 retriever."
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "1f218da279121857921dc9cf3f3b2a6a10395c22afbef5fe4dc4b035dd27f2e7",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 43,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Uses identical memory checkpoint as P1 (cms_3lvl_seed_*.pt) combined with frozen BM25 retriever."
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_3lvl_seed_44.pt",
+            "size_bytes": 21269390,
+            "size_mb": 20.28,
+            "sha256": "19035f792db025cd7fb0c3eb362740bfb1f1074f15ffb6f4501462608a5dadf0",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 5314752,
+            "num_levels": 3,
+            "seed": 44,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Uses identical memory checkpoint as P1 (cms_3lvl_seed_*.pt) combined with frozen BM25 retriever."
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "A2_two_levels": {
+      "name": "SA-CMS Level 2 (Paragraph + Section)",
+      "type": "ablation",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 2,
+      "seeds": {
+        "42": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_2lvl_seed_42.pt",
+            "size_bytes": 14181750,
+            "size_mb": 13.52,
+            "sha256": "47cc8f20e5259bcb50f5a063f0aea2057ecc06462181cf0cf9458c0cff363c15",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 3543168,
+            "num_levels": 2,
+            "seed": 42,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 2-level adapter, 3,543,168 params."
+        },
+        "43": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_2lvl_seed_43.pt",
+            "size_bytes": 14181750,
+            "size_mb": 13.52,
+            "sha256": "048365ce5f020d53aa6122264c379f5297a2c393d33867593390b2541c4f0085",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 3543168,
+            "num_levels": 2,
+            "seed": 43,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 2-level adapter, 3,543,168 params."
+        },
+        "44": {
+          "status": "AVAILABLE",
+          "checkpoint": {
+            "exists": true,
+            "path": "checkpoints/phase4_1/cms_2lvl_seed_44.pt",
+            "size_bytes": 14181750,
+            "size_mb": 13.52,
+            "sha256": "fee0e2073dd0f3c85750316746d8b8f0bb2b12d703c326ebaa9ab7c5c59dbcc5",
+            "keys": [
+              "cms_state_dict",
+              "cms_norm_state_dict",
+              "num_levels",
+              "seed",
+              "num_samples",
+              "num_epochs"
+            ],
+            "cms_param_count": 3543168,
+            "num_levels": 2,
+            "seed": 44,
+            "num_samples": 200,
+            "num_epochs": 3
+          },
+          "conformance": "Trained on exactly 200 samples, 2-level adapter, 3,543,168 params."
+        }
+      },
+      "overall_status": "AVAILABLE"
+    },
+    "A1_random_boundary": {
+      "name": "CMS Level 3 Random Boundary",
+      "type": "ablation",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 3,
+      "seeds": {
+        "42": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No 200-sample trained checkpoint on seed; new training prohibited."
+        },
+        "43": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No 200-sample trained checkpoint on seed; new training prohibited."
+        },
+        "44": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No 200-sample trained checkpoint on seed; new training prohibited."
+        }
+      },
+      "overall_status": "NEED_EXTERNAL_GPU"
+    },
+    "A3_no_gating": {
+      "name": "SA-CMS Additive (No Learned Gates)",
+      "type": "ablation",
+      "requires_adapter_checkpoint": true,
+      "target_levels": 3,
+      "seeds": {
+        "42": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No specialized additive checkpoint on seed; new training prohibited."
+        },
+        "43": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No specialized additive checkpoint on seed; new training prohibited."
+        },
+        "44": {
+          "status": "NEED_EXTERNAL_GPU",
+          "reason": "No specialized additive checkpoint on seed; new training prohibited."
+        }
+      },
+      "overall_status": "NEED_EXTERNAL_GPU"
+    },
+    "RQ4_Sequential_Snapshots": {
+      "name": "Sequential Document Ingestion Snapshots (D0 -> +5 -> +10 -> +20)",
+      "type": "continual_snapshots",
+      "available_snapshots": [],
+      "overall_status": "NEED_EXTERNAL_GPU",
+      "reason": "Sequential memory ingestion requires gradient-based state updates; new updates are prohibited on current machine."
+    }
+  },
+  "summary": {}
+}

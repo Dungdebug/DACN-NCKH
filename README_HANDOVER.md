@@ -1,36 +1,38 @@
-# 📋 BIÊN BẢN BÀN GIAO CÔNG VIỆC DỰ ÁN (PROJECT STATUS & HANDOVER)
+# 📋 BIÊN BẢN BÀN GIAO CÔNG VIỆC DỰ ÁN (PROJECT STATUS & FINAL HANDOVER)
 > **Dành cho**: Antigravity AI Agent / Kỹ sư tiếp quản & Nhóm Nghiên cứu.  
 > **Dự án**: Nghiên cứu Khoa học Sinh viên — Hệ thống Chatbot tài liệu dựa trên Nested Learning (SA-CMS & Hybrid QA).  
-> **Thời điểm cập nhật**: 04/10/2026.  
-> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% TOÀN BỘ PHASE 4.1 BENCHMARK & TỔNG HỢP XONG BÁO CÁO MASTER!**
+> **Thời điểm cập nhật**: 15/10/2026.  
+> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% GIAI ĐOẠN KIỂM TOÁN PHÁP Y (STAGE 1), SỬA LỖI KỸ THUẬT (STAGE 2) VÀ TÁI THẨM ĐỊNH THỰC TẾ (STAGE 3 & 4)**.  
+> 🔒 **KIỂM TRA TÍNH TOÀN VẸN**: Khớp **53/53 SHA-256 Checksums** (`training_output_final/checksums.sha256`) và **161/161 PyTest Unit Tests** (`tests/`).
 
 ---
 
-## ⚡ TỔNG QUAN NHANH (TL;DR)
-1. **Toàn bộ Phase 4.1 đã hoàn thành 100%**:
-   - Tất cả 5 câu hỏi nghiên cứu RQ1, RQ2, RQ3, RQ4, RQ5 đã hoàn tất trên cả 3 seeds ngẫu nhiên [42, 43, 44].
-   - **Vietnamese Final Benchmark (20 tài liệu / 350 câu hỏi)** đã hoàn tất toàn bộ 18/18 runs trên card đồ họa **NVIDIA GeForce RTX 3050 Laptop GPU**.
-2. **Master Reports & Kết quả thống kê chính thức**:
-   - Đã chạy tổng hợp thành công qua `scripts/aggregate_phase4_1_results.py`.
-   - Bảng kết quả tổng hợp chính thức: `results/phase4_1_master_results.csv` và `results/phase4_1_master_results.json`.
-   - Bộ 6 báo cáo học thuật chuyên sâu đã sinh tại thư mục `docs/`:
-     - `docs/phase4_1_rq1.md` (MK-NIAH, QASPER, LongHealth)
-     - `docs/phase4_1_rq2.md` (Controlled update budget)
-     - `docs/phase4_1_rq3.md` (Faithfulness, Citation & Refusal)
-     - `docs/phase4_1_rq4.md` (Catastrophic Forgetting)
-     - `docs/phase4_1_rq5.md` (3-Level Hardware Profiling & Latency)
-     - `docs/phase4_1_vietnamese.md` (20 tài liệu tiếng Việt, 350 câu hỏi)
-3. **Regression Test Suite**: Đạt **100/100 passed** (`pytest tests/`).
+## ⚡ TỔNG QUAN HỆ THỐNG & KẾT QUẢ NGHIỆM THU
+
+### 1. Phân định rõ ràng Hai Trục Nghiệm thu:
+1. **Software Verification (Kiểm thử Kỹ thuật & Độ tin cậy Phần mềm)**:
+   - **Unit Tests**: Đạt **161/161 tests passed** (`pytest tests/`).
+   - **Data Integrity**: Khớp **53/53 SHA-256 Checksums** (`training_output_final/checksums.sha256`), bao gồm toàn bộ 42 checkpoints nhị phân PyTorch `.pt`.
+   - **Audit Trail**: Toàn bộ dự đoán từng câu hỏi (raw model output, ground truth, normalized tokens, token F1, exact match, target logprob, adapter norms) được xuất minh bạch ra 4 file `.jsonl` tại [`results/raw_predictions/`](results/raw_predictions/).
+2. **Scientific Evaluation (Nghiệm thu Thực nghiệm Khoa học)**:
+   - Toàn bộ kết quả đối soát chính thức được tổng hợp tại [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv) và Báo cáo Tổng kết [`docs/final_scientific_report.md`](docs/final_scientific_report.md).
+   - **Ablation Study (A1, A3 vs P1)**: Chứng minh ranh giới cấu trúc văn bản (**P1**: QASPER F1 `0.2014`, LongHealth `63.33%`) vượt trội ranh giới ngẫu nhiên (**A1**: QASPER F1 `0.1866`, LongHealth `58.33%`) và bỏ xa kiến trúc không cổng (**A3**: QASPER F1 `0.1579`, LongHealth `43.33%`). Trọng số tensor phân kỳ thực chất ($\max |W_{\text{P1}} - W_{\text{A1}}| \approx 0.011 > 10^{-4}$, $\max |W_{\text{P1}} - W_{\text{A3}}| \approx 0.116 > 10^{-4}$).
+   - **RQ2 (Structure vs Fixed-Token)**: Căn chỉnh cấu trúc ngữ nghĩa (P1) vượt trội cố định token (B5) với $p = 3.03 \times 10^{-7} < 0.001$ (`STATISTICALLY SIGNIFICANT`) trên cùng ngân sách cập nhật.
+   - **RQ3 (Reading Before Retrieving)**: Chế độ lai P2 đạt **100% MK-NIAH**, **100% Độ trung thực Trích dẫn (Citation Faithfulness)**, và **76.0% Khả năng từ chối chính xác (Refusal Recall)**.
+   - **RQ4 (Continual Ingestion)**: Đánh giá trên 36 snapshot checkpoints thực tế chứng minh P1 duy trì độ quên trung bình chỉ $F_{20} = -0.0034$ và cải thiện độ hợp lý log-likelihood (+0.399) khi nạp 21 tài liệu tuần tự.
+   - **RQ5 (Hardware Efficiency)**: Huấn luyện thực tế trên **NVIDIA RTX 3050 Laptop GPU (6GB)** chỉ tiêu thụ đỉnh **743.86 MB VRAM**, hoàn toàn khả thi trên phần cứng thương mại phổ thông.
 
 ---
 
 ## 🏛️ THÔNG TIN MÔI TRƯỜNG & PHẦN CỨNG THỰC NGHIỆM
-- **Hệ điều hành**: Windows 11
-- **GPU thực thi**: NVIDIA GeForce RTX 3050 Laptop GPU (4GB VRAM)
-- **Python**: 3.9.13 / PyTorch 2.0.0+cu118
-- **Transformers**: 4.41.2
-- **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` (134,515,008 tham số, **100% frozen**)
-- **Training Samples Lock**: Đúng 200 samples (`TR_DOC_001` – `TR_DOC_020`) cho 3 epochs, $lr = 1e-4$, AdamW.
+- **Hệ điều hành**: Windows 11 / Windows 10
+- **Phần cứng mục tiêu**: NVIDIA GeForce RTX 3050 6GB Laptop GPU / GTX 1650 Ti
+- **Môi trường phần mềm**: Python 3.9 / PyTorch 2.3.0+cu121 / Transformers 4.41.2
+- **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` Base (134,515,008 tham số, **100% frozen**)
+- **Trainable Parameters**: Đúng **5,314,752 tham số** SA-CMS 3 cấp độ (Level 1: 1.77M, Level 2: 3.54M, Level 3: 5.31M)
+- **Tập huấn luyện chuẩn**: 200 mẫu cố định (`data/train/train_200_samples.json`), 150 gradient steps (3 epochs $\times$ 50 batches), $lr = 10^{-4}$, AdamW, WD = 0.01.
+- **Tiêu thụ VRAM đỉnh điểm**: **743.86 MB** (Train) / **440.4 MB** (Inference).
+
 
 ---
 

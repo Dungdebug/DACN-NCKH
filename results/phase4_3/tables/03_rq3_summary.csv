@@ -1,0 +1,6 @@
+method,dataset,n_samples,token_f1,token_f1_sd,token_f1_ci_lower,token_f1_ci_upper,exact_match,faithfulness_pct,faithfulness_ci_lower,faithfulness_ci_upper,correct_refusal_pct,false_refusal_pct,false_answer_pct,avg_latency_ms,peak_vram_mb,retrieval_status,refusal_controller_status,source_artifact
+B1,Vietnamese_Context_Evicted_100,100,0.0048,0.0237,0.0016,0.0088,0.0,0.0,0.0,0.0,0.0,0.0,100.0,12760.58,364.69,None,None,results/phase4_1/non_training/rq3/rq3_summary.json
+B2,Vietnamese_Context_Evicted_100,100,0.1596,0.2796,0.1164,0.2057,0.0,95.7,92.47,98.39,76.0,0.0,24.0,7873.78,353.31,"BM25 (k1=1.5, b=0.75, top_k=5, thresh=3.0)","Calibrated (min_score=3.0, cov=0.35)",results/phase4_1/non_training/rq3/rq3_summary.json
+B5,Vietnamese_Context_Evicted_100,100,0.0502,0.102,0.0346,0.0679,0.0,0.0,0.0,0.0,0.0,0.0,100.0,4634.92,317.73,None,None,results/phase4_1/non_training/rq3/rq3_summary.json
+P1,Vietnamese_Context_Evicted_100,100,0.0753,0.1223,0.0563,0.0958,0.0,0.0,0.0,0.0,0.0,0.0,100.0,4626.27,331.24,None,None,results/phase4_1/non_training/rq3/rq3_summary.json
+P2,Vietnamese_Context_Evicted_100,100,0.1596,0.2796,0.1164,0.2057,0.0,98.92,97.31,100.0,76.0,0.0,24.0,7768.73,369.48,"BM25 (k1=1.5, b=0.75, top_k=5, thresh=3.0)","Calibrated (min_score=3.0, cov=0.35)",results/phase4_1/non_training/rq3/rq3_summary.json
