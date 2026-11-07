@@ -1,0 +1,368 @@
+{
+  "document_id": "DEMO_DOC_001",
+  "version": 1,
+  "title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+  "raw_text": "# 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô\n\nTrong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.\n\nTầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn. Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi.\n\n# 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)\n\nKhông giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số. Cổng g_t nhận đầu vào là vector ẩn của tầng chú ý và điều tiết tỷ lệ thông tin bộ nhớ được đưa vào dòng biểu diễn chính. Điều này giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift).\n\n# 3. Hiệu quả Tính toán và Giảm Chi phí Token\n\nBằng cách nén thông tin lịch sử tài liệu vào các ma trận bộ nhớ, hệ thống cho phép mô hình trả lời các truy vấn mà không cần nhồi toàn bộ văn bản 10.000 token vào context window. Chi phí token đầu vào giảm hơn 80%, trong khi độ trễ phản hồi được duy trì dưới 50 mili-giây trên phần cứng tiêu chuẩn.",
+  "passages": [
+    {
+      "passage_id": "DEMO_DOC_001::P000",
+      "document_id": "DEMO_DOC_001",
+      "text": "# 1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution).",
+      "start_char": 0,
+      "end_char": 190,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P001",
+      "document_id": "DEMO_DOC_001",
+      "text": "Trong các mô hình ngôn ngữ hiện đại, việc xử lý văn bản dài thường gặp thách thức lớn về chi phí bộ nhớ và sự suy giảm chú ý (attention dilution). Hệ thống bộ nhớ liên tục (Continuum Memory System - CMS) giải quyết vấn đề này bằng cách thiết lập nhiều tầng bộ nhớ tham số hoạt động ở các chu kỳ thời gian khác nhau.",
+      "start_char": 44,
+      "end_char": 359,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P002",
+      "document_id": "DEMO_DOC_001",
+      "text": "Tầng 1 (Level 1) chịu trách nhiệm thích ứng ở cấp độ đoạn văn (paragraph), bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn. Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề.",
+      "start_char": 361,
+      "end_char": 587,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P003",
+      "document_id": "DEMO_DOC_001",
+      "text": "Tầng 2 (Level 2) cập nhật ở ranh giới phần mục (section), duy trì mạch lập luận và ngữ cảnh chủ đề. Tầng 3 (Level 3) đồng bộ ở ranh giới toàn bộ tài liệu (document), lưu trữ các thực thể cốt lõi. # 2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+      "start_char": 488,
+      "end_char": 745,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Giới thiệu Kiến trúc Bộ nhớ Đa quy mô",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P004",
+      "document_id": "DEMO_DOC_001",
+      "text": "Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending) Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số.",
+      "start_char": 690,
+      "end_char": 893,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P005",
+      "document_id": "DEMO_DOC_001",
+      "text": "Không giống các cơ chế cộng dồn đơn giản, SA-CMS áp dụng công thức cổng thích ứng để kết hợp biểu diễn chú ý của backbone và đầu ra bộ nhớ tham số. Cổng g_t nhận đầu vào là vector ẩn của tầng chú ý và điều tiết tỷ lệ thông tin bộ nhớ được đưa vào dòng biểu diễn chính.",
+      "start_char": 746,
+      "end_char": 1014,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P006",
+      "document_id": "DEMO_DOC_001",
+      "text": "Cổng g_t nhận đầu vào là vector ẩn của tầng chú ý và điều tiết tỷ lệ thông tin bộ nhớ được đưa vào dòng biểu diễn chính. Điều này giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift). # 3. Hiệu quả Tính toán và Giảm Chi phí Token",
+      "start_char": 894,
+      "end_char": 1140,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Cơ chế Cổng Hòa trộn Phần dư (Gated Residual Blending)",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P007",
+      "document_id": "DEMO_DOC_001",
+      "text": "Hiệu quả Tính toán và Giảm Chi phí Token Bằng cách nén thông tin lịch sử tài liệu vào các ma trận bộ nhớ, hệ thống cho phép mô hình trả lời các truy vấn mà không cần nhồi toàn bộ văn bản 10.000 token vào context window.",
+      "start_char": 1099,
+      "end_char": 1319,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Hiệu quả Tính toán và Giảm Chi phí Token",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_001::P008",
+      "document_id": "DEMO_DOC_001",
+      "text": "Bằng cách nén thông tin lịch sử tài liệu vào các ma trận bộ nhớ, hệ thống cho phép mô hình trả lời các truy vấn mà không cần nhồi toàn bộ văn bản 10.000 token vào context window. Chi phí token đầu vào giảm hơn 80%, trong khi độ trễ phản hồi được duy trì dưới 50 mili-giây trên phần cứng tiêu chuẩn.",
+      "start_char": 1141,
+      "end_char": 1439,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Hiệu quả Tính toán và Giảm Chi phí Token",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA006",
+        "document_version": 1,
+        "category": "Computer Science & AI",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_001_1",
+            "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+            "answerable": true,
+            "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+          },
+          {
+            "id": "DEMO_Q_001_2",
+            "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+            "answerable": true,
+            "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+          },
+          {
+            "id": "DEMO_Q_001_3",
+            "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+          }
+        ]
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "7f0a39d6f84497ee",
+  "created_at": 1794021573.7495637,
+  "metadata": {
+    "category": "Computer Science & AI",
+    "is_demo": true,
+    "questions": [
+      {
+        "id": "DEMO_Q_001_1",
+        "question": "Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?",
+        "answerable": true,
+        "expected_answer": "Tầng 1 thích ứng ở cấp độ đoạn văn, bắt giữ các chuyển tiếp cục bộ và từ vựng ngắn hạn."
+      },
+      {
+        "id": "DEMO_Q_001_2",
+        "question": "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) giúp ngăn ngừa hiện tượng gì?",
+        "answerable": true,
+        "expected_answer": "Giúp ngăn ngừa hiện tượng trôi dạt biểu diễn (representation drift)."
+      },
+      {
+        "id": "DEMO_Q_001_3",
+        "question": "Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?",
+        "answerable": false,
+        "expected_answer": "Tài liệu không cung cấp thông tin về vi xử lý lượng tử (Refusal required)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+# ==============================================================================
+# SA-CMS OFFLINE RUNTIME CONFIGURATION (FROZEN LOCAL DEPLOYMENT)
+# ==============================================================================
+
+runtime:
+  mode: "OFFLINE_SA_CMS"
+  status: "OFFLINE_ACTIVE"
+  network_disabled: true
+  port: 8000
+  host: "127.0.0.1"
+
+model:
+  backbone_name: "HuggingFaceTB/SmolLM2-135M"
+  local_model_path: "local_runtime/model"
+  local_tokenizer_path: "local_runtime/tokenizer"
+  architecture: "StructureAlignedHopeLM"
+  num_levels: 3
+  precision: "float32"
+  max_context_window: 512
+  freeze_backbone: true
+
+checkpoints:
+  current_active: "cms_3lvl_full_dataset.pt"
+  current_path: "local_runtime/checkpoints/cms_3lvl_full_dataset.pt"
+  current_status: "CURRENT_VALID_CHECKPOINT"
+  current_protocol: "Full-Dataset 3-Level SA-CMS Offline GPU Checkpoint (135 non-test docs / 1,731 sequences, Seed 42 Verified)"
+  extended_bilingual_checkpoint: "local_runtime/checkpoints/cms_3lvl_extended.pt"
+  base_phase4_checkpoint: "local_runtime/checkpoints/cms_3lvl_seed_42.pt"
+  final_external_checkpoint: "local_runtime/checkpoints/cms_3lvl_full_dataset.pt"
+  final_external_status: "READY_VERIFIED_GPU"
+
+retrieval:
+  algorithm: "BM25"
+  index_dir: "local_runtime/indexes"
+  k1: 1.5
+  b: 0.75
+  score_threshold: 3.0
+  max_evidence: 5
+  min_evidence: 1
+  min_query_coverage: 0.35
+
+refusal:
+  standard_message: "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
+
+chat_sessions:
+  storage_dir: "data/chat_sessions"

@@ -1,9 +1,36 @@
 # 📋 BIÊN BẢN BÀN GIAO CÔNG VIỆC DỰ ÁN (PROJECT STATUS & FINAL HANDOVER)
 > **Dành cho**: Antigravity AI Agent / Kỹ sư tiếp quản & Nhóm Nghiên cứu.  
 > **Dự án**: Nghiên cứu Khoa học Sinh viên — Hệ thống Chatbot tài liệu dựa trên Nested Learning (SA-CMS & Hybrid QA).  
-> **Thời điểm cập nhật**: 15/10/2026.  
-> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% GIAI ĐOẠN KIỂM TOÁN PHÁP Y (STAGE 1), SỬA LỖI KỸ THUẬT (STAGE 2) VÀ TÁI THẨM ĐỊNH THỰC TẾ (STAGE 3 & 4)**.  
-> 🔒 **KIỂM TRA TÍNH TOÀN VẸN**: Khớp **53/53 SHA-256 Checksums** (`training_output_final/checksums.sha256`) và **161/161 PyTest Unit Tests** (`tests/`).
+> **Thời điểm cập nhật**: 07/11/2026.  
+> **Trạng thái**: 🎉 **ĐÃ HOÀN THÀNH 100% THỰC NGHIỆM PHASE 4, NỀN TẢNG WEB OFFLINE `NL DocChat`, HUẤN LUYỆN MỞ RỘNG (`cms_3lvl_extended.pt`) & LƯU AN TOÀN TIẾN TRÌNH FULL-DATASET (`cms_3lvl_full_dataset.pt` — Seed 42 Hoàn tất 5/5 Epochs, Sẵn sàng Resume Seed 43 & 44)**.  
+> 🔒 **KIỂM TRA TÍNH TOÀN VẸN**: Khớp **54/54 SHA-256 Checksums** (`training_output_final/checksums.sha256`), **18/18 Local Runtime Assets VALID** (`local_runtime/metadata/integrity_hashes.json`), và **196/196 PyTest Unit & E2E Tests** (`tests/`).
+
+---
+
+## ⏸️ BÀN GIAO TIẾN TRÌNH HUẤN LUYỆN (SAVED TRAINING STATE & RESUME GUIDE)
+
+Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training.py`) đã được **dừng an toàn** và **lưu trọn vẹn trạng thái** tại [`checkpoints/full_dataset_training/training_progress_state.json`](checkpoints/full_dataset_training/training_progress_state.json):
+
+1. **Các Checkpoints Sẵn sàng Lấy ra Sử dụng Ngay (`local_runtime/checkpoints/`)**:
+   - **`cms_3lvl_full_dataset.pt`** *(Đang kích hoạt mặc định)*: Xuất từ **Seed 42** sau khi hoàn tất 5/5 epochs (Best Epoch 4) quét 100% `135` tài liệu non-test (`1,731` chuỗi duy nhất / `445,092` tokens, `0%` cắt cụt, `0%` trùng lặp tập test). Giảm **VN Answer PPL từ `18.46 → 2.32` (-87.46%)**, **EN Answer PPL từ `28.23 → 8.02` (-71.59%)**, **Combined Answer Loss `3.1281 → 1.4607` (-53.30%)** (SHA-256: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`).
+   - **`cms_3lvl_extended.pt`**: Hoàn tất 6/6 epochs trên `1,275` mẫu QA song ngữ (`1,000` EN + `275` VN × 2x). Giảm **VN Answer PPL `19.07 → 2.34` (-87.72%)**, **EN Answer PPL `31.54 → 8.91` (-71.74%)** (SHA-256: `d4f5b5ac90b91e1b613e4490303b0f35e6cbddc3bde5c4514617666f69f60238`).
+   - **`cms_3lvl_seed_42.pt`**: Checkpoint chuẩn đối chứng khoa học Phase 4.1 (SHA-256: `0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3`).
+
+2. **Cách Lấy ra Sử dụng Ngay hoặc Chạy Tiếp Tiến trình Train**:
+   - **Khởi chạy Web App `NL DocChat` (100% Offline)**:
+     ```powershell
+     .\start_offline_demo.bat
+     # Hoặc: python run_offline.py --host 127.0.0.1 --port 8000
+     ```
+   - **Chạy tiếp tiến trình huấn luyện cho Seed 43 & Seed 44** (Tự động bỏ qua Seed 42 đã xong, và tự động lưu tạm `cms_3lvl_full_seed_{seed}_partial.pt` sau mỗi epoch):
+     ```powershell
+     # Chạy tiếp toàn bộ các Seed còn lại (Seed 43 & Seed 44)
+     python scripts/run_training.py --seed all
+
+     # Hoặc chạy riêng từng Seed
+     python scripts/run_training.py --seed 43
+     python scripts/run_training.py --seed 44
+     ```
 
 ---
 
@@ -11,8 +38,9 @@
 
 ### 1. Phân định rõ ràng Hai Trục Nghiệm thu:
 1. **Software Verification (Kiểm thử Kỹ thuật & Độ tin cậy Phần mềm)**:
-   - **Unit Tests**: Đạt **161/161 tests passed** (`pytest tests/`).
-   - **Data Integrity**: Khớp **53/53 SHA-256 Checksums** (`training_output_final/checksums.sha256`), bao gồm toàn bộ 42 checkpoints nhị phân PyTorch `.pt`.
+   - **Unit & Offline E2E Tests**: Đạt **195/195 tests passed** (`pytest tests/`).
+   - **Data Integrity**: Khớp **54/54 SHA-256 Checksums** (`training_output_final/checksums.sha256`), bao gồm toàn bộ 42 checkpoints nhị phân PyTorch `.pt`, cùng kiểm định băm `VALID` cho checkpoint song ngữ mở rộng `local_runtime/checkpoints/cms_3lvl_extended.pt`.
+   - **NL DocChat Web Platform (100% Strict Offline)**: Hoàn thiện tích hợp giao diện Figma `NL DocChat` vào FastAPI (`src/web/static/`), bao gồm Chế độ Trình diễn Bảo vệ (`#btn-presentation-mode`), bộ phím tắt `Ctrl+K` / `Ctrl+/` / `Ctrl+L`, chuyển đổi trực tiếp checkpoint `cms_3lvl_extended.pt` ↔ `cms_3lvl_seed_42.pt`, và đồng bộ hóa điểm vào từ cả thư mục gốc ngoài lẫn thư mục con.
    - **Audit Trail**: Toàn bộ dự đoán từng câu hỏi (raw model output, ground truth, normalized tokens, token F1, exact match, target logprob, adapter norms) được xuất minh bạch ra 4 file `.jsonl` tại [`results/raw_predictions/`](results/raw_predictions/).
 2. **Scientific Evaluation (Nghiệm thu Thực nghiệm Khoa học)**:
    - Toàn bộ kết quả đối soát chính thức được tổng hợp tại [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv) và Báo cáo Tổng kết [`docs/final_scientific_report.md`](docs/final_scientific_report.md).

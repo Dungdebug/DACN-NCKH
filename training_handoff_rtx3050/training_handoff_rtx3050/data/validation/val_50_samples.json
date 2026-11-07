@@ -1,0 +1,641 @@
+{
+  "documents": [
+    {
+      "doc_id": "VAL_DOC_001",
+      "title": "Causal Inference and Counterfactual Reasoning in Language Models",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "qa_pairs": [
+        [
+          "What do standard language models learn instead of causal mechanisms?",
+          "statistical correlations"
+        ],
+        [
+          "What does counterfactual prompting evaluate in language models?",
+          "whether models can reason about altered antecedent conditions"
+        ],
+        [
+          "How do structural causal models represent variables?",
+          "as nodes in directed acyclic graphs with functional dependencies"
+        ],
+        [
+          "What happens during an intervention in a causal model?",
+          "modifies specific graph nodes while holding non-descendant mechanisms constant"
+        ],
+        [
+          "What is the benefit of aligning neural models with causal structures?",
+          "reduces vulnerability to spurious dataset shortcuts"
+        ],
+        [
+          "Are statistical correlations sufficient for causal reasoning?",
+          "No, correlations do not imply true causal mechanisms"
+        ],
+        [
+          "What graph structure is used in causal models?",
+          "directed acyclic graphs (DAGs)"
+        ],
+        [
+          "What remains constant during node interventions?",
+          "non-descendant mechanisms"
+        ],
+        [
+          "What vulnerability is mitigated by causal alignment?",
+          "spurious dataset shortcuts"
+        ],
+        [
+          "How are dependencies defined between causal nodes?",
+          "through functional dependencies"
+        ]
+      ]
+    },
+    {
+      "doc_id": "VAL_DOC_002",
+      "title": "Self-Supervised Pretraining Objectives Beyond Causal Masking",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "qa_pairs": [
+        [
+          "How does causal language modeling train autoregressive decoders?",
+          "by predicting subsequent tokens sequentially"
+        ],
+        [
+          "What training approach is used in masked language modeling?",
+          "corrupts random token spans and reconstructs originals with bidirectional encoders"
+        ],
+        [
+          "What does permutation language modeling sample?",
+          "arbitrary factorization orders to capture bidirectional context"
+        ],
+        [
+          "What does contrastive pretraining maximize?",
+          "agreement between differently augmented views of identical text passages"
+        ],
+        [
+          "What benefit results from combining masked reconstruction and contrastive alignment?",
+          "robust zero-shot transfer representations"
+        ],
+        [
+          "Are encoders in masked language modeling unidirectional or bidirectional?",
+          "bidirectional"
+        ],
+        [
+          "What is corrupted in masked language modeling?",
+          "random token spans"
+        ],
+        [
+          "How does permutation modeling achieve bidirectional context?",
+          "through sampled factorization orders"
+        ],
+        [
+          "What views are compared in contrastive learning?",
+          "differently augmented views of identical passages"
+        ],
+        [
+          "What transfer capability is enhanced by hybrid pretraining objectives?",
+          "zero-shot transfer representations"
+        ]
+      ]
+    },
+    {
+      "doc_id": "VAL_DOC_003",
+      "title": "Quantization Techniques for Resource-Constrained Edge Inference",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "qa_pairs": [
+        [
+          "What does post-training quantization do without retraining?",
+          "reduces floating-point weight precision to integer representations"
+        ],
+        [
+          "What does quantization-aware training simulate during backpropagation?",
+          "rounding errors to minimize accuracy degradation"
+        ],
+        [
+          "How does weight-only quantization operate during execution?",
+          "compresses model storage while computing in uncompressed precision"
+        ],
+        [
+          "What additional component is compressed in activation quantization?",
+          "intermediate tensors to minimize active memory bandwidth"
+        ],
+        [
+          "What deployment becomes feasible with low-bit quantization?",
+          "deploying 100M+ parameter models onto mobile and embedded devices"
+        ],
+        [
+          "Does post-training quantization require extensive retraining?",
+          "No, it operates without retraining"
+        ],
+        [
+          "Why is activation quantization important for hardware?",
+          "it minimizes active memory bandwidth"
+        ],
+        [
+          "What hardware targets benefit most from low-bit quantization?",
+          "mobile and embedded edge devices"
+        ],
+        [
+          "What precision is typically replaced by integer quantization?",
+          "floating-point precision"
+        ],
+        [
+          "How is accuracy maintained in quantization-aware training?",
+          "by modeling rounding errors during backpropagation"
+        ]
+      ]
+    },
+    {
+      "doc_id": "VAL_DOC_004",
+      "title": "Hallucination Mitigation through Fact-Checking Loops",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "qa_pairs": [
+        [
+          "What term describes plausible but factually incorrect model assertions?",
+          "hallucinations"
+        ],
+        [
+          "What do automated fact-checking loops extract from generated text?",
+          "atomic claims"
+        ],
+        [
+          "What three relationship categories do NLI classifiers produce?",
+          "entailment, neutral, or contradiction"
+        ],
+        [
+          "What pipeline activates when a contradiction is detected?",
+          "a critique-and-refine pipeline that revises the statement"
+        ],
+        [
+          "Where can fact-checking be integrated to reduce hallucinations?",
+          "directly into the decoding process"
+        ],
+        [
+          "What knowledge source is queried by fact-checking loops?",
+          "authoritative knowledge bases"
+        ],
+        [
+          "What does NLI stand for in fact verification?",
+          "Natural Language Inference"
+        ],
+        [
+          "Which NLI category indicates that evidence supports the claim?",
+          "entailment"
+        ],
+        [
+          "Which NLI category triggers statement revision?",
+          "contradiction"
+        ],
+        [
+          "What domain benefit results from fact-checking during decoding?",
+          "reduces hallucination frequency on technical domains"
+        ]
+      ]
+    },
+    {
+      "doc_id": "VAL_DOC_005",
+      "title": "Multi-Modal Grounding and Cross-Attention Alignment",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "qa_pairs": [
+        [
+          "Into what space do multi-modal models project visual and textual tokens?",
+          "a shared semantic latent space"
+        ],
+        [
+          "What backbone extracts spatial grid features from images?",
+          "vision transformer backbones"
+        ],
+        [
+          "How do textual queries attend to visual tokens?",
+          "through cross-attention layers"
+        ],
+        [
+          "What does contrastive image-text pretraining align across corpora?",
+          "global representations of image-caption pairs"
+        ],
+        [
+          "What establishes correspondences between textual nouns and image regions?",
+          "fine-grained bounding-box grounding"
+        ],
+        [
+          "What modalities are combined in vision-language models?",
+          "visual and textual modalities"
+        ],
+        [
+          "Which network encodes the visual input?",
+          "vision encoders"
+        ],
+        [
+          "Are visual and textual spaces separate or shared in aligned models?",
+          "shared semantic latent space"
+        ],
+        [
+          "What attention mechanism connects text queries with visual features?",
+          "cross-attention"
+        ],
+        [
+          "Why is bounding-box grounding beneficial for reasoning?",
+          "it establishes direct correspondences between nouns and visual regions"
+        ]
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": "VAL_Q001",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What do standard language models learn instead of causal mechanisms?",
+      "answer": "statistical correlations",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What do standard language models learn instead of causal mechanisms?\nAnswer: statistical correlations"
+    },
+    {
+      "sample_id": "VAL_Q002",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What does counterfactual prompting evaluate in language models?",
+      "answer": "whether models can reason about altered antecedent conditions",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What does counterfactual prompting evaluate in language models?\nAnswer: whether models can reason about altered antecedent conditions"
+    },
+    {
+      "sample_id": "VAL_Q003",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "How do structural causal models represent variables?",
+      "answer": "as nodes in directed acyclic graphs with functional dependencies",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: How do structural causal models represent variables?\nAnswer: as nodes in directed acyclic graphs with functional dependencies"
+    },
+    {
+      "sample_id": "VAL_Q004",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What happens during an intervention in a causal model?",
+      "answer": "modifies specific graph nodes while holding non-descendant mechanisms constant",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What happens during an intervention in a causal model?\nAnswer: modifies specific graph nodes while holding non-descendant mechanisms constant"
+    },
+    {
+      "sample_id": "VAL_Q005",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What is the benefit of aligning neural models with causal structures?",
+      "answer": "reduces vulnerability to spurious dataset shortcuts",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What is the benefit of aligning neural models with causal structures?\nAnswer: reduces vulnerability to spurious dataset shortcuts"
+    },
+    {
+      "sample_id": "VAL_Q006",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "Are statistical correlations sufficient for causal reasoning?",
+      "answer": "No, correlations do not imply true causal mechanisms",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: Are statistical correlations sufficient for causal reasoning?\nAnswer: No, correlations do not imply true causal mechanisms"
+    },
+    {
+      "sample_id": "VAL_Q007",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What graph structure is used in causal models?",
+      "answer": "directed acyclic graphs (DAGs)",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What graph structure is used in causal models?\nAnswer: directed acyclic graphs (DAGs)"
+    },
+    {
+      "sample_id": "VAL_Q008",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What remains constant during node interventions?",
+      "answer": "non-descendant mechanisms",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What remains constant during node interventions?\nAnswer: non-descendant mechanisms"
+    },
+    {
+      "sample_id": "VAL_Q009",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "What vulnerability is mitigated by causal alignment?",
+      "answer": "spurious dataset shortcuts",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: What vulnerability is mitigated by causal alignment?\nAnswer: spurious dataset shortcuts"
+    },
+    {
+      "sample_id": "VAL_Q010",
+      "document_id": "VAL_DOC_001",
+      "context": "Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.",
+      "question": "How are dependencies defined between causal nodes?",
+      "answer": "through functional dependencies",
+      "formatted_text": "Context: Standard language models learn statistical correlations rather than true causal mechanisms. Counterfactual prompting evaluates whether models can reason about altered antecedent conditions. Structural causal models represent variables as nodes in directed acyclic graphs with functional dependencies. Interventions modify specific graph nodes while holding non-descendant mechanisms constant. Aligning neural representations with causal graph structures reduces vulnerability to spurious dataset shortcuts.\nQuestion: How are dependencies defined between causal nodes?\nAnswer: through functional dependencies"
+    },
+    {
+      "sample_id": "VAL_Q011",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "How does causal language modeling train autoregressive decoders?",
+      "answer": "by predicting subsequent tokens sequentially",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: How does causal language modeling train autoregressive decoders?\nAnswer: by predicting subsequent tokens sequentially"
+    },
+    {
+      "sample_id": "VAL_Q012",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What training approach is used in masked language modeling?",
+      "answer": "corrupts random token spans and reconstructs originals with bidirectional encoders",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What training approach is used in masked language modeling?\nAnswer: corrupts random token spans and reconstructs originals with bidirectional encoders"
+    },
+    {
+      "sample_id": "VAL_Q013",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What does permutation language modeling sample?",
+      "answer": "arbitrary factorization orders to capture bidirectional context",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What does permutation language modeling sample?\nAnswer: arbitrary factorization orders to capture bidirectional context"
+    },
+    {
+      "sample_id": "VAL_Q014",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What does contrastive pretraining maximize?",
+      "answer": "agreement between differently augmented views of identical text passages",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What does contrastive pretraining maximize?\nAnswer: agreement between differently augmented views of identical text passages"
+    },
+    {
+      "sample_id": "VAL_Q015",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What benefit results from combining masked reconstruction and contrastive alignment?",
+      "answer": "robust zero-shot transfer representations",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What benefit results from combining masked reconstruction and contrastive alignment?\nAnswer: robust zero-shot transfer representations"
+    },
+    {
+      "sample_id": "VAL_Q016",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "Are encoders in masked language modeling unidirectional or bidirectional?",
+      "answer": "bidirectional",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: Are encoders in masked language modeling unidirectional or bidirectional?\nAnswer: bidirectional"
+    },
+    {
+      "sample_id": "VAL_Q017",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What is corrupted in masked language modeling?",
+      "answer": "random token spans",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What is corrupted in masked language modeling?\nAnswer: random token spans"
+    },
+    {
+      "sample_id": "VAL_Q018",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "How does permutation modeling achieve bidirectional context?",
+      "answer": "through sampled factorization orders",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: How does permutation modeling achieve bidirectional context?\nAnswer: through sampled factorization orders"
+    },
+    {
+      "sample_id": "VAL_Q019",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What views are compared in contrastive learning?",
+      "answer": "differently augmented views of identical passages",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What views are compared in contrastive learning?\nAnswer: differently augmented views of identical passages"
+    },
+    {
+      "sample_id": "VAL_Q020",
+      "document_id": "VAL_DOC_002",
+      "context": "Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.",
+      "question": "What transfer capability is enhanced by hybrid pretraining objectives?",
+      "answer": "zero-shot transfer representations",
+      "formatted_text": "Context: Causal language modeling trains autoregressive decoders by predicting subsequent tokens sequentially. Masked language modeling corrupts random token spans and trains bidirectional encoders to reconstruct originals. Permutation language modeling samples arbitrary factorization orders to capture bidirectional context autoregressively. Contrastive pretraining maximizes agreement between differently augmented views of identical text passages. Combining masked reconstruction with contrastive alignment yields robust zero-shot transfer representations.\nQuestion: What transfer capability is enhanced by hybrid pretraining objectives?\nAnswer: zero-shot transfer representations"
+    },
+    {
+      "sample_id": "VAL_Q021",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What does post-training quantization do without retraining?",
+      "answer": "reduces floating-point weight precision to integer representations",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What does post-training quantization do without retraining?\nAnswer: reduces floating-point weight precision to integer representations"
+    },
+    {
+      "sample_id": "VAL_Q022",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What does quantization-aware training simulate during backpropagation?",
+      "answer": "rounding errors to minimize accuracy degradation",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What does quantization-aware training simulate during backpropagation?\nAnswer: rounding errors to minimize accuracy degradation"
+    },
+    {
+      "sample_id": "VAL_Q023",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "How does weight-only quantization operate during execution?",
+      "answer": "compresses model storage while computing in uncompressed precision",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: How does weight-only quantization operate during execution?\nAnswer: compresses model storage while computing in uncompressed precision"
+    },
+    {
+      "sample_id": "VAL_Q024",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What additional component is compressed in activation quantization?",
+      "answer": "intermediate tensors to minimize active memory bandwidth",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What additional component is compressed in activation quantization?\nAnswer: intermediate tensors to minimize active memory bandwidth"
+    },
+    {
+      "sample_id": "VAL_Q025",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What deployment becomes feasible with low-bit quantization?",
+      "answer": "deploying 100M+ parameter models onto mobile and embedded devices",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What deployment becomes feasible with low-bit quantization?\nAnswer: deploying 100M+ parameter models onto mobile and embedded devices"
+    },
+    {
+      "sample_id": "VAL_Q026",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "Does post-training quantization require extensive retraining?",
+      "answer": "No, it operates without retraining",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: Does post-training quantization require extensive retraining?\nAnswer: No, it operates without retraining"
+    },
+    {
+      "sample_id": "VAL_Q027",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "Why is activation quantization important for hardware?",
+      "answer": "it minimizes active memory bandwidth",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: Why is activation quantization important for hardware?\nAnswer: it minimizes active memory bandwidth"
+    },
+    {
+      "sample_id": "VAL_Q028",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What hardware targets benefit most from low-bit quantization?",
+      "answer": "mobile and embedded edge devices",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What hardware targets benefit most from low-bit quantization?\nAnswer: mobile and embedded edge devices"
+    },
+    {
+      "sample_id": "VAL_Q029",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "What precision is typically replaced by integer quantization?",
+      "answer": "floating-point precision",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: What precision is typically replaced by integer quantization?\nAnswer: floating-point precision"
+    },
+    {
+      "sample_id": "VAL_Q030",
+      "document_id": "VAL_DOC_003",
+      "context": "Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.",
+      "question": "How is accuracy maintained in quantization-aware training?",
+      "answer": "by modeling rounding errors during backpropagation",
+      "formatted_text": "Context: Post-training quantization reduces floating-point weight precision to integer representations without retraining. Quantization-aware training models rounding errors during backpropagation to minimize accuracy degradation. Weight-only quantization compresses model storage while executing computations in uncompressed floating precision. Activation quantization additionally compresses intermediate tensors to minimize active memory bandwidth. Low-bit quantization enables deploying 100M+ parameter language models onto mobile and embedded devices.\nQuestion: How is accuracy maintained in quantization-aware training?\nAnswer: by modeling rounding errors during backpropagation"
+    },
+    {
+      "sample_id": "VAL_Q031",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What term describes plausible but factually incorrect model assertions?",
+      "answer": "hallucinations",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What term describes plausible but factually incorrect model assertions?\nAnswer: hallucinations"
+    },
+    {
+      "sample_id": "VAL_Q032",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What do automated fact-checking loops extract from generated text?",
+      "answer": "atomic claims",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What do automated fact-checking loops extract from generated text?\nAnswer: atomic claims"
+    },
+    {
+      "sample_id": "VAL_Q033",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What three relationship categories do NLI classifiers produce?",
+      "answer": "entailment, neutral, or contradiction",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What three relationship categories do NLI classifiers produce?\nAnswer: entailment, neutral, or contradiction"
+    },
+    {
+      "sample_id": "VAL_Q034",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What pipeline activates when a contradiction is detected?",
+      "answer": "a critique-and-refine pipeline that revises the statement",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What pipeline activates when a contradiction is detected?\nAnswer: a critique-and-refine pipeline that revises the statement"
+    },
+    {
+      "sample_id": "VAL_Q035",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "Where can fact-checking be integrated to reduce hallucinations?",
+      "answer": "directly into the decoding process",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: Where can fact-checking be integrated to reduce hallucinations?\nAnswer: directly into the decoding process"
+    },
+    {
+      "sample_id": "VAL_Q036",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What knowledge source is queried by fact-checking loops?",
+      "answer": "authoritative knowledge bases",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What knowledge source is queried by fact-checking loops?\nAnswer: authoritative knowledge bases"
+    },
+    {
+      "sample_id": "VAL_Q037",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What does NLI stand for in fact verification?",
+      "answer": "Natural Language Inference",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What does NLI stand for in fact verification?\nAnswer: Natural Language Inference"
+    },
+    {
+      "sample_id": "VAL_Q038",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "Which NLI category indicates that evidence supports the claim?",
+      "answer": "entailment",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: Which NLI category indicates that evidence supports the claim?\nAnswer: entailment"
+    },
+    {
+      "sample_id": "VAL_Q039",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "Which NLI category triggers statement revision?",
+      "answer": "contradiction",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: Which NLI category triggers statement revision?\nAnswer: contradiction"
+    },
+    {
+      "sample_id": "VAL_Q040",
+      "document_id": "VAL_DOC_004",
+      "context": "Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.",
+      "question": "What domain benefit results from fact-checking during decoding?",
+      "answer": "reduces hallucination frequency on technical domains",
+      "formatted_text": "Context: Generative language models frequently produce plausible but factually incorrect assertions known as hallucinations. Automated fact-checking loops extract atomic claims from generated text and query authoritative knowledge bases. Natural Language Inference (NLI) classifiers categorize relationships between claims and evidence as entailment, neutral, or contradiction. When contradiction is detected, a critique-and-refine pipeline revises the generated statement to align with facts. Integrating fact-checking directly into decoding reduces hallucination frequency on technical domains.\nQuestion: What domain benefit results from fact-checking during decoding?\nAnswer: reduces hallucination frequency on technical domains"
+    },
+    {
+      "sample_id": "VAL_Q041",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "Into what space do multi-modal models project visual and textual tokens?",
+      "answer": "a shared semantic latent space",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: Into what space do multi-modal models project visual and textual tokens?\nAnswer: a shared semantic latent space"
+    },
+    {
+      "sample_id": "VAL_Q042",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "What backbone extracts spatial grid features from images?",
+      "answer": "vision transformer backbones",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: What backbone extracts spatial grid features from images?\nAnswer: vision transformer backbones"
+    },
+    {
+      "sample_id": "VAL_Q043",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "How do textual queries attend to visual tokens?",
+      "answer": "through cross-attention layers",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: How do textual queries attend to visual tokens?\nAnswer: through cross-attention layers"
+    },
+    {
+      "sample_id": "VAL_Q044",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "What does contrastive image-text pretraining align across corpora?",
+      "answer": "global representations of image-caption pairs",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: What does contrastive image-text pretraining align across corpora?\nAnswer: global representations of image-caption pairs"
+    },
+    {
+      "sample_id": "VAL_Q045",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "What establishes correspondences between textual nouns and image regions?",
+      "answer": "fine-grained bounding-box grounding",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: What establishes correspondences between textual nouns and image regions?\nAnswer: fine-grained bounding-box grounding"
+    },
+    {
+      "sample_id": "VAL_Q046",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "What modalities are combined in vision-language models?",
+      "answer": "visual and textual modalities",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: What modalities are combined in vision-language models?\nAnswer: visual and textual modalities"
+    },
+    {
+      "sample_id": "VAL_Q047",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "Which network encodes the visual input?",
+      "answer": "vision encoders",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: Which network encodes the visual input?\nAnswer: vision encoders"
+    },
+    {
+      "sample_id": "VAL_Q048",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "Are visual and textual spaces separate or shared in aligned models?",
+      "answer": "shared semantic latent space",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: Are visual and textual spaces separate or shared in aligned models?\nAnswer: shared semantic latent space"
+    },
+    {
+      "sample_id": "VAL_Q049",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "What attention mechanism connects text queries with visual features?",
+      "answer": "cross-attention",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: What attention mechanism connects text queries with visual features?\nAnswer: cross-attention"
+    },
+    {
+      "sample_id": "VAL_Q050",
+      "document_id": "VAL_DOC_005",
+      "context": "Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.",
+      "question": "Why is bounding-box grounding beneficial for reasoning?",
+      "answer": "it establishes direct correspondences between nouns and visual regions",
+      "formatted_text": "Context: Multi-modal language models project visual and textual tokens into a shared semantic latent space. Vision encoders extract spatial grid features from images using vision transformer backbones. Cross-attention layers enable textual queries to attend directly to visual feature tokens. Contrastive image-text pretraining aligns global representations of image-caption pairs across large web corpora. Fine-grained bounding-box grounding establishes direct correspondences between textual nouns and visual regions.\nQuestion: Why is bounding-box grounding beneficial for reasoning?\nAnswer: it establishes direct correspondences between nouns and visual regions"
+    }
+  ]
+}

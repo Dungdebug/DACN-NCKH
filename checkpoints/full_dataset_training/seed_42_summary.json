@@ -1,0 +1,76 @@
+{
+  "seed": 42,
+  "checkpoint_path": "checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt",
+  "checkpoint_sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059",
+  "parent_checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+  "parent_sha256_verified_unchanged": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+  "best_epoch": 4,
+  "duration_sec": 2250.3,
+  "peak_vram_mb": 2661.0,
+  "baseline_metrics": {
+    "en_val": {
+      "full_loss": 4.7935,
+      "full_ppl": 120.7224,
+      "answer_loss": 3.3403,
+      "answer_ppl": 28.2278
+    },
+    "vn_val": {
+      "full_loss": 2.6585,
+      "full_ppl": 14.275,
+      "answer_loss": 2.9159,
+      "answer_ppl": 18.4649
+    },
+    "combined_answer_loss": 3.1281
+  },
+  "best_metrics": {
+    "en_val": {
+      "full_loss": 4.1545,
+      "full_ppl": 63.7221,
+      "answer_loss": 2.0819,
+      "answer_ppl": 8.02
+    },
+    "vn_val": {
+      "full_loss": 1.691,
+      "full_ppl": 5.425,
+      "answer_loss": 0.8396,
+      "answer_ppl": 2.3153
+    },
+    "combined_answer_loss": 1.4607
+  },
+  "weight_delta_from_parent": {
+    "max_abs_param_delta": 0.034861,
+    "l2_norm_by_module": {
+      "level_0": 6.520522,
+      "level_1": 6.502992,
+      "level_2": 6.09603,
+      "cms_norm": 0.135112
+    }
+  },
+  "epoch_history": [],
+  "qualitative_preview": [
+    {
+      "lang": "vi",
+      "question": "Hệ thống UWB hoạt động ở băng tần nào và độ rộng xung bao nhiêu?",
+      "reference": "Ở băng tần 6.5 GHz với độ rộng xung 2 nano-giây [VN_VAL_DOC_001::P001].",
+      "prediction": "UWB hoạt động ở băng tần 6.5 GHz với độ rộng xung 2 nano-"
+    },
+    {
+      "lang": "vi",
+      "question": "Sai số định vị trung bình của xe tự hành AGV là bao nhiêu?",
+      "reference": "Sai số trung bình 8.5 cm [VN_VAL_DOC_001::P001].",
+      "prediction": "Đạt 120 xe AGV và 20 Hz [VN_TR_DOC_002::P002]."
+    },
+    {
+      "lang": "en",
+      "question": "What do standard language models learn instead of causal mechanisms?",
+      "reference": "statistical correlations",
+      "prediction": "Standard language models learn causal mechanisms by identifying causal relationships between antecedent and consequent tokens."
+    },
+    {
+      "lang": "en",
+      "question": "What does counterfactual prompting evaluate in language models?",
+      "reference": "whether models can reason about altered antecedent conditions",
+      "prediction": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
+    }
+  ]
+}

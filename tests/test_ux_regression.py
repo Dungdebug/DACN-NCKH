@@ -172,3 +172,61 @@ def test_document_table_date_formatting_safe():
     assert "d.created_at.slice" not in app_js, "d.created_at.slice causes TypeError when created_at is a number/timestamp!"
     assert "formattedDate" in app_js
 
+
+def test_presentation_mode_equation_and_shortcuts_present():
+    """Verify UI-05 (SA-CMS Equation), UI-06 (Presentation Mode), and Section 4.1 keyboard shortcuts exist strictly offline."""
+    root = Path(__file__).resolve().parent.parent
+    index_html = (root / "src" / "web" / "static" / "index.html").read_text(encoding="utf-8")
+    app_css = (root / "src" / "web" / "static" / "css" / "app.css").read_text(encoding="utf-8")
+    app_js = (root / "src" / "web" / "static" / "js" / "app.js").read_text(encoding="utf-8")
+
+    # UI-06: Defense Fullscreen Presentation Mode
+    assert 'id="btn-presentation-mode"' in index_html
+    assert ".presentation-mode" in app_css
+    assert "togglePresentationMode" in app_js
+
+    # UI-05: 3-Level SA-CMS Equation & Extended GPU KPI
+    assert "cms-equation-box" in index_html
+    assert ".cms-equation-box" in app_css
+    assert "cms_3lvl_extended.pt" in index_html
+    assert "EXTENDED GPU TRAINING" in app_js
+
+    # Section 4.1: Keyboard shortcuts (Ctrl+K, Ctrl+/, Ctrl+L)
+    assert 'e.key === "k"' in app_js
+    assert 'e.key === "/"' in app_js
+    assert 'e.key === "l"' in app_js
+
+    # Zero external CDN URLs
+    for fname, content in [("index.html", index_html), ("app.css", app_css), ("app.js", app_js)]:
+        assert "https://cdn." not in content, f"External CDN prohibited in {fname}"
+        assert "https://fonts.googleapis.com" not in content, f"External font URL prohibited in {fname}"
+
+
+def test_light_dark_system_theme_controls_present():
+    """Verify Light / Dark / System theme controls in Top Header, Settings Popover, and Sidebar Footer."""
+    root = Path(__file__).resolve().parent.parent
+    index_html = (root / "src" / "web" / "static" / "index.html").read_text(encoding="utf-8")
+    app_css = (root / "src" / "web" / "static" / "css" / "app.css").read_text(encoding="utf-8")
+    app_js = (root / "src" / "web" / "static" / "js" / "app.js").read_text(encoding="utf-8")
+
+    # Top Header dual pill switch + Popover 3-way group + Sidebar toggle
+    assert 'id="header-theme-switch"' in index_html
+    assert 'id="btn-theme-light"' in index_html
+    assert 'id="btn-theme-dark"' in index_html
+    assert 'id="header-theme-group"' in index_html
+    assert 'data-theme-pref="system"' in index_html
+    assert 'id="btn-theme-toggle"' in index_html
+
+    # Dark theme CSS tokens & header switch styles
+    assert '[data-theme="dark"]' in app_css
+    assert "color-scheme: dark;" in app_css
+    assert ".header-theme-switch" in app_css
+    assert ".theme-pill-opt" in app_css
+
+    # JS theme resolution, persistence, and Alt+T shortcut
+    assert "resolveEffectiveTheme" in app_js
+    assert 'localStorage.setItem("nldoc_theme"' in app_js
+    assert "prefers-color-scheme: dark" in app_js
+
+
+

@@ -151,7 +151,8 @@ async def lifespan(app: FastAPI):
         seed_demo_documents()
         service._initialize_retriever()
     # Eagerly load local offline model
-    service.load_model_if_requested(prefer_gpu=False)
+    prefer_gpu = os.environ.get("SA_CMS_PREFER_GPU", "0") == "1"
+    service.load_model_if_requested(prefer_gpu=prefer_gpu)
     yield
 
 
@@ -303,6 +304,8 @@ async def list_documents(search: Optional[str] = None, limit: int = 100, offset:
             documents.append({
                 "document_id": doc_id,
                 "title": title,
+                "file_name": doc.metadata.get("file_name", title),
+                "file_size": format_file_size(doc.metadata.get("file_size") or len(raw_text.encode("utf-8"))),
                 "version": doc.version,
                 "content_hash": doc.content_hash,
                 "created_at": doc.created_at,
@@ -1071,7 +1074,17 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "generation_ms": round(generation_ms, 2),
     }
 
+    mode_norm = (req.mode or "hybrid").lower()
+    method_code = "P1" if mode_norm == "memory" else ("B2" if mode_norm == "context" else "P2")
+    memory_level_label = (
+        "Level 1-3 (SA-CMS Memory-Only, Context Evicted)"
+        if mode_norm == "memory"
+        else ("BM25 Context Window (Standard RAG)" if mode_norm == "context" else "Level 3 (SA-CMS Gated Multi-Level)")
+    )
+
     diagnostics_data = {
+        "mode": mode_norm,
+        "method": method_code,
         "routing": effective_route.value,
         "route_explanation": ground_explanation,
         "effective_query": effective_query,
@@ -1081,7 +1094,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "dynamic_top_k": use_dynamic_k,
         "context_compression": compression_stats,
         "refusal_reason": refusal_reason,
-        "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+        "memory_level": memory_level_label,
     }
 
     # Step 8: Add assistant message to session & persist
@@ -1102,7 +1115,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     service.telemetry.log_query(
         question=raw_query,
         answer=answer_text,
-        method="P2",
+        method=method_code,
         document_id=attached_docs[0] if attached_docs else None,
         mode=req.mode,
         answer_mode=req.answer_mode,

@@ -1,0 +1,58 @@
+{
+  "updated_at_utc": "2026-11-07T06:39:38Z",
+  "overall_status": "PAUSED_SAFE_RESUMABLE",
+  "completed_seeds": [
+    42
+  ],
+  "pending_seeds": [
+    43,
+    44
+  ],
+  "active_exported_runtime_checkpoint": {
+    "path": "local_runtime/checkpoints/cms_3lvl_full_dataset.pt",
+    "source_seed": 42,
+    "sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059"
+  },
+  "resume_commands": {
+    "resume_all_remaining": "python scripts/run_training.py --seed all",
+    "train_seed_43_only": "python scripts/run_training.py --seed 43",
+    "train_seed_44_only": "python scripts/run_training.py --seed 44",
+    "force_retrain_all": "python scripts/run_training.py --seed all --force-retrain"
+  },
+  "seeds": {
+    "42": {
+      "status": "COMPLETED_VERIFIED",
+      "checkpoint_path": "checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt",
+      "checkpoint_sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059",
+      "best_epoch": 4,
+      "epochs_completed": 5,
+      "best_metrics": {
+        "en_val": {
+          "full_loss": 4.1545,
+          "full_ppl": 63.7221,
+          "answer_loss": 2.0819,
+          "answer_ppl": 8.02
+        },
+        "vn_val": {
+          "full_loss": 1.691,
+          "full_ppl": 5.425,
+          "answer_loss": 0.8396,
+          "answer_ppl": 2.3153
+        },
+        "combined_answer_loss": 1.4607
+      }
+    },
+    "43": {
+      "status": "PENDING_RESUME",
+      "parent_warm_start": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+      "epochs_completed": 0,
+      "total_epochs": 5
+    },
+    "44": {
+      "status": "PENDING_RESUME",
+      "parent_warm_start": "checkpoints/phase4_1/cms_3lvl_seed_44.pt",
+      "epochs_completed": 0,
+      "total_epochs": 5
+    }
+  }
+}

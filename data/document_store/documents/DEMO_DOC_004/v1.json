@@ -1,0 +1,257 @@
+{
+  "document_id": "DEMO_DOC_004",
+  "version": 1,
+  "title": "Khung Quản trị An toàn Thông tin Số và Tuân thủ Bảo vệ Dữ liệu Cá nhân",
+  "raw_text": "# 1. Nguyên tắc Xử lý Dữ liệu Cá nhân Hợp pháp\n\nDữ liệu cá nhân phải được xử lý trên cơ sở có sự đồng thuận rõ ràng của chủ thể dữ liệu, trừ các trường hợp khẩn cấp đe dọa đến tính mạng hoặc an ninh quốc gia. Bên kiểm soát dữ liệu có trách nhiệm áp dụng các biện pháp kỹ thuật và tổ chức phù hợp để đảm bảo tính bảo mật, tính toàn vẹn và tính khả dụng của dữ liệu.\n\n# 2. Yêu cầu Báo cáo Sự cố An ninh Mạng\n\nKhi phát hiện sự cố rò rỉ dữ liệu hoặc xâm nhập trái phép, bên xử lý dữ liệu phải thông báo cho cơ quan quản lý có thẩm quyền trong thời hạn tối đa 72 giờ kể từ thời điểm phát hiện sự cố. Báo cáo phải mô tả bản chất của sự cố, số lượng chủ thể dữ liệu bị ảnh hưởng và các biện pháp khắc phục tức thời.\n\n# 3. Đánh giá Tác động Xử lý Dữ liệu (DPIA)\n\nHồ sơ đánh giá tác động xử lý dữ liệu cá nhân phải được lập và lưu trữ thường xuyên. Doanh nghiệp phải chỉ định Bộ phận hoặc Nhân sự chuyên trách bảo vệ dữ liệu (DPO) để giám sát việc tuân thủ các quy định pháp luật và phối hợp với thanh tra chuyên ngành.",
+  "passages": [
+    {
+      "passage_id": "DEMO_DOC_004::P000",
+      "document_id": "DEMO_DOC_004",
+      "text": "# 1. Nguyên tắc Xử lý Dữ liệu Cá nhân Hợp pháp Dữ liệu cá nhân phải được xử lý trên cơ sở có sự đồng thuận rõ ràng của chủ thể dữ liệu, trừ các trường hợp khẩn cấp đe dọa đến tính mạng hoặc an ninh quốc gia.",
+      "start_char": 0,
+      "end_char": 208,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Nguyên tắc Xử lý Dữ liệu Cá nhân Hợp pháp",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_004::P001",
+      "document_id": "DEMO_DOC_004",
+      "text": "Dữ liệu cá nhân phải được xử lý trên cơ sở có sự đồng thuận rõ ràng của chủ thể dữ liệu, trừ các trường hợp khẩn cấp đe dọa đến tính mạng hoặc an ninh quốc gia. Bên kiểm soát dữ liệu có trách nhiệm áp dụng các biện pháp kỹ thuật và tổ chức phù hợp để đảm bảo tính bảo mật, tính toàn vẹn và tính khả dụng của dữ liệu.",
+      "start_char": 48,
+      "end_char": 365,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Nguyên tắc Xử lý Dữ liệu Cá nhân Hợp pháp",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_004::P002",
+      "document_id": "DEMO_DOC_004",
+      "text": "# 2. Yêu cầu Báo cáo Sự cố An ninh Mạng Khi phát hiện sự cố rò rỉ dữ liệu hoặc xâm nhập trái phép, bên xử lý dữ liệu phải thông báo cho cơ quan quản lý có thẩm quyền trong thời hạn tối đa 72 giờ kể từ thời điểm phát hiện sự cố.",
+      "start_char": 366,
+      "end_char": 594,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Yêu cầu Báo cáo Sự cố An ninh Mạng",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA002",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_004::P003",
+      "document_id": "DEMO_DOC_004",
+      "text": "Khi phát hiện sự cố rò rỉ dữ liệu hoặc xâm nhập trái phép, bên xử lý dữ liệu phải thông báo cho cơ quan quản lý có thẩm quyền trong thời hạn tối đa 72 giờ kể từ thời điểm phát hiện sự cố. Báo cáo phải mô tả bản chất của sự cố, số lượng chủ thể dữ liệu bị ảnh hưởng và các biện pháp khắc phục tức thời.",
+      "start_char": 407,
+      "end_char": 709,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Yêu cầu Báo cáo Sự cố An ninh Mạng",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA003",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_004::P004",
+      "document_id": "DEMO_DOC_004",
+      "text": "# 3. Đánh giá Tác động Xử lý Dữ liệu (DPIA) Hồ sơ đánh giá tác động xử lý dữ liệu cá nhân phải được lập và lưu trữ thường xuyên.",
+      "start_char": 710,
+      "end_char": 839,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đánh giá Tác động Xử lý Dữ liệu (DPIA)",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA004",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    },
+    {
+      "passage_id": "DEMO_DOC_004::P005",
+      "document_id": "DEMO_DOC_004",
+      "text": "Hồ sơ đánh giá tác động xử lý dữ liệu cá nhân phải được lập và lưu trữ thường xuyên. Doanh nghiệp phải chỉ định Bộ phận hoặc Nhân sự chuyên trách bảo vệ dữ liệu (DPO) để giám sát việc tuân thủ các quy định pháp luật và phối hợp với thanh tra chuyên ngành.",
+      "start_char": 755,
+      "end_char": 1010,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Đánh giá Tác động Xử lý Dữ liệu (DPIA)",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA005",
+        "document_version": 1,
+        "category": "Cybersecurity & Law",
+        "is_demo": true,
+        "questions": [
+          {
+            "id": "DEMO_Q_004_1",
+            "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+            "answerable": true,
+            "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+          },
+          {
+            "id": "DEMO_Q_004_2",
+            "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+            "answerable": true,
+            "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+          },
+          {
+            "id": "DEMO_Q_004_3",
+            "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+            "answerable": false,
+            "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+          }
+        ]
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "2ec00fce32bba0c4",
+  "created_at": 1794021573.7745888,
+  "metadata": {
+    "category": "Cybersecurity & Law",
+    "is_demo": true,
+    "questions": [
+      {
+        "id": "DEMO_Q_004_1",
+        "question": "Thời hạn tối đa để thông báo cho cơ quan quản lý khi phát hiện sự cố rò rỉ dữ liệu là bao lâu?",
+        "answerable": true,
+        "expected_answer": "Thời hạn tối đa là 72 giờ kể từ thời điểm phát hiện sự cố."
+      },
+      {
+        "id": "DEMO_Q_004_2",
+        "question": "Doanh nghiệp cần chỉ định chức danh nào để giám sát việc tuân thủ bảo vệ dữ liệu?",
+        "answerable": true,
+        "expected_answer": "Nhân sự chuyên trách bảo vệ dữ liệu (DPO)."
+      },
+      {
+        "id": "DEMO_Q_004_3",
+        "question": "Mức phạt tiền tối đa là bao nhiêu tỷ đồng đối với vi phạm của ngân hàng quốc tế?",
+        "answerable": false,
+        "expected_answer": "Tài liệu không quy định mức phạt tiền cụ thể (Refusal required)."
+      }
+    ]
+  }
+}

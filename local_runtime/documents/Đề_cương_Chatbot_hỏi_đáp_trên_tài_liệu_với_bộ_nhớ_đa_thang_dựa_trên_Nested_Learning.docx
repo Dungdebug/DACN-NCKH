@@ -1,0 +1,251 @@
+# Đề cương: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning
+
+Oct 2, 2026 · @Nguyen Huu Trung
+
+## 1. Tên đề tài đề xuất
+
+Khuyến nghị dùng phương án A vì nó có một điểm mới về phương pháp, phát biểu được bằng công thức và kiểm chứng được bằng ablation.
+
+Phần còn lại của đề cương viết cho phương án A. Ý của B và C được giữ lại làm hai thí nghiệm trong bài, nên sinh viên không mất gì khi chọn A.
+
+## 2. Tóm tắt
+
+Đề tài xây dựng một chatbot chỉ trả lời dựa trên tài liệu người dùng cung cấp: mô hình đọc tài liệu vào một bộ nhớ tham số đa thang, rồi dùng truy hồi để dẫn chứng cho từng câu trả lời.
+
+Baseline là Hope-Attention với Continuum Memory System (CMS) trong bài báo Nested Learning. Bài báo cho thấy CMS nhiều mức tốt hơn ICL và DuoAttention trên hai bộ hỏi đáp tài liệu dài là LongHealth và QASPER.
+
+Phương pháp đề xuất, gọi là SA-CMS (Structure-Aligned CMS), mở rộng baseline ở ba điểm:
+
+Lịch cập nhật căn theo cấu trúc văn bản: mức 1 cập nhật ở cuối mỗi đoạn, mức 2 ở cuối mỗi mục, mức 3 ở cuối mỗi tài liệu.
+
+Mức bộ nhớ hạng thấp, có tự học: mỗi mức là một adapter nhỏ, được luyện thêm bằng các cặp hỏi đáp do mô hình tự sinh từ chính tài liệu.
+
+Trả lời có căn cứ: câu trả lời kèm đoạn trích dẫn, và mô hình từ chối khi tài liệu không chứa thông tin.
+
+## 3. Đặt vấn đề và khoảng trống nghiên cứu
+
+Chatbot hỏi đáp trên tài liệu hiện nay chủ yếu dựa vào truy hồi, nên chất lượng bị chặn bởi bước tìm đoạn văn và mô hình không nắm được toàn bộ tài liệu.
+
+Ba cách làm phổ biến đều có giới hạn rõ:
+
+RAG: mỗi lần mô hình chỉ thấy vài đoạn, nên câu hỏi cần tổng hợp nhiều phần của tài liệu dễ sai.
+
+Đưa cả tài liệu vào ngữ cảnh: tốn token ở mọi câu hỏi và vượt cửa sổ của mô hình nhỏ. Theo bài báo baseline, tri thức trong ngữ cảnh cũng không bao giờ đi vào tham số dài hạn.
+
+Tinh chỉnh một mức trên tài liệu: nạp tài liệu mới làm quên tài liệu cũ.
+
+CMS trong Nested Learning là một hướng thứ tư: nén tài liệu vào nhiều mức tham số có nhịp cập nhật khác nhau. Bài báo đã thử hướng này trên hỏi đáp tài liệu, nhưng còn để lại sáu khoảng trống.
+
+## 4. Baseline: CMS trong bài báo Nested Learning
+
+Baseline thay khối MLP của Transformer bằng một chuỗi k khối MLP cập nhật ở các tần số khác nhau, và giữ nguyên attention (biến thể Hope-Attention).
+
+Đầu ra của chuỗi (phương trình 70 của bài báo):
+
+y_t = \mathrm{MLP}^{(f_k)}\big(\mathrm{MLP}^{(f_{k-1})}(\cdots \mathrm{MLP}^{(f_1)}(x_t))\big)
+
+Khối thứ ℓ chỉ cập nhật sau mỗi C(ℓ) token, bằng gradient tích lũy của mất mát dự đoán token kế tiếp (phương trình 71):
+
+\theta^{(f_\ell)}_{i+1} = \theta^{(f_\ell)}_{i} - \begin{cases} \sum_{t=i-C^{(\ell)}}^{i} \eta^{(\ell)}_t \, f\big(\theta^{(f_\ell)}_t; x_t\big) & \text{nếu } i \equiv 0 \pmod{C^{(\ell)}} \\ 0 & \text{ngược lại} \end{cases}
+
+Mỗi khối lấy trọng số MLP đã pre-train làm trạng thái đầu (mục 7.3 của bài báo). Khi tốc độ học nội tại tiến về 0, khối giữ nguyên hành vi gốc.
+
+Kết quả của bài báo trên hỏi đáp tài liệu (hình 7):
+
+Hai xu hướng mà đề tài phải tái hiện được trước khi cải tiến:
+
+Thêm mức bộ nhớ thì khả năng hiểu ngữ cảnh dài tốt hơn.
+
+Tần số thấp nhất càng cao thì trí nhớ dài hạn càng yếu, đổi lại mô hình thích nghi nhanh hơn.
+
+Tác giả cũng nêu rõ hiện tượng quên thảm khốc chưa được giải quyết triệt để. Đề tài vì vậy đo mức quên như một kết quả chính.
+
+## 5. Mục tiêu, câu hỏi nghiên cứu và đóng góp
+
+Mục tiêu tổng quát: thiết kế và đánh giá SA-CMS, một bộ nhớ đa thang cập nhật theo cấu trúc văn bản, cho chatbot trả lời có dẫn chứng trên tài liệu được cung cấp.
+
+### 5.1 Câu hỏi nghiên cứu
+
+Các giả thuyết là dự đoán cần kiểm chứng, chưa phải kết quả.
+
+### 5.2 Đóng góp hướng tới bài Q1
+
+Phương pháp: SA-CMS, trong đó lịch token cố định của baseline là một trường hợp riêng.
+
+Giao thức đánh giá: ba chế độ trả lời (tài liệu trong ngữ cảnh, tài liệu đã rời ngữ cảnh, bản lai) so sánh ở cùng ngân sách tính toán.
+
+Bằng chứng thực nghiệm: so sánh với RAG và nén ngữ cảnh, có ablation, kiểm định thống kê và phân tích lỗi.
+
+Tài nguyên: mã nguồn mở và một bộ câu hỏi trên tài liệu tiếng Việt.
+
+### 5.3 Phạm vi và giả định
+
+Trong phạm vi: tài liệu văn bản tiếng Anh và tiếng Việt, đã trích xuất chữ; backbone mở 1–4 tỷ tham số.
+
+Ngoài phạm vi: bảng, hình và công thức trong tài liệu; huấn luyện Hope đầy đủ từ đầu; bộ tối ưu M3.
+
+Giả định cần xác nhận: thời gian 32 tuần; có một GPU 24 GB; chưa có mã nguồn chính thức của Hope, nên baseline được tự cài đặt theo phương trình 70–71.
+
+## 6. Phương pháp đề xuất: SA-CMS
+
+SA-CMS giữ nguyên backbone đã pre-train, thêm ba mức adapter hạng thấp, và cho mỗi mức cập nhật đúng tại ranh giới đoạn, mục hoặc tài liệu.
+
+### 6.1 Luồng xử lý
+
+Luồng SA-CMS · 2 pha, 3 mức bộ nhớ, 1 nhánh từ chối
+
+Ở pha nạp, mỗi mức cập nhật tại ranh giới của riêng nó và tri thức được củng cố dần xuống mức chậm hơn. Ở pha trả lời, chatbot chỉ trả lời khi có đoạn chứng cứ hỗ trợ.
+
+### 6.2 Các mức bộ nhớ
+
+Đầu ra của mỗi khối theo biến thể CMS độc lập trong bài báo (phương trình 74), với hàm Agg là tổng có cổng:
+
+y_t = \mathrm{MLP}_{\mathrm{pre}}(x_t) + \sum_{\ell=1}^{3} g_\ell(x_t)\, B_\ell A_\ell\, x_t
+
+Cổng g nằm trong khoảng 0 đến 1 và được học. Khi mọi cổng bằng 0, mô hình trở về đúng backbone gốc.
+
+### 6.3 Lịch cập nhật căn theo cấu trúc
+
+Gọi b = 1 khi token t kết thúc một đơn vị của mức ℓ (đoạn, mục hoặc tài liệu). Mức ℓ gom các token của đơn vị đó vào bộ đệm B và cập nhật tại ranh giới:
+
+\theta^{(\ell)} \leftarrow \theta^{(\ell)} - \frac{\eta^{(\ell)}}{|\mathcal{B}_\ell|} \sum_{t \in \mathcal{B}_\ell} \nabla_{\theta^{(\ell)}} \mathcal{L}(x_t) \quad \text{khi} \quad b_\ell(t) = 1
+
+Nếu ranh giới rơi đúng vào các bội của C(ℓ), công thức trở về phương trình 71, chỉ khác một hằng số nhân vào tốc độ học. Baseline vì vậy là một trường hợp riêng của SA-CMS.
+
+Ranh giới lấy từ tiêu đề và ngắt đoạn của tài liệu.
+
+Đơn vị quá dài được cắt ở một độ dài trần; tài liệu không có cấu trúc dùng lịch token cố định như baseline.
+
+Gradient chỉ tính cho adapter ở K tầng trên cùng để giữ chi phí nạp thấp.
+
+### 6.4 Tự học bằng câu hỏi tự sinh
+
+Ở cuối mỗi mục và mỗi tài liệu, mô hình tự sinh các cặp hỏi đáp từ phần vừa đọc và dùng chúng để cập nhật mức 2 và mức 3. Ý tưởng tự học này gần với Cartridges, nhưng ở đây tri thức đi vào nhiều mức thay vì một biểu diễn duy nhất.
+
+### 6.5 Trả lời có căn cứ
+
+Truy hồi các đoạn liên quan từ chỉ mục của kho tài liệu.
+
+Sinh câu trả lời bằng backbone cùng ba mức bộ nhớ, kèm mã của đoạn làm chứng cứ.
+
+Kiểm tra căn cứ: nếu không đoạn nào hỗ trợ câu trả lời, chatbot trả lời rằng tài liệu không đề cập.
+
+Ba chế độ dùng trong thực nghiệm: tài liệu nằm trong ngữ cảnh, chỉ dùng bộ nhớ sau khi tài liệu rời ngữ cảnh, và bản lai giữa bộ nhớ với truy hồi.
+
+### 6.6 Huấn luyện khởi tạo
+
+Bài báo meta-học trạng thái đầu của các mức bằng 15 tỷ token. Đề tài thu nhỏ bước này: chỉ huấn luyện adapter và cổng, mô phỏng vòng đọc rồi trả lời bằng xấp xỉ bậc nhất, trên phần huấn luyện của các bộ hỏi đáp tài liệu.
+
+Quy mô dự kiến là 50–100 triệu token trên một GPU 24 GB, chốt lại sau thử nghiệm ở tuần 8.
+
+### 6.7 Quản lý kho tài liệu
+
+Mỗi kho có một tệp bộ nhớ riêng, gồm trọng số adapter của ba mức.
+
+Hệ thống chụp trạng thái trước mỗi lần nạp, nên gỡ một tài liệu vừa nạp là quay lui về bản chụp.
+
+Khi tài liệu có phiên bản mới, hệ thống nạp lại và đo xem câu trả lời có theo phiên bản mới không.
+
+## 7. Thiết kế thực nghiệm
+
+Thực nghiệm dùng lại hai bộ hỏi đáp tài liệu của bài báo để so sánh trực tiếp với baseline, rồi thêm kho tài liệu tăng dần và tài liệu tiếng Việt.
+
+### 7.1 Dữ liệu
+
+### 7.2 Phương pháp so sánh
+
+Mọi phương pháp dùng chung backbone, chung cửa sổ ngữ cảnh và chung mức lượng tử hóa.
+
+### 7.3 Thước đo
+
+### 7.4 Ablation
+
+Lịch token cố định so với lịch theo cấu trúc, ở cùng tổng số lần cập nhật.
+
+Ranh giới thật so với ranh giới ngẫu nhiên có cùng số lượng, để tách tác dụng của cấu trúc khỏi tác dụng của độ dài thay đổi.
+
+Số mức bộ nhớ: 1, 2, 3.
+
+Có và không có tự học bằng câu hỏi tự sinh.
+
+Tổng thường so với tổng có cổng khi gộp các mức.
+
+Hạng adapter và số tầng K được cập nhật.
+
+### 7.5 Độ tin cậy thống kê
+
+Mỗi cấu hình chạy 3 hạt giống. Kết quả báo cáo kèm khoảng tin cậy 95% bằng bootstrap, và so sánh P1 với B5 dùng kiểm định bắt cặp trên cùng bộ câu hỏi.
+
+### 7.6 Tiêu chí thành công
+
+Bài báo đủ mạnh khi P1 hơn B5 có ý nghĩa thống kê trên QASPER ở cùng chi phí nạp, và P2 đạt độ trung thực không thấp hơn B2. Nếu lịch theo cấu trúc không hơn lịch cố định, bài báo chuyển trọng tâm sang phương án B hoặc C ở mục 1.
+
+## 8. Lộ trình viết bài Q1
+
+Sinh viên nộp bản thảo ở tuần 32; vòng phản biện của tạp chí nằm ngoài khung thời gian này.
+
+### 8.1 Dàn ý bài báo
+
+Introduction: vấn đề, sáu khoảng trống ở mục 3, bốn đóng góp ở mục 5.2.
+
+Related Work: RAG, nén ngữ cảnh dài, học liên tục, Nested Learning và Titans.
+
+Background: CMS và phương trình 70–71.
+
+Method: SA-CMS, lịch theo cấu trúc, tự học, trả lời có căn cứ.
+
+Experimental Setup: dữ liệu, phương pháp so sánh, thước đo, ngân sách tính toán.
+
+Results: trả lời lần lượt RQ1 đến RQ5.
+
+Analysis: ablation, phân tích lỗi, chi phí.
+
+Limitations: những gì phương pháp chưa làm được, gồm cả việc xóa chọn lọc.
+
+Conclusion.
+
+### 8.2 Tạp chí ứng viên
+
+Cả ba được các trang tổng hợp chỉ số ghi là Q1 theo SJR (IP&M, KBS, ESWA). Sinh viên cần đối chiếu lại trên trang Scimago chính thức ngay trước khi nộp.
+
+### 8.3 Điều kiện để bản thảo đủ mạnh
+
+☐ Điểm mới phát biểu được bằng công thức, baseline là trường hợp riêng.
+
+☐ Có ít nhất hai bộ dữ liệu công khai dùng chung với bài báo gốc.
+
+☐ So sánh với một hệ RAG được tinh chỉnh kỹ, không chỉ với mốc yếu.
+
+☐ Ablation tách từng thành phần, có đối chứng ranh giới ngẫu nhiên.
+
+☐ Mọi bảng kết quả có khoảng tin cậy và kiểm định thống kê.
+
+☐ Báo cáo đầy đủ chi phí và giới hạn của phương pháp.
+
+☐ Mã nguồn, cấu hình và bộ câu hỏi tiếng Việt được công bố.
+
+### 8.4 Tiến độ
+
+Nếu G2 không đạt sau tuần 12, bài chuyển trọng tâm sang phương án B hoặc C ở mục 1 mà không phải làm lại giai đoạn 1.
+
+## 9. Rủi ro và phương án dự phòng
+
+## 10. Tài liệu tham khảo
+
+Mục 1 là bài báo baseline do người dùng cung cấp. Mục 2–8 lấy từ danh mục tham khảo của chính bài báo đó.
+
+A. Behrouz, M. Razaviyayn, P. Zhong, V. Mirrokni. "Nested Learning: The Illusion of Deep Learning Architectures." arXiv:2512.24695, 2025. Một phiên bản đăng tại NeurIPS 2025.
+
+A. Behrouz, P. Zhong, V. Mirrokni. "Titans: Learning to Memorize at Test Time." NeurIPS 2025.
+
+P. Dasigi, K. Lo, I. Beltagy, A. Cohan, N. A. Smith, M. Gardner. "A dataset of information-seeking questions and answers anchored in research papers." arXiv:2105.03011, 2021.
+
+L. Adams và cộng sự. "LongHealth: A question answering benchmark with long clinical documents." Journal of Healthcare Informatics Research, 2025, tr. 1–17.
+
+C.-P. Hsieh và cộng sự. "RULER: What's the Real Context Size of Your Long-Context Language Models?" Conference on Language Modeling, 2024.
+
+S. Eyuboglu và cộng sự. "Cartridges: Lightweight and general-purpose long context representations via self-study." arXiv:2506.06266, 2025.
+
+G. Xiao và cộng sự. "DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads." ICLR 2025.
+
+A. Dubey và cộng sự. "The Llama 3 Herd of Models." arXiv:2407.21783, 2024.

@@ -35,6 +35,16 @@ htmlcov/
 # Local offline runtime generated files & heavy weights (>100MB)
 local_runtime/model/*.safetensors
 local_runtime/snapshots/
+local_runtime/parsed/DOC_179*
+local_runtime/parsed/LIFECYCLE_DOC_*
+local_runtime/parsed/TEST_DOC_*
+local_runtime/documents/LIFECYCLE_DOC_*
+data/document_store/documents/DOC_179*
+checkpoints/phase4_2/
+results/phase4_4/checkpoints/
+training_output_final/checkpoints/
+training_handoff_rtx3050/training_handoff_rtx3050/output/
+/DACN-NCKH-main/
 
 # Temporary scratch files and test scripts
 scratch/

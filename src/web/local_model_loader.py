@@ -129,10 +129,18 @@ class LocalModelLoader:
             if ckpt_path.exists():
                 logger.info("Loading offline SA-CMS checkpoint from: %s", ckpt_path)
                 state = torch.load(str(ckpt_path), map_location=self.device)
-                if "cms_state_dict" in state:
+                if "cms_state_dict" in state and model.cms is not None:
                     model.cms.load_state_dict(state["cms_state_dict"], strict=False)
-                elif "state_dict" in state:
+                elif "state_dict" in state and model.cms is not None:
                     model.cms.load_state_dict(state["state_dict"], strict=False)
+                if (
+                    "cms_norm_state_dict" in state
+                    and state["cms_norm_state_dict"] is not None
+                    and getattr(model, "cms_norm", None) is not None
+                ):
+                    model.cms_norm.load_state_dict(state["cms_norm_state_dict"], strict=False)
+                if model.cms is not None:
+                    model.cms.save_initial_state()
                 self.active_checkpoint_name = ckpt_path.name
                 self.active_checkpoint_path = str(ckpt_path)
                 self.active_checkpoint_status = ckpt_cfg.get("current_status", "CURRENT_VALID_CHECKPOINT")
@@ -171,11 +179,18 @@ class LocalModelLoader:
 
         try:
             state = torch.load(str(target_path), map_location=self.device)
-            if self.model and hasattr(self.model, "cms"):
+            if self.model and getattr(self.model, "cms", None) is not None:
                 if "cms_state_dict" in state:
                     self.model.cms.load_state_dict(state["cms_state_dict"], strict=False)
                 elif "state_dict" in state:
                     self.model.cms.load_state_dict(state["state_dict"], strict=False)
+                if (
+                    "cms_norm_state_dict" in state
+                    and state["cms_norm_state_dict"] is not None
+                    and getattr(self.model, "cms_norm", None) is not None
+                ):
+                    self.model.cms_norm.load_state_dict(state["cms_norm_state_dict"], strict=False)
+                self.model.cms.save_initial_state()
 
             self.active_checkpoint_name = checkpoint_name
             self.active_checkpoint_path = str(target_path)
@@ -201,11 +216,14 @@ class LocalModelLoader:
         model_ready = (model_dir / "model.safetensors").exists()
         tokenizer_ready = (tokenizer_dir / "tokenizer.json").exists()
         ckpt_ready = (ckpt_dir / "cms_3lvl_seed_42.pt").exists() or (self.active_checkpoint_path and Path(self.active_checkpoint_path).exists())
+        available_ckpts = sorted([p.name for p in ckpt_dir.glob("*.pt")]) if ckpt_dir.exists() else []
 
         return {
             "model": "READY" if (model_ready and self.model_loaded) else ("PRESENT (NOT LOADED)" if model_ready else "MISSING"),
             "tokenizer": "READY" if (tokenizer_ready and self.tokenizer is not None) else ("PRESENT" if tokenizer_ready else "MISSING"),
             "sa_cms_checkpoint": f"READY ({self.active_checkpoint_name})" if ckpt_ready else "MISSING",
+            "active_checkpoint": self.active_checkpoint_name,
+            "available_checkpoints": available_ckpts,
             "checkpoint_classification": self.active_checkpoint_status,
             "document_index": "READY" if document_count > 0 else "EMPTY (READY FOR UPLOAD)",
             "document_count": document_count,

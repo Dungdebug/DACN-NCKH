@@ -34,8 +34,8 @@ Hệ thống tuân thủ nghiêm ngặt nguyên tắc **khóa mô hình (Model L
    - Kích thước Adapter: ~20.3 MB.
    - Cơ chế đọc/ghi bộ nhớ: Chiếu biểu diễn cấu trúc văn bản qua mạng nơ-ron cục bộ và đưa vào các tầng ẩn của mô hình ngôn ngữ thông qua cơ chế Attention/Gating.
 3. **Phân biệt Checkpoint**:
-   - `CURRENT_VALID_CHECKPOINT`: Checkpoint thực nghiệm đã đóng băng tại Phase 4.1 (`cms_3lvl_seed_42.pt`), phục vụ suy luận và kiểm thử cục bộ ngay lập tức.
-   - `PENDING_EXTERNAL_GPU`: Vị trí cấu hình chuẩn hóa, sẵn sàng tiếp nhận checkpoint huấn luyện chính thức quy mô lớn từ GPU ngoại vi (Phase 4.5) thông qua tệp cấu hình mà không phải thay đổi kiến trúc mã nguồn.
+   - `cms_3lvl_extended.pt` (`CURRENT_VALID_CHECKPOINT` — Mặc định): Checkpoint song ngữ Việt–Anh mở rộng được warm-start từ `cms_3lvl_seed_42.pt` trên GPU `NVIDIA GeForce RTX 3050`, giảm Answer Perplexity tiếng Việt **-87.72%** (`19.07 → 2.34`) và tiếng Anh **-71.74%** (`31.54 → 8.91`) trên tập kiểm định độc lập (0% rò rỉ tập test).
+   - `cms_3lvl_seed_42.pt` (`BASE_PHASE4_CHECKPOINT`): Checkpoint thực nghiệm gốc đóng băng tại Phase 4.1, được bảo toàn nguyên vẹn để đối chiếu bất cứ lúc nào ngay trên giao diện `NL DocChat`.
 
 ---
 
@@ -58,7 +58,8 @@ local_runtime/
 │   ├── merges.txt
 │   └── special_tokens_map.json
 ├── checkpoints/
-│   └── cms_3lvl_seed_42.pt         (20.3 MB - Phase 4.1 Frozen Checkpoint)
+│   ├── cms_3lvl_extended.pt        (20.3 MB - Extended Bilingual GPU Checkpoint [Active])
+│   └── cms_3lvl_seed_42.pt         (20.3 MB - Phase 4.1 Frozen Base Checkpoint)
 ├── datasets/
 ├── documents/
 ├── indexes/

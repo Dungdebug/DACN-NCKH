@@ -1,0 +1,263 @@
+{
+  "training_run": "SA-CMS 3-Level Full-Dataset Multi-Seed Offline GPU Training",
+  "command": "python scripts/run_training.py --seed 42",
+  "status": "COMPLETED_VERIFIED",
+  "completed_at_utc": "2026-11-07T06:39:38Z",
+  "hardware": {
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "vram_total_mb": 4095.5,
+    "peak_vram_allocated_mb": 2661.0,
+    "cuda_version": "11.8",
+    "pytorch_version": "2.0.0+cu118",
+    "dtype": "float32"
+  },
+  "architecture": {
+    "backbone": "HuggingFaceTB/SmolLM2-135M (100% Frozen)",
+    "frozen_backbone_params": 134515008,
+    "trainable_cms_params": 5314752,
+    "trainable_cms_norm_params": 1152,
+    "total_trainable_params": 5315904,
+    "num_levels": 3
+  },
+  "full_dataset_scan_manifest": {
+    "unique_non_test_documents_scanned": 135,
+    "unique_training_sequences": 1731,
+    "unique_training_tokens": 445092,
+    "english_scale_qa_samples": 1000,
+    "vietnamese_structured_qa_samples": 275,
+    "demo_grounded_and_refusal_qa_samples": 12,
+    "fulltext_domain_and_local_doc_chunks": 444,
+    "fulltext_domain_and_local_doc_tokens": 134567,
+    "fulltext_documents_detail": [
+      {
+        "doc_id": "PAPER_NL_2025",
+        "title": "Nested Learning: The Illusion of Deep Learning Architectures (NeurIPS 2025)",
+        "lang": "en",
+        "source_group": "foundational_paper_fulltext",
+        "tokens": 69461,
+        "chunks": 220,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "DE_CUONG_NCKH",
+        "title": "Đề cương NCKH: Chatbot hỏi đáp trên tài liệu với bộ nhớ đa thang dựa trên Nested Learning",
+        "lang": "vi",
+        "source_group": "research_proposal_fulltext",
+        "tokens": 12804,
+        "chunks": 46,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "DEMO_DOC_001",
+        "title": "Cơ chế Bộ nhớ Đa quy mô và Khối Giao tiếp Liên cấp trong Mô hình Ngôn ngữ",
+        "lang": "vi",
+        "source_group": "demo_reference_fulltext",
+        "tokens": 1090,
+        "chunks": 4,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "DEMO_DOC_002",
+        "title": "Quy hoạch Hạ tầng Đường sắt Tốc độ cao Bắc - Nam và Giao thông Đô thị 2030",
+        "lang": "vi",
+        "source_group": "demo_reference_fulltext",
+        "tokens": 899,
+        "chunks": 4,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "DEMO_DOC_003",
+        "title": "Phác đồ Quản lý Đái tháo đường Tuýp 2 và Kiểm soát Biến chứng Tim mạch",
+        "lang": "vi",
+        "source_group": "demo_reference_fulltext",
+        "tokens": 896,
+        "chunks": 4,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "DEMO_DOC_004",
+        "title": "Khung Quản trị An toàn Thông tin Số và Tuân thủ Bảo vệ Dữ liệu Cá nhân",
+        "lang": "vi",
+        "source_group": "demo_reference_fulltext",
+        "tokens": 872,
+        "chunks": 3,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "LOCAL_BMTT_NHOM5_HOAN_THIEN",
+        "title": "Báo cáo Đồ án Bảo mật Thông tin Nhóm 5 Hoàn thiện",
+        "lang": "vi",
+        "source_group": "local_workspace_docx_fulltext",
+        "tokens": 18876,
+        "chunks": 65,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "LOCAL_N5_BAO_CAO_DAMN_BMTT",
+        "title": "Báo cáo ĐAMH Bảo mật Thông tin Nhóm 5",
+        "lang": "vi",
+        "source_group": "local_workspace_docx_fulltext",
+        "tokens": 16944,
+        "chunks": 56,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "LOCAL_NHOM05_BAI05",
+        "title": "Báo cáo Chuyên đề Nhóm 05 Bài 05",
+        "lang": "vi",
+        "source_group": "local_workspace_docx_fulltext",
+        "tokens": 4667,
+        "chunks": 16,
+        "noise_chars_removed": 0
+      },
+      {
+        "doc_id": "LOCAL_DE_CUONG_CHATBOT_DOCX",
+        "title": "Đề cương Chi tiết Chatbot SA-CMS Nested Learning",
+        "lang": "vi",
+        "source_group": "local_workspace_docx_fulltext",
+        "tokens": 8058,
+        "chunks": 26,
+        "noise_chars_removed": 0
+      }
+    ],
+    "disjoint_en_val_samples": 50,
+    "disjoint_vn_val_samples": 20,
+    "truncated_samples": 0,
+    "benchmark_overlap": "0% (verified via verify_zero_benchmark_leakage)"
+  },
+  "hyperparameters": {
+    "seeds": [
+      42
+    ],
+    "epochs_per_seed": 5,
+    "optimizer": "AdamW",
+    "base_lr": 0.00016,
+    "min_lr": 1.6e-05,
+    "weight_decay": 0.01,
+    "effective_batch_size": 8,
+    "vn_oversample_factor": 2,
+    "loss_formula": "0.25 * full_causal_lm_loss + 0.75 * answer_or_continuation_ce_loss",
+    "grad_clip_max_norm": 1.0
+  },
+  "multi_seed_summary": {
+    "seeds_evaluated": [
+      42
+    ],
+    "best_seed": 42,
+    "best_seed_combined_val_loss": 1.4607,
+    "baseline_en_answer_ppl": {
+      "mean": 28.2278,
+      "sd": 0.0
+    },
+    "trained_en_answer_ppl": {
+      "mean": 8.02,
+      "sd": 0.0
+    },
+    "baseline_vn_answer_ppl": {
+      "mean": 18.4649,
+      "sd": 0.0
+    },
+    "trained_vn_answer_ppl": {
+      "mean": 2.3153,
+      "sd": 0.0
+    },
+    "trained_combined_answer_loss": {
+      "mean": 1.4607,
+      "sd": 0.0
+    },
+    "en_ppl_reduction_pct_mean": 71.59,
+    "vn_ppl_reduction_pct_mean": 87.46
+  },
+  "exported_runtime_checkpoint": {
+    "path": "local_runtime/checkpoints/cms_3lvl_full_dataset.pt",
+    "source_seed": 42,
+    "sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059",
+    "integrity_hashes_registered_count": 18
+  },
+  "protected_checkpoints_verified_unchanged": {
+    "checkpoints/phase4_1/cms_3lvl_seed_42.pt": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+    "checkpoints/phase4_1/cms_3lvl_seed_43.pt": "1f218da279121857921dc9cf3f3b2a6a10395c22afbef5fe4dc4b035dd27f2e7",
+    "checkpoints/phase4_1/cms_3lvl_seed_44.pt": "19035f792db025cd7fb0c3eb362740bfb1f1074f15ffb6f4501462608a5dadf0",
+    "local_runtime/checkpoints/cms_3lvl_seed_42.pt": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+    "local_runtime/checkpoints/cms_3lvl_extended.pt": "d4f5b5ac90b91e1b613e4490303b0f35e6cbddc3bde5c4514617666f69f60238"
+  },
+  "total_wall_clock_sec": 0.06,
+  "per_seed_runs": [
+    {
+      "seed": 42,
+      "checkpoint_path": "checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt",
+      "checkpoint_sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059",
+      "parent_checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+      "parent_sha256_verified_unchanged": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+      "best_epoch": 4,
+      "duration_sec": 2250.3,
+      "peak_vram_mb": 2661.0,
+      "baseline_metrics": {
+        "en_val": {
+          "full_loss": 4.7935,
+          "full_ppl": 120.7224,
+          "answer_loss": 3.3403,
+          "answer_ppl": 28.2278
+        },
+        "vn_val": {
+          "full_loss": 2.6585,
+          "full_ppl": 14.275,
+          "answer_loss": 2.9159,
+          "answer_ppl": 18.4649
+        },
+        "combined_answer_loss": 3.1281
+      },
+      "best_metrics": {
+        "en_val": {
+          "full_loss": 4.1545,
+          "full_ppl": 63.7221,
+          "answer_loss": 2.0819,
+          "answer_ppl": 8.02
+        },
+        "vn_val": {
+          "full_loss": 1.691,
+          "full_ppl": 5.425,
+          "answer_loss": 0.8396,
+          "answer_ppl": 2.3153
+        },
+        "combined_answer_loss": 1.4607
+      },
+      "weight_delta_from_parent": {
+        "max_abs_param_delta": 0.034861,
+        "l2_norm_by_module": {
+          "level_0": 6.520522,
+          "level_1": 6.502992,
+          "level_2": 6.09603,
+          "cms_norm": 0.135112
+        }
+      },
+      "epoch_history": [],
+      "qualitative_preview": [
+        {
+          "lang": "vi",
+          "question": "Hệ thống UWB hoạt động ở băng tần nào và độ rộng xung bao nhiêu?",
+          "reference": "Ở băng tần 6.5 GHz với độ rộng xung 2 nano-giây [VN_VAL_DOC_001::P001].",
+          "prediction": "UWB hoạt động ở băng tần 6.5 GHz với độ rộng xung 2 nano-"
+        },
+        {
+          "lang": "vi",
+          "question": "Sai số định vị trung bình của xe tự hành AGV là bao nhiêu?",
+          "reference": "Sai số trung bình 8.5 cm [VN_VAL_DOC_001::P001].",
+          "prediction": "Đạt 120 xe AGV và 20 Hz [VN_TR_DOC_002::P002]."
+        },
+        {
+          "lang": "en",
+          "question": "What do standard language models learn instead of causal mechanisms?",
+          "reference": "statistical correlations",
+          "prediction": "Standard language models learn causal mechanisms by identifying causal relationships between antecedent and consequent tokens."
+        },
+        {
+          "lang": "en",
+          "question": "What does counterfactual prompting evaluate in language models?",
+          "reference": "whether models can reason about altered antecedent conditions",
+          "prediction": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
+        }
+      ]
+    }
+  ]
+}

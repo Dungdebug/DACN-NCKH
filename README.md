@@ -4,12 +4,63 @@
 > **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` Base (134.5M tham số, frozen weights)  
 > **Bộ nhớ tham số**: SA-CMS 3 cấp độ (Level 1, 2, 3: **5,314,752 tham số** có thể huấn luyện)  
 > **Môi trường phần cứng**: NVIDIA GeForce RTX 3050 Laptop GPU (6GB VRAM) / GTX 1650 Ti, VRAM đỉnh: **743.86 MB**  
-> **Cập nhật lần cuối**: 15/10/2026 (🎉 **Nghiệm thu toàn diện Stage 2, 3 & 4 — 53/53 SHA-256 Pass, 161/161 Unit Tests Pass**)  
+> **Cập nhật lần cuối**: 07/11/2026 (🎉 **Hoàn thiện đồng bộ NL DocChat + Lưu Tiến trình Huấn luyện Full Dataset (`cms_3lvl_full_dataset.pt`, Seed 42 Hoàn tất 5/5 Epochs) & Extended (`cms_3lvl_extended.pt`) — 54/54 SHA-256 Pass, 196/196 Unit & E2E Tests Pass**)  
 > 📢 **BÁO CÁO KHOA HỌC CHÍNH THỨC**: Vui lòng tham khảo 👉 [`docs/final_scientific_report.md`](docs/final_scientific_report.md) và Bảng kết quả tổng hợp [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv)!
 
-lệnh thực thi 
+---
 
+## ⏸️ TRẠNG THÁI LƯU TIẾN TRÌNH TRAIN & HƯỚNG DẪN LẤY RA SỬ DỤNG / CHẠY TIẾP
+
+Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training.py`) đã được **dừng an toàn** và **lưu trọn vẹn trạng thái** tại [`checkpoints/full_dataset_training/`](checkpoints/full_dataset_training/) và [`local_runtime/checkpoints/`](local_runtime/checkpoints/):
+
+| Hạng mục / Seed | Trạng thái | Đường dẫn Checkpoint & Báo cáo | Kết quả Đánh giá Validation (0% Overlap) |
+| :--- | :---: | :--- | :--- |
+| **Phase 4.1/4.2 Khoa học (54 files)** | 🔒 **ĐÃ KHÓA (100% VALID)** | `checkpoints/phase4_1/cms_3lvl_seed_{42,43,44}.pt`<br>`local_runtime/checkpoints/cms_3lvl_seed_42.pt` | Chuẩn đối sánh khoa học RQ1–RQ5 (SHA-256: `0a379f6a238a...`) |
+| **Extended Bilingual QA (`1,275` mẫu)** | ✅ **HOÀN TẤT (6/6 Epochs)** | `local_runtime/checkpoints/cms_3lvl_extended.pt`<br>`checkpoints/extended_training/training_report_extended.json` | **VN Answer PPL**: `19.07 → 2.34` (**-87.72%**)<br>**EN Answer PPL**: `31.54 → 8.91` (**-71.74%**) |
+| **Full-Dataset — Seed 42 (`135` docs / `1,731` chuỗi)** | ✅ **HOÀN TẤT (5/5 Epochs, Best Ep 4)** | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt`<br>👉 Đã xuất ra: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`<br>`checkpoints/full_dataset_training/seed_42_summary.json` | **VN Answer PPL**: `18.46 → 2.32` (**-87.46%**, Loss `0.8396`)<br>**EN Answer PPL**: `28.23 → 8.02` (**-71.59%**, Loss `2.0819`)<br>**Combined Answer Loss**: `3.1281 → 1.4607` (**-53.30%**) |
+| **Full-Dataset — Seed 43** | ⏸️ **ĐÃ TẠM DỪNG (`0/5` Epochs)** | Khởi tạo ấm từ `checkpoints/phase4_1/cms_3lvl_seed_43.pt` | Sẵn sàng chạy tiếp bất kỳ lúc nào (tự động lưu sau mỗi epoch) |
+| **Full-Dataset — Seed 44** | ⏸️ **ĐÃ TẠM DỪNG (`0/5` Epochs)** | Khởi tạo ấm từ `checkpoints/phase4_1/cms_3lvl_seed_44.pt` | Sẵn sàng chạy tiếp bất kỳ lúc nào (tự động lưu sau mỗi epoch) |
+
+### 1. Cách lấy Checkpoint đã train ra sử dụng ngay (Web App / CLI / Python)
+Checkpoint tốt nhất của Full-Dataset (**Seed 42**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`, SHA-256: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`) đã được **kích hoạt mặc định** trong `local_runtime/config/runtime_config.yaml`:
+
+```powershell
+# Khởi chạy ngay giao diện Web NL DocChat (100% Offline, tự động nạp cms_3lvl_full_dataset.pt)
+.\start_offline_demo.bat
+
+# Hoặc chạy trực tiếp bằng Python
+python run_offline.py --host 127.0.0.1 --port 8000
+```
+- **Chuyển đổi Checkpoint trực tiếp trên giao diện Web**: Mở menu cấu hình chế độ ở thanh tiêu đề ➔ mục **Checkpoint SA-CMS (Offline)** để chuyển đổi tức thời giữa:
+  1. `cms_3lvl_full_dataset.pt` *(Full Dataset GPU — Seed 42 đã hoàn tất 100%)*
+  2. `cms_3lvl_extended.pt` *(Extended Bilingual GPU — đã hoàn tất 100%)*
+  3. `cms_3lvl_seed_42.pt` *(Phase 4.1 Base — chuẩn đối chứng bài báo)*
+- **Nạp trực tiếp trong code Python**:
+  ```python
+  from src.web.local_model_loader import LocalModelLoader
+
+  loader = LocalModelLoader.get_instance()
+  model, tokenizer = loader.load_offline_model(prefer_gpu=True)
+  # Hoặc chuyển đổi giữa các checkpoint đã lưu:
+  loader.switch_checkpoint("cms_3lvl_full_dataset.pt")  # hoặc "cms_3lvl_extended.pt", "cms_3lvl_seed_42.pt"
+  ```
+
+### 2. Cách chạy tiếp tiến trình Train (`Seed 43` & `Seed 44`) bất kỳ lúc nào
+Script [`scripts/run_training.py`](scripts/run_training.py) đã tích hợp cơ chế **Resume tự động 2 cấp** (tự động bỏ qua các Seed đã hoàn tất như `Seed 42`, đồng thời lưu trạng thái tạm `cms_3lvl_full_seed_{seed}_partial.pt` sau mỗi epoch để khôi phục đúng epoch đang chạy dở nếu tiếp tục tạm dừng):
+
+```powershell
+# Chạy tiếp toàn bộ các Seed còn lại (tự động nhận diện Seed 42 đã xong, chạy tiếp Seed 43 và Seed 44)
 python scripts/run_training.py --seed all
+
+# Hoặc chỉ chạy tiếp riêng Seed 43 (khoảng ~15-20 phút trên RTX 3050 nhờ tối ưu chunked loss + hidden cache)
+python scripts/run_training.py --seed 43
+
+# Hoặc chỉ chạy tiếp riêng Seed 44
+python scripts/run_training.py --seed 44
+
+# Xem trạng thái tiến trình đã lưu
+Get-Content checkpoints/full_dataset_training/training_progress_state.json
+```
 ---
 
 ## 📌 BẢN ĐỒ TIẾN ĐỘ DỰ ÁN (PROJECT STATUS)
@@ -339,6 +390,8 @@ Hôm nay đã hoàn thành việc tích hợp toàn diện backend chatbot theo 
 DACN-NCKH/
 ├── README.md                      # [FILE NÀY] Báo cáo tóm tắt toàn bộ dự án
 ├── README_HANDOVER.md             # Biên bản bàn giao, cập nhật tiến độ & danh mục artifacts
+├── run_offline.py                 # [PHASE 5] Entrypoint khởi chạy Web Platform NL DocChat 100% Offline
+├── start_offline_demo.bat         # [PHASE 5] Script 1-click mở Web App & trình duyệt tại http://127.0.0.1:8000
 ├── run_chatbot.py                 # [PHASE 3.3] CLI chuẩn hóa backend chatbot (Root entrypoint)
 ├── run_hybrid_qa.py               # CLI tương tác hỏi đáp, nạp tài liệu và test Phase 3.0
 ├── run_phase2_5_controlled.py     # Script chạy kiểm toán thực nghiệm Phase 2.5
@@ -376,6 +429,11 @@ DACN-NCKH/
 │   ├── cms/                       # Lõi Continuum Memory System (Eq 70/71)
 │   ├── document_structure/        # Parser bóc tách cấu trúc tiêu đề, đoạn văn
 │   ├── evaluation/                # Các bộ benchmark MK-NIAH và QASPER
+│   ├── web/                       # [PHASE 5] Web Platform NL DocChat (FastAPI + Figma UI 100% Offline)
+│   │   ├── app.py                 # REST API hỏi đáp phiên, trích dẫn nguồn, cấu trúc SA-CMS & Research Lab
+│   │   ├── session_manager.py     # Quản lý lịch sử hội thoại bền vững & đối chiếu ngữ cảnh đa lượt
+│   │   ├── local_model_loader.py  # Nạp SmolLM2-135M + SA-CMS checkpoints hoàn toàn cục bộ (Zero Network)
+│   │   └── static/                # Giao diện NL DocChat tích hợp từ thiết kế Figma (HTML/CSS/JS thuần)
 │   └── utils/
 ├── configs/
 │   ├── phase4_experiment.yaml     # [PHASE 4.0] CẤU HÌNH THỰC NGHIỆM ĐÓNG BĂNG CHÍNH THỨC
@@ -429,7 +487,65 @@ DACN-NCKH/
 ```
 
 ---
-*Ghi chú: Giữ nguyên các cam kết khoa học, không chỉnh sửa thuật toán đã chốt, không dùng kết quả chưa kiểm soát ngân sách.*
 
-NOTE Kiệt
-tui chỉ mới train AI còn về giao diện tui sẽ chỉnh sau 
+## 🌐 GIAO DIỆN WEB NL DOCCHAT (FIGMA UI + FASTAPI SA-CMS 100% OFFLINE)
+
+Phần giao diện Web chưa hoàn thành trước đó đã được tích hợp hoàn chỉnh từ bản thiết kế **NL DocChat** (`figma_template`) vào nền tảng FastAPI thực tế tại `src/web/static/` và kết nối toàn diện với lõi AI đã huấn luyện:
+
+- **Trải nghiệm Chat-First chuẩn Figma**: Thanh bên 280px quản lý lịch sử hội thoại (tạo mới, đổi tên, xóa, tìm kiếm trực tiếp), đính kèm đa tài liệu, kéo-thả tệp (`PDF`, `DOCX`, `TXT`, `MD`) kèm tiến trình 6 bước đồng bộ `SA-CMS Memory`.
+- **Chế độ Sáng / Tối / Hệ thống (`☀ Sáng | ☾ Tối | Hệ thống`)**: Tích hợp công tắc chuyển đổi trực tiếp trên thanh tiêu đề (`#header-theme-switch`), bộ chọn 3 chế độ trong menu cấu hình (`#header-theme-group`), nút cuối thanh bên (`#btn-theme-toggle`), phím tắt nhanh **`Alt + T`**, ghi nhớ qua `localStorage` và chống chớp trắng khi tải trang.
+- **Trả lời có Căn cứ & Cổng Từ chối Chống Ảo giác**: Hiển thị tách biệt phần `TRẢ LỜI` và thẻ `CĂN CỨ` thu gọn; nhấp vào nhãn `[1]` hoặc **Xem toàn văn** để mở ngăn trượt đối chiếu nguyên văn đoạn trích gốc có tô sáng từ khóa.
+- **Giải phẫu Bộ nhớ 3 Tầng SA-CMS & Research Lab**: Chuyển đổi trực tiếp giữa `P2: Hybrid SA-CMS + BM25`, `P1: SA-CMS Memory-Only`, `B2: Standard BM25 RAG`; hiển thị trực quan phương trình tổng hợp cổng phần dư `Eq. 74` (`g₁, g₂, g₃`), nâng cấp phiên bản tài liệu (`v2`) / `Rollback Snapshot`, chạy đối sánh 4 mô hình (`B1/B2/P1/P2`), 7 kịch bản bảo vệ 1-click và xem 4 biểu đồ chuẩn Q1 (300 DPI) hoàn toàn ngoại tuyến.
+- **Chế độ Trình diễn Bảo vệ & Phím tắt Chuyên nghiệp**: Nút **Trình diễn** (`#btn-presentation-mode`) mở rộng không gian đọc/máy chiếu cho hội đồng nghiệm thu; hỗ trợ đầy đủ phím tắt `Ctrl+K` (mở nhanh kho tài liệu), `Ctrl+/` (đóng/mở ngăn X-Ray SA-CMS), `Ctrl+L` (tạo cuộc trò chuyện mới), `Alt+T` (đổi Sáng/Tối), và `Esc` (đóng hộp thoại / thu nhỏ trình diễn).
+- **Đồng bộ hóa Thư mục Gốc Ngoài & Trong**: Chuẩn hóa toàn bộ điểm vào khởi chạy (`start_offline_demo.bat`, `start_web.bat`, `run_offline.py`, `run_web.py`, `run_chatbot.py`, `run_hybrid_qa.py`, `scripts/run_training.py`, `pytest.ini`) để hoạt động mượt mà dù chạy từ thư mục gốc ngoài hay thư mục con.
+
+### Cách khởi chạy nhanh (100% Offline)
+```powershell
+# Cách 1: Chạy file thực thi tự động (mở trình duyệt tại http://127.0.0.1:8000)
+.\start_offline_demo.bat
+
+# Cách 2: Khởi chạy trực tiếp bằng Python
+python run_offline.py --host 127.0.0.1 --port 8000
+```
+
+---
+
+## 🔥 HUẤN LUYỆN MỞ RỘNG & QUÉT TOÀN BỘ TẬP DỮ LIỆU TRÊN GPU (`cms_3lvl_full_dataset.pt` & `cms_3lvl_extended.pt`)
+
+Để tối ưu chất lượng hỏi đáp song ngữ Việt – Anh và quét hết 100% các tài liệu non-test trong dự án mà vẫn bảo toàn tuyệt đối toàn bộ kết quả khoa học Phase 4 đã khóa (`54/54 SHA-256 VALID`), hệ thống cung cấp hai cấp độ huấn luyện GPU ngoại tuyến trên **NVIDIA GeForce RTX 3050 Laptop GPU** (`SmolLM2-135M` đóng băng 100% `134,515,008` tham số; chỉ cập nhật `5,315,904` tham số `cms` + `cms_norm`):
+
+### 1. Huấn luyện Song ngữ Mở rộng (`cms_3lvl_extended.pt` — Đã hoàn tất 100%)
+- **Script**: [`scripts/train_extended_sa_cms.py`](scripts/train_extended_sa_cms.py)
+- **Tập dữ liệu**: `1,275` mẫu QA độc lập (`1,000` EN `TR_DOC_001..100` + `275` VN `VN_TR_DOC_001..025`, lấy mẫu `1,550` lượt/epoch × `6` epochs, `0` mẫu cắt cụt, `0%` trùng lặp tập test).
+- **Kết quả kiểm định độc lập (Best Epoch 5/6 — `checkpoints/extended_training/training_report_extended.json`)**:
+  - **Tiếng Việt (`VN_VAL_DOC_001..004`)**: Answer Loss giảm `2.9481 → 0.8508`; Answer Perplexity giảm `19.07 → 2.34` (**-87.72%**).
+  - **Tiếng Anh (`VAL_DOC_001..005`)**: Answer Loss giảm `3.4513 → 2.1875`; Answer Perplexity giảm `31.54 → 8.91` (**-71.74%**).
+  - **Lưu trữ**: `local_runtime/checkpoints/cms_3lvl_extended.pt` (SHA-256: `d4f5b5ac90b91e1b613e4490303b0f35e6cbddc3bde5c4514617666f69f60238`).
+
+### 2. Huấn luyện Toàn bộ Tập Dữ liệu Chưa Quét Hết (`cms_3lvl_full_dataset.pt` — Đã hoàn tất Seed 42 & Lưu tiến trình Resume cho Seed 43, 44)
+- **Script**: [`scripts/run_training.py`](scripts/run_training.py)
+- **Tập dữ liệu quét 100% (`135` tài liệu non-test / `1,731` chuỗi duy nhất / `445,092` tokens, `0%` cắt cụt, `0%` rò rỉ tập test)**:
+  - `1,000` mẫu QA tiếng Anh (`TR_DOC_001`–`TR_DOC_100`, bao gồm `800` mẫu chưa quét ở Phase 4.1).
+  - `275` mẫu QA tiếng Việt có cấu trúc & hồi tưởng bộ nhớ (`VN_TR_DOC_001`–`VN_TR_DOC_025`, nhân `2x`/epoch).
+  - `12` mẫu QA có căn cứ & từ chối chuẩn (`DEMO_DOC_001`–`DEMO_DOC_004`, nhân `2x`/epoch).
+  - `444` đoạn cắt trượt có chồng lấp (`384` tokens/cửa sổ, bước trượt `352`, `0%` cắt bỏ) từ **10 tài liệu toàn văn học thuật & miền ứng dụng** (`134,567` tokens): `paper_text.txt` (bài báo gốc Nested Learning NeurIPS 2025), `de_cuong_text.txt` (Đề cương NCKH), `DEMO_DOC_001..004`, và 4 báo cáo `.docx` tiếng Việt trong `local_runtime/documents/`.
+- **Tối ưu Kỹ thuật trên GPU 4GB VRAM**:
+  - Tiền trích xuất chính xác trạng thái ẩn FP32 của backbone đóng băng (`precompute_frozen_backbone_hidden`) + tắt bộ đệm KV (`use_cache=False`) + hàm mất mát phân lát `256` token (`compute_chunked_dual_losses_and_backward`), giảm mức tiêu thụ VRAM từ `2,661 MB` xuống `~942 MB`.
+- **Trạng thái đã lưu (`checkpoints/full_dataset_training/training_progress_state.json`)**:
+  - ✅ **Seed 42 (Hoàn tất 5/5 epochs, Best Epoch 4)**: Lưu tại `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt` và xuất trực tiếp ra `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` (SHA-256: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`). Đạt **VN Val Answer PPL `2.32` (-87.46%)**, **EN Val Answer PPL `8.02` (-71.59%)**, **Combined Val Answer Loss `1.4607` (-53.30%)**.
+  - ⏸️ **Seed 43 & Seed 44 (Đã tạm dừng an toàn, sẵn sàng chạy tiếp)**: Khi chạy `python scripts/run_training.py --seed all`, hệ thống tự động giữ nguyên kết quả `Seed 42` (`[Seed 42 | RESUMED VERIFIED]`) và huấn luyện tiếp `Seed 43`, `Seed 44` (có lưu tạm `cms_3lvl_full_seed_{seed}_partial.pt` sau từng epoch).
+
+```powershell
+# 1. Lấy ra sử dụng ngay trên Web App (mặc định nạp cms_3lvl_full_dataset.pt)
+.\start_offline_demo.bat
+
+# 2. Chạy tiếp tiến trình huấn luyện cho các Seed còn lại (Seed 43 & Seed 44)
+python scripts/run_training.py --seed all
+
+# 3. Hoặc chạy tiếp từng Seed riêng lẻ
+python scripts/run_training.py --seed 43
+python scripts/run_training.py --seed 44
+```
+
+---
+*Ghi chú: Giữ nguyên toàn bộ cam kết khoa học, trọng số đã huấn luyện (`checkpoints/phase4_*`, `training_output_final/`, `cms_3lvl_seed_42.pt`) và kết quả thực nghiệm Phase 4 (`results/phase4_*`). Giao diện NL DocChat và các checkpoints mở rộng (`cms_3lvl_full_dataset.pt`, `cms_3lvl_extended.pt`) đã hoàn thiện đồng bộ.*

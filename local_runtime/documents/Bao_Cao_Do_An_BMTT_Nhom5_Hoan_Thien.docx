@@ -1,0 +1,381 @@
+BỘ GIÁO DỤC VÀ ĐÀO TẠO
+TRƯỜNG ĐẠI HỌC CÔNG NGHỆ TP. HCM (HUTECH)
+KHOA CÔNG NGHỆ THÔNG TIN
+
+BÁO CÁO ĐỒ ÁN MÔN HỌC / CHUYÊN ĐỀ BẢO MẬT THÔNG TIN
+
+PHÁT HIỆN FILE CHỨA MÃ ĐỘC DỰA TRÊN PHƯƠNG PHÁP LAI KẾT HỢP GIỮA PHÂN TÍCH TĨNH TẠI CHỖ VÀ TRA CỨU TRI THỨC MỐI ĐE DỌA ĐÁM MÂY TÍCH HỢP TRÍ TUỆ NHÂN TẠO BỔ TRỢ
+
+Giảng viên hướng dẫn: ThS. Đinh Phương Nam
+
+Sinh viên thực hiện:
+1. Huỳnh Thị Ngọc Ánh - Lớp: 24DTHB4 - MSSV: 24800600057
+2. Lê Ngọc Anh Thư - Lớp: 24DTHB4 - MSSV: 24800600943
+3. Nguyễn Thế Phong - Lớp: 24DTHB4 - MSSV: 24800600724
+4. Đỗ Tiến Dũng - Lớp: 23DTHB4 - MSSV: 2380600292
+
+TP. Hồ Chí Minh, Năm 2026
+
+LỜI MỞ ĐẦU
+
+Trong bối cảnh chuyển đổi số và sự phát triển mạnh mẽ của không gian mạng hiện nay, các hoạt động học tập, làm việc, truyền thông và vận hành doanh nghiệp đều gắn liền với việc chia sẻ, trao đổi các tệp tin và cài đặt các phần mềm ứng dụng từ Internet. Tuy nhiên, sự tiện lợi này cũng mở ra con đường xâm nhập nguy hiểm cho các đối tượng tấn công mạng ('hacker'). Kẻ tấn công liên tục lợi dụng tệp tin thực thi nhị phân, ngụy trang dưới các văn bản hoặc phần mềm tiện ích vô hại, nhằm phát tán mã độc (malware), xâm nhập hạ tầng mạng, đánh cắp thông tin bí mật và tống tiền doanh nghiệp.
+
+Đặc biệt, mã độc ngày nay không ngừng tiến hóa với các kỹ thuật đóng gói (packing), mã hóa (encryption) và làm rối mã (obfuscation) tinh vi, khiến việc phát hiện trở nên vô cùng khó khăn. Trước thách thức đó, nhóm tác giả đã quyết định thực hiện đề tài: 'Phát hiện file chứa mã độc dựa trên phương pháp lai kết hợp giữa phân tích tĩnh tại chỗ và tra cứu tri thức mối đe dọa đám mây tích hợp trí tuệ nhân tạo bổ trợ'. Mục tiêu của đề tài là xây dựng một công cụ phòng thủ thực tế, trực quan, hỗ trợ người dùng và chuyên viên an toàn thông tin rà soát, đánh giá toàn diện độ an toàn của tệp thực thi Windows trước khi cho phép kích hoạt.
+
+LỜI CẢM ƠN
+
+Nhóm sinh viên thực hiện đề tài xin bày tỏ lòng biết ơn chân thành và sâu sắc nhất đến ThS. Đinh Phương Nam – Giảng viên hướng dẫn môn học Bảo mật thông tin. Thầy đã luôn tận tâm định hướng, chia sẻ kiến thức chuyên môn quý báu và giải đáp cặn kẽ những vướng mắc kỹ thuật trong suốt quá trình nhóm nghiên cứu và triển khai đề tài.
+
+Nhóm cũng xin gửi lời cảm ơn trân trọng đến Ban Giám hiệu Trường Đại học Công nghệ TP. HCM (HUTECH) cùng toàn thể quý Thầy, Cô thuộc Khoa Công nghệ Thông tin đã truyền đạt nền tảng kiến thức vững chắc và tạo điều kiện học tập, nghiên cứu tốt nhất cho chúng em.
+
+Nhóm sinh viên thực hiện:
+Đỗ Tiến Dũng - Huỳnh Thị Ngọc Ánh
+Lê Ngọc Anh Thư - Nguyễn Thế Phong
+
+NHIỆM VỤ ĐỒ ÁN
+
+Để hoàn thành mục tiêu đề tài, nhóm đã xác định và thực hiện 5 nhiệm vụ trọng tâm sau:
+
+• Bước 1: Nghiên cứu lý thuyết về mã độc, cấu trúc định dạng tệp thực thi Windows Portable Executable (PE) và cơ chế ẩn giấu hành vi.
+
+• Bước 2: Kỹ nghệ đặc trưng PE tối ưu (20 đặc trưng số học) và xây dựng hệ thống web ứng dụng hoàn chỉnh kết hợp phân tích tĩnh tại chỗ, tra cứu VirusTotal và trí tuệ nhân tạo cục bộ.
+
+• Bước 3: Nghiên cứu, huấn luyện và đối chiếu 3 thuật toán học máy (Random Forest, KNN, SVM); thiết lập cơ chế AI bổ trợ nhược điểm cho phân tích tĩnh và Cloud CTI, đồng thời tích hợp Explainable AI (XAI).
+
+• Bước 4: Thực nghiệm kiểm thử và đánh giá trên các mẫu tệp thực tế: phần mềm sạch (laragon.exe), mã độc đã biết (WannaCry) và mã độc mới Zero-Day đóng gói UPX.
+
+• Bước 5: Xây dựng quy trình ứng phó tự động hóa (Automated Incident Response) tự động sinh kịch bản PowerShell dọn dẹp hệ thống theo khuyến nghị NIST.
+
+NHẬN XÉT CỦA GIẢNG VIÊN HƯỚNG DẪN
+
+...........................................................................................................................................................................................................................
+
+...........................................................................................................................................................................................................................
+
+...........................................................................................................................................................................................................................
+
+...........................................................................................................................................................................................................................
+
+DANH MỤC THUẬT NGỮ VÀ TỪ VIẾT TẮT
+
+CHƯƠNG 1: TỔNG QUAN
+
+1.1. Bối cảnh và tính cấp thiết của đề tài
+
+Trong những năm gần đây, mã độc ngày càng phát triển vượt bậc cả về số lượng lẫn mức độ tinh vi [1]. Các công trình nghiên cứu của Shahzad và cộng sự cho thấy sự bùng nổ nhanh chóng của malware đã tạo ra những thách thức sống còn đối với các phương pháp phát hiện truyền thống. Kẻ tấn công áp dụng triệt để các kỹ thuật che giấu hiện đại như đóng gói (packing), làm rối mã (obfuscation), mã hóa mật mã học (encryption) và biến hình (polymorphism/metamorphism) nhằm làm biến dạng cấu trúc lệnh máy, gây tê liệt quá trình phân tích [2].
+
+Trước thực tế phức tạp này, hai phương pháp nhận diện phổ biến hiện nay đều bộc lộ những nhược điểm cố hữu:
+
+Phương pháp phát hiện dựa trên chữ ký (Signature-based detection): Có ưu điểm tốc độ xử lý nhanh và tiêu tốn rất ít tài nguyên, nhưng hoàn toàn bị qua mặt khi mã độc chỉ cần biến đổi một vài byte dữ liệu hoặc thay đổi mã băm (hash).
+
+Phương pháp tra cứu tri thức đám mây (Cloud Threat Intelligence - CTI, tiêu biểu là VirusTotal): Rất hiệu quả với các chủng mã độc đã biết nhờ tập hợp tri thức từ hơn 70 hãng bảo mật hàng đầu. Tuy nhiên, Cloud CTI hoàn toàn bất lực trước mã độc mới Zero-Day (chưa từng bị phát hiện trên thế giới), đồng thời phụ thuộc chặt chẽ vào đường truyền Internet và bị giới hạn tần suất truy vấn API (Rate Limiting).
+
+Đối với môi trường Microsoft Windows, tệp thực thi Portable Executable (PE) là đối tượng nghiên cứu trọng yếu vì phần lớn mã độc nhắm vào người dùng cuối đều được phân phối dưới định dạng này. Việc phân tích cấu trúc bên trong tệp PE (thông tin Header, Section, Import Address Table, Entropy) cho phép đánh giá bản chất tệp mà không nhất thiết phải kích hoạt mã máy.
+
+Vì vậy, đề tài 'Phát hiện file chứa mã độc dựa trên phương pháp lai kết hợp giữa phân tích tĩnh tại chỗ và tra cứu tri thức mối đe dọa đám mây tích hợp trí tuệ nhân tạo bổ trợ' được thực hiện nhằm xây dựng một giải pháp bảo mật toàn diện. Trí tuệ nhân tạo (AI) được tích hợp đóng vai trò là công cụ bổ trợ hạt nhân, giúp khắc phục triệt để nhược điểm tương hỗ của phân tích tĩnh và tra cứu đám mây, bảo đảm năng lực phòng vệ tức thời ngay cả trong môi trường ngoại tuyến.
+
+1.2. Mục tiêu nghiên cứu
+
+Mục tiêu bao trùm của đề tài là xây dựng hệ thống phần mềm hoàn chỉnh hỗ trợ phát hiện mã độc thực thi Windows PE dựa trên kiến trúc lai đa tầng:
+
+• Khai thác hiệu quả các đặc trưng thu được từ phân tích tĩnh tệp PE kết hợp với nguồn thông tin tình báo mối đe dọa từ VirusTotal API v3.
+
+• Hiện thực hóa và làm rõ vai trò bổ trợ then chốt của AI:
+
+1. Bổ trợ cho Phân tích tĩnh: AI học các quy luật phi tuyến tính phức tạp từ bảng đặc trưng số cấu trúc PE (Shannon Entropy, tỷ lệ chênh lệch bộ nhớ ảo, các cụm Win32 API nhạy cảm theo chuẩn MITRE ATT&CK), qua đó nhận diện mã độc bị obfuscation mà các quy tắc tĩnh cứng nhắc không thể bắt được.
+
+2. Bổ trợ cho Đám mây CTI: Khi gặp mã độc Zero-Day (VirusTotal trả về NOT_FOUND) hoặc khi mất mạng, hệ thống tự động kích hoạt cơ chế Zero-Day Synergistic Defense, trao quyền cho AI cục bộ với 65% trọng số phán quyết để ngăn chặn mối nguy ngay tại máy trạm.
+
+• Xóa bỏ định kiến 'hộp đen' của AI bằng cách tích hợp Explainable AI (XAI), giải thích rõ ràng 8 nhóm rủi ro kỹ thuật.
+
+• Tự động hóa quy trình ứng phó sự cố (Automated Incident Response) theo chuẩn NIST 4 bước, tự sinh mã kịch bản PowerShell dọn dẹp hệ thống.
+
+1.3. Đối tượng và phạm vi nghiên cứu
+
+• Đối tượng nghiên cứu: Tệp thực thi nhị phân định dạng Portable Executable (tập trung vào các tệp có đuôi mở rộng .exe và .dll) trên hệ điều hành Microsoft Windows 32-bit và 64-bit.
+
+• Phạm vi nghiên cứu:
+
+1. Tiếp cận theo hướng phân tích tĩnh: Chỉ trích xuất và đánh giá các đặc trưng cấu trúc PE nhị phân mà không thực thi mã máy. Phương pháp này đảm bảo an toàn tuyệt đối cho máy trạm thử nghiệm (loại trừ nguy cơ lây nhiễm ngầm), đạt tốc độ xử lý tức thì (< 0.05 giây/tệp) và tiết kiệm tài nguyên hệ thống.
+
+2. Tích hợp Cloud Threat Intelligence: Tra cứu mã băm SHA-256 và cơ chế khớp nối Imphash thông qua VirusTotal API v3 kết hợp bộ đệm cache cục bộ.
+
+3. Dữ liệu thực nghiệm quy mô lớn: Sử dụng tập dữ liệu chuẩn hóa gồm 24.625 mẫu PE thực tế (14.600 mẫu mã độc và 10.025 mẫu phần mềm sạch) để huấn luyện và kiểm thử mô hình học máy.
+
+1.4. Ý nghĩa khoa học và thực tiễn của đề tài
+
+• Ý nghĩa khoa học: Đề tài chứng minh tính ưu việt của phương pháp lai đa tầng. Làm sáng tỏ cơ chế bù trừ khuyết điểm lẫn nhau giữa Phân tích tĩnh (nhanh nhưng dễ bị làm rối), Đám mây CTI (chính xác nhưng mù Zero-Day) và Trí tuệ nhân tạo (khái quát hóa cao, vận hành độc lập tại chỗ).
+
+• Giá trị thực tiễn: Hệ thống được triển khai thành Web Dashboard trực quan, đóng vai trò như một chốt chặn an ninh tại chỗ (Endpoint Guard), cho phép quản trị viên và người dùng kiểm tra nhanh tệp tin tải về trước khi kích hoạt, đồng thời nhận ngay kịch bản PowerShell khắc phục sự cố.
+
+1.5. Cấu trúc tổng thể của báo cáo
+
+Báo cáo đồ án được kết cấu thành 5 chương chặt chẽ:
+• Chương 1: Tổng quan đề tài (Bối cảnh, mục tiêu, đối tượng, phạm vi và ý nghĩa).
+• Chương 2: Cơ sở lý thuyết và Phương pháp tiếp cận (Cấu trúc PE, các nhược điểm cố hữu, vai trò bổ trợ của AI, các thuật toán học máy, XAI và khảo sát tập dữ liệu benchmark).
+• Chương 3: Thiết kế và Xây dựng hệ thống Hybrid Defender (Pipeline 5 tầng, kỹ nghệ 20 đặc trưng, cơ chế phán quyết lai, động cơ ứng cứu và giao diện web).
+• Chương 4: Kết quả thực nghiệm và Đánh giá (Hiệu năng 3 mô hình RF, KNN, SVM, kiểm thử 3 kịch bản thực tế, đánh giá cơ chế lai và thảo luận hạn chế).
+• Chương 5: Kết luận và Hướng phát triển (Tổng kết vấn đề giải quyết, hạn chế tồn tại và định hướng nâng cấp).
+
+CHƯƠNG 2: CƠ SỞ LÝ THUYẾT VÀ PHƯƠNG PHÁP TIẾP CẬN
+
+2.1. Tổng quan về mã độc và Cấu trúc tệp Portable Executable (PE)
+
+Mã độc (Malware - Malicious Software) là tên gọi chung cho các chương trình độc hại được thiết kế nhằm mục đích phá hoại hệ thống, đánh cắp dữ liệu nhạy cảm hoặc thực hiện các hành vi trái phép [6, 7, 8]. Trên hệ điều hành Windows, định dạng Portable Executable (PE) là quy chuẩn chung cho các tệp thực thi (.exe), thư viện liên kết động (.dll) và trình điều khiển (.sys) [3, 5].
+
+Một cấu trúc PE tiêu chuẩn bao gồm: MS-DOS Header (chứa con trỏ e_lfanew trỏ đến PE Header), DOS Stub ('This program cannot be run in DOS mode'), PE Signature ('PE\0\0'), COFF File Header, Optional Header (chứa Data Directories) và Section Headers (.text, .data, .rdata, .rsrc). Trong phân tích tĩnh, 3 thành phần cốt lõi sau mang ý nghĩa đặc biệt quan trọng:
+
+Shannon Entropy (Độ hỗn loạn byte): Thước đo mức độ ngẫu nhiên của các byte dữ liệu trong từng section, tính theo công thức:
+H(X) = - Σ [ p(x_i) * log2(p(x_i)) ] (với i chạy từ 0 đến 255)
+Entropy dao động từ 0.0 đến 8.0. Khi H(X) > 7.2, section đó chứa dữ liệu bị đóng gói (packing) bằng UPX/Themida hoặc mã hóa mật mã học [1].
+
+Import Address Table (IAT): Danh sách các DLL và Win32 API mà chương trình triệu gọi. Mã độc thường để lộ ý đồ qua các cụm API can thiệp sâu: tiêm mã bộ nhớ (VirtualAllocEx, WriteProcessMemory), duy trì quyền khởi động (RegSetValueEx) hoặc né tránh máy ảo (IsDebuggerPresent).
+
+Bất thường kích thước Section (Size Anomaly): Hiện tượng kích thước ảo trên RAM (VirtualSize) lớn hơn vượt bậc so với kích thước thực trên đĩa (SizeOfRawData). Đây là dấu hiệu chỉ điểm việc giải nén mã độc trực tiếp vào bộ nhớ RAM khi chạy.
+
+2.2. Các phương pháp phát hiện mã độc và Những nhược điểm cố hữu
+
+Phát hiện mã độc hiện nay dựa trên hai nhánh chính: phân tích tĩnh (Static Analysis) và phân tích động (Dynamic Sandbox Analysis), kết hợp cùng mạng lưới tình báo đám mây (Cloud Threat Intelligence). Tuy nhiên, mỗi phương pháp riêng lẻ đều tồn tại những hạn chế chí mạng:
+
+Phân tích tĩnh truyền thống: Dễ bị vô hiệu hóa hoàn toàn bởi các kỹ thuật Packer, Crypter và Obfuscator. Khi mã độc được nén, bảng IAT bị giấu kín và mã máy biến thành chuỗi byte ngẫu nhiên. Ngược lại, việc chỉ dựa vào luật cứng đơn giản rất dễ gây ra tỷ lệ báo động nhầm (False Positives) đối với các ứng dụng sạch có entropy cao.
+
+Tra cứu Đám mây (Cloud CTI - VirusTotal): Tổng hợp tri thức từ hơn 70 hãng bảo mật hàng đầu [2]. Dù vậy, Cloud CTI tồn tại 'điểm mù hoàn toàn' trước mã độc mới Zero-Day (mã băm chưa từng xuất hiện trên VirusTotal sẽ trả về NOT_FOUND hoặc 0/70 phát hiện). Bên cạnh đó là sự phụ thuộc bắt buộc vào mạng Internet và giới hạn tần suất gọi API (4 requests/phút).
+
+2.3. Trí tuệ nhân tạo (AI/ML) – Công cụ bổ trợ nhược điểm tương hỗ
+
+Để giải quyết triệt để sự bế tắc của hai phương pháp trên, Trí tuệ Nhân tạo (Machine Learning) được tích hợp đóng vai trò là 'công cụ bổ trợ' trung tâm:
+
+• Giải cứu Phân tích tĩnh: AI học các không gian đặc trưng phi tuyến đa chiều giữa 20 thuộc tính PE, nhận biết chính xác bản chất mã độc kể cả khi đã bị đóng gói/obfuscation.
+
+• Giải cứu Đám mây CTI: Khi gặp mã độc Zero-Day hoặc khi ngoại tuyến, hệ thống tự động kích hoạt cơ chế Zero-Day Synergistic Defense, nâng tỷ trọng điểm AI lên 65% để phán quyết độc lập tại chỗ.
+
+2.4. Các thuật toán học máy và Chỉ số đánh giá toán học
+
+Đề tài nghiên cứu đối sánh 3 thuật toán học máy giám sát kinh điển:
+• Random Forest (RF) [4]: Thuật toán Ensemble dựa trên kỹ thuật Bagging (100 cây quyết định ngẫu nhiên), vượt trội trong việc xử lý dữ liệu bảng (Tabular Data) và cung cấp trọng số đặc trưng (feature_importances_).
+• K-Nearest Neighbors (KNN): Phân loại dựa trên khoảng cách Euclidean với K=5 và trọng số khoảng cách nghịch đảo, tạo biên phân loại bao bọc cực tốt cho mã sạch.
+• Support Vector Machine (SVM) [5]: Xây dựng siêu phẳng phân cách cực đại với hàm nhân RBF (Radial Basis Function).
+
+Hiệu năng mô hình được định lượng chính xác từ Ma trận nhầm lẫn (Confusion Matrix):
+• Accuracy = (TP + TN) / (TP + TN + FP + FN)
+• Recall (Độ phủ mã độc) = TP / (TP + FN)
+• Precision (Độ chuẩn xác cảnh báo) = TP / (TP + FP)
+• False Negative Rate (Bỏ sót mã độc) = FNR = FN / (TP + FN) = 1 - Recall
+• False Positive Rate (Báo động nhầm) = FPR = FP / (FP + TN)
+• F1-Score = 2 * (Precision * Recall) / (Precision + Recall)
+
+2.5. Khảo sát các bộ dữ liệu mã độc chuẩn quốc tế
+
+Trong nghiên cứu học máy an toàn thông tin, các tập dữ liệu benchmark quốc tế đóng vai trò chuẩn mực so sánh học thuật:
+• ClaMP (Classification of Malware with PE headers) [9]: Gồm 5.210 mẫu (2.722 malware và 2.488 benign) với 69 đặc trưng raw và derived từ PE Header.
+• EMBER (Elastic Malware Benchmark for Empowering Researchers) [8]: Tập dữ liệu khổng lồ với 1,1 triệu mẫu PE phục vụ huấn luyện mô hình phân tích tĩnh quy mô lớn.
+• BODMAS [7]: Gồm 134.435 mẫu PE (57.293 malware và 77.142 benign) với 2.381 chiều đặc trưng, hỗ trợ phân tích sự biến đổi của mã độc theo trục thời gian.
+• Tập dữ liệu đề tài sử dụng: Kế thừa kho mẫu Kaggle Malware Detection kết hợp tập bổ sung tệp sạch hệ thống thực tế với tổng số 24.625 mẫu PE (14.600 malware và 10.025 benign), bảo đảm tính thực tế và cân bằng lớp tối ưu.
+
+CHƯƠNG 3: THIẾT KẾ VÀ XÂY DỰNG HỆ THỐNG HYBRID DEFENDER
+
+3.1. Pipeline Kiến trúc Hệ thống Tổng thể
+
+Hệ thống Hybrid Threat Defender vận hành theo quy trình khép kín 5 tầng, tiếp nhận tệp PE thực thi (.exe, .dll) với giới hạn kích thước tối đa 64MB:
+
+• Tầng 1 (Static Analyzer): Trích xuất cấu trúc PE an toàn qua pefile, băm SHA-256, tính Shannon Entropy và gom cụm 6 nhóm Win32 API nhạy cảm → Vector 20 đặc trưng số.
+• Tầng 2 (Cloud Threat Intel): Tra cứu SHA-256 qua VirusTotal API v3, kiểm tra cơ sở dữ liệu Imphash và bộ đệm cache cục bộ → Điểm CTI (S_cti: 0.0 - 1.0).
+• Tầng 3 (Local Tri-AI Engine): Chuẩn hóa StandardScaler, dự đoán qua Random Forest, KNN, SVM (Majority Voting), kết hợp Heuristics Guardrails và 8 cảnh báo XAI → Điểm AI (P_ml: 0.0 - 1.0).
+• Tầng 4 (Hybrid Decision Engine): Động cơ phán quyết thích ứng theo kịch bản mối đe dọa đã biết hoặc Zero-Day → BENIGN / SUSPICIOUS_UNKNOWN / MALICIOUS.
+• Tầng 5 (Remediation Engine): Tự động sinh kịch bản PowerShell .ps1 xử lý sự cố theo chuẩn NIST 4 bước.
+
+3.2. Thiết kế chi tiết các phân hệ
+
+3.2.1. Phân hệ Phân tích Tĩnh: Kỹ nghệ 20 đặc trưng số học
+
+Tập dữ liệu gốc Kaggle có 79 cột nhưng nhiều cột là hằng số hoặc định danh nhiễu gây ra 'lời nguyền chiều dữ liệu' (Curse of Dimensionality). Nhóm đã tiến hành chọn lọc và kỹ nghệ đặc trưng thành 20 đặc trưng số học chuẩn mực:
+
+Bảng 3.1: Vector 20 đặc trưng trích xuất từ cấu trúc tệp PE
+
+Lý do giới hạn kích thước tệp 64MB trong hệ thống:
+
+1. Phù hợp đặc thù mã độc: Hơn 99.8% mã độc Windows PE có dung lượng dưới 15MB để phát tán nhanh; các tệp > 64MB hầu hết là tài nguyên đồ họa game hoặc gói cài đặt đa phương tiện.
+
+2. Đồng bộ API VirusTotal: Gói API v3 của VirusTotal quy định ngưỡng tải lên kiểm tra từ 32MB đến 64MB.
+
+3. Bảo vệ hạ tầng: Ngăn ngừa nguy cơ tấn công từ chối dịch vụ (DoS) làm tràn bộ nhớ RAM máy chủ trong quá trình phân rã nhị phân.
+
+3.2.2. Phân hệ Tra cứu Tri thức Đám mây (cloud_threat_intel.py)
+
+• Bảo mật quyền riêng tư: Chỉ tính toán và gửi mã băm cryptographic SHA-256 lên VirusTotal, tuyệt đối không tải nội dung tệp tin của người dùng lên internet.
+
+• Bộ đệm Cache cục bộ: Lưu trữ kết quả tại cache/vt_cache.json, phản hồi tức thì (< 1 ms) cho các mẫu đã được quét trước đó.
+
+• Khớp nối Imphash: Tự động đối soát băm Import Address Table với chữ ký các dòng ransomware khét tiếng (WannaCry: f43c3f96614457e5e7ab3d27464ef245, Locky, Emotet), nâng điểm CTI lên 0.95 ngay cả khi SHA-256 bị thay đổi do kỹ thuật đa hình.
+
+3.2.3. Phân hệ Trí tuệ Nhân tạo (ai_engine.py) và Giải thích XAI
+
+• Chuẩn hóa Z-Score: Đưa 20 đặc trưng số về phân phối chuẩn (μ = 0, σ = 1) bằng StandardScaler.
+
+• Hội đồng Biểu quyết (Majority Voting): Hợp nhất kết quả từ 3 mô hình đã huấn luyện (RF, KNN, SVM) nhằm loại trừ thiên lệch phán quyết từ một thuật toán đơn lẻ.
+
+• Lớp rào chắn Heuristics Guardrails: (1) Khóa BENIGN (Score = 0.0) nếu tệp rỗng 0 bytes; (2) Khóa trần rủi ro tối đa 8% cho phần mềm sạch đã kiểm định (không chứa API nhạy cảm, không có section bất thường và entropy ≤ 6.6), triệt tiêu hoàn toàn nguy cơ báo động nhầm.
+
+• 8 Danh mục Cảnh báo XAI: Giải thích minh bạch 8 nhóm rủi ro (High Entropy, Suspicious Section, Size Anomaly, Process Injection, Persistence, Evasion, C2 Network, Security Weakness).
+
+3.2.4. Động cơ Phán quyết Lai Tương Hỗ (hybrid_detector.py)
+
+Điểm rủi ro tổng hợp Risk_Score ∈ [0.0, 1.0] được tính toán linh hoạt theo 3 kịch bản vận hành:
+
+• Kịch bản 1: Mối đe dọa đã biết (S_cti ≥ 0.70):
+
+Risk_Score = 0.20 * S_static + 0.30 * P_ml + 0.50 * S_cti
+
+• Kịch bản 2: Phòng thủ Mã độc Zero-Day / Ngoại tuyến (S_cti = 0 hoặc NOT_FOUND):
+
+Risk_Score = 0.35 * S_static + 0.65 * P_ml (AI gánh vác 65% trọng số)
+
+• Kịch bản 3: Phán quyết Lai Cân Bằng (Tín hiệu phân tán):
+
+Risk_Score = 0.25 * S_static + 0.35 * P_ml + 0.40 * S_cti
+
+Phân loại ngưỡng: Risk_Score ≥ 0.70 là MALICIOUS; từ 0.40 đến 0.69 là SUSPICIOUS_UNKNOWN; dưới 0.40 là BENIGN.
+
+3.2.5. Phân hệ Ứng phó sự cố (remediation_engine.py)
+
+Tự động sinh kịch bản PowerShell .ps1 thực hiện quy trình ứng cứu sự cố 4 bước chuẩn NIST: (1) Cách ly tệp vào thư mục an toàn C:\Malware_Quarantine\; (2) Tiêu diệt tiến trình độc hại theo tên và PID; (3) Rà soát dọn dẹp các khóa Registry tự khởi động Run/RunOnce; (4) Kích hoạt lệnh quét chuyên sâu toàn bộ máy trạm.
+
+3.3. Thiết kế giao diện Web Dashboard
+
+Giao diện được xây dựng trên nền tảng Flask kết hợp HTML5/CSS3/JavaScript theo phong cách Dark Mode hiện đại chuyên dụng cho các trung tâm giám sát an ninh mạng (SOC). Web Dashboard gồm 4 phân tab kết quả trực quan:
+• Tab 1 (Cách Khắc Phục & Ứng Cứu): Đồng hồ đo rủi ro (Risk Gauge 0 - 100%), phán quyết tổng hợp và tải mã kịch bản PowerShell.
+• Tab 2 (Phân Tích AI & XAI Heuristics): Xác suất mã độc từ 3 mô hình, kết quả biểu quyết đồng thuận và danh sách cảnh báo XAI chi tiết.
+• Tab 3 (Trí Thức Đám Mây VirusTotal): Tỷ lệ các hãng bảo mật toàn cầu cảnh báo và phân loại chủng loại mã độc.
+• Tab 4 (Phân Tích Tĩnh PE Chi Tiết): Bảng thống kê dung lượng ảo vs dung lượng thực từng section, độ hỗn loạn entropy và danh sách API nhạy cảm theo 6 danh mục.
+
+CHƯƠNG 4: KẾT QUẢ THỰC NGHIỆM VÀ ĐÁNH GIÁ
+
+4.1. Môi trường thực nghiệm và Tập dữ liệu chuẩn hóa
+
+• Cấu hình phần cứng: Máy trạm độc lập CPU Intel Core i5 / AMD Ryzen 5, 16GB RAM, SSD 512GB NVMe, hệ điều hành Microsoft Windows 11 64-bit.
+
+• Môi trường phần mềm: Python 3.11, Flask 3.0, scikit-learn 1.4, pefile 2023.2.7, numpy, scipy, joblib.
+
+• Tập dữ liệu thực nghiệm: Nhằm giải quyết triệt để tình trạng mất cân bằng dữ liệu (class imbalance) của tập gốc Kaggle (74.4% mã độc khiến mô hình dễ bị dương tính giả), nhóm nghiên cứu đã gộp thêm 5.013 mẫu PE sạch thực tế từ Windows System32, Microsoft Office và các trình duyệt phổ biến:
+
+- Tổng số mẫu: 24.625 tệp PE thực tế.
+
+- Mẫu mã độc (Malware, label 1): 14.600 mẫu (chiếm 59.3%).
+
+- Mẫu sạch (Benign, label 0): 10.025 mẫu (chiếm 40.7%).
+
+- Phân chia: 80% Huấn luyện (19.700 mẫu) và 20% Kiểm thử độc lập (4.925 mẫu gồm 2.920 mã độc và 2.005 mã sạch).
+
+4.2. Huấn luyện và Đánh giá hiệu năng 3 mô hình học máy
+
+Hiệu năng của 3 thuật toán học máy được đo lường đồng nhất trên 4.925 mẫu kiểm thử độc lập sau khi chuẩn hóa qua StandardScaler:
+
+Bảng 4.1: Đối chiếu hiệu năng tổng thể trên 4.925 mẫu kiểm thử độc lập
+
+Bảng 4.2: Ma trận nhầm lẫn chi tiết phân tách trên 2 tập con
+
+4.3. Kiểm thử trên các kịch bản thực tế
+
+4.3.1. Kịch bản 1: Quét phần mềm sạch thực tế (laragon.exe – Benign)
+
+• Thông tin tệp: laragon.exe (2,06 MB), SHA-256: 81af8efab2e5...
+
+• Phân tích tĩnh: Entropy toàn file 6.426/8.0; entropy cao nhất ở section .reloc đạt 6.658/8.0; import 27 DLLs và 576 APIs (chứa API can thiệp Registry và mạng do tính chất phần mềm quản lý web server).
+
+• Đám mây CTI: Ngoại tuyến / Không cấu hình API Key → Không có dữ liệu.
+
+• Xử lý AI & Phán quyết Lai: Nhờ Clean Binary Guardrail kết hợp nhận định cấu trúc bình thường, Risk Score tổng hợp chỉ đạt 25.9% (< 40%). Hệ thống đưa ra phán quyết BENIGN (AN TOÀN), chứng minh khả năng kháng báo động giả xuất sắc.
+
+4.3.2. Kịch bản 2: Quét mã độc đã biết (WannaCry Ransomware – Known Threat)
+
+• Thông tin tệp: WannaCryptor_Payload.exe, SHA-256: ed01ebf8..., Imphash: f43c3f96614457e5e7ab3d27464ef245.
+
+• Phân tích tĩnh: Entropy rất cao 7.55/8.0 (phân vùng .text đạt 7.82/8.0); phát hiện 3 API tiêm mã, 2 API duy trì Registry và 2 API kết nối mạng C2.
+
+• Đám mây CTI: Khớp Imphash WannaCry; 68/72 hãng bảo mật cảnh báo nguy hiểm (S_cti = 94.4%).
+
+• Xử lý AI & Phán quyết Lai: AI dự đoán xác suất mã độc P_ml = 98.5%. Áp dụng công thức Known-Threat Corroboration:
+Risk_Score = (0.20 * 0.85) + (0.30 * 0.985) + (0.50 * 0.944) = 0.938 (93.8%)
+Phán quyết MALICIOUS (MÃ ĐỘC NGUY CẤP), lập tức tự sinh kịch bản PowerShell diệt tiến trình khẩn cấp.
+
+4.3.3. Kịch bản 3: Phòng thủ mã độc mới Zero-Day (Unknown UPX Dropper – Zero-Day)
+
+• Thông tin tệp: Unknown_Invoice_Drop.exe (mã độc mới biên dịch, nén bằng UPX packer).
+
+• Phân tích tĩnh: Section UPX1 có entropy 7.95/8.0; section UPX0 có VirtualSize = 120.000 bytes nhưng RawData = 0 bytes (dấu hiệu giải nén thẳng vào RAM); chứa API né tránh IsDebuggerPresent.
+
+• Đám mây CTI: VirusTotal trả về NOT_FOUND (0/70 phát hiện).
+
+• BƯỚC ĐỘT PHÁ CỦA AI: Nếu chỉ dựa vào đám mây, tệp sẽ bị bỏ sót hoàn toàn. Nhờ học được đặc trưng phi tuyến về section lệch và entropy cao, AI dự đoán P_ml = 88.2%. Hệ thống tự động kích hoạt chế độ Zero-Day Synergistic Defense:
+Risk_Score = (0.35 * 0.80) + (0.65 * 0.882) = 0.853 (85.3%)
+Phán quyết MALICIOUS (BẮT TRÚNG ZERO-DAY). Cảnh báo XAI làm rõ: 'Section UPX đóng gói, độ hỗn loạn byte bất thường và kích thước ảo vượt mức thực tế'.
+
+4.4. Đánh giá tính ưu việt của cơ chế lai có AI bổ trợ
+
+Bảng 4.3: So sánh cơ chế Phán quyết Lai tích hợp AI với các phương pháp đơn lẻ
+
+4.5. Thảo luận và Hạn chế tồn tại
+
+1. Làm rõ tính nhất quán về Hạn chế: Hệ thống đạt hiệu năng ưu việt nhờ mô hình lai (Tĩnh + AI + Đám mây). Hạn chế ở đây được xác định rõ là: Ở tầng phân tích tại chỗ, hệ thống mới chỉ áp dụng phương pháp phân tích tĩnh cấu trúc tệp nhị phân, chưa tích hợp môi trường ảo hóa động (Dynamic Sandbox Analysis) để ghi nhận hành vi gọi API trong thời gian chạy thực (runtime) đối với các kỹ thuật tiêm mã nâng cao như Process Hollowing.
+
+2. Giới hạn tài khoản Cloud API: Gói VirusTotal miễn phí bị giới hạn 4 requests/phút. Mặc dù cơ chế Local Cache và Imphash Matching đã giảm thiểu đáng kể số lượt gọi mạng, môi trường doanh nghiệp quy mô lớn vẫn cần bổ sung gói Private API hoặc tích hợp nguồn CTI mở.
+
+3. Phạm vi hệ điều hành: Hiện tại hệ thống chuyên sâu cho định dạng PE của Microsoft Windows (.exe, .dll), chưa mở rộng sang ELF (Linux) hay APK (Android).
+
+CHƯƠNG 5: KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN
+
+5.1. Những vấn đề đã giải quyết
+
+1. Xây dựng thành công hệ thống phòng thủ mã độc lai hoàn chỉnh: Kết hợp chặt chẽ giữa Phân tích tĩnh tại chỗ, Học máy Đa mô hình (Tri-AI) và Cloud Threat Intelligence (VirusTotal API v3).
+
+2. Khẳng định vai trò bổ trợ mang tính sống còn của AI:
+
+- Khắc phục nhược điểm Phân tích tĩnh: AI học các quy luật phi tuyến sâu của vector 20 đặc trưng PE, nhận diện chính xác mã độc đã qua đóng gói mã (Packer) và làm rối (Obfuscation).
+
+- Khắc phục nhược điểm Đám mây CTI: Khi gặp mã độc Zero-Day hoặc khi ngoại tuyến, AI tự động gánh vác 65% trọng số để đưa ra phán quyết tại chỗ chính xác mà không cần chữ ký toàn cầu.
+
+3. Đạt độ chính xác thực nghiệm vượt trội: Huấn luyện trên 24.625 mẫu PE thực tế, Random Forest đạt Accuracy 97.75%, Recall 98.12% với độ trễ siêu tốc 0.0118 ms/tệp. Sự kết hợp với KNN và Guardrails giúp triệt tiêu nguy cơ báo động nhầm.
+
+4. Minh bạch hóa với Explainable AI (XAI): Xóa bỏ định kiến 'hộp đen' với 8 danh mục giải thích trực quan lý do cảnh báo.
+
+5. Khép kín quy trình ứng phó tự động: Tự động tạo kịch bản khắc phục sự cố bằng PowerShell Script (.ps1) theo chuẩn NIST 4 bước.
+
+5.2. Những vấn đề chưa giải quyết
+
+• Chưa tích hợp môi trường máy ảo Sandbox để quan sát hành vi thực thi động (Dynamic Analysis).
+
+• Chưa hỗ trợ phân tích các tệp văn phòng chứa macro độc hại (Office OLE2, OOXML, PDF).
+
+• Chưa có cơ chế Active Learning tự động cập nhật và huấn luyện lại (Retrain) mô hình khi người dùng tải lên các mẫu mới.
+
+5.3. Hướng phát triển trong tương lai
+
+• Tích hợp module Sandbox phân tích động cục bộ (Cuckoo Sandbox / QEMU) để bắt hành vi runtime.
+
+• Mở rộng phân tích sang định dạng ELF (Linux) và ứng dụng di động APK (Android).
+
+• Kết nối thêm các nền tảng chia sẻ tri thức mối đe dọa nguồn mở: AlienVault OTX, AbuseIPDB, MalwareBazaar.
+
+• Đóng gói toàn bộ giải pháp dưới dạng Docker Container và triển khai Agent EDR giám sát tệp tin thời gian thực trên Endpoint.
+
+TÀI LIỆU THAM KHẢO
+
+[1] E. Eroğlu (2020), 'Malware Detection based on Static PE features and Machine Learning', International Journal of Information Security Science, vol. 9, no. 4, pp. 210-222.
+
+[2] VirusTotal (2023), 'VirusTotal REST API v3 Documentation and Best Practices', Google Cloud Security Reference Guide, developers.virustotal.com.
+
+[3] Microsoft Corporation (2023), 'Microsoft Portable Executable and Common Object File Format (COFF) Specification', Microsoft Developer Network (MSDN).
+
+[4] L. Breiman (2001), 'Random Forests', Machine Learning, vol. 45, no. 1, pp. 5-32.
+
+[5] F. Pedregosa et al. (2011), 'Scikit-learn: Machine Learning in Python', Journal of Machine Learning Research (JMLR), vol. 12, pp. 2825-2830.
+
+[6] E. Carrera (2023), 'PEFile: A Python module to read and work with PE (Portable Executable) files', GitHub Repository.
+
+[7] L. Yang, A. Ciptadi, I. Laziuk, A. Ahmadzadeh, G. Wang (2021), 'BODMAS: An Open Dataset for Learning-based Temporal Analysis of PE Malware', IEEE Deep Learning and Security Workshop (DLS), pp. 1-8.
+
+[8] H. S. Anderson, P. Roth (2018), 'EMBER: An Open Dataset for Training Static PE Malware Machine Learning Models', arXiv preprint arXiv:1804.04159.
+
+[9] A. Kumar, K. S. Kuppusamy, G. Aghila (2018), 'ClaMP: Classification of Malware with PE headers using Machine Learning', International Journal of Computer Network and Information Security, vol. 10, no. 3, pp. 28-36.
+
+[10] MITRE Corporation (2023), 'MITRE ATT&CK Matrix for Enterprise: Techniques and Tactics Index', attack.mitre.org.

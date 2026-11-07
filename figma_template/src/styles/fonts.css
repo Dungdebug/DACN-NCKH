@@ -1,0 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Roboto+Slab:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap");
+
+@theme inline {
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Roboto Slab", ui-serif, Georgia, serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+}

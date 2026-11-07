@@ -1,672 +1,601 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="dark">
+<html lang="vi" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SA-CMS NEURAL MEMORY STUDIO — Trợ lý Hỏi đáp Tài liệu Đa thang</title>
-  <link rel="stylesheet" href="/static/css/app.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NL DocChat — Website Chatbot Hỏi Đáp Tài Liệu (SA-CMS &amp; Nested Learning)</title>
+  <meta name="description" content="Hệ thống Chatbot hỏi đáp tài liệu dựa trên Nested Learning (SA-CMS &amp; Hybrid QA) vận hành 100% Offline." />
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237257FF'/%3E%3Cpath d='M16 6l2.2 5.8L24 14l-5.8 2.2L16 22l-2.2-5.8L8 14l5.8-2.2L16 6z' fill='white'/%3E%3C/svg%3E" />
+  <script>
+    (function () {
+      try {
+        var pref = localStorage.getItem("nldoc_theme") || "light";
+        var resolved =
+          pref === "system"
+            ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : (pref === "dark" ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", resolved);
+      } catch (_e) {}
+    })();
+  </script>
 </head>
-<body class="theme-obsidian">
-  <div class="studio-app-container">
+<body>
+  <div class="nldoc-app" id="nldoc-app">
+    <!-- Mobile Sidebar Backdrop -->
+    <button type="button" class="sidebar-backdrop" id="sidebar-backdrop" aria-label="Đóng thanh bên"></button>
 
-    <!-- ============================================================== -->
-    <!-- VÙNG A: TOP TELEMETRY COMMAND BAR (Thanh Điều Khiển Đỉnh)       -->
-    <!-- ============================================================== -->
-    <header class="neural-topbar" id="neural-topbar">
-      <!-- Logo & Tiêu đề -->
-      <div class="topbar-branding">
-        <div class="neural-logo-icon" title="Structure-Aligned Continuum Memory">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 16C4 16 8 8 16 8C24 8 28 16 28 16C28 16 24 24 16 24C8 24 4 16 4 16Z" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="16" cy="16" r="4" fill="#10B981"/>
-            <path d="M10 16C10 12.6863 12.6863 10 16 10" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M16 22C19.3137 22 22 19.3137 22 16" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="branding-text">
-          <div class="branding-title">
-            <span class="title-primary">SA-CMS</span>
-            <span class="title-sub">NEURAL MEMORY STUDIO</span>
-          </div>
-          <div class="branding-caption">Structure-Aligned Continuum Memory for Document QA</div>
-        </div>
-      </div>
-
-      <!-- Live Telemetry Status Pills -->
-      <div class="topbar-telemetry-pills">
-        <div class="telemetry-pill pill-offline" title="100% Offline Local Inference — Zero Cloud Egress">
-          <span class="pulse-dot"></span>
-          <span class="pill-label">100% OFFLINE LOCAL</span>
-        </div>
-        <div class="telemetry-pill pill-model" title="Mô hình nền 135M đông cứng + Bộ nhớ tham số thích ứng 5.31M">
-          <svg class="pill-icon" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm0 2.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>
-          </svg>
-          <span class="pill-label">SmolLM2-135M (Frozen) + 5.31M SA-CMS</span>
-        </div>
-        <div class="telemetry-pill pill-vram" title="Bộ nhớ đồ họa đỉnh điểm đo đạc thực tế trên RTX 3050 Laptop">
-          <svg class="pill-icon" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M2 3h12a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1zm1 2v6h10V5H3zm2 1h2v4H5V6zm4 0h2v4H9V6z"/>
-          </svg>
-          <span class="pill-label">VRAM Peak: <strong>743.86 MB</strong></span>
-        </div>
-      </div>
-
-      <!-- Segmented Mode Switcher (P2 / P1 / B2 / B5) -->
-      <div class="topbar-mode-switcher" id="mode-switcher-container">
-        <button class="mode-tab-btn active" data-mode="hybrid" id="mode-btn-p2" title="Kiến trúc Lai: Bộ nhớ SA-CMS + Truy xuất BM25 + Kiểm định căn cứ">
-          <span class="mode-icon">🔥</span>
-          <span class="mode-text">P2: SA-CMS Hybrid</span>
-          <span class="mode-badge">100% F1</span>
+    <!-- ================================================================== -->
+    <!-- LEFT SIDEBAR (Figma NL DocChat 280px Sidebar)                      -->
+    <!-- ================================================================== -->
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Điều hướng cuộc trò chuyện và tài liệu">
+      <div class="sidebar-top-row">
+        <button type="button" class="brand-home-btn" id="btn-brand-home" title="Tạo cuộc trò chuyện mới">
+          <span class="brand-logo-box" aria-hidden="true">
+            <!-- Sparkles Icon -->
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+              <path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>
+            </svg>
+          </span>
+          <span class="brand-title-wrap">
+            <span class="brand-name">NL DocChat</span>
+            <span class="brand-tag">SA-CMS</span>
+          </span>
         </button>
-        <button class="mode-tab-btn" data-mode="memory" id="mode-btn-p1" title="Chỉ dùng bộ nhớ tham số SA-CMS sau khi tài liệu đã rời ngữ cảnh">
-          <span class="mode-icon">🧠</span>
-          <span class="mode-text">P1: Memory-Only</span>
-        </button>
-        <button class="mode-tab-btn" data-mode="context" id="mode-btn-b2" title="RAG tiêu chuẩn BM25 truyền thống">
-          <span class="mode-icon">📚</span>
-          <span class="mode-text">B2: Standard RAG</span>
-        </button>
-        <button class="mode-tab-btn" data-mode="fixed" id="mode-btn-b5" title="CMS cập nhật theo số token cố định (Baseline Hope-Attention)">
-          <span class="mode-icon">📏</span>
-          <span class="mode-text">B5: Fixed-Token CMS</span>
+        <button type="button" class="icon-btn sidebar-collapse-btn" id="btn-sidebar-close" aria-label="Thu gọn thanh bên" title="Thu gọn thanh bên">
+          <!-- PanelLeftClose Icon -->
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M9 3v18"/>
+            <path d="m16 15-3-3 3-3"/>
+          </svg>
         </button>
       </div>
 
-      <!-- Fast Action Buttons & Theme Switcher -->
-      <div class="topbar-actions">
-        <button class="btn btn-topbar-action" id="btn-open-figures-modal" title="Xem 4 biểu đồ nghiên cứu và kết quả nghiệm thu Q1">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" class="icon-svg">
-            <path d="M2 13h12M4 10l3-3 2 2 4-5"/>
+      <!-- Primary Sidebar Actions -->
+      <div class="sidebar-actions">
+        <button type="button" class="sidebar-action-btn sidebar-action-primary" id="btn-new-chat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
           </svg>
-          <span>Q1 Figures</span>
+          <span>Cuộc trò chuyện mới</span>
         </button>
-        <button class="btn btn-topbar-action" id="btn-open-research-modal" title="Môi trường Nghiên cứu Khoa học 8 Trang">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" class="icon-svg">
-            <path d="M6 2v4l-3 7h10l-3-7V2H6zM6 6h4"/>
+        <button type="button" class="sidebar-action-btn" id="btn-toggle-search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
           </svg>
-          <span>Research Lab</span>
+          <span>Tìm kiếm cuộc trò chuyện</span>
         </button>
-        <button class="btn-theme-toggle" id="btn-theme-toggle" title="Chuyển đổi Dark Mode (Obsidian) / Light Mode (Academic Paper)">
-          <span class="theme-icon theme-icon-dark">🌙</span>
-          <span class="theme-icon theme-icon-light">☀️</span>
-        </button>
+        <div class="sidebar-search-box" id="sidebar-search-wrap" hidden>
+          <input type="text" id="sidebar-search-input" placeholder="Tìm hội thoại hoặc tài liệu..." autocomplete="off" />
+          <button type="button" class="search-clear-btn" id="btn-clear-search" aria-label="Xóa tìm kiếm">✕</button>
+        </div>
       </div>
-    </header>
 
-    <!-- ============================================================== -->
-    <!-- BỐ CỤC 3 CỘT WORKBENCH (3-PANE WORKBENCH LAYOUT)                -->
-    <!-- ============================================================== -->
-    <div class="workbench-body">
-
-      <!-- ============================================================ -->
-      <!-- VÙNG B: CỘT TRÁI (LEFT PANE - 280px)                        -->
-      <!-- Cây Cấu Trúc Văn Bản & Cỗ Máy Thời Gian Snapshot (Mục 6.7)   -->
-      <!-- ============================================================ -->
-      <aside class="workbench-left-pane" id="workbench-left-pane">
-        <!-- Section 1: Kho Tài liệu & Nạp Preset nhanh -->
-        <div class="pane-section">
-          <div class="section-header">
-            <span class="section-title-icon">
-              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 3.5A1.5 1.5 0 012.5 2h3.879a1.5 1.5 0 011.06.44l1.122 1.12A1.5 1.5 0 009.62 4H13.5A1.5 1.5 0 0115 5.5v7a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 011 12.5v-9z"/></svg>
-            </span>
-            <h3 class="section-title">Kho Tài Liệu &amp; Presets</h3>
-            <button class="btn-icon-subtle" id="btn-sidebar-add-doc" title="Tải tài liệu mới">＋</button>
+      <!-- Scrollable Conversations & Documents -->
+      <div class="sidebar-scroll">
+        <div class="sidebar-section">
+          <div class="sidebar-section-header">
+            <span class="sidebar-section-label">Gần đây</span>
+            <span class="sidebar-count-pill" id="lbl-session-count">0</span>
           </div>
-
-          <!-- Dataset Presets Selector -->
-          <div class="preset-selector-group">
-            <div class="preset-label">Chọn ngữ liệu kiểm chuẩn:</div>
-            <div class="preset-chips-grid">
-              <button class="preset-chip active" data-preset="vn_qa" id="preset-vn-qa">
-                <span class="chip-flag">🇻🇳</span>
-                <span class="chip-name">Vietnamese QA</span>
-                <span class="chip-meta">350 items</span>
-              </button>
-              <button class="preset-chip" data-preset="qasper" id="preset-qasper">
-                <span class="chip-flag">📑</span>
-                <span class="chip-name">QASPER Papers</span>
-                <span class="chip-meta">10 docs</span>
-              </button>
-              <button class="preset-chip" data-preset="longhealth" id="preset-longhealth">
-                <span class="chip-flag">🏥</span>
-                <span class="chip-name">LongHealth MCQA</span>
-                <span class="chip-meta">20 docs</span>
-              </button>
-              <button class="preset-chip" data-preset="stream" id="preset-stream">
-                <span class="chip-flag">📈</span>
-                <span class="chip-name">Continual Stream</span>
-                <span class="chip-meta">D0→D20</span>
-              </button>
-            </div>
+          <div class="sidebar-list" id="sidebar-sessions-list">
+            <!-- Populated dynamically from /api/chat/sessions -->
           </div>
+        </div>
 
-          <!-- Active Document Card -->
-          <div class="active-document-card" id="active-document-card">
-            <div class="doc-card-top">
-              <span class="doc-icon">📄</span>
-              <div class="doc-meta-info">
-                <h4 class="doc-title" id="active-doc-title">Nghiên cứu Hệ thống SA-CMS</h4>
-                <div class="doc-tags">
-                  <span class="badge-version" id="active-doc-version">v1</span>
-                  <span class="doc-size" id="active-doc-size">1,420 words · 1,917 tok</span>
-                </div>
-              </div>
-            </div>
-            <div class="doc-card-status">
-              <span class="status-indicator">✓ SA-CMS Memory Synchronized</span>
-            </div>
+        <div class="sidebar-section sidebar-docs-section">
+          <div class="sidebar-section-header">
+            <span class="sidebar-section-label">Tài liệu</span>
+            <button type="button" class="sidebar-link-btn" id="btn-open-doc-library" title="Mở thư viện quản lý tài liệu">Quản lý kho</button>
           </div>
-
-          <!-- Mini Upload Drag & Drop Area -->
-          <div class="mini-upload-dropzone" id="mini-upload-dropzone">
-            <input type="file" id="file-upload-input" accept=".pdf,.docx,.txt,.md" style="display: none;" multiple>
-            <div class="dropzone-inner" id="btn-trigger-upload">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="drop-icon">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          <div class="sidebar-list" id="sidebar-documents-list">
+            <!-- Populated dynamically from /api/documents -->
+          </div>
+          <button type="button" class="sidebar-add-doc-btn" id="btn-sidebar-add-doc">
+            <span class="add-doc-dashed-box" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="M12 5v14"/>
               </svg>
-              <span>Thả tài liệu hoặc <strong>nhấp để nạp</strong></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 2: Bản đồ Ranh giới Cấu trúc (b_l(t) = 1) -->
-        <div class="pane-section structure-section">
-          <div class="section-header">
-            <span class="section-title-icon">
-              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1a.5.5 0 00-.5.5v13a.5.5 0 00.5.5H5v-1H4V2h7v1h1V1.5a.5.5 0 00-.5-.5h-8zM8 4a2 2 0 100 4 2 2 0 000-4zm4 6a2 2 0 100 4 2 2 0 000-4z"/></svg>
             </span>
-            <h3 class="section-title">Cấu Trúc Căn Chỉnh ($b_\ell=1$)</h3>
-            <span class="badge-tag badge-ready" id="lbl-boundary-count">16 Ranh giới</span>
-          </div>
-
-          <div class="structure-tree-view" id="structure-tree-view">
-            <!-- Mức 3: Toàn văn -->
-            <div class="tree-node level-3-node">
-              <div class="node-content">
-                <span class="node-badge l3-badge">Mức 3</span>
-                <span class="node-label">Toàn văn bản ($b_3=1$)</span>
-                <span class="node-trigger">1 lần/doc</span>
-              </div>
-              <div class="node-children">
-                <!-- Mức 2: Chương mục -->
-                <div class="tree-node level-2-node">
-                  <div class="node-content">
-                    <span class="node-badge l2-badge">Mức 2</span>
-                    <span class="node-label">Mục 1: Kiến trúc Bộ nhớ</span>
-                    <span class="node-trigger">b₂=1</span>
-                  </div>
-                  <div class="node-children">
-                    <!-- Mức 1: Đoạn văn -->
-                    <div class="tree-node level-1-node">
-                      <div class="node-content">
-                        <span class="node-badge l1-badge">Mức 1</span>
-                        <span class="node-label">Đoạn 1.1: Định nghĩa CMS</span>
-                        <span class="node-trigger reset-tag">b₁=1 (Reset)</span>
-                      </div>
-                    </div>
-                    <div class="tree-node level-1-node">
-                      <div class="node-content">
-                        <span class="node-badge l1-badge">Mức 1</span>
-                        <span class="node-label">Đoạn 1.2: Ranh giới Cấu trúc</span>
-                        <span class="node-trigger reset-tag">b₁=1 (Reset)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tree-node level-2-node">
-                  <div class="node-content">
-                    <span class="node-badge l2-badge">Mức 2</span>
-                    <span class="node-label">Mục 2: Cơ chế Hòa trộn Cổng</span>
-                    <span class="node-trigger">b₂=1</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            <span>Thêm tài liệu</span>
+          </button>
         </div>
 
-        <!-- Section 3: Cỗ Máy Thời Gian Quản Lý Phiên Bản (Mục 6.7) -->
-        <div class="pane-section snapshot-section">
-          <div class="section-header">
-            <span class="section-title-icon">
-              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm.5 2.5a.5.5 0 00-1 0v3.293l2.146 2.147a.5.5 0 00.708-.708L8.5 8.293V5.5z"/></svg>
-            </span>
-            <h3 class="section-title">Quản Lý Kho &amp; Bản Chụp (6.7)</h3>
+        <!-- Explicit 6-Stage SA-CMS Memory Ingestion Status Card -->
+        <div class="ingestion-pipeline-card" id="ingestion-pipeline-panel" hidden>
+          <div class="ingestion-card-header">
+            <span class="ingestion-card-title" id="ingestion-file-label">Đang nạp tài liệu...</span>
+            <button type="button" class="ingestion-close-btn" id="btn-close-ingestion" aria-label="Ẩn tiến trình">✕</button>
           </div>
+          <ul class="ingestion-stages-list" id="ingestion-stages-list">
+            <li class="ingestion-stage" data-stage="0"><span class="stage-dot"></span><span>Tệp đã lưu</span></li>
+            <li class="ingestion-stage" data-stage="1"><span class="stage-dot"></span><span>Văn bản đã trích xuất</span></li>
+            <li class="ingestion-stage" data-stage="2"><span class="stage-dot"></span><span>Cấu trúc đã phân tích</span></li>
+            <li class="ingestion-stage" data-stage="3"><span class="stage-dot"></span><span>Chỉ mục cục bộ đã sẵn sàng</span></li>
+            <li class="ingestion-stage" data-stage="4"><span class="stage-dot"></span><span>SA-CMS Memory đã sẵn sàng</span></li>
+            <li class="ingestion-stage" data-stage="5"><span class="stage-dot"></span><span>Sẵn sàng hỏi</span></li>
+          </ul>
+          <div class="ingestion-token-note" id="ingestion-token-note"></div>
+        </div>
+      </div>
 
-          <!-- Timeline Snapshots -->
-          <div class="snapshot-timeline-list">
-            <div class="snapshot-item active" id="snap-item-latest">
-              <span class="snap-dot"></span>
-              <div class="snap-info">
-                <div class="snap-name">Snapshot Hiện tại (Active)</div>
-                <div class="snap-time">Đã lưu: <code>data/document_store</code></div>
-              </div>
-            </div>
-            <div class="snapshot-item" id="snap-item-prev">
-              <span class="snap-dot"></span>
-              <div class="snap-info">
-                <div class="snap-name">Snapshot D0 (Gốc)</div>
-                <div class="snap-time">Điểm neo an toàn (Zero drift)</div>
-              </div>
-            </div>
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-user-card" id="btn-open-research-footer" title="Mở bảng điều khiển Nghiên cứu Khoa học SA-CMS">
+          <div class="user-avatar-badge" aria-hidden="true">NL</div>
+          <div class="user-card-meta">
+            <p class="user-card-name">SA-CMS Offline</p>
+            <p class="user-card-sub" id="lbl-footer-model-info">SmolLM2-135M · 5.31M CMS</p>
           </div>
+          <span class="user-card-gear" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+        </button>
+        <button type="button" class="icon-btn theme-switch-btn" id="btn-theme-toggle" title="Chuyển đổi giao diện Sáng / Tối" aria-label="Chuyển đổi giao diện Sáng / Tối">
+          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+          <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
 
-          <!-- Snapshot Action Buttons -->
-          <div class="snapshot-actions-grid">
-            <button class="btn btn-sm btn-snapshot-rollback" id="btn-sidebar-rollback" title="Quay lui trạng thái bộ nhớ về bản chụp trước khi nạp tài liệu">
-              <svg viewBox="0 0 16 16" fill="currentColor" class="btn-svg"><path d="M8 3a5 5 0 104.546 2.914.5.5 0 01.908-.417A6 6 0 118 2v1z"/><path d="M8 0a.5.5 0 01.5.5v3a.5.5 0 01-1 0v-3A.5.5 0 018 0z"/></svg>
-              <span>Rollback Snapshot</span>
+    <!-- ================================================================== -->
+    <!-- MAIN CHAT WORKSPACE                                                -->
+    <!-- ================================================================== -->
+    <section class="app-main" id="app-main">
+      <!-- Drag & Drop Overlay -->
+      <div class="dropzone-overlay" id="dropzone-overlay" hidden>
+        <div class="dropzone-card">
+          <div class="dropzone-icon-box">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>
+            </svg>
+          </div>
+          <h3>Thả tệp để nạp vào NL DocChat</h3>
+          <p>Hỗ trợ PDF, DOCX, TXT, Markdown — phân tích cấu trúc &amp; đồng bộ SA-CMS 100% Offline</p>
+        </div>
+      </div>
+
+      <!-- Top Header Bar -->
+      <header class="app-header">
+        <div class="header-left">
+          <button type="button" class="icon-btn header-menu-btn" id="btn-sidebar-open" aria-label="Mở thanh bên" title="Mở thanh bên">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+            </svg>
+          </button>
+
+          <!-- Model & Mode Selector Dropdown -->
+          <div class="mode-selector-wrap">
+            <button type="button" class="model-dropdown-btn" id="btn-mode-dropdown" aria-expanded="false">
+              <span class="model-dropdown-brand">NL DocChat</span>
+              <span class="model-dropdown-sub" id="lbl-active-mode">Nested Learning · P2 Hybrid</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
             </button>
-            <button class="btn btn-sm btn-snapshot-update" id="btn-sidebar-update-v2" title="Cập nhật tài liệu phiên bản mới v2 với số liệu thay đổi để kiểm chứng phản hồi">
-              <svg viewBox="0 0 16 16" fill="currentColor" class="btn-svg"><path d="M4.854 4.146a.5.5 0 010 .708L2.707 7H12.5a.5.5 0 010 1H2.707l2.147 2.146a.5.5 0 01-.708.708l-3-3a.5.5 0 010-.708l3-3a.5.5 0 01.708 0z"/><path d="M11.146 11.854a.5.5 0 010-.708L13.293 9H3.5a.5.5 0 010-1h9.793l-2.147-2.146a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z"/></svg>
-              <span>Cập nhật Bản v2</span>
+
+            <div class="mode-popover" id="mode-dropdown-menu" hidden>
+              <div class="popover-group-label">Chế độ Suy luận (SA-CMS Pipeline)</div>
+              <button type="button" class="mode-option active" data-mode="hybrid">
+                <div class="mode-option-main">
+                  <span class="mode-option-title">P2: Hybrid SA-CMS + BM25</span>
+                  <span class="mode-option-badge">Khuyên dùng</span>
+                </div>
+                <span class="mode-option-desc">Kết hợp bộ nhớ tham số 3 tầng + truy hồi BM25 + cổng từ chối chống ảo giác.</span>
+              </button>
+              <button type="button" class="mode-option" data-mode="memory">
+                <div class="mode-option-main">
+                  <span class="mode-option-title">P1: SA-CMS Memory-Only</span>
+                </div>
+                <span class="mode-option-desc">Trả lời từ bộ nhớ tham số đa thang khi tài liệu rời cửa sổ ngữ cảnh.</span>
+              </button>
+              <button type="button" class="mode-option" data-mode="context">
+                <div class="mode-option-main">
+                  <span class="mode-option-title">B2: Standard BM25 RAG</span>
+                </div>
+                <span class="mode-option-desc">Baseline truy hồi từ khóa tiêu chuẩn để đối chứng thực nghiệm.</span>
+              </button>
+
+              <div class="popover-divider"></div>
+              <div class="popover-group-label">Độ dài câu trả lời (Tối ưu Token RQ5)</div>
+              <div class="length-segmented-group" id="header-length-group">
+                <button type="button" class="length-seg-btn" data-length="concise">Ngắn gọn</button>
+                <button type="button" class="length-seg-btn active" data-length="balanced">Cân bằng</button>
+                <button type="button" class="length-seg-btn" data-length="detailed">Chi tiết</button>
+              </div>
+
+              <div class="popover-divider"></div>
+              <div class="popover-group-label">Giao diện hiển thị (Sáng / Tối)</div>
+              <div class="length-segmented-group theme-segmented-group" id="header-theme-group">
+                <button type="button" class="length-seg-btn theme-seg-btn active" data-theme-pref="light">☀ Sáng</button>
+                <button type="button" class="length-seg-btn theme-seg-btn" data-theme-pref="dark">☾ Tối</button>
+                <button type="button" class="length-seg-btn theme-seg-btn" data-theme-pref="system">Hệ thống</button>
+              </div>
+
+              <div class="popover-divider"></div>
+              <div class="popover-group-label">Checkpoint SA-CMS (Offline)</div>
+              <div class="ckpt-selector-row">
+                <select id="sel-active-checkpoint" class="ckpt-select" aria-label="Chọn checkpoint SA-CMS">
+                  <option value="cms_3lvl_full_dataset.pt">cms_3lvl_full_dataset.pt (Full Dataset 3-Seed GPU)</option>
+                  <option value="cms_3lvl_extended.pt">cms_3lvl_extended.pt (Extended GPU)</option>
+                  <option value="cms_3lvl_seed_42.pt">cms_3lvl_seed_42.pt (Phase 4.1 Base)</option>
+                </select>
+              </div>
+
+              <div class="popover-divider"></div>
+              <label class="telemetry-toggle-row">
+                <input type="checkbox" id="chk-show-telemetry" checked />
+                <span>Hiển thị chỉ số Token &amp; Cổng SA-CMS</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-theme-switch" id="header-theme-switch" role="group" aria-label="Chuyển đổi chế độ Sáng / Tối">
+            <button type="button" class="theme-pill-opt active" id="btn-theme-light" data-set-theme="light" aria-pressed="true" title="Chế độ Sáng (Alt+T)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+              <span class="hide-sm">Sáng</span>
+            </button>
+            <button type="button" class="theme-pill-opt" id="btn-theme-dark" data-set-theme="dark" aria-pressed="false" title="Chế độ Tối (Alt+T)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+              </svg>
+              <span class="hide-sm">Tối</span>
             </button>
           </div>
+
+          <button type="button" class="header-ghost-btn" id="btn-presentation-mode" aria-pressed="false" title="Chế độ Trình diễn Bảo vệ toàn màn hình (Máy chiếu Hội đồng)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>
+            </svg>
+            <span class="hide-sm">Trình diễn</span>
+          </button>
+
+          <button type="button" class="header-ghost-btn" id="btn-open-research-lab" title="Mở phòng thí nghiệm đối sánh mô hình, số liệu &amp; biểu đồ Q1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/>
+            </svg>
+            <span class="hide-xs">Research Lab</span>
+          </button>
+
+          <button type="button" class="header-ghost-btn header-danger-btn" id="btn-clear-chat" hidden title="Bắt đầu cuộc trò chuyện sạch mới">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            </svg>
+            <span class="hide-sm">Xóa cuộc trò chuyện</span>
+          </button>
+
+          <button type="button" class="ready-status-pill" id="btn-status-inspector" title="Xem nguồn trích dẫn &amp; trạng thái bộ nhớ 3 tầng SA-CMS">
+            <span class="ready-dot"></span>
+            <span class="ready-text-desktop" id="lbl-system-ready">Tài liệu đã sẵn sàng</span>
+            <span class="ready-text-mobile">Sẵn sàng</span>
+          </button>
         </div>
+      </header>
 
-        <!-- Session List Mini Footer -->
-        <div class="pane-footer-sessions">
-          <div class="session-label">Lịch sử phiên:</div>
-          <div class="sessions-mini-list" id="sidebar-sessions-list">
-            <!-- Dynamic Sessions -->
-          </div>
-        </div>
-      </aside>
-
-      <!-- ============================================================ -->
-      <!-- VÙNG C: CỘT GIỮA (CENTER PANE - FLEX 1)                      -->
-      <!-- Đấu Trường Hỏi Đáp Súc Tích & Tiết Kiệm Token (RQ5)           -->
-      <!-- ============================================================ -->
-      <main class="workbench-center-pane" id="workbench-center-pane">
-
-        <!-- Khay Kịch Bản Bấm Nhanh Phân Nhóm (Interactive Demo Dock) -->
-        <div class="interactive-demo-dock" id="demo-dock">
-          <div class="dock-header">
-            <span class="dock-title">🎯 KỊCH BẢN THỬ NGHIỆM 1-CLICK:</span>
-            <span class="dock-sub">Bấm chọn câu hỏi để kiểm chứng phản hồi tức thì</span>
-          </div>
-
-          <div class="dock-chips-container">
-            <!-- Nhóm 1: Tiếng Việt có căn cứ -->
-            <div class="dock-group">
-              <span class="group-tag tag-vn">🟢 Tiếng Việt (Có căn cứ)</span>
-              <button class="demo-chip" data-query="Kiến trúc SA-CMS áp dụng mấy cấp độ bộ nhớ?">Kiến trúc 3 cấp độ SA-CMS</button>
-              <button class="demo-chip" data-query="Đường sắt cao tốc Bắc Nam có chiều dài bao nhiêu?">Đường sắt Bắc - Nam</button>
-              <button class="demo-chip" data-query="Đặc tính quan trọng của SA-CMS là gì?">Lưu trữ ngoại tuyến</button>
-            </div>
-
-            <!-- Nhóm 2: Academic English -->
-            <div class="dock-group">
-              <span class="group-tag tag-en">🔵 Academic English</span>
-              <button class="demo-chip" data-query="What is the continuum memory update rule in Nested Learning?">CMS Update Rule</button>
-              <button class="demo-chip" data-query="How does Hope-Attention modify the Transformer architecture?">Hope-Attention Block</button>
-              <button class="demo-chip" data-query="What is the parameter size of the frozen SmolLM2 base?">Backbone 135M</button>
-            </div>
-
-            <!-- Nhóm 3: Bẫy từ chối -->
-            <div class="dock-group">
-              <span class="group-tag tag-refusal">🛡️ Bẫy Từ Chối (Out-of-Scope)</span>
-              <button class="demo-chip chip-refusal" data-query="Giá cổ phiếu VinFast hôm nay trên sàn NASDAQ là bao nhiêu?">Cổ phiếu VinFast</button>
-              <button class="demo-chip chip-refusal" data-query="Dự báo thời tiết Hà Nội ngày mai có mưa không?">Thời tiết Hà Nội</button>
-              <button class="demo-chip chip-refusal" data-query="Nhiệt độ sôi của plutonium hexafluoride là bao nhiêu?">Hóa chất ngoài tài liệu</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat Scroll Container -->
-        <div class="chat-scroll-container" id="chat-scroll-container">
-          <!-- Messages Stream -->
-          <div class="messages-stream" id="messages-stream">
-            <div class="messages-list" id="messages-list">
-              <!-- Tin nhắn chào mừng khởi đầu -->
-              <div class="message-item assistant welcome-msg" id="msg-welcome-banner">
-                <div class="message-avatar">
-                  <div class="avatar-ring">🧠</div>
-                </div>
-                <div class="message-bubble welcome-bubble">
-                  <div class="welcome-badge">HỆ THỐNG ĐÃ SẴN SÀNG</div>
-                  <h3 class="welcome-title">Chào mừng bạn đến với SA-CMS Neural Studio!</h3>
-                  <p class="welcome-desc">
-                    Hệ thống hỏi đáp tài liệu hoạt động <strong>100% ngoại tuyến</strong>, tích hợp bộ nhớ liên tục đa thang căn theo cấu trúc ngữ nghĩa (SA-CMS) cùng cơ chế kiểm chứng căn cứ và từ chối thông minh.
-                  </p>
-                  <div class="welcome-stats-row">
-                    <div class="stat-box">
-                      <span class="stat-num">5.31M</span>
-                      <span class="stat-name">Tham số SA-CMS</span>
-                    </div>
-                    <div class="stat-box">
-                      <span class="stat-num">136.7 ms</span>
-                      <span class="stat-name">Độ trễ phản hồi</span>
-                    </div>
-                    <div class="stat-box">
-                      <span class="stat-num">-70.1%</span>
-                      <span class="stat-name">Tiết kiệm Token (RQ5)</span>
-                    </div>
-                    <div class="stat-box">
-                      <span class="stat-num">100%</span>
-                      <span class="stat-name">Độ trung thực trích dẫn</span>
-                    </div>
-                  </div>
-                  <div class="welcome-hint">
-                    👉 Bấm một câu hỏi gợi ý ở khay phía trên hoặc nhập câu hỏi của bạn để bắt đầu.
-                  </div>
-                </div>
+      <!-- Scrollable Viewport (Welcome View OR Active Conversation Stream) -->
+      <div class="chat-viewport" id="chat-scroll-container">
+        <!-- EMPTY STATE: Figma Welcome View -->
+        <div class="welcome-container" id="welcome-view">
+          <div class="welcome-hero">
+            <div class="welcome-bot-wrap">
+              <div class="welcome-bot-box">
+                <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
+                </svg>
               </div>
+              <span class="welcome-bot-status" aria-hidden="true"></span>
             </div>
 
-            <!-- Thinking Indicator -->
-            <div class="thinking-indicator" id="thinking-indicator" style="display: none;">
-              <div class="thinking-avatar">🧠</div>
-              <div class="thinking-card">
-                <div class="thinking-waves">
-                  <span class="wave-bar w1"></span>
-                  <span class="wave-bar w2"></span>
-                  <span class="wave-bar w3"></span>
-                </div>
-                <span class="thinking-text" id="thinking-text">Đang đối soát bộ nhớ SA-CMS và trích xuất bằng chứng...</span>
+            <h1 class="welcome-title">Hôm nay tôi có thể giúp gì cho bạn?</h1>
+            <p class="welcome-subtitle">
+              Hỏi đáp, tóm tắt và khám phá kiến thức từ tài liệu của bạn bằng Nested Learning (SA-CMS &amp; Hybrid QA — 100% Offline).
+            </p>
+
+            <!-- 2x2 Figma Suggestion Cards -->
+            <div class="suggestions-grid" id="welcome-suggestions-grid">
+              <!-- Populated dynamically based on active documents or default suggestions -->
+            </div>
+
+            <!-- Quick 1-Click Verification Chips (Grounded + Refusal Guard) -->
+            <div class="quick-verify-bar">
+              <span class="quick-verify-label">Thử nhanh kịch bản kiểm chứng:</span>
+              <div class="quick-verify-chips">
+                <button type="button" class="verify-chip" data-query="Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?">Vai trò Tầng 1 SA-CMS</button>
+                <button type="button" class="verify-chip" data-query="Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?">Đường sắt Bắc - Nam</button>
+                <button type="button" class="verify-chip" data-query="Thuốc nào là lựa chọn đầu tay trong đơn trị liệu đái tháo đường tuýp 2?">Phác đồ Metformin</button>
+                <button type="button" class="verify-chip verify-chip-refusal" data-query="Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?" title="Kiểm tra cổng từ chối chống ảo giác">🛡️ Câu hỏi bẫy ngoài tài liệu</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Glassmorphic Chat Input Composer -->
-        <div class="chat-composer-wrapper" id="composer-wrapper">
-          <form class="chat-input-form" id="chat-input-form" onsubmit="return false;">
-            <!-- Attached document pill -->
-            <div class="composer-top-bar" id="composer-attachments">
-              <div class="attached-doc-pill" id="input-doc-indicator">
-                <span class="pill-doc-icon">📎</span>
-                <span class="pill-doc-name" id="composer-active-doc-name">Nghiên cứu Hệ thống SA-CMS</span>
-                <span class="pill-doc-mode" id="composer-active-mode-tag">P2 Hybrid</span>
-              </div>
+        <!-- ACTIVE CONVERSATION STREAM -->
+        <div class="messages-container" id="chat-stream-view" hidden>
+          <div class="messages-inner" id="messages-list">
+            <!-- Messages rendered dynamically -->
+          </div>
 
-              <!-- Answer Length Mode Selector -->
-              <div class="length-mode-selector">
-                <button type="button" class="btn-length-mode active" data-mode="concise" title="Trả lời súc tích (<20 tokens, tối ưu RQ5)">Súc tích (RQ5)</button>
-                <button type="button" class="btn-length-mode" data-mode="balanced" title="Trả lời cân bằng ngữ cảnh">Cân bằng</button>
-                <button type="button" class="btn-length-mode" data-mode="detailed" title="Trả lời chi tiết đầy đủ">Chi tiết</button>
+          <!-- Thinking Indicator (Figma 3-dot pulse) -->
+          <div class="message-row thinking-row" id="thinking-indicator" hidden>
+            <div class="msg-avatar msg-avatar-assistant" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+              </svg>
+            </div>
+            <div class="msg-body">
+              <p class="msg-author">NL DocChat</p>
+              <div class="thinking-dots-wrap">
+                <span class="thinking-dot d1"></span>
+                <span class="thinking-dot d2"></span>
+                <span class="thinking-dot d3"></span>
+                <span class="thinking-status-text" id="thinking-status-text">Đang truy xuất bằng chứng và đối soát bộ nhớ SA-CMS...</span>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <!-- Input area -->
-            <div class="composer-input-row">
-              <textarea
-                class="chat-textarea"
-                id="chat-textarea"
-                rows="1"
-                placeholder="Đặt câu hỏi về tài liệu (ví dụ: 'Kiến trúc SA-CMS áp dụng mấy cấp độ?')..."
-                autocomplete="off"
-              ></textarea>
-              <button type="submit" class="btn-send-message" id="btn-send-message" title="Gửi câu hỏi (Enter)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="send-icon">
-                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+      <!-- Bottom Rounded Composer (Figma 26px Rounded Card) -->
+      <div class="composer-dock">
+        <form class="composer-form" id="composer-form">
+          <div class="composer-card">
+            <!-- Attached Document Chips inside Composer -->
+            <div class="composer-chips-row" id="composer-attached-chips" hidden></div>
+
+            <textarea
+              id="composer-textarea"
+              class="composer-textarea"
+              rows="1"
+              placeholder="Hỏi bất kỳ điều gì về tài liệu..."
+            ></textarea>
+
+            <div class="composer-toolbar">
+              <div class="composer-tools-left">
+                <button type="button" class="composer-icon-btn" id="btn-attach-file" aria-label="Đính kèm tài liệu" title="Tải tài liệu lên (PDF, DOCX, TXT, MD)">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                  </svg>
+                </button>
+
+                <button type="button" class="composer-pill-btn" id="btn-doc-picker" title="Chọn hoặc quản lý tài liệu đính kèm phiên chat">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
+                  </svg>
+                  <span id="lbl-attached-count">Toàn bộ tài liệu</span>
+                </button>
+
+                <button type="button" class="composer-pill-btn composer-length-pill" id="btn-cycle-length" title="Nhấp để đổi độ dài câu trả lời (Ngắn gọn / Cân bằng / Chi tiết)">
+                  <span id="lbl-composer-length">Cân bằng</span>
+                </button>
+              </div>
+
+              <button type="submit" class="composer-send-btn" id="btn-send" disabled aria-label="Gửi câu hỏi" title="Gửi câu hỏi (Enter)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/>
+                  <path d="m21.854 2.147-10.94 10.939"/>
                 </svg>
               </button>
             </div>
-          </form>
-        </div>
-
-      </main>
-
-      <!-- ============================================================ -->
-      <!-- VÙNG D: CỘT PHẢI (RIGHT PANE - 380px)                       -->
-      <!-- Máy Chụp X-Quang Bộ Nhớ Đa Thang & Bằng Chứng (3 Tabs)       -->
-      <!-- ============================================================ -->
-      <aside class="workbench-right-pane" id="workbench-right-pane">
-        <!-- Tab Navigation Bar -->
-        <div class="inspector-tabs-nav">
-          <button class="insp-tab-btn active" data-target="tab-neural-xray" id="btn-tab-xray">
-            <span class="tab-icon">🔬</span>
-            <span class="tab-title">Sóng Bộ Nhớ</span>
-          </button>
-          <button class="insp-tab-btn" data-target="tab-evidence" id="btn-tab-evidence">
-            <span class="tab-icon">📑</span>
-            <span class="tab-title">Bằng Chứng Gốc</span>
-            <span class="tab-counter" id="lbl-evidence-count">3</span>
-          </button>
-          <button class="insp-tab-btn" data-target="tab-benchmarks" id="btn-tab-benchmarks">
-            <span class="tab-icon">📈</span>
-            <span class="tab-title">Bảng Vàng Q1</span>
-          </button>
-        </div>
-
-        <!-- TAB 1: GIẢI PHẪU SÓNG BỘ NHỚ 5 TẦNG (LIVE NEURAL X-RAY) -->
-        <div class="inspector-tab-content active" id="tab-neural-xray">
-          <!-- Công thức toán học cốt lõi -->
-          <div class="math-formula-box">
-            <div class="formula-title">PHƯƠNG TRÌNH TỔNG HỢP CỔNG ĐỘNG (EQ. 74)</div>
-            <div class="formula-latex">
-              y_t = \mathrm{MLP}_{\mathrm{pre}}(x_t) + \sum_{\ell=1}^{3} g_\ell(x_t)\, B_\ell A_\ell\, x_t
-            </div>
-            <div class="formula-caption">Hàm cổng học được $g_\ell(x_t) \in [0, 1]$ hòa trộn không phá hủy</div>
           </div>
 
-          <!-- 3 Đồng Hồ Đo Cổng Động & Chuẩn Ma Trận -->
-          <div class="gauges-container">
+          <p class="composer-disclaimer">
+            NL DocChat (SA-CMS Offline) có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng từ nguồn trích dẫn.
+          </p>
+        </form>
+      </div>
+    </section>
 
-            <!-- Mức 1: Đoạn văn (High-Freq) -->
-            <div class="gauge-card level-1-gauge">
-              <div class="gauge-top">
-                <span class="gauge-badge l1-badge">Mức 1</span>
-                <span class="gauge-title">Đoạn văn ($\ell=1$, High-Freq)</span>
-                <span class="gauge-val" id="val-g1">g₁ = 0.842</span>
-              </div>
-              <div class="gauge-bar-track">
-                <div class="gauge-bar-fill l1-fill" id="bar-g1" style="width: 84.2%;"></div>
-              </div>
-              <div class="gauge-details">
-                <span>Norm $\Vert W_1 \Vert_F$: <strong>1.42</strong></span>
-                <span class="reset-notice">⚡ Reset cuối mỗi mục</span>
-              </div>
-            </div>
+    <!-- ================================================================== -->
+    <!-- SLIDE-OVER RIGHT INSPECTOR DRAWER (Source Fulltext & SA-CMS X-Ray) -->
+    <!-- ================================================================== -->
+    <aside class="inspector-drawer" id="inspector-drawer" aria-label="Chi tiết nguồn trích dẫn và bộ nhớ SA-CMS" hidden>
+      <div class="inspector-header">
+        <div class="inspector-tabs">
+          <button type="button" class="inspector-tab active" data-insp-tab="source" id="insp-tab-source">Nguồn trích dẫn</button>
+          <button type="button" class="inspector-tab" data-insp-tab="structure" id="insp-tab-structure">Cấu trúc &amp; SA-CMS</button>
+        </div>
+        <button type="button" class="icon-btn" id="btn-close-inspector" aria-label="Đóng bảng chi tiết">✕</button>
+      </div>
 
-            <!-- Mức 2: Chương mục (Mid-Freq) -->
-            <div class="gauge-card level-2-gauge">
-              <div class="gauge-top">
-                <span class="gauge-badge l2-badge">Mức 2</span>
-                <span class="gauge-title">Chương mục ($\ell=2$, Mid-Freq)</span>
-                <span class="gauge-val" id="val-g2">g₂ = 0.615</span>
-              </div>
-              <div class="gauge-bar-track">
-                <div class="gauge-bar-fill l2-fill" id="bar-g2" style="width: 61.5%;"></div>
-              </div>
-              <div class="gauge-details">
-                <span>Norm $\Vert W_2 \Vert_F$: <strong>2.18</strong></span>
-                <span class="persist-notice">🔄 Tự học QA củng cố</span>
-              </div>
-            </div>
+      <!-- Panel 1: Citation & Fulltext Verbatim Viewer -->
+      <div class="inspector-body" id="insp-panel-source">
+        <div id="inspector-source-content" class="inspector-empty-state">
+          <p>Nhấp vào nhãn trích dẫn <strong>[1]</strong> hoặc nút <strong>Xem toàn văn</strong> dưới câu trả lời để đối chiếu nguyên văn đoạn trích gốc.</p>
+        </div>
+      </div>
 
-            <!-- Mức 3: Toàn tài liệu (Low-Freq) -->
-            <div class="gauge-card level-3-gauge">
-              <div class="gauge-top">
-                <span class="gauge-badge l3-badge">Mức 3</span>
-                <span class="gauge-title">Toàn tài liệu ($\ell=3$, Low-Freq)</span>
-                <span class="gauge-val" id="val-g3">g₃ = 0.927</span>
-              </div>
-              <div class="gauge-bar-track">
-                <div class="gauge-bar-fill l3-fill" id="bar-g3" style="width: 92.7%;"></div>
-              </div>
-              <div class="gauge-details">
-                <span>Norm $\Vert W_3 \Vert_F$: <strong>3.65</strong></span>
-                <span class="persist-notice">🛡️ Tri thức bền vững toàn kho</span>
-              </div>
-            </div>
-
-            <!-- Mức 4: Nền Pre-trained -->
-            <div class="gauge-card level-4-gauge">
-              <div class="gauge-top">
-                <span class="gauge-badge l4-badge">Mức 4</span>
-                <span class="gauge-title">Tri thức nền (SmolLM2-135M)</span>
-                <span class="gauge-val">Đóng băng 100%</span>
-              </div>
-              <div class="gauge-bar-track">
-                <div class="gauge-bar-fill l4-fill" style="width: 100%;"></div>
-              </div>
-              <div class="gauge-details">
-                <span>Tham số gốc: 134.5M</span>
-                <span class="frozen-notice">🔒 Không bao giờ cập nhật</span>
-              </div>
-            </div>
-
+      <!-- Panel 2: SA-CMS 3-Level Memory & Document Structure Tree -->
+      <div class="inspector-body" id="insp-panel-structure" hidden>
+        <div class="insp-section-card">
+          <div class="insp-card-title">Động lực Bộ nhớ 3 Tầng SA-CMS (Eq. 74)</div>
+          <p class="insp-card-sub">Backbone <code>SmolLM2-135M</code> (Frozen 100%) + <code>5,315,904</code> tham số CMS</p>
+          <div class="cms-equation-box" title="Phương trình 74 — Cổng hòa trộn phần dư đa thang SA-CMS">
+            <code>yₜ = MLP_pre(xₜ) + ∑ₗ₌₁³ gₗ(xₜ) · BₗAₗ xₜ</code>
+            <span class="cms-arch-meta">d = 576 · d_ff = 1,536 · r = 16 · 3 Tầng Độc lập</span>
           </div>
 
-          <!-- Sơ đồ Ranh giới So Sánh (SVG Timeline B5 vs P1) -->
-          <div class="timeline-comparison-card">
-            <div class="timeline-card-title">ĐỐI SÁNH CẮT RANH GIỚI (MỤC 7.4 B)</div>
-            <div class="timeline-visual">
-              <div class="tl-row">
-                <span class="tl-label bad">B5 (Fixed Token)</span>
-                <div class="tl-track tl-b5">
-                  <span class="cut-line c1" title="Cắt token 128 (chém ngang câu)">✕</span>
-                  <span class="cut-line c2" title="Cắt token 256">✕</span>
-                  <span class="cut-line c3" title="Cắt token 384">✕</span>
-                </div>
-              </div>
-              <div class="tl-row">
-                <span class="tl-label good">P1 (SA-CMS)</span>
-                <div class="tl-track tl-p1">
-                  <span class="syntax-line s1" title="Ranh giới đoạn 1">✓ Đoạn</span>
-                  <span class="syntax-line s2" title="Ranh giới đoạn 2">✓ Đoạn</span>
-                  <span class="syntax-line s3" title="Ranh giới mục 1">✓ Mục</span>
-                </div>
-              </div>
-            </div>
-            <div class="tl-footnote">SA-CMS tôn trọng 100% ranh giới ngữ nghĩa tự nhiên của tài liệu</div>
+          <div class="cms-gate-row">
+            <div class="cms-gate-label"><span>Mức 1 · Đoạn văn (Paragraph)</span><strong id="insp-val-g1">g₁ = 0.842</strong></div>
+            <div class="cms-gate-track"><div class="cms-gate-fill fill-l1" id="insp-bar-g1" style="width: 84.2%"></div></div>
+          </div>
+          <div class="cms-gate-row">
+            <div class="cms-gate-label"><span>Mức 2 · Chương mục (Section)</span><strong id="insp-val-g2">g₂ = 0.615</strong></div>
+            <div class="cms-gate-track"><div class="cms-gate-fill fill-l2" id="insp-bar-g2" style="width: 61.5%"></div></div>
+          </div>
+          <div class="cms-gate-row">
+            <div class="cms-gate-label"><span>Mức 3 · Toàn tài liệu (Document)</span><strong id="insp-val-g3">g₃ = 0.927</strong></div>
+            <div class="cms-gate-track"><div class="cms-gate-fill fill-l3" id="insp-bar-g3" style="width: 92.7%"></div></div>
           </div>
         </div>
 
-        <!-- TAB 2: TRÌNH SOI BẰNG CHỨNG GỐC CÓ TÔ SÁNG (GROUNDED EVIDENCE) -->
-        <div class="inspector-tab-content" id="tab-evidence">
-          <div class="evidence-toolbar">
-            <span class="ev-subtitle">Các phân đoạn văn bản gốc được truy xuất từ chỉ mục BM25:</span>
+        <div class="insp-section-card">
+          <div class="insp-card-header-flex">
+            <span class="insp-card-title">Cây Cấu trúc &amp; Phiên bản Tài liệu</span>
+            <select id="insp-doc-select" class="insp-select" aria-label="Chọn tài liệu để xem cấu trúc"></select>
           </div>
-
-          <div class="evidence-passages-list" id="evidence-passages-list">
-            <!-- Render động khi có tin nhắn -->
-            <div class="evidence-card" id="ev-card-1">
-              <div class="ev-card-header">
-                <span class="ev-badge">#1 BẰNG CHỨNG CỐT LÕI</span>
-                <span class="ev-score">Điểm liên quan: 4.85</span>
-              </div>
-              <div class="ev-card-meta">
-                <strong>VN_DOC_001::P003</strong> — <em>Chương 1: Kiến trúc Bộ nhớ</em>
-              </div>
-              <div class="ev-card-body">
-                Kiến trúc SA-CMS áp dụng cơ chế căn chỉnh theo cấu trúc tài liệu gồm <mark class="neon-highlight">3 cấp độ: đoạn văn, chương mục và toàn văn tài liệu</mark>. Mức 1 ghi nhận chi tiết thực thể và reset ở cuối mỗi mục nhằm loại bỏ nhiễu cú pháp cục bộ.
-              </div>
-            </div>
-
-            <div class="evidence-card" id="ev-card-2">
-              <div class="ev-card-header">
-                <span class="ev-badge">#2 BỔ TRỢ</span>
-                <span class="ev-score">Điểm liên quan: 3.92</span>
-              </div>
-              <div class="ev-card-meta">
-                <strong>VN_DOC_001::P004</strong> — <em>Chương 1: Kiến trúc Bộ nhớ</em>
-              </div>
-              <div class="ev-card-body">
-                Hàm tổng hợp độc lập (Phương trình 74) sử dụng mạng cổng học được để kiểm soát tỷ trọng đóng góp của từng tầng bộ nhớ vào vector biểu diễn ẩn cuối cùng.
-              </div>
-            </div>
+          <div class="insp-version-actions">
+            <button type="button" class="btn-outline-sm" id="btn-doc-update-v2" title="Cập nhật tài liệu lên phiên bản v2 (Mục 6.7)">+ Cập nhật Bản v2</button>
+            <button type="button" class="btn-outline-sm" id="btn-doc-rollback" title="Quay lui về bản chụp trước đó">↺ Rollback Snapshot</button>
+          </div>
+          <div class="structure-tree-container" id="insp-structure-tree">
+            <!-- Rendered from /api/documents/{id}/structure -->
           </div>
         </div>
+      </div>
+    </aside>
 
-        <!-- TAB 3: BẢNG VÀNG NGHIÊN CỨU Q1 (RQ1-RQ5 & ABLATION DASHBOARD) -->
-        <div class="inspector-tab-content" id="tab-benchmarks">
-          <div class="kpi-cards-grid">
-            <div class="kpi-card highlight-gold">
-              <div class="kpi-top">
-                <span class="kpi-label">RQ2: Kiểm định Bắt cặp (N=1,140)</span>
-                <span class="kpi-tag pass">GATE G2 PASS</span>
-              </div>
-              <div class="kpi-value">p = 3.03e-7 &lt; 0.001</div>
-              <div class="kpi-desc">SA-CMS (P1) vượt trội Fixed-Token (B5) gấp <strong>11.7x F1</strong> với ý nghĩa thống kê tuyệt đối.</div>
-            </div>
-
-            <div class="kpi-card highlight-purple">
-              <div class="kpi-top">
-                <span class="kpi-label">Ablation: Cổng Động &amp; Cấu Trúc</span>
-                <span class="kpi-tag">6 ABLATIONS</span>
-              </div>
-              <div class="kpi-value">63.3% &gt; 58.3% &gt; 43.3%</div>
-              <div class="kpi-desc">P1 (Chuẩn) vượt A1 (Random Boundary) +7.9% F1 và vượt A3 (Ungated) +27.5% F1.</div>
-            </div>
-
-            <div class="kpi-card highlight-blue">
-              <div class="kpi-top">
-                <span class="kpi-label">RQ4: Chống Quên Tuần Tự (36 Snaps)</span>
-                <span class="kpi-tag">OPTION C</span>
-              </div>
-              <div class="kpi-value">+0.3990 Log-likelihood</div>
-              <div class="kpi-desc">Độ quên $F_{20} = -0.0034$. Bộ nhớ Level 3 củng cố kiến thức ngược khi nạp 20 tài liệu.</div>
-            </div>
-
-            <div class="kpi-card highlight-green">
-              <div class="kpi-top">
-                <span class="kpi-label">RQ5: Hiệu Quả Token &amp; Tốc Độ</span>
-                <span class="kpi-tag">SAVINGS</span>
-              </div>
-              <div class="kpi-value">-70.1% Token · 45.1x Nhanh</div>
-              <div class="kpi-desc">P2 tiêu tốn 313 tokens (so với 1,051 của RAG); độ trễ 136.7 ms (so với 6,159 ms).</div>
-            </div>
-          </div>
-
-          <!-- Thumbnail Gallery Xem 4 Biểu Đồ Nghiên Cứu -->
-          <div class="figures-gallery-box">
-            <div class="gallery-title">4 BIỂU ĐỒ BẢN THẢO Q1 (300 DPI):</div>
-            <div class="figures-grid">
-              <div class="figure-thumb" data-img="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" data-title="Figure 1: RQ2 — SA-CMS vs Baselines (p < 0.001)">
-                <img src="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" alt="Fig 1">
-                <span>Fig 1: RQ2 P1 vs B5</span>
-              </div>
-              <div class="figure-thumb" data-img="/results/figures/fig2_ablation_study.png" data-title="Figure 2: 6 Ablation Studies & Fig 7 Reproduction">
-                <img src="/results/figures/fig2_ablation_study.png" alt="Fig 2">
-                <span>Fig 2: 6 Ablations</span>
-              </div>
-              <div class="figure-thumb" data-img="/results/figures/fig3_rq4_continual_forgetting_curve.png" data-title="Figure 3: RQ4 — Continual Ingestion Forgetting Curve">
-                <img src="/results/figures/fig3_rq4_continual_forgetting_curve.png" alt="Fig 3">
-                <span>Fig 3: Forgetting Curve</span>
-              </div>
-              <div class="figure-thumb" data-img="/results/figures/fig4_rq3_hybrid_faithfulness.png" data-title="Figure 4: RQ3 — Hybrid Faithfulness & Refusal Precision">
-                <img src="/results/figures/fig4_rq3_hybrid_faithfulness.png" alt="Fig 4">
-                <span>Fig 4: Faithfulness</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </aside>
-
-    </div>
-
-    <!-- ============================================================== -->
-    <!-- LIGHTBOX MODAL: XEM BIỂU ĐỒ KHOA HỌC PHÓNG TO TOÀN MÀN HÌNH    -->
-    <!-- ============================================================== -->
-    <div class="modal-backdrop" id="modal-figures-lightbox" style="display: none;">
-      <div class="modal-dialog modal-figures-view">
+    <!-- ================================================================== -->
+    <!-- MODAL 1: DOCUMENT LIBRARY & INGESTION MANAGER                      -->
+    <!-- ================================================================== -->
+    <div class="modal-overlay" id="modal-doc-library" hidden>
+      <div class="modal-card modal-lg" role="dialog" aria-modal="true" aria-labelledby="doc-modal-title">
         <div class="modal-header">
-          <div class="modal-title">
-            <span class="icon">📊</span>
-            <h3 id="lightbox-title">Biểu đồ Khoa học Chuẩn Q1 (300 DPI)</h3>
+          <div>
+            <h2 class="modal-title" id="doc-modal-title">Thư viện Tài liệu &amp; Kho Chỉ mục SA-CMS</h2>
+            <p class="modal-subtitle">Đính kèm tài liệu vào phiên trò chuyện hiện tại hoặc tải lên văn bản mới (PDF, DOCX, TXT, MD).</p>
           </div>
-          <button class="btn-icon" id="btn-close-lightbox">✕</button>
+          <button type="button" class="icon-btn" id="btn-close-doc-modal" aria-label="Đóng hộp thoại">✕</button>
         </div>
-        <div class="modal-body lightbox-body">
-          <img id="lightbox-img" src="/results/figures/fig2_ablation_study.png" alt="Scientific Figure Full">
-          <div class="lightbox-caption" id="lightbox-caption">
-            Biểu đồ trích xuất từ <code>results/figures/</code> phục vụ bảo vệ đồ án và nộp bản thảo Q1.
+
+        <div class="modal-body">
+          <div class="doc-modal-toolbar">
+            <input type="text" id="doc-modal-search" class="modal-input" placeholder="Tìm theo tên hoặc mã tài liệu..." />
+            <button type="button" class="btn-secondary" id="btn-toggle-raw-form">+ Nhập văn bản thô</button>
+            <button type="button" class="btn-secondary" id="btn-seed-demo" title="Khôi phục 4 tài liệu mẫu kiểm chuẩn">Nạp tài liệu mẫu</button>
+            <button type="button" class="btn-primary" id="btn-modal-upload">Tải tệp lên</button>
+          </div>
+
+          <!-- Collapsible Raw Text Creation Form -->
+          <div class="raw-doc-form" id="raw-doc-form" hidden>
+            <input type="text" id="raw-doc-title" class="modal-input" placeholder="Tiêu đề tài liệu mới (ví dụ: Báo cáo Nghiên cứu AI)..." />
+            <textarea id="raw-doc-text" class="modal-textarea" rows="5" placeholder="# Mục 1. Giới thiệu&#10;&#10;Nhập nội dung văn bản có cấu trúc tại đây..."></textarea>
+            <div class="raw-doc-actions">
+              <button type="button" class="btn-secondary" id="btn-cancel-raw">Hủy</button>
+              <button type="button" class="btn-primary" id="btn-submit-raw">Lưu &amp; Lập chỉ mục SA-CMS</button>
+            </div>
+          </div>
+
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Đính kèm</th>
+                  <th>Tài liệu</th>
+                  <th>Phiên bản</th>
+                  <th>Quy mô</th>
+                  <th>Ngày tạo</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="doc-modal-tbody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Toast Notification Container -->
-    <div class="toast-container" id="toast-container"></div>
+    <!-- ================================================================== -->
+    <!-- MODAL 2: RESEARCH LAB, METHOD ARENA & Q1 SCIENTIFIC FIGURES        -->
+    <!-- ================================================================== -->
+    <div class="modal-overlay" id="modal-research-lab" hidden>
+      <div class="modal-card modal-xl" role="dialog" aria-modal="true" aria-labelledby="rlab-modal-title">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title" id="rlab-modal-title">SA-CMS Research Lab &amp; Hội đồng Nghiệm thu</h2>
+            <p class="modal-subtitle">Đối sánh trực tiếp B1 / B2 / P1 / P2, kịch bản bảo vệ 1-click và biểu đồ thực nghiệm chuẩn Q1.</p>
+          </div>
+          <button type="button" class="icon-btn" id="btn-close-research-modal" aria-label="Đóng Research Lab">✕</button>
+        </div>
 
+        <div class="rlab-tabs-bar">
+          <button type="button" class="rlab-tab active" data-rlab-tab="arena">Đối sánh 4 Mô hình</button>
+          <button type="button" class="rlab-tab" data-rlab-tab="demos">7 Kịch bản Bảo vệ</button>
+          <button type="button" class="rlab-tab" data-rlab-tab="metrics">Số liệu RQ1–RQ5</button>
+          <button type="button" class="rlab-tab" data-rlab-tab="figures">4 Biểu đồ Q1 (300 DPI)</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Tab 1: Head-to-Head Method Comparison Arena -->
+          <div class="rlab-panel" id="rlab-panel-arena">
+            <div class="arena-query-bar">
+              <input type="text" id="arena-query-input" class="modal-input" value="Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?" placeholder="Nhập câu hỏi cần đối sánh giữa B1, B2, P1 và P2..." />
+              <button type="button" class="btn-primary" id="btn-run-arena">▶ Chạy Đối chiếu</button>
+            </div>
+            <div class="arena-grid" id="arena-results-grid">
+              <!-- Populated from POST /api/chat/compare -->
+            </div>
+          </div>
+
+          <!-- Tab 2: 7 Committee Demo Scenarios -->
+          <div class="rlab-panel" id="rlab-panel-demos" hidden>
+            <div class="demos-grid" id="committee-demos-grid">
+              <!-- Populated with 7 reproducible demo scenarios -->
+            </div>
+          </div>
+
+          <!-- Tab 3: Official Phase 4 Frozen vs Round 2 Metrics -->
+          <div class="rlab-panel" id="rlab-panel-metrics" hidden>
+            <div id="rlab-metrics-content" class="metrics-dashboard">
+              <!-- Populated from GET /research/metrics & /api/system/status -->
+            </div>
+          </div>
+
+          <!-- Tab 4: 4 Q1 Figures -->
+          <div class="rlab-panel" id="rlab-panel-figures" hidden>
+            <div class="q1-figures-grid">
+              <button type="button" class="q1-fig-card" data-fig-src="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" data-fig-title="Figure 1: RQ2 — SA-CMS (P1) vs Fixed-Token (B5) trên cùng ngân sách cập nhật (p = 3.03e-7)">
+                <img src="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" alt="Figure 1 RQ2" />
+                <span>Figure 1: RQ2 — SA-CMS vs Fixed-Token Baselines (p &lt; 0.001)</span>
+              </button>
+              <button type="button" class="q1-fig-card" data-fig-src="/results/figures/fig2_ablation_study.png" data-fig-title="Figure 2: Nghiên cứu 6 Phép Ablation &amp; Tái lập Xu hướng Đa tầng (Fig. 7)">
+                <img src="/results/figures/fig2_ablation_study.png" alt="Figure 2 Ablation" />
+                <span>Figure 2: 6 Phép Ablation (Số tầng, Ranh giới, Cổng động g_l)</span>
+              </button>
+              <button type="button" class="q1-fig-card" data-fig-src="/results/figures/fig3_rq4_continual_forgetting_curve.png" data-fig-title="Figure 3: RQ4 — Đường cong Duy trì Tri thức qua 21 Tài liệu Tuần tự (36 Checkpoints)">
+                <img src="/results/figures/fig3_rq4_continual_forgetting_curve.png" alt="Figure 3 RQ4" />
+                <span>Figure 3: RQ4 — Chống Quên Thảm Khốc (Continual Ingestion)</span>
+              </button>
+              <button type="button" class="q1-fig-card" data-fig-src="/results/figures/fig4_rq3_hybrid_faithfulness.png" data-fig-title="Figure 4: RQ3 — Độ trung thực Trích dẫn 100% &amp; Kiểm soát Từ chối (Hybrid P2)">
+                <img src="/results/figures/fig4_rq3_hybrid_faithfulness.png" alt="Figure 4 RQ3" />
+                <span>Figure 4: RQ3 — Độ Trung Thực Trích Dẫn &amp; Cổng Từ Chối</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox Modal for Zooming Figures -->
+    <div class="modal-overlay" id="modal-figure-zoom" hidden>
+      <div class="modal-card modal-zoom-card">
+        <div class="modal-header">
+          <h3 class="modal-title" id="zoom-fig-title">Biểu đồ Khoa học</h3>
+          <button type="button" class="icon-btn" id="btn-close-zoom" aria-label="Đóng ảnh phóng to">✕</button>
+        </div>
+        <div class="modal-body zoom-fig-body">
+          <img id="zoom-fig-img" src="/results/figures/fig1_rq2_sa_cms_vs_baselines.png" alt="Biểu đồ phóng to" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden File Input & Toast Container -->
+    <input type="file" id="hidden-file-input" accept=".pdf,.docx,.txt,.md" multiple hidden />
+    <div class="toast-stack" id="toast-container" aria-live="polite"></div>
   </div>
 
   <script src="/static/js/app.js"></script>

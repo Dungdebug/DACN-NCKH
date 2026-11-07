@@ -1,0 +1,285 @@
+{
+  "training_run": "SA-CMS 3-Level Extended Bilingual Offline GPU Training",
+  "status": "COMPLETED_VERIFIED",
+  "hardware": {
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "vram_total_mb": 4095.5,
+    "peak_vram_allocated_mb": 2242.98,
+    "cuda_version": "11.8",
+    "pytorch_version": "2.0.0+cu118",
+    "dtype": "float32"
+  },
+  "architecture": {
+    "backbone": "HuggingFaceTB/SmolLM2-135M (100% Frozen)",
+    "frozen_backbone_params": 134515008,
+    "trainable_cms_params": 5314752,
+    "trainable_cms_norm_params": 1152,
+    "total_trainable_params": 5315904,
+    "num_levels": 3
+  },
+  "lineage": {
+    "warm_start_parent": "local_runtime/checkpoints/cms_3lvl_seed_42.pt",
+    "parent_sha256_verified_unchanged": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
+    "output_archive_checkpoint": "checkpoints/extended_training/cms_3lvl_extended.pt",
+    "output_runtime_checkpoint": "local_runtime/checkpoints/cms_3lvl_extended.pt",
+    "output_checkpoint_sha256": "d4f5b5ac90b91e1b613e4490303b0f35e6cbddc3bde5c4514617666f69f60238"
+  },
+  "dataset": {
+    "english_train_samples": 1000,
+    "vietnamese_train_samples": 275,
+    "vietnamese_oversample_factor": 2,
+    "unique_train_samples": 1275,
+    "effective_samples_per_epoch": 1550,
+    "english_val_samples": 50,
+    "vietnamese_val_samples": 20,
+    "max_length": 832,
+    "truncated_samples": 0,
+    "benchmark_overlap": "0% (strictly disjoint document IDs)"
+  },
+  "hyperparameters": {
+    "epochs": 6,
+    "optimizer": "AdamW",
+    "base_lr": 0.00015,
+    "min_lr": 1.5e-05,
+    "weight_decay": 0.01,
+    "warmup_steps": 86,
+    "total_optimizer_steps": 1077,
+    "effective_batch_size": 8,
+    "loss_formula": "0.25 * full_causal_lm_loss + 0.75 * answer_span_ce_loss",
+    "grad_clip_max_norm": 1.0,
+    "seed": 42
+  },
+  "summary_metrics": {
+    "best_epoch": 5,
+    "total_training_duration_sec": 782.5,
+    "baseline_seed42": {
+      "en_val": {
+        "full_loss": 4.7935,
+        "full_ppl": 120.7238,
+        "answer_loss": 3.4513,
+        "answer_ppl": 31.5408
+      },
+      "vn_val": {
+        "full_loss": 2.6588,
+        "full_ppl": 14.2795,
+        "answer_loss": 2.9481,
+        "answer_ppl": 19.0695
+      },
+      "combined_answer_loss": 3.1997
+    },
+    "best_extended": {
+      "en_val": {
+        "full_loss": 4.2767,
+        "full_ppl": 72.0023,
+        "answer_loss": 2.1875,
+        "answer_ppl": 8.9131
+      },
+      "vn_val": {
+        "full_loss": 1.7414,
+        "full_ppl": 5.7056,
+        "answer_loss": 0.8508,
+        "answer_ppl": 2.3415
+      },
+      "combined_answer_loss": 1.5192
+    },
+    "improvements": {
+      "en_answer_loss_delta": -1.2638,
+      "en_answer_ppl_reduction_pct": 71.74,
+      "vn_answer_loss_delta": -2.0973,
+      "vn_answer_ppl_reduction_pct": 87.72,
+      "combined_answer_loss_delta": -1.6805
+    },
+    "weight_delta_from_seed42": {
+      "max_abs_param_delta": 0.035845,
+      "l2_norm_by_module": {
+        "level_0": 6.510903,
+        "level_1": 6.484036,
+        "level_2": 6.046944,
+        "cms_norm": 0.227701
+      }
+    }
+  },
+  "epoch_history": [
+    {
+      "epoch": 1,
+      "train_combined_loss": 1.7801,
+      "train_full_loss": 3.0521,
+      "train_answer_loss": 1.3561,
+      "en_val": {
+        "full_loss": 4.2164,
+        "full_ppl": 67.789,
+        "answer_loss": 2.4666,
+        "answer_ppl": 11.7824
+      },
+      "vn_val": {
+        "full_loss": 1.8959,
+        "full_ppl": 6.6587,
+        "answer_loss": 0.8084,
+        "answer_ppl": 2.2443
+      },
+      "combined_val_answer_loss": 1.6375,
+      "avg_grad_norm": 2.8043,
+      "lr_end": 0.0001471,
+      "duration_sec": 190.7,
+      "peak_vram_mb": 2242.05,
+      "is_best": true
+    },
+    {
+      "epoch": 2,
+      "train_combined_loss": 1.3281,
+      "train_full_loss": 2.5918,
+      "train_answer_loss": 0.9068,
+      "en_val": {
+        "full_loss": 4.1801,
+        "full_ppl": 65.3756,
+        "answer_loss": 2.2943,
+        "answer_ppl": 9.9176
+      },
+      "vn_val": {
+        "full_loss": 1.8975,
+        "full_ppl": 6.669,
+        "answer_loss": 0.8639,
+        "answer_ppl": 2.3725
+      },
+      "combined_val_answer_loss": 1.5791,
+      "avg_grad_norm": 2.0507,
+      "lr_end": 0.0001267,
+      "duration_sec": 110.21,
+      "peak_vram_mb": 2242.98,
+      "is_best": true
+    },
+    {
+      "epoch": 3,
+      "train_combined_loss": 1.1204,
+      "train_full_loss": 2.3178,
+      "train_answer_loss": 0.7212,
+      "en_val": {
+        "full_loss": 4.2063,
+        "full_ppl": 67.1089,
+        "answer_loss": 2.2196,
+        "answer_ppl": 9.2034
+      },
+      "vn_val": {
+        "full_loss": 1.778,
+        "full_ppl": 5.918,
+        "answer_loss": 0.8372,
+        "answer_ppl": 2.3098
+      },
+      "combined_val_answer_loss": 1.5284,
+      "avg_grad_norm": 1.8436,
+      "lr_end": 9.2e-05,
+      "duration_sec": 132.11,
+      "peak_vram_mb": 2242.98,
+      "is_best": true
+    },
+    {
+      "epoch": 4,
+      "train_combined_loss": 0.9711,
+      "train_full_loss": 2.1213,
+      "train_answer_loss": 0.5877,
+      "en_val": {
+        "full_loss": 4.2401,
+        "full_ppl": 69.4142,
+        "answer_loss": 2.2526,
+        "answer_ppl": 9.512
+      },
+      "vn_val": {
+        "full_loss": 1.7621,
+        "full_ppl": 5.8246,
+        "answer_loss": 0.8253,
+        "answer_ppl": 2.2825
+      },
+      "combined_val_answer_loss": 1.539,
+      "avg_grad_norm": 1.8096,
+      "lr_end": 5.5e-05,
+      "duration_sec": 105.74,
+      "peak_vram_mb": 2242.98,
+      "is_best": false
+    },
+    {
+      "epoch": 5,
+      "train_combined_loss": 0.8686,
+      "train_full_loss": 1.9913,
+      "train_answer_loss": 0.4944,
+      "en_val": {
+        "full_loss": 4.2767,
+        "full_ppl": 72.0023,
+        "answer_loss": 2.1875,
+        "answer_ppl": 8.9131
+      },
+      "vn_val": {
+        "full_loss": 1.7414,
+        "full_ppl": 5.7056,
+        "answer_loss": 0.8508,
+        "answer_ppl": 2.3415
+      },
+      "combined_val_answer_loss": 1.5192,
+      "avg_grad_norm": 1.7725,
+      "lr_end": 2.6e-05,
+      "duration_sec": 116.64,
+      "peak_vram_mb": 2242.98,
+      "is_best": true
+    },
+    {
+      "epoch": 6,
+      "train_combined_loss": 0.81,
+      "train_full_loss": 1.9109,
+      "train_answer_loss": 0.4431,
+      "en_val": {
+        "full_loss": 4.293,
+        "full_ppl": 73.1853,
+        "answer_loss": 2.1952,
+        "answer_ppl": 8.982
+      },
+      "vn_val": {
+        "full_loss": 1.7355,
+        "full_ppl": 5.6715,
+        "answer_loss": 0.8516,
+        "answer_ppl": 2.3435
+      },
+      "combined_val_answer_loss": 1.5234,
+      "avg_grad_norm": 1.6753,
+      "lr_end": 1.5e-05,
+      "duration_sec": 127.02,
+      "peak_vram_mb": 2242.98,
+      "is_best": false
+    }
+  ],
+  "qualitative_preview": [
+    {
+      "lang": "vi",
+      "question": "Hệ thống UWB hoạt động ở băng tần nào và độ rộng xung bao nhiêu?",
+      "reference": "Ở băng tần 6.5 GHz với độ rộng xung 2 nano-giây [VN_VAL_DOC_001::P001].",
+      "before_seed42": "Hệ thống UWB hoạt động trong băng tần nào và độ rộng xung bao nhiêu",
+      "after_extended": "Đạt đội xe và thu hẹp dưới 2.5 mét [VN_TR_DOC_001::P00"
+    },
+    {
+      "lang": "vi",
+      "question": "Sai số định vị trung bình của xe tự hành AGV là bao nhiêu?",
+      "reference": "Sai số trung bình 8.5 cm [VN_VAL_DOC_001::P001].",
+      "before_seed42": "",
+      "after_extended": "Đạt 120 xe AGV với độ rộng xung 2 nano-giây chống nhiễu đa đ"
+    },
+    {
+      "lang": "vi",
+      "question": "Máy chủ điều phối cập nhật vị trí của bao nhiêu xe AGV và ở tần số nào?",
+      "reference": "Cập nhật 120 xe AGV ở tần số 20 Hz [VN_VAL_DOC_001::P002].",
+      "before_seed42": "",
+      "after_extended": "Đạt 120 xe AGV và ở tần số 20 Hz [VN_TR_DOC_001::P001]."
+    },
+    {
+      "lang": "en",
+      "question": "What do standard language models learn instead of causal mechanisms?",
+      "reference": "statistical correlations",
+      "before_seed42": "Aligning standard language models with causal graph structures reduces vulnerability to spurious dataset shortcuts. Aligning standard language models with causal graph structures reduces vulnerability to spurious dataset shortcuts. Aligning standard language models with causal graph structures reduces vulnerability to spurious",
+      "after_extended": "Standard language models learn causal mechanisms from standard language models without requiring structural causal models or structural causal models without standard language models"
+    },
+    {
+      "lang": "en",
+      "question": "What does counterfactual prompting evaluate in language models?",
+      "reference": "whether models can reason about altered antecedent conditions",
+      "before_seed42": "Counterfactual prompting tests the validity of specific linguistic assertions.",
+      "after_extended": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
+    }
+  ]
+}

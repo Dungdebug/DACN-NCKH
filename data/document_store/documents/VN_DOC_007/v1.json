@@ -1,0 +1,132 @@
+{
+  "document_id": "VN_DOC_007",
+  "version": 1,
+  "title": "Chiến lược Phát triển Công nghiệp Bán dẫn và Thiết kế Vi mạch",
+  "raw_text": "## 1. Cơ sở Lý luận và Bối cảnh Thực tiễn\n\nNội dung văn kiện nghiên cứu thuộc lĩnh vực Công nghiệp Bán dẫn khẳng định tầm quan trọng của việc chuẩn hóa các quy trình kỹ thuật và chính sách quản lý hiện đại tại Việt Nam trong giai đoạn 2024-2030. \n\nTheo các báo cáo thẩm định ban đầu, việc áp dụng các tiêu chuẩn quốc tế ISO và khung hướng dẫn kỹ thuật số giúp nâng cao 35% hiệu suất vận hành thực tế so với phương pháp truyền thống.\n\n## 2. Kiến trúc và Phương pháp Triển khai\n\nHệ thống vận hành được phân cấp thành 3 tầng chức năng độc lập: tầng thu thập dữ liệu cơ sở, tầng phân tích xử lý trung gian và tầng báo cáo điều hành vĩ mô. \n\nThời gian đáp ứng của từng tầng được kiểm soát nghiêm ngặt với độ trễ tối đa dưới 200 mili-giây, bảo đảm an toàn dữ liệu và tuân thủ các quy định bảo mật chuyên ngành.\n\n## 3. Kết quả Thực nghiệm và Kế hoạch Mở rộng\n\nTrong giai đoạn thử nghiệm diện hẹp tại 5 đơn vị cơ sở, tổng ngân sách tiết kiệm đạt 15,8 tỷ đồng và mức độ hài lòng của người dùng đạt 94,5%. \n\nKế hoạch triển khai mở rộng trên phạm vi toàn quốc dự kiến hoàn thành vào quý IV năm 2026 với sự phối hợp chặt chẽ của các bộ ngành chuyên trách.",
+  "passages": [
+    {
+      "passage_id": "VN_DOC_007::P000",
+      "document_id": "VN_DOC_007",
+      "text": "## 1. Cơ sở Lý luận và Bối cảnh Thực tiễn Nội dung văn kiện nghiên cứu thuộc lĩnh vực Công nghiệp Bán dẫn khẳng định tầm quan trọng của việc chuẩn hóa các quy trình kỹ thuật và chính sách quản lý hiện đại tại Việt Nam trong giai đoạn 2024-2030.",
+      "start_char": 0,
+      "end_char": 245,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Cơ sở Lý luận và Bối cảnh Thực tiễn",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P001",
+      "document_id": "VN_DOC_007",
+      "text": "Nội dung văn kiện nghiên cứu thuộc lĩnh vực Công nghiệp Bán dẫn khẳng định tầm quan trọng của việc chuẩn hóa các quy trình kỹ thuật và chính sách quản lý hiện đại tại Việt Nam trong giai đoạn 2024-2030. Theo các báo cáo thẩm định ban đầu, việc áp dụng các tiêu chuẩn quốc tế ISO và khung hướng dẫn kỹ thuật số giúp nâng cao 35% hiệu suất vận hành thực tế so với phương pháp truyền thống.",
+      "start_char": 43,
+      "end_char": 433,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Cơ sở Lý luận và Bối cảnh Thực tiễn",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA001",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P002",
+      "document_id": "VN_DOC_007",
+      "text": "Theo các báo cáo thẩm định ban đầu, việc áp dụng các tiêu chuẩn quốc tế ISO và khung hướng dẫn kỹ thuật số giúp nâng cao 35% hiệu suất vận hành thực tế so với phương pháp truyền thống. ## 2. Kiến trúc và Phương pháp Triển khai",
+      "start_char": 248,
+      "end_char": 476,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "1. Cơ sở Lý luận và Bối cảnh Thực tiễn",
+      "metadata": {
+        "section_id": "SEC001",
+        "paragraph_id": "PARA002",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P003",
+      "document_id": "VN_DOC_007",
+      "text": "Kiến trúc và Phương pháp Triển khai Hệ thống vận hành được phân cấp thành 3 tầng chức năng độc lập: tầng thu thập dữ liệu cơ sở, tầng phân tích xử lý trung gian và tầng báo cáo điều hành vĩ mô.",
+      "start_char": 440,
+      "end_char": 634,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Kiến trúc và Phương pháp Triển khai",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA004",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P004",
+      "document_id": "VN_DOC_007",
+      "text": "Hệ thống vận hành được phân cấp thành 3 tầng chức năng độc lập: tầng thu thập dữ liệu cơ sở, tầng phân tích xử lý trung gian và tầng báo cáo điều hành vĩ mô. Thời gian đáp ứng của từng tầng được kiểm soát nghiêm ngặt với độ trễ tối đa dưới 200 mili-giây, bảo đảm an toàn dữ liệu và tuân thủ các quy định bảo mật chuyên ngành.",
+      "start_char": 477,
+      "end_char": 805,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Kiến trúc và Phương pháp Triển khai",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA004",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P005",
+      "document_id": "VN_DOC_007",
+      "text": "Thời gian đáp ứng của từng tầng được kiểm soát nghiêm ngặt với độ trễ tối đa dưới 200 mili-giây, bảo đảm an toàn dữ liệu và tuân thủ các quy định bảo mật chuyên ngành. ## 3. Kết quả Thực nghiệm và Kế hoạch Mở rộng",
+      "start_char": 637,
+      "end_char": 852,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "2. Kiến trúc và Phương pháp Triển khai",
+      "metadata": {
+        "section_id": "SEC002",
+        "paragraph_id": "PARA005",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P006",
+      "document_id": "VN_DOC_007",
+      "text": "Kết quả Thực nghiệm và Kế hoạch Mở rộng Trong giai đoạn thử nghiệm diện hẹp tại 5 đơn vị cơ sở, tổng ngân sách tiết kiệm đạt 15,8 tỷ đồng và mức độ hài lòng của người dùng đạt 94,5%.",
+      "start_char": 812,
+      "end_char": 995,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Kết quả Thực nghiệm và Kế hoạch Mở rộng",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA007",
+        "document_version": 1
+      }
+    },
+    {
+      "passage_id": "VN_DOC_007::P007",
+      "document_id": "VN_DOC_007",
+      "text": "Trong giai đoạn thử nghiệm diện hẹp tại 5 đơn vị cơ sở, tổng ngân sách tiết kiệm đạt 15,8 tỷ đồng và mức độ hài lòng của người dùng đạt 94,5%. Kế hoạch triển khai mở rộng trên phạm vi toàn quốc dự kiến hoàn thành vào quý IV năm 2026 với sự phối hợp chặt chẽ của các bộ ngành chuyên trách.",
+      "start_char": 853,
+      "end_char": 1143,
+      "start_token": -1,
+      "end_token": -1,
+      "section_title": "3. Kết quả Thực nghiệm và Kế hoạch Mở rộng",
+      "metadata": {
+        "section_id": "SEC003",
+        "paragraph_id": "PARA007",
+        "document_version": 1
+      }
+    }
+  ],
+  "structural_metadata": {},
+  "content_hash": "359fd7cc1a69c231",
+  "created_at": 1791108549.614297,
+  "metadata": {}
+}

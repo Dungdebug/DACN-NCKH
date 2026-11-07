@@ -14,8 +14,8 @@ Tài liệu này tổng hợp đầy đủ cơ sở lý thuyết, kiến trúc t
   * **Máy local**: NVIDIA GTX 1650 Ti (4GB VRAM) — phục vụ suy luận (inference), thăm dò cơ học (mechanistic probing) và chạy Web UI.
   * **Máy train thực nghiệm**: NVIDIA RTX 3050 Laptop GPU (6GB VRAM) — đỉnh tiêu thụ VRAM khi huấn luyện chỉ **743.86 MB** và khi suy luận là **440.40 MB**.
 * **Độ tin cậy kỹ thuật**:
-  * Vượt qua **161/161 Unit & Integration Tests** (`pytest tests/`).
-  * Khớp **53/53 mã băm SHA-256** (`training_output_final/checksums.sha256`) cho toàn bộ checkpoints và kết quả thực nghiệm.
+  * Vượt qua **195/195 Unit & Integration Tests** (`pytest tests/`).
+  * Khớp **54/54 mã băm SHA-256** (`training_output_final/checksums.sha256`) cho toàn bộ checkpoints và kết quả thực nghiệm Phase 4, cùng băm toàn vẹn cho checkpoint mở rộng song ngữ `local_runtime/checkpoints/cms_3lvl_extended.pt` (giảm Answer Perplexity tiếng Việt **-87.72%** và tiếng Anh **-71.74%**).
 
 ---
 
@@ -180,7 +180,7 @@ python run_hybrid_qa.py query --question "What is Continuum Memory System?" --mo
 
 ### 6.3. Chạy Bộ Kiểm thử Tự động (Unit & Integration Tests)
 ```bash
-# Chạy toàn bộ 161 bài test của hệ thống:
+# Chạy toàn bộ 195 bài test của hệ thống:
 python -m pytest tests/ -q
 
 # Chạy kiểm thử chế độ khóa mạng hoàn toàn (Strict Offline Socket-Blocked Test):

@@ -36,6 +36,9 @@ def main():
     parser.add_argument("--prefer-gpu", action="store_true", help="Use CUDA if available")
     args = parser.parse_args()
 
+    if args.prefer_gpu:
+        os.environ["SA_CMS_PREFER_GPU"] = "1"
+
     local_runtime = PROJECT_ROOT / "local_runtime"
     if not (local_runtime / "model" / "model.safetensors").exists():
         print("[!] Warning: Local model assets missing in local_runtime/.")
@@ -43,16 +46,32 @@ def main():
         from scripts.prepare_offline_assets import prepare_offline_assets
         prepare_offline_assets()
 
+    active_ckpt_label = "cms_3lvl_extended.pt (Extended Bilingual GPU)"
+    cfg_path = local_runtime / "config" / "runtime_config.yaml"
+    if cfg_path.exists():
+        try:
+            import yaml
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                cfg = yaml.safe_load(f) or {}
+            ckpt_cfg = cfg.get("checkpoints", {})
+            ckpt_name = ckpt_cfg.get("current_active")
+            ckpt_proto = ckpt_cfg.get("current_protocol", "")
+            if ckpt_name:
+                active_ckpt_label = f"{ckpt_name} ({ckpt_proto})" if ckpt_proto else ckpt_name
+        except Exception:
+            pass
+
     print("=" * 75)
     print("SA-CMS: STRUCTURE-ALIGNED CONTINUUM MEMORY CHATBOT")
     print("DOCUMENT-GROUNDED QUESTION ANSWERING | OFFLINE RESEARCH PROTOTYPE")
     print("=" * 75)
     print(f"[*] Mode:           100% OFFLINE (ZERO NETWORK CALLS)")
     print(f"[*] Host URL:       http://{args.host}:{args.port}")
+    print(f"[*] Device Policy:  {'CUDA Preferred' if args.prefer_gpu else 'CPU Deterministic'}")
     print(f"[*] Local Runtime:  {local_runtime}")
     print(f"[*] Backbone:       HuggingFaceTB/SmolLM2-135M (Frozen Base Model)")
     print(f"[*] Memory System:  StructureAlignedHopeLM (3 Levels: Para / Sec / Doc)")
-    print(f"[*] Checkpoint:     Phase 4.1 Frozen Empirical (cms_3lvl_seed_42.pt)")
+    print(f"[*] Checkpoint:     {active_ckpt_label}")
     print(f"[*] Retrieval:      Local BM25 Inverted Index + EvidenceSelector")
     print(f"[*] Refusal Engine: Local Grounding Safety Controller")
     print(f"[*] History Store:  Local JSON Persistence (data/chat_sessions/)")

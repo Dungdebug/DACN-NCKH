@@ -1,0 +1,22 @@
+[2026-10-04 19:59:33] [INFO] Logger initialized. File sink: logs\smoke_test_20261004_195933.log
+[2026-10-04 19:59:33] [INFO] === STARTING PHASE 1 SMOKE TEST ===
+[2026-10-04 19:59:33] [INFO] Target execution device: cuda
+[2026-10-04 19:59:33] [INFO] [Gate 1/6] Verifying model initialization...
+[2026-10-04 19:59:33] [INFO]  Model initialized successfully. Total parameters: 7,878,144
+[2026-10-04 19:59:33] [INFO] [Gate 2/6] Verifying memory initialization...
+[2026-10-04 19:59:33] [INFO]  CMS Levels: 3
+[2026-10-04 19:59:33] [INFO]  Chunk sizes: [64, 32, 16]
+[2026-10-04 19:59:33] [INFO]  Frequencies: [1.0, 2.0, 4.0]
+[2026-10-04 19:59:33] [INFO]  Memory initialized and base theta_0 cached.
+[2026-10-04 19:59:33] [INFO] [Gate 3/6] Verifying forward pass...
+[2026-10-04 19:59:33] [INFO]  Forward pass successful. Output shape: torch.Size([2, 32, 1000]), Loss: 7.0066
+[2026-10-04 19:59:33] [INFO] [Gate 4/6] Verifying online memory update (Equation 71)...
+[2026-10-04 19:59:33] [INFO]  Equation 71 update executed. Parameter norm change: 0.000022
+[2026-10-04 19:59:33] [INFO]  Layer update events: {0: [0, 1, 2], 1: [0, 1, 2], 2: [0, 1, 2], 3: [0, 1, 2]}
+[2026-10-04 19:59:33] [INFO]  Memory reset restored initial theta_0 exactly.
+[2026-10-04 19:59:33] [INFO] [Gate 5/6] Verifying checkpoint save and load...
+[2026-10-04 19:59:33] [INFO]  Checkpoint saved to: C:\Users\ASUS\AppData\Local\Temp\tmp2fvvxmj6\smoke_checkpoint.pt
+[2026-10-04 19:59:33] [INFO]  Checkpoint loaded and validated with exact parity.
+[2026-10-04 19:59:33] [INFO] [Gate 6/6] Verifying inference execution...
+[2026-10-04 19:59:33] [INFO]  Inference successful. Generated sequence: [10, 20, 30, 40, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990, 990]
+[2026-10-04 19:59:33] [INFO] === ALL 6 SMOKE TEST GATES PASSED! ===
