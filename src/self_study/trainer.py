@@ -135,15 +135,23 @@ class SelfStudyTrainer:
         """Returns all parameters currently flagged as requires_grad=True."""
         return [p for p in self.model.parameters() if p.requires_grad]
 
-    def compute_qa_loss(self, pair: SelfStudyQAPair) -> Tuple[torch.Tensor, int]:
+    def compute_qa_loss(
+        self,
+        pair: SelfStudyQAPair,
+        label_smoothing: float = 0.0,
+        include_context: bool = True,
+    ) -> Tuple[torch.Tensor, int]:
         """
         Computes teacher-forced cross-entropy loss ONLY on answer tokens.
-        Prompt template:
-            Câu hỏi: {question}\nTrả lời: {answer}
-        Prefix tokens (question + prompt wrapper) are masked with -100.
+        Prefix tokens (context + question + prompt wrapper) are masked with -100.
+        Supports label_smoothing to prevent rote surface-string memorization.
         """
-        prompt = f"Câu hỏi: {pair.question}\nTrả lời: {pair.answer}"
-        prefix = f"Câu hỏi: {pair.question}\nTrả lời: "
+        ctx = getattr(pair, "source_text", "").strip()
+        if include_context and ctx:
+            prefix = f"Ngữ cảnh: {ctx}\nCâu hỏi: {pair.question}\nTrả lời: "
+        else:
+            prefix = f"Câu hỏi: {pair.question}\nTrả lời: "
+        prompt = f"{prefix}{pair.answer}"
 
         enc_prompt = self.tokenizer(prompt, return_tensors="pt")
         enc_prefix = self.tokenizer(prefix, return_tensors="pt")
@@ -159,13 +167,58 @@ class SelfStudyTrainer:
             # Degenerate case: prefix exceeds length, no answer tokens
             return torch.tensor(0.0, device=self.device, requires_grad=True), 0
 
-        answer_tokens_count = (targets != -100).sum().item()
+        answer_tokens_count = int((targets != -100).sum().item())
         if answer_tokens_count <= 0:
             return torch.tensor(0.0, device=self.device, requires_grad=True), 0
 
         # Forward pass
         logits, loss = self.model.forward(input_ids, targets=targets)
+        if label_smoothing > 0.0 and logits is not None:
+            shift_logits = logits[..., :-1, :].contiguous()
+            shift_labels = targets[..., 1:].contiguous()
+            loss = F.cross_entropy(
+                shift_logits.view(-1, shift_logits.size(-1)),
+                shift_labels.view(-1),
+                ignore_index=-100,
+                label_smoothing=label_smoothing,
+            )
         return loss, answer_tokens_count
+
+    def compute_self_distilled_loss(
+        self,
+        pair: SelfStudyQAPair,
+        ema_state: Dict[str, torch.Tensor],
+        label_smoothing: float = 0.10,
+        kl_alpha: float = 0.25,
+        temperature: float = 1.5,
+    ) -> Tuple[torch.Tensor, int, float]:
+        """
+        Self-Learning Loss combining:
+        1. Context-grounded answer loss with label smoothing (anti-rote).
+        2. Self-consistency regularization toward the model's own EMA memory state.
+        Returns (total_loss, answer_tokens_count, raw_surprise_loss).
+        """
+        ce_loss, ans_toks = self.compute_qa_loss(
+            pair, label_smoothing=label_smoothing, include_context=True
+        )
+        if ans_toks <= 0:
+            return ce_loss, 0, 0.0
+
+        with torch.no_grad():
+            raw_loss, _ = self.compute_qa_loss(
+                pair, label_smoothing=0.0, include_context=True
+            )
+            raw_surprise = float(raw_loss.item())
+
+        # Quadratic self-consistency anchor toward EMA teacher weights (prevents overfitting to single sentence)
+        ema_reg = torch.tensor(0.0, device=self.device)
+        if ema_state and hasattr(self.model, "cms") and self.model.cms is not None:
+            for name, p in self.model.cms.named_parameters():
+                if p.requires_grad and name in ema_state:
+                    ema_reg = ema_reg + F.mse_loss(p, ema_state[name])
+
+        total_loss = (1.0 - kl_alpha) * ce_loss + (kl_alpha * temperature) * ce_loss + 10.0 * ema_reg
+        return total_loss, ans_toks, raw_surprise
 
     def train(
         self,
@@ -176,21 +229,13 @@ class SelfStudyTrainer:
         max_steps: int = 20,
         grad_clip: float = 1.0,
         document_id: Optional[str] = None,
+        surprise_gate_min_loss: float = 0.35,
+        label_smoothing: float = 0.0,
+        use_curiosity_weights: bool = True,
     ) -> Dict[str, Any]:
         """
         Runs self-study parameter adaptation using extracted QA pairs.
-
-        Args:
-            qa_pairs: List of verified SelfStudyQAPair instances.
-            epochs: Number of training passes over the pairs.
-            lr_level2: Learning rate for Level 2 (Section) memory.
-            lr_level3: Learning rate for Level 3 (Document) memory.
-            max_steps: Hard cap on total gradient steps to ensure < 20-30s execution.
-            grad_clip: Maximum gradient norm for numerical stability.
-            document_id: Optional ID to auto-save the adapted checkpoint.
-
-        Returns:
-            Dict containing initial/final loss, steps, and duration.
+        Incorporates Epistemic Surprise Gating and Curiosity Weighting to prevent rote memorization.
         """
         if not qa_pairs:
             return {
@@ -198,6 +243,7 @@ class SelfStudyTrainer:
                 "document_id": document_id,
                 "num_pairs": 0,
                 "steps_executed": 0,
+                "skipped_rote_steps": 0,
                 "initial_loss": 0.0,
                 "final_loss": 0.0,
                 "loss_history": [],
@@ -229,26 +275,48 @@ class SelfStudyTrainer:
 
         optimizer = torch.optim.AdamW(param_groups, weight_decay=0.01)
 
+        # Compute epistemic curiosity weights per pair
+        curiosity_weights = [1.0] * len(qa_pairs)
+        if use_curiosity_weights:
+            try:
+                from src.self_study.curiosity_trainer import CuriosityDrivenIngestionEngine
+                curiosity_engine = CuriosityDrivenIngestionEngine()
+                curiosity_weights = curiosity_engine.get_gradient_step_weights(qa_pairs)
+            except Exception:
+                curiosity_weights = [1.0] * len(qa_pairs)
+
         loss_history: List[float] = []
         step_count = 0
+        skipped_rote_steps = 0
         total_tokens_trained = 0
 
         for epoch in range(epochs):
-            for pair in qa_pairs:
+            for idx, pair in enumerate(qa_pairs):
                 if step_count >= max_steps:
                     break
 
                 optimizer.zero_grad()
-                loss, num_ans_toks = self.compute_qa_loss(pair)
+                loss, num_ans_toks = self.compute_qa_loss(
+                    pair, label_smoothing=label_smoothing, include_context=True
+                )
 
                 if loss is None or torch.isnan(loss) or num_ans_toks == 0:
                     continue
 
-                loss.backward()
+                loss_val = float(loss.item())
+
+                # Anti-Rote Surprise Gate: after first pass, if model already mastered this pair, skip update
+                if epoch > 0 and loss_val < surprise_gate_min_loss and len(loss_history) >= len(qa_pairs):
+                    skipped_rote_steps += 1
+                    loss_history.append(loss_val)
+                    continue
+
+                c_weight = curiosity_weights[idx] if idx < len(curiosity_weights) else 1.0
+                weighted_loss = loss * (0.75 + 0.25 * c_weight)
+                weighted_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.get_trainable_parameters(), max_norm=grad_clip)
                 optimizer.step()
 
-                loss_val = float(loss.item())
                 loss_history.append(loss_val)
                 total_tokens_trained += num_ans_toks
                 step_count += 1
@@ -272,6 +340,7 @@ class SelfStudyTrainer:
                 metadata={
                     "num_pairs": len(qa_pairs),
                     "steps": step_count,
+                    "skipped_rote_steps": skipped_rote_steps,
                     "initial_loss": initial_loss,
                     "final_loss": final_loss,
                     "reduction_pct": reduction_pct,
@@ -284,6 +353,7 @@ class SelfStudyTrainer:
             "document_id": document_id,
             "num_pairs": len(qa_pairs),
             "steps_executed": step_count,
+            "skipped_rote_steps": skipped_rote_steps,
             "total_tokens_trained": total_tokens_trained,
             "initial_loss": round(initial_loss, 4),
             "final_loss": round(final_loss, 4),

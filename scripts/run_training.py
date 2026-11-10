@@ -397,6 +397,12 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
 
     domain_doc_chunks: List[Dict[str, Any]] = []
     domain_doc_manifest: List[Dict[str, Any]] = []
+    from src.self_study.extractor import QAPairExtractor
+    from src.self_study.curiosity_trainer import CuriosityDrivenIngestionEngine
+
+    self_extractor = QAPairExtractor()
+    curiosity_engine = CuriosityDrivenIngestionEngine()
+
     for doc_id, title, raw_text, lang, src_grp in doc_sources:
         all_train_doc_ids.append(doc_id)
         chunks, meta = chunk_full_document(
@@ -411,6 +417,36 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
         )
         domain_doc_chunks.extend(chunks)
         domain_doc_manifest.append(meta)
+
+        # Autonomous Self-Study QA Extraction from raw document structure (Levels 1, 2, 3)
+        try:
+            ss_rep = self_extractor.extract_from_text(
+                text=raw_text,
+                document_id=doc_id,
+                max_pairs_per_section=4,
+                max_pairs=25,
+            )
+            curated = curiosity_engine.curate_curriculum(ss_rep.pairs, max_budget=20)
+            for s_idx, pair in enumerate(curated.curated_pairs, start=1):
+                prompt_text = (
+                    f"Ngữ cảnh ({title} - {pair.section_title}):\n{pair.source_text}\n\n"
+                    f"Câu hỏi: {pair.question}\nTrả lời:"
+                )
+                full_text = f"{prompt_text} {pair.answer}\n"
+                demo_qa_train.append(
+                    encode_qa_sample(
+                        tokenizer=tokenizer,
+                        prompt_text=prompt_text,
+                        full_text=full_text,
+                        lang=lang,
+                        sample_id=f"SELF_STUDY_{doc_id}_{s_idx:02d}",
+                        doc_id=doc_id,
+                        source_group="autonomous_self_study_qa",
+                        max_length=max_length,
+                    )
+                )
+        except Exception:
+            pass
 
     # Enforce strict zero-leakage verification before returning
     verify_zero_benchmark_leakage(all_train_doc_ids)
@@ -614,11 +650,17 @@ def compute_chunked_dual_losses_and_backward(
     answer_labels: torch.Tensor,
     scale_factor: float,
     chunk_tokens: int = 1024,
-) -> Tuple[float, float, float]:
+    label_smoothing: float = 0.08,
+    surprise_gate_min_loss: float = 1.10,
+) -> Tuple[float, float, float, bool]:
     """
-    Computes exact `0.25 * full_loss + 0.75 * ans_loss` and backpropagates exact FP32 gradients
-    through `lm_head` in 256-token slices (`<= 48 MB` peak logits VRAM instead of `900+ MB`),
-    then propagates `dL/d(aug_hidden)` into trainable `cms` + `cms_norm`.
+    Computes `0.25 * full_loss + 0.75 * ans_loss` with Anti-Rote Self-Learning:
+      1. Evaluates the model's own unsmoothed predictive surprise (`raw_ans_loss`).
+      2. Epistemic Surprise Gate: if `raw_ans_loss < surprise_gate_min_loss` (the model already
+         mastered this pattern), skips backward gradient update (`rote_skipped=True`) to prevent
+         rote memorization.
+      3. Applies `label_smoothing` and surprise-proportional gradient weighting so the model
+         only updates on novel, unmastered information.
     """
     h_pred = aug_hidden[:, :-1, :].reshape(-1, aug_hidden.size(-1))
     h_leaf = h_pred.detach().requires_grad_(True)
@@ -628,9 +670,34 @@ def compute_chunked_dual_losses_and_backward(
     valid_full = int((y_full != -100).sum().item())
     valid_ans = int((y_ans != -100).sum().item())
 
-    full_sum_val = 0.0
-    ans_sum_val = 0.0
+    # Step 1: Fast no-grad pass to measure the model's own epistemic surprise before updating
+    raw_full_sum = 0.0
+    raw_ans_sum = 0.0
     n_tok = h_leaf.size(0)
+    with torch.no_grad():
+        for s in range(0, n_tok, chunk_tokens):
+            e = min(n_tok, s + chunk_tokens)
+            logits_s = lm_head(h_leaf[s:e])
+            if valid_full > 0:
+                raw_full_sum += float(F.cross_entropy(logits_s, y_full[s:e], ignore_index=-100, reduction="sum").item())
+            if valid_ans > 0:
+                raw_ans_sum += float(F.cross_entropy(logits_s, y_ans[s:e], ignore_index=-100, reduction="sum").item())
+            del logits_s
+
+    full_loss_val = raw_full_sum / float(max(1, valid_full))
+    ans_loss_val = (raw_ans_sum / float(valid_ans)) if valid_ans > 0 else full_loss_val
+    comb_loss_val = 0.25 * full_loss_val + 0.75 * ans_loss_val
+
+    if math.isnan(comb_loss_val) or math.isinf(comb_loss_val):
+        raise RuntimeError(f"NaN/Inf loss encountered: {comb_loss_val}")
+
+    # Step 2: Epistemic Surprise Gate — skip gradient update if model already mastered this sample
+    if surprise_gate_min_loss > 0.0 and ans_loss_val < surprise_gate_min_loss:
+        return comb_loss_val, full_loss_val, ans_loss_val, True
+
+    # Modulate gradient strength by epistemic surprise (higher surprise -> stronger learning signal)
+    surprise_weight = min(1.25, max(0.25, (ans_loss_val - surprise_gate_min_loss + 0.35) / 1.35))
+    effective_scale = scale_factor * surprise_weight
 
     for s in range(0, n_tok, chunk_tokens):
         e = min(n_tok, s + chunk_tokens)
@@ -643,38 +710,28 @@ def compute_chunked_dual_losses_and_backward(
 
         logits_s = lm_head(h_leaf[s:e])
         f_term = (
-            F.cross_entropy(logits_s, yf_s, ignore_index=-100, reduction="sum") / float(max(1, valid_full))
+            F.cross_entropy(logits_s, yf_s, ignore_index=-100, reduction="sum", label_smoothing=label_smoothing * 0.5)
+            / float(max(1, valid_full))
             if has_f
             else logits_s.sum() * 0.0
         )
         if valid_ans > 0:
             a_term = (
-                F.cross_entropy(logits_s, ya_s, ignore_index=-100, reduction="sum") / float(valid_ans)
+                F.cross_entropy(logits_s, ya_s, ignore_index=-100, reduction="sum", label_smoothing=label_smoothing)
+                / float(valid_ans)
                 if has_a
                 else logits_s.sum() * 0.0
             )
         else:
             a_term = f_term
 
-        if has_f:
-            full_sum_val += float(f_term.item()) * float(max(1, valid_full))
-        if valid_ans > 0 and has_a:
-            ans_sum_val += float(a_term.item()) * float(valid_ans)
-
-        slice_obj = (0.25 * f_term + 0.75 * a_term) * scale_factor
+        slice_obj = (0.25 * f_term + 0.75 * a_term) * effective_scale
         slice_obj.backward()
         del logits_s, f_term, a_term, slice_obj
 
-    full_loss_val = full_sum_val / float(max(1, valid_full))
-    ans_loss_val = (ans_sum_val / float(valid_ans)) if valid_ans > 0 else full_loss_val
-    comb_loss_val = 0.25 * full_loss_val + 0.75 * ans_loss_val
-
-    if math.isnan(comb_loss_val) or math.isinf(comb_loss_val):
-        raise RuntimeError(f"NaN/Inf loss encountered: {comb_loss_val}")
-
     if h_leaf.grad is not None:
         h_pred.backward(h_leaf.grad)
-    return comb_loss_val, full_loss_val, ans_loss_val
+    return comb_loss_val, full_loss_val, ans_loss_val, False
 
 
 @torch.no_grad()
@@ -1410,6 +1467,7 @@ def train_single_seed(
         ep_full_sum = 0.0
         ep_ans_sum = 0.0
         ep_samples = 0
+        ep_rote_skipped = 0
         ep_tokens_scanned = 0
         ep_grad_norms: List[float] = []
 
@@ -1431,13 +1489,17 @@ def train_single_seed(
                 aug_hidden = base_hidden + mem_residual
 
                 scale_factor = float(bsz) / total_window_samples
-                comb_loss_val, full_loss_val, ans_loss_val = compute_chunked_dual_losses_and_backward(
+                comb_loss_val, full_loss_val, ans_loss_val, rote_skipped = compute_chunked_dual_losses_and_backward(
                     aug_hidden=aug_hidden,
                     lm_head=model.backbone.lm_head,
                     full_labels=full_labels,
                     answer_labels=answer_labels,
                     scale_factor=scale_factor,
+                    label_smoothing=0.08,
+                    surprise_gate_min_loss=1.10 if epoch > 1 else 0.0,
                 )
+                if rote_skipped:
+                    ep_rote_skipped += bsz
 
                 ep_comb_sum += comb_loss_val * bsz
                 ep_full_sum += full_loss_val * bsz
@@ -1514,6 +1576,7 @@ def train_single_seed(
         epoch_history.append({
             "epoch": epoch,
             "sequences_scanned": ep_samples,
+            "rote_skipped_sequences": ep_rote_skipped,
             "tokens_scanned": ep_tokens_scanned,
             "train_combined_loss": avg_train_comb,
             "train_full_loss": avg_train_full,
@@ -1561,7 +1624,7 @@ def train_single_seed(
         marker = "*BEST*" if improved else ""
         print(
             f"  [Seed {seed} | Ep {epoch}/{effective_epochs} | {ep_duration:.1f}s] "
-            f"Tokens: {ep_tokens_scanned:,} | "
+            f"Tokens: {ep_tokens_scanned:,} (RoteSkipped: {ep_rote_skipped}) | "
             f"Train: {avg_train_ans:.4f} | "
             f"EN PPL: {val_en['answer_ppl']:.2f} | "
             f"VN PPL: {val_vn['answer_ppl']:.2f} | "
