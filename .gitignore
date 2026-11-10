@@ -59,4 +59,5 @@ scratch_bench.py
 checkpoints/train_5m/
 checkpoints/train_10m/
 checkpoints/*.pt
+checkpoints/**/STOP_TRAINING
 logs/*.log
