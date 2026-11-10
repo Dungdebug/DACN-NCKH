@@ -972,8 +972,8 @@ def make_epoch_batches(
     return batches
 
 
-TOKENS_PER_FULL_EPOCH = 599_293
-SEQUENCES_PER_FULL_EPOCH = 2_018
+TOKENS_PER_FULL_EPOCH = 2_458_514
+SEQUENCES_PER_FULL_EPOCH = 7_444
 PRIOR_PHASES_TOKENS = 2_275_170  # Extended Bilingual QA (2,175,906) + Pilot 100/200 (99,264)
 
 
@@ -1272,8 +1272,11 @@ def sync_progress_and_markdown_report(
     md_content = "\n".join(md_lines) + "\n"
     report_targets = [
         ROOT_DIR / "Training_report.md",
+        ROOT_DIR / "Traning_report.md",
         ROOT_DIR.parent / "Training_report.md",
         ROOT_DIR.parent / "Traning_report.md",
+        Path("c:/laragon/laragon/www/DACN-NCKH-main/Training_report.md"),
+        Path("c:/laragon/laragon/www/DACN-NCKH-main/Traning_report.md"),
     ]
     for r_path in report_targets:
         try:
