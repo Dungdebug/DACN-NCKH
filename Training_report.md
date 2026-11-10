@@ -1,7 +1,7 @@
 # 📊 BÁO CÁO TIẾN TRÌNH & KẾT QUẢ HUẤN LUYỆN SA-CMS 3-LEVEL (MỐC ≥ 10M TOKENS)
 
-- **Cập nhật lần cuối (UTC)**: `2026-11-10T10:29:23Z`
-- **Trạng thái tiến trình**: **`PAUSED_SAFE_RESUMABLE (Tiến trình đang dừng an toàn — Sẵn sàng lấy ra chạy tiếp bất kỳ lúc nào)`**
+- **Cập nhật lần cuối (UTC)**: `2026-11-10T12:17:06Z`
+- **Trạng thái tiến trình**: **`PAUSED_SAFE_RESUMABLE (Đã xác nhận dừng tiến trình theo yêu cầu của người dùng (Sẵn sàng lấy ra chạy tiếp bất kỳ lúc nào))`**
 - **Mục tiêu Token**: **`≥ 10,000,000 tokens`** (Đạt chuẩn khoa học thực tế, triệt tiêu 100% học vẹt)
 - **Quy mô tập huấn luyện mới (Đã tích hợp đủ 3 Phương Pháp)**: **`5,115 tài liệu độc lập` | `7,444 chuỗi` | `2,458,514 tokens/epoch`** (~2.55M tokens/epoch tính cả oversample tiếng Việt)
 - **Dự kiến Token khi chạy tập mới (Chỉ cần 4 Epochs / 1 Seed)**: **`10,184,056 tokens`** (**Vượt mốc 10M chỉ trong 1 Seed duy nhất mà không lặp lại**)
@@ -19,7 +19,7 @@ Hệ thống huấn luyện được thiết kế tự động thích ứng vớ
 
 ### 🖥️ Thông số phần cứng máy thực tế được nhận diện:
 - **Bộ vi xử lý (CPU)**: `Intel64 Family 6 Model 154 Stepping 3, GenuineIntel` (20 cores) — Cấp phát tính toán: **`8 worker threads`** (tránh nghẽn thread).
-- **RAM Hệ Thống**: **`15.71 GB`** (Khả dụng: **`5.14 GB`**) — Đảm bảo lưu đệm tensor an toàn.
+- **RAM Hệ Thống**: **`15.71 GB`** (Khả dụng: **`5.02 GB`**) — Đảm bảo lưu đệm tensor an toàn.
 - **Card đồ họa (GPU)**: **`NVIDIA GeForce RTX 3050 Laptop GPU`** (**`4095.5 MB` VRAM** | CUDA `11.8`).
 - **Hồ sơ tối ưu bộ nhớ kích hoạt**: **`4GB VRAM TIER (Laptop / Budget GPU: RTX 3050, GTX 1650/1050Ti)`**.
 - **Kích thước Slice Chunk đánh giá**: **`256 tokens/slice`** (Giữ kích thước logits trung gian `≤ 50.3 MB`, giảm 75% tiêu thụ VRAM so với thông thường).
@@ -66,7 +66,7 @@ Hệ thống huấn luyện được thiết kế tự động thích ứng vớ
 | **Seed 42** | `COMPLETED_VERIFIED` | `5/5` | **`3,258,900`** | `11,360` | `8.43` | `3.23` | `1.6524` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt` |
 | **Seed 43** | `COMPLETED_VERIFIED` | `6/6` | **`3,595,758`** | `12,108` | `8.18` | `2.32` | `1.4721` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_43.pt` |
 | **Seed 44** | `COMPLETED_VERIFIED` | `6/6` | **`3,595,758`** | `12,108` | `8.15` | `2.33` | `1.4722` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_44.pt` |
-| **TỔNG FULL-DATASET** | **`PAUSED_SAFE_RESUMABLE (Tiến trình đang dừng an toàn — Sẵn sàng lấy ra chạy tiếp bất kỳ lúc nào)`** | **`17/17`** | **`10,450,416`** | **`35,576`** | — | — | — | `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` |
+| **TỔNG FULL-DATASET** | **`PAUSED_SAFE_RESUMABLE (Đã xác nhận dừng tiến trình theo yêu cầu của người dùng (Sẵn sàng lấy ra chạy tiếp bất kỳ lúc nào))`** | **`17/17`** | **`10,450,416`** | **`35,576`** | — | — | — | `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` |
 | **TỔNG TOÀN DỰ ÁN** | **Bao gồm Extended + Pilot** | **29 Epochs** | **`12,725,586`** | **`45,776`** | — | — | — | `checkpoints/` |
 
 ---
