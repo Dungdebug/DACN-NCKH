@@ -383,6 +383,11 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
         ("N5-Báo_cáo_DAMN_BMTT.docx", "LOCAL_N5_BAO_CAO_DAMN_BMTT", "Báo cáo ĐAMH Bảo mật Thông tin Nhóm 5"),
         ("NHOM05-BAI05.docx", "LOCAL_NHOM05_BAI05", "Báo cáo Chuyên đề Nhóm 05 Bài 05"),
         ("Đề_cương_Chatbot_hỏi_đáp_trên_tài_liệu_với_bộ_nhớ_đa_thang_dựa_trên_Nested_Learning.docx", "LOCAL_DE_CUONG_CHATBOT_DOCX", "Đề cương Chi tiết Chatbot SA-CMS Nested Learning"),
+        ("da_lat_coffee.txt", "LOCAL_DA_LAT_COFFEE", "Tài liệu Canh tác Cà phê Cao nguyên Đà Lạt"),
+        ("ninh_thuan_solar.txt", "LOCAL_NINH_THUAN_SOLAR", "Quy hoạch Năng lượng Tái tạo Ninh Thuận"),
+        ("chủ_đề_viết.docx", "LOCAL_CHU_DE_VIET", "Chủ đề Viết và Phương pháp Nghiên cứu"),
+        ("trang_3.docx", "LOCAL_TRANG_3_DOCX", "Tài liệu Chuyên ngành Bổ trợ"),
+        ("Tài liệu Nghiên cứu SA-CMS Mẫu Offline.txt", "LOCAL_SA_CMS_MAU_OFFLINE", "Tài liệu Nghiên cứu SA-CMS Mẫu"),
     ]
     for fname, custom_id, custom_title in local_docx_map:
         fpath = local_docs_dir / fname
@@ -1632,6 +1637,15 @@ def train_single_seed(
             f"VRAM: {peak_vram_mb:.0f}MB {marker}",
             flush=True,
         )
+
+        # Anti-Rote Early Stopping: stop if validation loss does not improve for 2 consecutive epochs
+        if epoch >= 4 and (epoch - best_epoch) >= 2:
+            print(
+                f"  [Seed {seed} | ANTI-ROTE EARLY STOP] Validation loss reached convergence at Epoch {best_epoch} "
+                f"(no improvement for 2 epochs). Halting to prevent rote memorization.",
+                flush=True,
+            )
+            break
 
         if not dry_run and _check_stop_requested(archive_dir):
             sync_progress_and_markdown_report(

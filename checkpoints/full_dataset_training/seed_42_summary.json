@@ -1,52 +1,191 @@
 {
   "seed": 42,
   "checkpoint_path": "checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt",
-  "checkpoint_sha256": "bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059",
+  "checkpoint_sha256": "2a33da5f949c50aaee1ad557e9868ac1fd80f2c53ea5eacf82b2ecccd8561abf",
   "parent_checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
   "parent_sha256_verified_unchanged": "0a379f6a238a5ceb872abffbfbd4bc9f59a23742b2d02b4680fe31cb1efea7c3",
   "best_epoch": 4,
-  "duration_sec": 2250.3,
-  "peak_vram_mb": 2661.0,
+  "epochs_completed": 5,
+  "tokens_scanned_total": 3258900,
+  "sequences_scanned_total": 11360,
+  "duration_sec": 504.39,
+  "peak_vram_mb": 1750.46,
   "baseline_metrics": {
     "en_val": {
-      "full_loss": 4.7935,
-      "full_ppl": 120.7224,
-      "answer_loss": 3.3403,
-      "answer_ppl": 28.2278
+      "full_loss": 4.7936,
+      "full_ppl": 120.7301,
+      "answer_loss": 3.4512,
+      "answer_ppl": 31.5397
     },
     "vn_val": {
-      "full_loss": 2.6585,
-      "full_ppl": 14.275,
-      "answer_loss": 2.9159,
-      "answer_ppl": 18.4649
+      "full_loss": 2.6589,
+      "full_ppl": 14.2799,
+      "answer_loss": 2.9481,
+      "answer_ppl": 19.07
     },
-    "combined_answer_loss": 3.1281
+    "combined_answer_loss": 3.1997
   },
   "best_metrics": {
     "en_val": {
-      "full_loss": 4.1545,
-      "full_ppl": 63.7221,
-      "answer_loss": 2.0819,
-      "answer_ppl": 8.02
+      "full_loss": 4.2045,
+      "full_ppl": 66.985,
+      "answer_loss": 2.1324,
+      "answer_ppl": 8.4349
     },
     "vn_val": {
-      "full_loss": 1.691,
-      "full_ppl": 5.425,
-      "answer_loss": 0.8396,
-      "answer_ppl": 2.3153
+      "full_loss": 1.9035,
+      "full_ppl": 6.7097,
+      "answer_loss": 1.1725,
+      "answer_ppl": 3.2301
     },
-    "combined_answer_loss": 1.4607
+    "combined_answer_loss": 1.6524
   },
   "weight_delta_from_parent": {
-    "max_abs_param_delta": 0.034861,
+    "max_abs_param_delta": 0.054144,
     "l2_norm_by_module": {
-      "level_0": 6.520522,
-      "level_1": 6.502992,
-      "level_2": 6.09603,
-      "cms_norm": 0.135112
+      "level_0": 5.776806,
+      "level_1": 5.938917,
+      "level_2": 5.601066,
+      "cms_norm": 0.508702
     }
   },
-  "epoch_history": [],
+  "epoch_history": [
+    {
+      "epoch": 1,
+      "sequences_scanned": 2272,
+      "rote_skipped_sequences": 0,
+      "tokens_scanned": 651780,
+      "train_combined_loss": 1.915,
+      "train_full_loss": 2.9765,
+      "train_answer_loss": 1.5612,
+      "en_val": {
+        "full_loss": 4.1671,
+        "full_ppl": 64.5254,
+        "answer_loss": 2.3346,
+        "answer_ppl": 10.3255
+      },
+      "vn_val": {
+        "full_loss": 1.9497,
+        "full_ppl": 7.0267,
+        "answer_loss": 0.9947,
+        "answer_ppl": 2.704
+      },
+      "combined_val_answer_loss": 1.6646,
+      "avg_grad_norm": 3.0373,
+      "lr_end": 0.0001545,
+      "duration_sec": 84.76,
+      "peak_vram_mb": 1750.46,
+      "is_best": true
+    },
+    {
+      "epoch": 2,
+      "sequences_scanned": 2272,
+      "rote_skipped_sequences": 1210,
+      "tokens_scanned": 651780,
+      "train_combined_loss": 1.6081,
+      "train_full_loss": 2.6509,
+      "train_answer_loss": 1.2604,
+      "en_val": {
+        "full_loss": 4.1978,
+        "full_ppl": 66.5378,
+        "answer_loss": 2.2304,
+        "answer_ppl": 9.3035
+      },
+      "vn_val": {
+        "full_loss": 1.9628,
+        "full_ppl": 7.1193,
+        "answer_loss": 1.1352,
+        "answer_ppl": 3.1117
+      },
+      "combined_val_answer_loss": 1.6828,
+      "avg_grad_norm": 0.7998,
+      "lr_end": 0.0001225,
+      "duration_sec": 53.71,
+      "peak_vram_mb": 1750.46,
+      "is_best": false
+    },
+    {
+      "epoch": 3,
+      "sequences_scanned": 2272,
+      "rote_skipped_sequences": 1334,
+      "tokens_scanned": 651780,
+      "train_combined_loss": 1.5379,
+      "train_full_loss": 2.5616,
+      "train_answer_loss": 1.1967,
+      "en_val": {
+        "full_loss": 4.1748,
+        "full_ppl": 65.0252,
+        "answer_loss": 2.1581,
+        "answer_ppl": 8.6548
+      },
+      "vn_val": {
+        "full_loss": 1.9142,
+        "full_ppl": 6.7814,
+        "answer_loss": 1.1699,
+        "answer_ppl": 3.2218
+      },
+      "combined_val_answer_loss": 1.664,
+      "avg_grad_norm": 0.6062,
+      "lr_end": 7.38e-05,
+      "duration_sec": 238.77,
+      "peak_vram_mb": 1750.46,
+      "is_best": true
+    },
+    {
+      "epoch": 4,
+      "sequences_scanned": 2272,
+      "rote_skipped_sequences": 1462,
+      "tokens_scanned": 651780,
+      "train_combined_loss": 1.485,
+      "train_full_loss": 2.5032,
+      "train_answer_loss": 1.1455,
+      "en_val": {
+        "full_loss": 4.2045,
+        "full_ppl": 66.985,
+        "answer_loss": 2.1324,
+        "answer_ppl": 8.4349
+      },
+      "vn_val": {
+        "full_loss": 1.9035,
+        "full_ppl": 6.7097,
+        "answer_loss": 1.1725,
+        "answer_ppl": 3.2301
+      },
+      "combined_val_answer_loss": 1.6524,
+      "avg_grad_norm": 0.455,
+      "lr_end": 3.21e-05,
+      "duration_sec": 48.68,
+      "peak_vram_mb": 1750.46,
+      "is_best": true
+    },
+    {
+      "epoch": 5,
+      "sequences_scanned": 2272,
+      "rote_skipped_sequences": 1496,
+      "tokens_scanned": 651780,
+      "train_combined_loss": 1.463,
+      "train_full_loss": 2.4766,
+      "train_answer_loss": 1.1251,
+      "en_val": {
+        "full_loss": 4.2069,
+        "full_ppl": 67.1456,
+        "answer_loss": 2.1328,
+        "answer_ppl": 8.4382
+      },
+      "vn_val": {
+        "full_loss": 1.8851,
+        "full_ppl": 6.5873,
+        "answer_loss": 1.1735,
+        "answer_ppl": 3.2333
+      },
+      "combined_val_answer_loss": 1.6532,
+      "avg_grad_norm": 0.4055,
+      "lr_end": 1.6e-05,
+      "duration_sec": 77.93,
+      "peak_vram_mb": 1750.46,
+      "is_best": false
+    }
+  ],
   "qualitative_preview": [
     {
       "lang": "vi",
@@ -58,22 +197,19 @@
       "lang": "vi",
       "question": "Sai số định vị trung bình của xe tự hành AGV là bao nhiêu?",
       "reference": "Sai số trung bình 8.5 cm [VN_VAL_DOC_001::P001].",
-      "prediction": "Đạt 120 xe AGV và 20 Hz [VN_TR_DOC_002::P002]."
+      "prediction": "xe tự hành AGV là 1.2 mét."
     },
     {
       "lang": "en",
       "question": "What do standard language models learn instead of causal mechanisms?",
       "reference": "statistical correlations",
-      "prediction": "Standard language models learn causal mechanisms by identifying causal relationships between antecedent and consequent tokens."
+      "prediction": "Standard language models learn causal mechanisms by simulating causal chains of cause-effect relationships."
     },
     {
       "lang": "en",
       "question": "What does counterfactual prompting evaluate in language models?",
       "reference": "whether models can reason about altered antecedent conditions",
-      "prediction": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
+      "prediction": "Counterfactual prompting evaluates models' ability to reason about altered antecedent conditions."
     }
-  ],
-  "epochs_completed": 5,
-  "tokens_scanned_total": 2996465,
-  "sequences_scanned_total": 10090
+  ]
 }

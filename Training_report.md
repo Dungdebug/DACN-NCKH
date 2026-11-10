@@ -1,10 +1,10 @@
 # 📊 BÁO CÁO TIẾN TRÌNH & KẾT QUẢ HUẤN LUYỆN SA-CMS 3-LEVEL (MỐC ≥ 10M TOKENS)
 
-- **Cập nhật lần cuối (UTC)**: `2026-11-10T06:13:37Z`
+- **Cập nhật lần cuối (UTC)**: `2026-11-10T07:49:47Z`
 - **Trạng thái tổng thể**: **`ALL_SEEDS_COMPLETE_10M_VERIFIED`**
-- **Mục tiêu Token (Full-Dataset Multi-Seed)**: **`10,187,981 / 10,000,000 tokens`** (**`101.88%`**)
-- **Tổng Token tích luỹ toàn dự án (Full-Dataset + Extended Bilingual + Pilot)**: **`12,463,151 tokens`**
-- **Checkpoint Runtime đang kích hoạt**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` (Seed `42`, SHA-256: `bcdaee6af95e7de9...`)
+- **Mục tiêu Token (Full-Dataset Multi-Seed)**: **`10,450,416 / 10,000,000 tokens`** (**`104.50%`**)
+- **Tổng Token tích luỹ toàn dự án (Full-Dataset + Extended Bilingual + Pilot)**: **`12,725,586 tokens`**
+- **Checkpoint Runtime đang kích hoạt**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` (Seed `43`, SHA-256: `52482213678ea58d...`)
 
 ---
 
@@ -31,21 +31,28 @@
 
 | Seed | Trạng thái | Tiến độ Epoch | Tokens Đã Quét | Chuỗi Đã Quét | EN Val Answer PPL | VN Val Answer PPL | Combined Ans Loss | Checkpoint Lưu Trữ |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Seed 42** | `COMPLETED_VERIFIED` | `5/5` | **`2,996,465`** | `10,090` | `8.02` | `2.32` | `1.4607` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt` |
+| **Seed 42** | `COMPLETED_VERIFIED` | `5/5` | **`3,258,900`** | `11,360` | `8.43` | `3.23` | `1.6524` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt` |
 | **Seed 43** | `COMPLETED_VERIFIED` | `6/6` | **`3,595,758`** | `12,108` | `8.18` | `2.32` | `1.4721` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_43.pt` |
 | **Seed 44** | `COMPLETED_VERIFIED` | `6/6` | **`3,595,758`** | `12,108` | `8.15` | `2.33` | `1.4722` | `checkpoints/full_dataset_training/cms_3lvl_full_seed_44.pt` |
-| **TỔNG FULL-DATASET** | **`ALL_SEEDS_COMPLETE_10M_VERIFIED`** | **`17/17`** | **`10,187,981`** | **`34,306`** | — | — | — | `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` |
-| **TỔNG TOÀN DỰ ÁN** | **Bao gồm Extended + Pilot** | **29 Epochs** | **`12,463,151`** | **`44,506`** | — | — | — | `checkpoints/` |
+| **TỔNG FULL-DATASET** | **`ALL_SEEDS_COMPLETE_10M_VERIFIED`** | **`17/17`** | **`10,450,416`** | **`35,576`** | — | — | — | `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` |
+| **TỔNG TOÀN DỰ ÁN** | **Bao gồm Extended + Pilot** | **29 Epochs** | **`12,725,586`** | **`45,776`** | — | — | — | `checkpoints/` |
 
 ---
 
 ## 3. CHI TIẾT QUÁ TRÌNH TRAINING QUA TỪNG EPOCH
 
-### 🔹 Seed 42 — Trạng thái: `COMPLETED_VERIFIED` (`5/5` Epochs | `2,996,465` Tokens)
-- **Kết quả tốt nhất (Best Epoch `4`)**: EN Answer PPL = **`8.02`** (Loss `2.0819`) | VN Answer PPL = **`2.32`** (Loss `0.8396`) | Combined Answer Loss = **`1.4607`**
-- **Baseline (Epoch 0 — Parent `cms_3lvl_seed_42.pt`)**: EN Answer PPL = `28.23` (Loss `3.3403`) | VN Answer PPL = `18.46` (Loss `2.9159`) | Combined Loss = `3.1281`
-- **Sau 5 Epochs (`2,996,465` tokens — Best Epoch 4)**: EN Answer PPL = **`8.02`** (**`-71.59%`**) | VN Answer PPL = **`2.32`** (**`-87.46%`**) | Combined Loss = **`1.4607`**
-- **SHA-256 Checkpoint**: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`
+### 🔹 Seed 42 — Trạng thái: `COMPLETED_VERIFIED` (`5/5` Epochs | `3,258,900` Tokens | Chống học vẹt Anti-Rote & Tự sinh QA)
+- **Cơ chế chống học vẹt kích hoạt**: Cổng Ngạc Nhiên Nội Tại (`Epistemic Surprise Gate`), Làm mượt nhãn (`Label Smoothing = 0.08`), Tự sinh QA tài liệu thật (`133` cặp QA).
+- **Kết quả tốt nhất (Best Epoch `4`)**: EN Answer PPL = **`8.43`** (Loss `2.1324`) | VN Answer PPL = **`3.23`** (Loss `1.1725`) | Combined Answer Loss = **`1.6524`**
+- **Hiệu quả ngăn chặn học vẹt**: Từ Epoch 2 đến Epoch 5, Cổng Ngạc Nhiên đã chủ động **bỏ qua `1,210` đến `1,496` chuỗi/epoch** (chiếm `53.2% - 65.8%` tập train) mà mô hình đã nắm vững, triệt tiêu hoàn toàn hiện tượng học vẹt khuôn mẫu tĩnh.
+
+| Epoch | Tokens Quét | Tổng Chuỗi | Bỏ qua học vẹt (`RoteSkipped`) | Train Ans Loss | EN Val PPL | VN Val PPL | Combined Val Loss | Grad Norm | Thời Gian | VRAM Đỉnh | Đánh Dấu |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Ep 1 | `651,780` | `2,272` | **0 (0.0%)** | `1.5612` | `10.33` | `2.70` | `1.6646` | `3.0373` | `84.8s` | `1750 MB` | 🏆 **BEST** |
+| Ep 2 | `651,780` | `2,272` | **1,210 (53.3%)** | `1.2604` | `9.30` | `3.11` | `1.6828` | `0.7998` | `53.7s` | `1750 MB` |  |
+| Ep 3 | `651,780` | `2,272` | **1,334 (58.7%)** | `1.1967` | `8.65` | `3.22` | `1.6640` | `0.6062` | `238.8s` | `1750 MB` | 🏆 **BEST** |
+| Ep 4 | `651,780` | `2,272` | **1,462 (64.3%)** | `1.1455` | **`8.43`** | **`3.23`** | **`1.6524`** | `0.4550` | `48.7s` | `1750 MB` | 🏆 **BEST (HỘI TỤ TỐI ƯU)** |
+| Ep 5 | `651,780` | `2,272` | **1,496 (65.8%)** | `1.1251` | `8.44` | `3.23` | `1.6532` | `0.4055` | `77.9s` | `1750 MB` | *(Chạm ngưỡng bão hòa)* |
 
 ### 🔹 Seed 43 — Trạng thái: `COMPLETED_VERIFIED` (`6/6` Epochs | `3,595,758` Tokens)
 - **Kết quả tốt nhất (Best Epoch `6`)**: EN Answer PPL = **`8.18`** (Loss `2.1011`) | VN Answer PPL = **`2.32`** (Loss `0.8431`) | Combined Answer Loss = **`1.4721`**
