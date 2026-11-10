@@ -587,7 +587,14 @@ def precompute_frozen_backbone_hidden(
     Pre-extracts frozen backbone hidden states once per unique sequence into compact FP16 CPU RAM
     (`~510 MB` total instead of `1.02 GB`, eliminating Windows pagefile swapping) and caches to disk.
     """
-    cache_file = ROOT_DIR / "checkpoints" / "full_dataset_training" / "frozen_hidden_fp16_cache.pt"
+    # Prefer Drive D: if available to protect Drive C: disk space (43GB+ free on D:)
+    if Path("D:/").exists():
+        cache_dir = Path("D:/dacn_training_cache")
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_file = cache_dir / "frozen_hidden_fp16_cache.pt"
+    else:
+        cache_file = ROOT_DIR / "checkpoints" / "full_dataset_training" / "frozen_hidden_fp16_cache.pt"
+
     cached_map: Dict[str, torch.Tensor] = {}
     if cache_file.exists():
         try:
@@ -619,8 +626,11 @@ def precompute_frozen_backbone_hidden(
 
     if updated and len(samples) > 100:
         try:
+            import shutil
             cache_file.parent.mkdir(parents=True, exist_ok=True)
-            torch.save(cached_map, str(cache_file))
+            free_gb = shutil.disk_usage(str(cache_file.parent)).free / (1024 ** 3)
+            if free_gb > 5.0:
+                torch.save(cached_map, str(cache_file))
         except Exception:
             pass
     torch.cuda.empty_cache()
