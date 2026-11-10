@@ -148,6 +148,7 @@ class ChatSession:
         refusal_reason: Optional[str] = None,
         diagnostics: Optional[Dict[str, Any]] = None,
         existing_titles: Optional[Set[str]] = None,
+        suggested_questions: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         msg_id = f"msg_{uuid.uuid4().hex[:10]}"
         msg = {
@@ -162,6 +163,7 @@ class ChatSession:
             "refused": refused,
             "refusal_reason": refusal_reason,
             "diagnostics": diagnostics or {},
+            "suggested_questions": suggested_questions or [],
         }
         self.messages.append(msg)
         self.updated_at = time.time()

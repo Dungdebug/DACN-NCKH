@@ -46,7 +46,7 @@
   * Tài liệu `docs/round2_external_gpu_handoff.md` đã viện dẫn `Qwen/Qwen2.5-0.5B-Instruct`.
   * Các file `rq2_runner_core.py` và `run_sequential.py` đề cập `SmolLM2-135M-Instruct (Frozen)`.
 * **Quy chuẩn nguồn chân lý**:
-  * Tài liệu quyết định mô hình nền [`docs/backbone_decision.md`](file:///d:/NCKH/docs/backbone_decision.md) và Khóa công bằng Phase 4.0.2 [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml) quy định dứt khoát:
+  * Tài liệu quyết định mô hình nền [`docs/backbone_decision.md`](docs/backbone_decision.md) và Khóa công bằng Phase 4.0.2 [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml) quy định dứt khoát:
     > **Chỉ dùng Base Model:** `HuggingFaceTB/SmolLM2-135M`. Tuyệt đối không dùng bản `SmolLM2-135M-Instruct` để tránh bias căn chỉnh hội thoại. Càng không được tự ý đổi sang `Qwen2.5-0.5B` làm phá vỡ toàn bộ baseline đối chứng với Phase 2 và Phase 3.
 * **Kết luận**: Gắn nhãn cảnh báo **`BACKBONE_MISMATCH`**.
 
@@ -54,7 +54,7 @@
 * **Thực trạng**:
   * Cả hai gói `round2_rq2/preflight.py` và `round2_rq4/preflight.py` đều đặt cảnh báo/yêu cầu VRAM $\ge 16$GB, khuyến nghị máy chủ 24GB–80GB (RTX 3090, RTX 4090, A100).
 * **Quy chuẩn nguồn chân lý**:
-  * Hợp đồng huấn luyện Phase 4.0.4 ([`docs/phase4_0_4_training_handoff.md`](file:///d:/NCKH/docs/phase4_0_4_training_handoff.md)) và Hợp đồng tích hợp Phase 4.4 ([`results/phase4_4/external_package_audit.json`](file:///d:/NCKH/results/phase4_4/external_package_audit.json)) đã khóa cứng mục tiêu phần cứng là:
+  * Hợp đồng huấn luyện Phase 4.0.4 ([`docs/phase4_0_4_training_handoff.md`](docs/phase4_0_4_training_handoff.md)) và Hợp đồng tích hợp Phase 4.4 ([`results/phase4_4/external_package_audit.json`](results/phase4_4/external_package_audit.json)) đã khóa cứng mục tiêu phần cứng là:
     > **NVIDIA GeForce RTX 3050 (6GB / 8GB VRAM)**.
   * Vì mô hình `SmolLM2-135M` ở định dạng FP16 chỉ chiếm ~270MB VRAM, và 3 adapter CMS chỉ chiếm ~40MB, tổng VRAM khi huấn luyện/đánh giá thực tế với batch size 2 chỉ dao động trong khoảng **1.2 GB – 1.8 GB**, an toàn tuyệt đối trên card 6GB.
   * Việc gói Round 2 tự ý nâng yêu cầu lên $\ge 16$GB là không có căn cứ kỹ thuật và vi phạm hợp đồng bàn giao Phase 4.5.
@@ -76,7 +76,7 @@
   * Thuật toán nạp tuần tự trong `run_sequential.py` áp dụng công thức trừ lùi độ chính xác cố định ($Acc - \text{decay}$) thay vì forward qua mạng và kiểm tra câu trả lời thực tế.
   * Không hề lưu bất kỳ checkpoint `.pt` nào trong số 36 checkpoint bắt buộc.
 * **Quy chuẩn nguồn chân lý**:
-  * Hợp đồng Phase 4.4 và Phase 4.2 ([`external_gpu/phase4_4/run_rq4.py`](file:///d:/NCKH/external_gpu/phase4_4/run_rq4.py)) đã có sẵn kịch bản chuẩn:
+  * Hợp đồng Phase 4.4 và Phase 4.2 ([`external_gpu/phase4_4/run_rq4.py`](external_gpu/phase4_4/run_rq4.py)) đã có sẵn kịch bản chuẩn:
     * Tập dữ liệu: 21 tài liệu chuẩn `INC_DOC_000` đến `INC_DOC_020` từ `src/evaluation/incremental_corpus.py`.
     * Đánh giá cả 3 phương pháp: `B4`, `B5`, `P1` trên 3 seeds `42, 43, 44`.
     * Lưu đầy đủ 36 file checkpoint `.pt` tại các mốc `D0`, `D0_plus5`, `D0_plus10`, `D0_plus20`.

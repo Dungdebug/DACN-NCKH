@@ -16,8 +16,8 @@
 
 | Thuộc tính | Giá trị |
 |:---|:---|
-| **Source file** | [`results/phase2_5_final_results.csv`](file:///d:/NCKH/results/phase2_5_final_results.csv) |
-| **Derived from** | [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv) với hiệu chỉnh PPL từ Phase 2.5.1 |
+| **Source file** | [`results/phase2_5_final_results.csv`](results/phase2_5_final_results.csv) |
+| **Derived from** | [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv) với hiệu chỉnh PPL từ Phase 2.5.1 |
 | **Benchmarks** | MK-NIAH (100 samples/seed), QASPER (10 documents/seed) |
 | **Seeds** | 42, 43, 44 |
 | **Tổng hàng dữ liệu** | 21 (7 cấu hình × 3 seed) |
@@ -126,7 +126,7 @@
 
 ## TASK 4 — BOOTSTRAP CI 95% (TỪ PHASE 2.5.1)
 
-Nguồn: [`results/phase2_5_1_statistical_audit.csv`](file:///d:/NCKH/results/phase2_5_1_statistical_audit.csv)  
+Nguồn: [`results/phase2_5_1_statistical_audit.csv`](results/phase2_5_1_statistical_audit.csv)  
 Method: Non-parametric percentile bootstrap, B=1000 iterations, seed=42.  
 Unit: MK-NIAH → 100 samples, QASPER → 10 documents.  
 Seed dùng: 42 (representative seed).
@@ -159,7 +159,7 @@ Seed dùng: 42 (representative seed).
 
 ## TASK 5 — KIỂM ĐỊNH THỐNG KÊ BẮT CẶP (P1 vs B5)
 
-Nguồn: Phase 2.5.1 audit ([`docs/phase2_5_1_statistical_audit.md`](file:///d:/NCKH/docs/phase2_5_1_statistical_audit.md), Task 2)
+Nguồn: Phase 2.5.1 audit ([`docs/phase2_5_1_statistical_audit.md`](docs/phase2_5_1_statistical_audit.md), Task 2)
 
 ### So sánh: SA-CMS (P1) vs Fixed-Token (B5) — Level 2, Budget = 1,540
 
@@ -265,11 +265,11 @@ Kết quả Phase 2.5 đã được:
 
 | File | Mô tả | Trạng thái |
 |:---|:---|:---:|
-| [`results/phase2_5_final_results.csv`](file:///d:/NCKH/results/phase2_5_final_results.csv) | Bộ kết quả duy nhất cho báo cáo | **CHÍNH THỨC** |
-| [`results/phase2_5_1_statistical_audit.csv`](file:///d:/NCKH/results/phase2_5_1_statistical_audit.csv) | Bootstrap CI & paired test data | **CHÍNH THỨC** |
-| [`docs/phase2_5_1_statistical_audit.md`](file:///d:/NCKH/docs/phase2_5_1_statistical_audit.md) | Báo cáo kiểm toán thống kê chi tiết | **CHÍNH THỨC** |
-| [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv) | Dữ liệu gốc (trước hiệu chỉnh PPL) | **THAM CHIẾU** |
-| [`results/sa_cms_comparison.csv`](file:///d:/NCKH/results/sa_cms_comparison.csv) | Phase 2 cũ, budget bất đối xứng | **KHÔNG DÙNG** |
-| [`results/sa_cms_experiment_results.json`](file:///d:/NCKH/results/sa_cms_experiment_results.json) | Phase 2 cũ, budget bất đối xứng | **KHÔNG DÙNG** |
+| [`results/phase2_5_final_results.csv`](results/phase2_5_final_results.csv) | Bộ kết quả duy nhất cho báo cáo | **CHÍNH THỨC** |
+| [`results/phase2_5_1_statistical_audit.csv`](results/phase2_5_1_statistical_audit.csv) | Bootstrap CI & paired test data | **CHÍNH THỨC** |
+| [`docs/phase2_5_1_statistical_audit.md`](docs/phase2_5_1_statistical_audit.md) | Báo cáo kiểm toán thống kê chi tiết | **CHÍNH THỨC** |
+| [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv) | Dữ liệu gốc (trước hiệu chỉnh PPL) | **THAM CHIẾU** |
+| [`results/sa_cms_comparison.csv`](results/sa_cms_comparison.csv) | Phase 2 cũ, budget bất đối xứng | **KHÔNG DÙNG** |
+| [`results/sa_cms_experiment_results.json`](results/sa_cms_experiment_results.json) | Phase 2 cũ, budget bất đối xứng | **KHÔNG DÙNG** |
 
 **KẾT THÚC PHASE 2.5.2. SẴN SÀNG CHUYỂN SANG PHASE 3.**

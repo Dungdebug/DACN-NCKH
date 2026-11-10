@@ -26,7 +26,7 @@
 
 ## 2. KIỂM KÊ CHECKPOINT VÀ NGUYÊN TẮC SỬ DỤNG (CHECKPOINT INVENTORY)
 
-Toàn bộ thông tin chi tiết được lưu trữ tại [`results/phase4_1/checkpoint_inventory.json`](file:///d:/NCKH/results/phase4_1/checkpoint_inventory.json).
+Toàn bộ thông tin chi tiết được lưu trữ tại [`results/phase4_1/checkpoint_inventory.json`](results/phase4_1/checkpoint_inventory.json).
 
 ### 2.1. Checkpoint Hiện Có (Available)
 - **B1 (ICL)**: Backbone `HuggingFaceTB/SmolLM2-135M` nguyên bản (134,515,008 tham số, đóng băng 100%). Không dùng adapter.
@@ -61,23 +61,23 @@ Toàn bộ thông tin chi tiết được lưu trữ tại [`results/phase4_1/ch
 
 ## 3. BẢO TỒN DỮ LIỆU THỰC NGHIỆM KHÔNG QUA HUẤN LUYỆN (TASK 10)
 
-Toàn bộ kết quả chi tiết từng item và tổng hợp thống kê không đè lên tệp gốc mà được tổ chức thành cấu trúc độc lập tại [`results/phase4_1/non_training/`](file:///d:/NCKH/results/phase4_1/non_training/):
+Toàn bộ kết quả chi tiết từng item và tổng hợp thống kê không đè lên tệp gốc mà được tổ chức thành cấu trúc độc lập tại [`results/phase4_1/non_training/`](results/phase4_1/non_training/):
 
-1. [`results/phase4_1/non_training/rq1/`](file:///d:/NCKH/results/phase4_1/non_training/rq1/):
-   - [`rq1_standardized_items.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq1/rq1_standardized_items.csv) (3,240 bản ghi cấp item đầy đủ: `method`, `dataset`, `question_id`, `seed`, `checkpoint`, `metric`, `value`, `latency_ms`, `VRAM_mb`, `evaluation_type: frozen-checkpoint inference evaluation`).
-   - [`rq1_summary.json`](file:///d:/NCKH/results/phase4_1/non_training/rq1/rq1_summary.json) (Thống kê Mean, SD, Bootstrap 95% CI với $B=1000$).
-2. [`results/phase4_1/non_training/rq2/`](file:///d:/NCKH/results/phase4_1/non_training/rq2/):
-   - [`rq2_standardized_items.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq2/rq2_standardized_items.csv) (360 bản ghi cấp câu hỏi/tài liệu đối sánh kiểm soát ngân sách).
-   - [`rq2_summary.json`](file:///d:/NCKH/results/phase4_1/non_training/rq2/rq2_summary.json) (Kiểm định Paired Student's t-test, Wilcoxon signed-rank test, Cohen's d cho 90 cặp câu hỏi trùng khớp, kèm phân tích theo từng seed và biến thể A2).
-3. [`results/phase4_1/non_training/rq3/`](file:///d:/NCKH/results/phase4_1/non_training/rq3/):
-   - [`rq3_standardized_items.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq3/rq3_standardized_items.csv) (1,500 bản ghi đo đạc F1, Exact Match, Faithfulness, Từ chối đúng/sai qua các seed).
-   - [`rq3_summary.json`](file:///d:/NCKH/results/phase4_1/non_training/rq3/rq3_summary.json) (Tổng hợp độ trung thực có trích dẫn chứng minh, tỷ lệ từ chối và so sánh cơ chế B2 vs P2).
-   - [`blinded_manual_verification_100.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv) (100 ca kiểm định mù thủ công).
-4. [`results/phase4_1/non_training/rq4/`](file:///d:/NCKH/results/phase4_1/non_training/rq4/):
-   - [`rq4_status.json`](file:///d:/NCKH/results/phase4_1/non_training/rq4/rq4_status.json) (Ghi nhận trạng thái `NEED_EXTERNAL_GPU` và lý do bắt buộc theo protocol).
-5. [`results/phase4_1/non_training/rq5/`](file:///d:/NCKH/results/phase4_1/non_training/rq5/):
-   - [`rq5_cost_profile.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq5/rq5_cost_profile.csv) (Hồ sơ đo đạc độc lập: thời gian truy xuất, thời gian nạp bộ nhớ, thời gian sinh, độ trễ toàn trình, VRAM đỉnh, kích thước checkpoint).
-   - [`rq5_summary.json`](file:///d:/NCKH/results/phase4_1/non_training/rq5/rq5_summary.json).
+1. [`results/phase4_1/non_training/rq1/`](results/phase4_1/non_training/rq1/):
+   - [`rq1_standardized_items.csv`](results/phase4_1/non_training/rq1/rq1_standardized_items.csv) (3,240 bản ghi cấp item đầy đủ: `method`, `dataset`, `question_id`, `seed`, `checkpoint`, `metric`, `value`, `latency_ms`, `VRAM_mb`, `evaluation_type: frozen-checkpoint inference evaluation`).
+   - [`rq1_summary.json`](results/phase4_1/non_training/rq1/rq1_summary.json) (Thống kê Mean, SD, Bootstrap 95% CI với $B=1000$).
+2. [`results/phase4_1/non_training/rq2/`](results/phase4_1/non_training/rq2/):
+   - [`rq2_standardized_items.csv`](results/phase4_1/non_training/rq2/rq2_standardized_items.csv) (360 bản ghi cấp câu hỏi/tài liệu đối sánh kiểm soát ngân sách).
+   - [`rq2_summary.json`](results/phase4_1/non_training/rq2/rq2_summary.json) (Kiểm định Paired Student's t-test, Wilcoxon signed-rank test, Cohen's d cho 90 cặp câu hỏi trùng khớp, kèm phân tích theo từng seed và biến thể A2).
+3. [`results/phase4_1/non_training/rq3/`](results/phase4_1/non_training/rq3/):
+   - [`rq3_standardized_items.csv`](results/phase4_1/non_training/rq3/rq3_standardized_items.csv) (1,500 bản ghi đo đạc F1, Exact Match, Faithfulness, Từ chối đúng/sai qua các seed).
+   - [`rq3_summary.json`](results/phase4_1/non_training/rq3/rq3_summary.json) (Tổng hợp độ trung thực có trích dẫn chứng minh, tỷ lệ từ chối và so sánh cơ chế B2 vs P2).
+   - [`blinded_manual_verification_100.csv`](results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv) (100 ca kiểm định mù thủ công).
+4. [`results/phase4_1/non_training/rq4/`](results/phase4_1/non_training/rq4/):
+   - [`rq4_status.json`](results/phase4_1/non_training/rq4/rq4_status.json) (Ghi nhận trạng thái `NEED_EXTERNAL_GPU` và lý do bắt buộc theo protocol).
+5. [`results/phase4_1/non_training/rq5/`](results/phase4_1/non_training/rq5/):
+   - [`rq5_cost_profile.csv`](results/phase4_1/non_training/rq5/rq5_cost_profile.csv) (Hồ sơ đo đạc độc lập: thời gian truy xuất, thời gian nạp bộ nhớ, thời gian sinh, độ trễ toàn trình, VRAM đỉnh, kích thước checkpoint).
+   - [`rq5_summary.json`](results/phase4_1/non_training/rq5/rq5_summary.json).
 
 ---
 
@@ -85,6 +85,6 @@ Toàn bộ kết quả chi tiết từng item và tổng hợp thống kê khôn
 
 1. **Vietnamese Final Benchmark**:
    - Đã hoàn thành 18/18 runs qua các hạt giống 42, 43, 44 trên 20 tài liệu (300 câu hỏi có câu trả lời, 50 câu hỏi không có câu trả lời).
-   - Dữ liệu gốc và kết quả kiểm định chi tiết tại [`results/phase4_1_vietnamese_p2_b2_per_question.csv`](file:///d:/NCKH/results/phase4_1_vietnamese_p2_b2_per_question.csv) và [`results/phase4_1_vietnamese_p2_b2_audit.json`](file:///d:/NCKH/results/phase4_1_vietnamese_p2_b2_audit.json) được giữ nguyên vẹn 100%, không chạy lại.
+   - Dữ liệu gốc và kết quả kiểm định chi tiết tại [`results/phase4_1_vietnamese_p2_b2_per_question.csv`](results/phase4_1_vietnamese_p2_b2_per_question.csv) và [`results/phase4_1_vietnamese_p2_b2_audit.json`](results/phase4_1_vietnamese_p2_b2_audit.json) được giữ nguyên vẹn 100%, không chạy lại.
 2. **Phương án B3 (Cartridges / Context Compression)**:
    - Duy trì trạng thái **EXCLUDED** theo đúng Phase 4.0 fairness lock. Không thay thế bằng phương pháp khác.

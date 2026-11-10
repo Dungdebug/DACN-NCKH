@@ -72,5 +72,8 @@
       "reference": "whether models can reason about altered antecedent conditions",
       "prediction": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
     }
-  ]
+  ],
+  "epochs_completed": 5,
+  "tokens_scanned_total": 2996465,
+  "sequences_scanned_total": 10090
 }

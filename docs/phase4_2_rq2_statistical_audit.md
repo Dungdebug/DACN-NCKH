@@ -3,7 +3,7 @@
 
 > **Mục tiêu**: Điều tra và xác thực tính chính xác toán học của chỉ số chênh lệch trung bình (*Mean Diff = +0.0093*) giữa P1 (SA-CMS) và B5 (Fixed-Token CMS), đồng thời làm rõ nguồn gốc của các con số được trích dẫn trong báo cáo Phase 4.1.  
 > **Căn cứ**: `configs/phase4_experiment.yaml`, `results/phase4_1/rq2/rq2_raw_results.json`, `results/phase4_1/rq1/rq1_raw_results.json`.  
-> **Nguyên tắc bảo tồn**: Không sửa đổi hoặc ghi đè kết quả gốc; toàn bộ kết quả kiểm toán được lưu độc lập tại [`results/phase4_2/rq2_statistical_audit.json`](file:///d:/NCKH/results/phase4_2/rq2_statistical_audit.json).
+> **Nguyên tắc bảo tồn**: Không sửa đổi hoặc ghi đè kết quả gốc; toàn bộ kết quả kiểm toán được lưu độc lập tại [`results/phase4_2/rq2_statistical_audit.json`](results/phase4_2/rq2_statistical_audit.json).
 
 ---
 

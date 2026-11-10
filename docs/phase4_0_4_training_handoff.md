@@ -11,8 +11,8 @@
 ## 1. TỔNG QUAN GÓI BÀN GIAO (EXECUTIVE SUMMARY)
 
 Tuân thủ nguyên tắc khoa học và chỉ đạo trong Phase 4.0.4, toàn bộ quy trình huấn luyện cho các bộ chuyển đổi tham số (SA-CMS Parametric Memory Adapters) đã được trích xuất thành một gói bàn giao độc lập, tự chủ 100% tại:
-* **Thư mục package**: [`training_handoff_rtx3050/`](file:///d:/NCKH/training_handoff_rtx3050/)
-* **File nén hoàn chỉnh**: [`training_handoff_rtx3050.zip`](file:///d:/NCKH/training_handoff_rtx3050.zip) (Dung lượng: ~103 KB)
+* **Thư mục package**: [`training_handoff_rtx3050/`](training_handoff_rtx3050/)
+* **File nén hoàn chỉnh**: [`training_handoff_rtx3050.zip`](training_handoff_rtx3050.zip) (Dung lượng: ~103 KB)
 
 Gói bàn giao này cho phép một cộng tác viên độc lập sở hữu card đồ họa **NVIDIA GeForce RTX 3050 6GB** hoặc **NVIDIA GeForce RTX 3050 8GB** có thể thiết lập môi trường và thực hiện huấn luyện chuẩn xác mà không phụ thuộc vào bất kỳ đường dẫn hay tài nguyên nào của máy gốc.
 

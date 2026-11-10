@@ -61,12 +61,31 @@ def main():
         except Exception:
             pass
 
+    lan_ip = None
+    if args.host == "0.0.0.0":
+        try:
+            import socket
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            lan_ip = s.getsockname()[0]
+            s.close()
+        except Exception:
+            try:
+                import socket
+                lan_ip = socket.gethostbyname(socket.gethostname())
+            except Exception:
+                pass
+
     print("=" * 75)
     print("SA-CMS: STRUCTURE-ALIGNED CONTINUUM MEMORY CHATBOT")
     print("DOCUMENT-GROUNDED QUESTION ANSWERING | OFFLINE RESEARCH PROTOTYPE")
     print("=" * 75)
     print(f"[*] Mode:           100% OFFLINE (ZERO NETWORK CALLS)")
-    print(f"[*] Host URL:       http://{args.host}:{args.port}")
+    if lan_ip:
+        print(f"[*] Local URL:      http://127.0.0.1:{args.port}")
+        print(f"[*] Network URL:    http://{lan_ip}:{args.port}  (Truy cập từ máy khác cùng WiFi/LAN)")
+    else:
+        print(f"[*] Host URL:       http://{args.host}:{args.port}")
     print(f"[*] Device Policy:  {'CUDA Preferred' if args.prefer_gpu else 'CPU Deterministic'}")
     print(f"[*] Local Runtime:  {local_runtime}")
     print(f"[*] Backbone:       HuggingFaceTB/SmolLM2-135M (Frozen Base Model)")

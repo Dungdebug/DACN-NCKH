@@ -40,6 +40,12 @@ local_runtime/parsed/LIFECYCLE_DOC_*
 local_runtime/parsed/TEST_DOC_*
 local_runtime/documents/LIFECYCLE_DOC_*
 data/document_store/documents/DOC_179*
+data/document_store/documents/doc_self_study_*
+data/document_store/documents/doc_benchmark_*
+data/document_store/documents/doc_noisy_*
+data/document_store/documents/test_doc_*
+local_runtime/documents/doc_self_study_*
+local_runtime/parsed/doc_self_study_*
 checkpoints/phase4_2/
 results/phase4_4/checkpoints/
 training_output_final/checkpoints/
@@ -49,3 +55,8 @@ training_handoff_rtx3050/training_handoff_rtx3050/output/
 # Temporary scratch files and test scripts
 scratch/
 scratch_bench.py
+
+checkpoints/train_5m/
+checkpoints/train_10m/
+checkpoints/*.pt
+logs/*.log

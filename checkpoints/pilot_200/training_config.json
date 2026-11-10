@@ -20,9 +20,9 @@
   "precision": "float32",
   "random_seed": 42,
   "device": "cuda",
-  "wall_clock_time_sec": 22.54,
-  "token_throughput_tps": 2915.2,
-  "peak_vram_mb": 828.58,
+  "wall_clock_time_sec": 24.2,
+  "token_throughput_tps": 2715.55,
+  "peak_vram_mb": 828.59,
   "checkpoint_size_mb": 13.52,
   "epoch_train_losses": [
     4.5972,
@@ -37,7 +37,7 @@
     "exact_match": 0.0
   },
   "post_train_validation": {
-    "val_loss": 4.5738,
+    "val_loss": 4.5739,
     "val_ppl": 96.92,
     "token_f1": 0.2431,
     "exact_match": 0.0

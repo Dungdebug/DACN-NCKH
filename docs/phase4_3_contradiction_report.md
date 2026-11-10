@@ -29,11 +29,11 @@
 - **Finding:** The true raw results in `results/phase4_1/rq1/rq1_raw_results.json` contain the full item-level data:
   - QASPER F1: B1=0.2590, B4=0.1025, B5=0.0957, P1=0.0896.
   - LongHealth Accuracy: B1=0.2000, B4=0.2333, B5=0.2000, P1=0.1667.
-- **Corrected Action:** Phase 4.3 master table [`results/phase4_3/tables/01_rq1_summary.csv`](file:///d:/NCKH/results/phase4_3/tables/01_rq1_summary.csv) directly computes bootstrap statistics from the true raw file without touching old intermediate files.
+- **Corrected Action:** Phase 4.3 master table [`results/phase4_3/tables/01_rq1_summary.csv`](results/phase4_3/tables/01_rq1_summary.csv) directly computes bootstrap statistics from the true raw file without touching old intermediate files.
 
 ### CONTRA-02: Clerical Typo in RQ2 Summary Narrative
 - **Root Cause:** The numbers 0.2869 and 0.2818 appeared in early exploratory drafts testing 2-level ablation variants (A2). They were accidentally transcribed into narrative text.
-- **Finding:** In `results/phase4_1/rq2/rq2_raw_results.json` and [`results/phase4_2/rq2_statistical_audit.json`](file:///d:/NCKH/results/phase4_2/rq2_statistical_audit.json), the paired 90 items (30 QASPER + 60 LongHealth) demonstrate:
+- **Finding:** In `results/phase4_1/rq2/rq2_raw_results.json` and [`results/phase4_2/rq2_statistical_audit.json`](results/phase4_2/rq2_statistical_audit.json), the paired 90 items (30 QASPER + 60 LongHealth) demonstrate:
   - P1 Mean: 0.1570, B5 Mean: 0.1477.
   - Paired Mean Difference: +0.0093 ($t=0.8203, p=0.4143$, Wilcoxon $p=0.8589$, Cohen's $d=0.0865$).
 - **Conclusion:** The difference between structure-aligned and fixed-token schedules is **not statistically significant** ($p > 0.05$) under the student-scale 200-sample update budget.
@@ -50,4 +50,4 @@
 
 ## 3. Provenance & Compliance Verification
 
-Every reported number across Phase 4.3 artifacts has been audited back to its immutable raw origin in [`results/phase4_3/data_provenance.json`](file:///d:/NCKH/results/phase4_3/data_provenance.json). Zero orphan metrics remain.
+Every reported number across Phase 4.3 artifacts has been audited back to its immutable raw origin in [`results/phase4_3/data_provenance.json`](results/phase4_3/data_provenance.json). Zero orphan metrics remain.

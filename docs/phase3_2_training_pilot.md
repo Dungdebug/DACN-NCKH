@@ -39,7 +39,7 @@ Sau khi hoàn tất phân tích lỗi và kiểm chứng refusal tại **Phase 3
 > Theo đề cương, quy mô phải được ghi rõ theo token thực tế: không được gọi "100 samples = 100 training units theo đề cương" mà phải ghi rõ "100-example pilot, total X tokens".
 
 ### 2.1. Cấu trúc Phân vùng Dữ liệu
-Dữ liệu được tổ chức tại module [`src/training/training_corpus.py`](file:///d:/NCKH/src/training/training_corpus.py) gồm 20 tài liệu nghiên cứu chuyên sâu (`TR_DOC_001` đến `TR_DOC_020`) thuộc các lĩnh vực: Khoa học máy tính, Kiến trúc bộ nhớ ngoài, Hệ thống phân tán, Lý thuyết thông tin và Tối ưu hóa Gradient.
+Dữ liệu được tổ chức tại module [`src/training/training_corpus.py`](src/training/training_corpus.py) gồm 20 tài liệu nghiên cứu chuyên sâu (`TR_DOC_001` đến `TR_DOC_020`) thuộc các lĩnh vực: Khoa học máy tính, Kiến trúc bộ nhớ ngoài, Hệ thống phân tán, Lý thuyết thông tin và Tối ưu hóa Gradient.
 
 - **Pilot A (100 training samples):** Lấy từ 10 tài liệu đầu tiên (`TR_DOC_001`–`TR_DOC_010`), mã câu hỏi `TR_Q001`–`TR_Q100`.
 - **Pilot B (200 training samples):** Lấy từ toàn bộ 20 tài liệu (`TR_DOC_001`–`TR_DOC_020`), mã câu hỏi `TR_Q001`–`TR_Q200`.
@@ -83,7 +83,7 @@ Cả hai pilot huấn luyện đều hoàn tất 100% không phát sinh lỗi s�
 
 ### 4.1. Bảng So sánh Tổng hợp: Pilot 100 vs Pilot 200
 
-Kết quả được xuất tự động tại [`results/phase3_2_training_comparison.csv`](file:///d:/NCKH/results/phase3_2_training_comparison.csv) và [`results/phase3_2_training_config.json`](file:///d:/NCKH/results/phase3_2_training_config.json):
+Kết quả được xuất tự động tại [`results/phase3_2_training_comparison.csv`](results/phase3_2_training_comparison.csv) và [`results/phase3_2_training_config.json`](results/phase3_2_training_config.json):
 
 | Chỉ số Thực nghiệm (Metric) | Baseline (Pre-train) | Pilot A (100 samples) | Pilot B (200 samples) | Ghi chú & Xu hướng |
 | :--- | :---: | :---: | :---: | :--- |
@@ -130,13 +130,13 @@ Kết quả được xuất tự động tại [`results/phase3_2_training_compa
 Hệ thống đã tự động xuất và đóng gói đầy đủ các artifact phục vụ tái lập:
 
 ### 6.1. Cấu trúc Checkpoint
-- [`checkpoints/pilot_100/cms_weights.pt`](file:///d:/NCKH/checkpoints/pilot_100/cms_weights.pt) (13.52 MB)
-- [`checkpoints/pilot_100/training_config.json`](file:///d:/NCKH/checkpoints/pilot_100/training_config.json)
-- [`checkpoints/pilot_200/cms_weights.pt`](file:///d:/NCKH/checkpoints/pilot_200/cms_weights.pt) (13.52 MB)
-- [`checkpoints/pilot_200/training_config.json`](file:///d:/NCKH/checkpoints/pilot_200/training_config.json)
+- [`checkpoints/pilot_100/cms_weights.pt`](checkpoints/pilot_100/cms_weights.pt) (13.52 MB)
+- [`checkpoints/pilot_100/training_config.json`](checkpoints/pilot_100/training_config.json)
+- [`checkpoints/pilot_200/cms_weights.pt`](checkpoints/pilot_200/cms_weights.pt) (13.52 MB)
+- [`checkpoints/pilot_200/training_config.json`](checkpoints/pilot_200/training_config.json)
 
 ### 6.2. Kiểm thử Khôi phục Checkpoint (Bit-level Reload Fidelity Test)
-Tại cuối mỗi run pilot và trong test case [`tests/test_training_pipeline.py`](file:///d:/NCKH/tests/test_training_pipeline.py):
+Tại cuối mỗi run pilot và trong test case [`tests/test_training_pipeline.py`](tests/test_training_pipeline.py):
 1. Khởi tạo một phiên bản `PretrainedHopeLM` độc lập với trọng số khởi tạo ban đầu.
 2. Nạp `state_dict` đã lưu từ checkpoint file vào `model.cms` và `model.cms_norm`.
 3. Chạy forward pass so sánh trực tiếp output logits trên cùng một mẫu kiểm thử giữa model gốc và model vừa nạp lại.
@@ -166,7 +166,7 @@ tests/test_training_pipeline.py .......                                   [100%]
 ============================== 92 passed in 23.79s ==============================
 ```
 
-Chi tiết 7 test mới trong [`tests/test_training_pipeline.py`](file:///d:/NCKH/tests/test_training_pipeline.py):
+Chi tiết 7 test mới trong [`tests/test_training_pipeline.py`](tests/test_training_pipeline.py):
 1. `test_no_document_overlap_with_phase3_1`: Xác nhận 0% tài liệu trùng lặp với Phase 3.1.
 2. `test_no_question_overlap_with_phase3_1`: Xác nhận 0% câu hỏi trùng lặp với Phase 3.1.
 3. `test_sample_counts_and_partitioning`: Kiểm tra tính toàn vẹn phân vùng (100 train, 200 train, 50 val).

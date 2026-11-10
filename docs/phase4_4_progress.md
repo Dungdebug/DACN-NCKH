@@ -27,7 +27,7 @@ In strict adherence to the **Global Hard Rule** and protocol locks:
 
 ## 2. One-Command External GPU Runner Suite (`external_gpu/phase4_4/`)
 
-A turn-key orchestration suite has been constructed in [`external_gpu/phase4_4/`](file:///d:/NCKH/external_gpu/phase4_4/):
+A turn-key orchestration suite has been constructed in [`external_gpu/phase4_4/`](external_gpu/phase4_4/):
 
 ```
 external_gpu/phase4_4/

@@ -1,0 +1,4 @@
+## 1. Gioi thieu Nested Learning
+Nested Learning la phuong phap hoc da thang thoi gian.
+## 2. Ung dung
+Phuong phap giup giam thieu bo nho RAM dang ke.

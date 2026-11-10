@@ -44,6 +44,67 @@ def _extract_query_keywords(question: str) -> List[str]:
     return [w for w in cleaned.split() if len(w) > 1 and w not in STOPWORDS_VI_EN]
 
 
+VIETNAMESE_DOMAIN_SYNONYMS: Dict[str, List[str]] = {
+    # Nghề nghiệp, chức vụ, công tác
+    "nghề": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc", "cấp", "bậc", "tổ", "trưởng", "đảm", "nhiệm"],
+    "nghiệp": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc"],
+    "chức": ["vụ", "công", "tác", "cấp", "bậc", "tổ", "trưởng", "vị", "trí"],
+    "chức vụ": ["tổ", "trưởng", "cấp", "bậc", "đơn", "vị", "công", "tác"],
+    "làm": ["công", "tác", "đảm", "nhiệm", "chức", "vụ", "phụ", "trách", "thực", "hiện", "nhiệm", "vụ"],
+    # Con người, tác giả, chủ thể
+    "ông": ["tôi", "tác", "giả", "người", "viết", "bản", "thân", "đồng", "chí", "trần", "hữu", "trang"],
+    "bà": ["tôi", "tác", "giả", "người", "viết", "bản", "thân", "đồng", "chí"],
+    "anh": ["tôi", "tác", "giả", "người", "viết", "bản", "thân", "đồng", "chí"],
+    "tác giả": ["tôi", "người", "viết", "bản", "thân", "trần", "hữu", "trang"],
+    "người": ["tôi", "tác", "giả", "bản", "thân", "trần", "hữu", "trang"],
+    "tên": ["tôi", "trần", "hữu", "trang", "họ", "tên"],
+    "ai": ["tên", "tôi", "họ", "tên", "người", "viết", "tác", "giả", "đồng", "chí", "trần", "hữu", "trang"],
+    # Đơn vị, nơi làm việc, công ty
+    "đâu": ["đơn", "vị", "công", "tác", "cơ", "quan", "công", "ty", "ctcp", "hàng", "hải", "macs"],
+    "công ty": ["đơn", "vị", "doanh", "nghiệp", "ctcp", "hàng", "hải", "macs", "công", "tác"],
+    "đơn vị": ["ctcp", "hàng", "hải", "macs", "công", "tác"],
+    "chỗ": ["đơn", "vị", "cơ", "quan", "nơi", "làm", "việc"],
+    # Hoạt động, mục tiêu, thành tích, kết quả
+    "phấn đấu": ["kết", "quả", "thành", "tích", "mục", "tiêu", "chỉ", "tiêu", "hoàn", "thành", "đạt", "được", "sáng", "kiến"],
+    "kết quả": ["hoàn", "thành", "chỉ", "tiêu", "đạt", "được", "thành", "tích", "sáng", "kiến"],
+    "thành tích": ["kết", "quả", "đạt", "được", "hoàn", "thành", "sáng", "kiến"],
+    "mục tiêu": ["kế", "hoạch", "chỉ", "tiêu", "phương", "hướng", "nhiệm", "vụ"],
+    # Học tập, đạo đức, tư tưởng, chỉ thị
+    "học": ["học", "tập", "nghiên", "cứu", "quán", "triệt", "thực", "hành", "tư", "tưởng", "đạo", "đức", "phong", "cách"],
+    "dạy": ["tư", "tưởng", "đạo", "đức", "phong", "cách", "chỉ", "thị", "hồ", "chí", "minh"],
+    "bác": ["hồ", "chí", "minh", "chủ", "tịch", "tư", "tưởng", "đạo", "đức", "phong", "cách"],
+    "chỉ thị": ["07", "ct", "tw", "bộ", "chính", "trị"],
+    # Trách nhiệm, rèn luyện, khuyết điểm
+    "trách nhiệm": ["nhiệm", "vụ", "nghĩa", "vụ", "gương", "mẫu", "tiên", "phong", "đi", "đầu"],
+    "khuyết điểm": ["hạn", "chế", "thiếu", "sót", "khắc", "phục", "kiểm", "điểm", "tự", "kiểm", "điểm"],
+    "hạn chế": ["thiếu", "sót", "khuyết", "điểm", "khắc", "phục", "kiểm", "điểm"],
+    "lỗi": ["hạn", "chế", "thiếu", "sót", "khuyết", "điểm", "khắc", "phục", "sửa", "chữa"],
+    "khắc phục": ["sửa", "chữa", "hạn", "chế", "thiếu", "sót", "tự", "kiểm", "điểm"],
+    # Năm, thời gian
+    "năm": ["2026", "hằng", "năm", "toàn", "khóa"],
+    "thời gian": ["ngày", "tháng", "năm", "2026"],
+}
+
+
+def expand_query_semantics(question: str) -> Tuple[str, List[str]]:
+    """
+    Expands raw user question into expanded query text for BM25 and keyword tokens
+    for sentence scoring, bridging the colloquial-to-document vocabulary gap.
+    """
+    q_norm = (question or "").lower()
+    raw_kw = _extract_query_keywords(question)
+    expanded_tokens = list(raw_kw)
+
+    for key, synonyms in VIETNAMESE_DOMAIN_SYNONYMS.items():
+        if key in q_norm or any(k == key for k in raw_kw):
+            for syn in synonyms:
+                if syn not in expanded_tokens:
+                    expanded_tokens.append(syn)
+
+    expanded_query_str = f"{question} " + " ".join(expanded_tokens)
+    return expanded_query_str.strip(), expanded_tokens
+
+
 def strip_passage_artifacts(text: str) -> str:
     """
     Removes internal passage IDs, page markers, markdown heading hashes,
@@ -139,7 +200,8 @@ def score_sentence_relevance(
     s_lower = sentence.lower()
     q_lower = (question or "").lower()
     s_words = set(re.sub(r"[^\w\s]", " ", s_lower).split())
-    q_set = set(query_keywords)
+    _, exp_tokens = expand_query_semantics(question)
+    q_set = set(query_keywords) | set(exp_tokens)
 
     if not s_words:
         return -10.0
@@ -194,6 +256,7 @@ def compress_evidence_context(
     question: str,
     evidence_passages: List[Dict[str, Any]],
     max_sentences_per_passage: int = 2,
+    tokenizer: Optional[Any] = None,
 ) -> Tuple[str, Dict[str, Any]]:
     """
     Query-Guided Sub-Passage Context Pruner:
@@ -236,8 +299,16 @@ def compress_evidence_context(
     raw_full = "\n\n".join(raw_blocks)
     comp_full = "\n\n".join(compressed_blocks)
 
-    raw_tok = int(len(raw_full.split()) * 1.35)
-    comp_tok = int(len(comp_full.split()) * 1.35)
+    if tokenizer is not None:
+        try:
+            raw_tok = len(tokenizer.encode(raw_full, add_special_tokens=False))
+            comp_tok = len(tokenizer.encode(comp_full, add_special_tokens=False))
+        except Exception:
+            raw_tok = int(len(raw_full.split()) * 1.35)
+            comp_tok = int(len(comp_full.split()) * 1.35)
+    else:
+        raw_tok = int(len(raw_full.split()) * 1.35)
+        comp_tok = int(len(comp_full.split()) * 1.35)
     saved = max(0, raw_tok - comp_tok)
     ratio = round((saved / raw_tok) * 100.0, 2) if raw_tok > 0 else 0.0
 
@@ -265,7 +336,9 @@ def synthesize_accurate_grounded_answer(
         return "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
 
     q_keywords = _extract_query_keywords(question)
-    q_set = set(q_keywords)
+    _, exp_tokens = expand_query_semantics(question)
+    all_scoring_keywords = list(dict.fromkeys(q_keywords + exp_tokens))
+    q_set = set(all_scoring_keywords)
     mode = (answer_mode or "balanced").lower()
 
     # Collect and score all clean sentences across retrieved citations
@@ -276,7 +349,7 @@ def synthesize_accurate_grounded_answer(
         doc_title = c.get("document_title", c.get("document_id", "Tài liệu"))
         sents = split_clean_sentences(raw_text)
         for s_idx, sent in enumerate(sents):
-            rel_score = score_sentence_relevance(sent, question, q_keywords, s_idx)
+            rel_score = score_sentence_relevance(sent, question, all_scoring_keywords, s_idx)
             # Boost by passage retrieval rank
             passage_rank_bonus = max(0.0, 2.0 - c_idx * 0.6)
             total_score = rel_score + passage_rank_bonus

@@ -6,9 +6,9 @@
 **Ngày thực hiện**: 03/10/2026  
 **Trạng thái**: **FINAL PROTOCOL STATUS = READY_FOR_PHASE_4_1 (TẤT CẢ 8 CỔNG KIỂM TOÁN ĐẠT CHUẨN)**  
 **Phần cứng**: NVIDIA GeForce GTX 1650 Ti (4GB VRAM), Python 3.9.13, PyTorch 2.x  
-**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml)  
-**Bảng ma trận phương pháp $\times$ tập dữ liệu**: [`results/phase4_0_3_dataset_matrix.csv`](file:///d:/NCKH/results/phase4_0_3_dataset_matrix.csv)  
-**Tệp dữ liệu kiểm toán JSON**: [`results/phase4_0_3_scope_check.json`](file:///d:/NCKH/results/phase4_0_3_scope_check.json)  
+**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml)  
+**Bảng ma trận phương pháp $\times$ tập dữ liệu**: [`results/phase4_0_3_dataset_matrix.csv`](results/phase4_0_3_dataset_matrix.csv)  
+**Tệp dữ liệu kiểm toán JSON**: [`results/phase4_0_3_scope_check.json`](results/phase4_0_3_scope_check.json)  
 
 ---
 
@@ -32,7 +32,7 @@ Giai đoạn Phase 4.0.3 thực hiện khóa chặt lần cuối **phạm vi to�
 Đề cương NCKH (Mục 4, Bảng hình 7; Mục 7.1, dòng 188–190) nêu rõ: LongHealth được dùng cho **RQ1–RQ3** để kiểm tra khả năng suy luận trên hồ sơ bệnh án dài với câu hỏi trắc nghiệm đa lựa chọn.
 
 ### 2.1. Hiện thực hóa Module Đánh giá LongHealth:
-Hệ thống đã bổ sung lớp kiểm chuẩn độc lập [`LongHealthDocumentBenchmark`](file:///d:/NCKH/src/evaluation/pretrained_benchmarks.py) trong thư viện kiểm định:
+Hệ thống đã bổ sung lớp kiểm chuẩn độc lập [`LongHealthDocumentBenchmark`](src/evaluation/pretrained_benchmarks.py) trong thư viện kiểm định:
 - Hỗ trợ đánh giá trắc nghiệm 4 lựa chọn (A, B, C, D) với các bệnh án phức tạp chia thành các mục lâm sàng chuẩn: *Chief Complaint & HPI, Past Medical/Surgical History, Hospital Course & Interventions, Lab Findings & Medications, Discharge Diagnosis & Follow-up*.
 - Đo lường đồng thời: Accuracy (%), Perplexity, Cross-Entropy Loss, Xác suất Softmax của token mục tiêu ($P(\text{choice})$), và F1 token.
 
@@ -108,7 +108,7 @@ Tất cả 5 tập dữ liệu trong Đề cương đều đã được ghi nh�
 
 ## 7. NHIỆM VỤ 6: MA TRẬN PHƯƠNG PHÁP $\times$ TẬP DỮ LIỆU (METHOD $\times$ DATASET MATRIX)
 
-Chi tiết ma trận được lưu trữ tại [`results/phase4_0_3_dataset_matrix.csv`](file:///d:/NCKH/results/phase4_0_3_dataset_matrix.csv):
+Chi tiết ma trận được lưu trữ tại [`results/phase4_0_3_dataset_matrix.csv`](results/phase4_0_3_dataset_matrix.csv):
 
 | Mã | Phương Pháp | QASPER | LongHealth | MK-NIAH | Vietnamese | Incremental Corpus | Ghi Chú Khoa Học |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
@@ -137,7 +137,7 @@ Chi tiết ma trận được lưu trữ tại [`results/phase4_0_3_dataset_matr
 
 ## 9. KẾT LUẬN & ĐIỀU KIỆN DỪNG (STOP CONDITION)
 
-Kịch bản kiểm toán độc lập [`scripts/verify_phase4_0_3_scope.py`](file:///d:/NCKH/scripts/verify_phase4_0_3_scope.py) đã xác nhận toàn bộ các cổng kiểm định đều vượt qua 100%:
+Kịch bản kiểm toán độc lập [`scripts/verify_phase4_0_3_scope.py`](scripts/verify_phase4_0_3_scope.py) đã xác nhận toàn bộ các cổng kiểm định đều vượt qua 100%:
 
 ```
 ================================================================================

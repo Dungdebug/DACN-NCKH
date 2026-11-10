@@ -83,19 +83,19 @@ d:\NCKH/
 
 | Thành phần trong Paper | Section / Equation trong Paper | Module & Lớp trong Code | Mô tả chức năng |
 |---|---|---|---|
-| **Causal Self-Attention** | Sec 8.3 (trang 33) | [`CausalSelfAttention`](file:///d:/NCKH/src/attention/causal_attention.py) | Working memory module, causal mask $M_{ij}$, hỗ trợ KV-Cache |
-| **Sequential CMS** | Sec 7.1, Eq (70) | [`SequentialMLPChain`](file:///d:/NCKH/src/cms/mlp_chain.py) | $y_t = \mathrm{MLP}^{(f_k)}(\dots \mathrm{MLP}^{(f_1)}(x_t))$ |
-| **Independent CMS** | Sec 7.1, Eq (74) | [`IndependentMLPChain`](file:///d:/NCKH/src/cms/mlp_chain.py) | $y_t = \mathrm{Agg}(\mathrm{MLP}^{(f_k)}(x_t), \dots)$ |
-| **CMS Gradient Update** | Sec 7.1, Eq (71) | [`ContinuumMemorySystem.update_scheduled_levels`](file:///d:/NCKH/src/cms/continuum_memory.py) | $\theta^{(f_\ell)}_{i+1} = \theta^{(f_\ell)}_i - \eta^{(\ell)} \nabla \mathcal{L}$ nếu $i \equiv 0 \pmod{C^{(\ell)}}$ |
-| **Frequency Schedule** | Sec 7.1, Def 2 | [`CMSSchedule`](file:///d:/NCKH/src/cms/schedule.py) | Quản lý thang đo tần số $f_\ell$ và chunk sizes $C^{(\ell)}$ |
-| **Chunk Token Buffer** | Sec 7.1, Sec 8.2 | [`MemoryChunkBuffer`](file:///d:/NCKH/src/memory/buffer.py) | Đếm bước token, kích hoạt cập nhật khi chạm ngưỡng $C^{(\ell)}$ |
-| **Ad-hoc Level Stacking** | Sec 7.3 (trang 29) | [`ContinuumMemorySystem.initialize_from_base`](file:///d:/NCKH/src/cms/continuum_memory.py) | Khởi tạo trọng số CMS từ MLP pre-trained ban đầu |
-| **Memory Reset** | Sec 7.1, Eq (72) | [`ContinuumMemorySystem.reset_memory`](file:///d:/NCKH/src/cms/continuum_memory.py) | Phục hồi bộ nhớ về trạng thái ban đầu $\theta_0$ giữa các tài liệu |
-| **Hope-Attention Block** | Sec 8.3 (trang 33) | [`HopeAttentionBlock`](file:///d:/NCKH/src/hope_attention/block.py) | Tích hợp Attention + CMS + Residual + LayerNorm |
-| **Hope-Attention LM** | Sec 8.3 & Sec 9.1 | [`HopeAttentionLM`](file:///d:/NCKH/src/hope_attention/model.py) | Mô hình ngôn ngữ Causal đầy đủ với $N$ tầng Hope-Attention |
-| **Document Ingestion** | Sec 7.1, Sec 9.1 | [`OnlineDocumentTrainer`](file:///d:/NCKH/src/training/online_trainer.py) | Đọc văn bản liên tục và cập nhật bộ nhớ online |
-| **MK-NIAH Benchmark** | Sec 9.1, Figure 7 Left | [`MKNIAHBenchmark`](file:///d:/NCKH/src/evaluation/mk_niah.py) | Đánh giá truy xuất đa khóa trong văn bản dài |
-| **Document QA Benchmark** | Sec 9.1, Figure 7 Right | [`DocumentQABenchmark`](file:///d:/NCKH/src/evaluation/doc_qa.py) | Đánh giá perplexity và loss trả lời trên tài liệu dài |
+| **Causal Self-Attention** | Sec 8.3 (trang 33) | [`CausalSelfAttention`](src/attention/causal_attention.py) | Working memory module, causal mask $M_{ij}$, hỗ trợ KV-Cache |
+| **Sequential CMS** | Sec 7.1, Eq (70) | [`SequentialMLPChain`](src/cms/mlp_chain.py) | $y_t = \mathrm{MLP}^{(f_k)}(\dots \mathrm{MLP}^{(f_1)}(x_t))$ |
+| **Independent CMS** | Sec 7.1, Eq (74) | [`IndependentMLPChain`](src/cms/mlp_chain.py) | $y_t = \mathrm{Agg}(\mathrm{MLP}^{(f_k)}(x_t), \dots)$ |
+| **CMS Gradient Update** | Sec 7.1, Eq (71) | [`ContinuumMemorySystem.update_scheduled_levels`](src/cms/continuum_memory.py) | $\theta^{(f_\ell)}_{i+1} = \theta^{(f_\ell)}_i - \eta^{(\ell)} \nabla \mathcal{L}$ nếu $i \equiv 0 \pmod{C^{(\ell)}}$ |
+| **Frequency Schedule** | Sec 7.1, Def 2 | [`CMSSchedule`](src/cms/schedule.py) | Quản lý thang đo tần số $f_\ell$ và chunk sizes $C^{(\ell)}$ |
+| **Chunk Token Buffer** | Sec 7.1, Sec 8.2 | [`MemoryChunkBuffer`](src/memory/buffer.py) | Đếm bước token, kích hoạt cập nhật khi chạm ngưỡng $C^{(\ell)}$ |
+| **Ad-hoc Level Stacking** | Sec 7.3 (trang 29) | [`ContinuumMemorySystem.initialize_from_base`](src/cms/continuum_memory.py) | Khởi tạo trọng số CMS từ MLP pre-trained ban đầu |
+| **Memory Reset** | Sec 7.1, Eq (72) | [`ContinuumMemorySystem.reset_memory`](src/cms/continuum_memory.py) | Phục hồi bộ nhớ về trạng thái ban đầu $\theta_0$ giữa các tài liệu |
+| **Hope-Attention Block** | Sec 8.3 (trang 33) | [`HopeAttentionBlock`](src/hope_attention/block.py) | Tích hợp Attention + CMS + Residual + LayerNorm |
+| **Hope-Attention LM** | Sec 8.3 & Sec 9.1 | [`HopeAttentionLM`](src/hope_attention/model.py) | Mô hình ngôn ngữ Causal đầy đủ với $N$ tầng Hope-Attention |
+| **Document Ingestion** | Sec 7.1, Sec 9.1 | [`OnlineDocumentTrainer`](src/training/online_trainer.py) | Đọc văn bản liên tục và cập nhật bộ nhớ online |
+| **MK-NIAH Benchmark** | Sec 9.1, Figure 7 Left | [`MKNIAHBenchmark`](src/evaluation/mk_niah.py) | Đánh giá truy xuất đa khóa trong văn bản dài |
+| **Document QA Benchmark** | Sec 9.1, Figure 7 Right | [`DocumentQABenchmark`](src/evaluation/doc_qa.py) | Đánh giá perplexity và loss trả lời trên tài liệu dài |
 
 ---
 

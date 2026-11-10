@@ -63,7 +63,7 @@ Dữ liệu kiểm toán pháp y trực tiếp từ 9 file log huấn luyện th
 ---
 
 ## 4. BẢNG PROTOCOL COMPLIANCE (ĐỐI CHIẾU 17 THÔNG SỐ ĐÃ KHÓA)
-Đối chiếu lại toàn diện 17 hạng mục từng bị cảnh báo trong [`docs/external_gpu_protocol_reconciliation.md`](file:///d:/NCKH/docs/external_gpu_protocol_reconciliation.md):
+Đối chiếu lại toàn diện 17 hạng mục từng bị cảnh báo trong [`docs/external_gpu_protocol_reconciliation.md`](docs/external_gpu_protocol_reconciliation.md):
 
 | STT | Hạng mục Protocol | Giá trị Quy chuẩn Khóa (Locked Protocol) | Giá trị thực tế phát hiện trong Commit mới | Trạng thái (Status) | Bằng chứng File & Dòng |
 |:---:|:---|:---|:---|:---:|:---|
@@ -254,6 +254,6 @@ Tiến hành kiểm tra nhị phân độc lập bằng PyTorch script (`weights
   2. Thuật toán chấm điểm single-token đã được thay thế triệt để bằng Token F1 / Exact Match / Target Logprob chuẩn hóa SQuAD/QASPER, triệt tiêu 100% false positives.
   3. Đã ghi nhận toàn bộ raw predictions dạng JSONL vào `results/raw_predictions/` cho mọi thí nghiệm (Ablation, RQ2, RQ3, RQ4).
   4. Đã phân tích quỹ đạo Target Log-Probability cho RQ4 (+0.399 log-likelihood retention cho P1).
-  5. Đã giải trình minh bạch luồng prompt tiếng Việt của RQ3 và xuất bản Báo cáo Khoa học Tổng kết [`docs/final_scientific_report.md`](file:///d:/NCKH/docs/final_scientific_report.md).
+  5. Đã giải trình minh bạch luồng prompt tiếng Việt của RQ3 và xuất bản Báo cáo Khoa học Tổng kết [`docs/final_scientific_report.md`](docs/final_scientific_report.md).
 
 

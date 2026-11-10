@@ -33,30 +33,30 @@ Bảng đối chiếu toàn diện 13 tiêu chí khoa học được quy định
 
 | STT | Yêu cầu trong Đề cương | Bằng chứng trong Code & Kết quả thực tế | Đánh giá | Tệp / Hàm / Dòng mã nguồn |
 | :---: | :--- | :--- | :---: | :--- |
-| **1** | **3 random seeds** (Mục 7.5, L253) | Đã chạy đủ seeds `42`, `43`, `44` cho 7 cấu hình (tổng cộng 21 hàng trong CSV). | **PASS** | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L225): L225; [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv): L2-22 |
-| **2** | **Bootstrap CI 95%** (Mục 7.5, L253) | **Phase 2.5 cũ**: Gọi `bootstrap_ci(accs)` trên mảng 3 phần tử (3 seed averages), vi phạm giả định thống kê.<br>**Phase 2.5.1**: Đã sửa thành bootstrap trên từng đơn vị quan sát ($n=100$ mẫu MK-NIAH, $n=10$ tài liệu QASPER). | **FAIL** *(cũ)*<br>$\rightarrow$ **PASS** *(mới)* | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L357-L372); [`scripts/audit_phase2_5_statistics.py`](file:///d:/NCKH/scripts/audit_phase2_5_statistics.py#L34-L58) |
-| **3** | **Paired statistical test P1 vs B5** (Mục 7.5, L253) | **Phase 2.5 cũ**: Tuyên bố "statistically verified improvement" nhưng không có hàm tính $t$, $W$ hay $p$-value.<br>**Phase 2.5.1**: Đã tính toàn diện paired t-test, Wilcoxon signed-rank, McNemar test và Cohen's $d_z$ từ từng cặp mẫu. | **FAIL** *(cũ)*<br>$\rightarrow$ **PASS** *(mới)* | [`docs/phase2_5_scientific_validation.md`](file:///d:/NCKH/docs/phase2_5_scientific_validation.md#L186); [`scripts/audit_phase2_5_statistics.py`](file:///d:/NCKH/scripts/audit_phase2_5_statistics.py#L61-L160) |
-| **4** | **Fixed-token vs structure cùng total update budget** (Mục 7.4, L246) | Thuật toán `StructureAlignedSchedule` cân bằng chính xác số điểm ngắt: Level 2 = 1.540 cập nhật, Level 3 = 1.650 cập nhật ($\Delta = 0$). | **PASS** | [`src/hope_attention/sa_cms.py`](file:///d:/NCKH/src/hope_attention/sa_cms.py#L56-L105); [`tests/test_sa_cms_update.py`](file:///d:/NCKH/tests/test_sa_cms_update.py#L273-L284) |
-| **5** | **Real boundaries vs random boundaries cùng số boundary** (Mục 7.4, L247) | Ablation ranh giới ngẫu nhiên (`schedule_mode="random"`) sinh đúng số lượng boundary với ranh giới cấu trúc thật: Level 2 = 1.540, Level 3 = 1.650. | **PASS** | [`src/hope_attention/sa_cms.py`](file:///d:/NCKH/src/hope_attention/sa_cms.py#L82-L93); [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv): L11-13, L20-22 |
-| **6** | **QASPER answer-level metric: F1/EM** (Mục 7.3, L230-232) | Đã triển khai chấm điểm Token F1 và Exact Match (EM) theo chuẩn gốc của benchmark QASPER (Dasigi et al., 2021). | **PASS** | [`src/evaluation/pretrained_benchmarks.py`](file:///d:/NCKH/src/evaluation/pretrained_benchmarks.py#L320-L370); [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L186-L189) |
-| **7** | **PPL là metric phụ, không thay thế answer-level metric** (Đề cương & Prompt) | Báo cáo và bảng kết quả hiển thị song song F1, EM, Loss và PPL. Không dùng riêng PPL để kết luận năng lực QA. | **PASS** | [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv): cột `QASPER_F1`, `QASPER_EM`, `QASPER_PPL` |
-| **8** | **MK-NIAH evaluation** (Mục 7.1, L191-193) | Đánh giá 100 mẫu truy xuất đa khóa (RULER-style) với các chỉ số: Verbatim Accuracy, Target Probability, Target Rank. | **PASS** | [`src/evaluation/pretrained_benchmarks.py`](file:///d:/NCKH/src/evaluation/pretrained_benchmarks.py#L15-L99); [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L47-L129) |
-| **9** | **Reproducibility** (Mục 7.5, L253) | Mọi bộ sinh số ngẫu nhiên đều được cố định seed (`torch.manual_seed`, `np.random.seed`, `random.seed`), pipeline hoàn toàn tái lập được. 27/27 unit tests PASS. | **PASS** | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L270-L273); [`tests/test_sa_cms_update.py`](file:///d:/NCKH/tests/test_sa_cms_update.py) |
-| **10** | **Cùng backbone** (Mục 7.2, L225) | Toàn bộ 7 cấu hình đều sử dụng chung mô hình `HuggingFaceTB/SmolLM2-135M` (134.5M parameters, frozen weights). | **PASS** | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L276) |
-| **11** | **Cùng context window** (Mục 7.2, L225) | Cùng nhận văn bản nguyên vẹn, không cắt ngắn ngữ cảnh giữa các phương pháp. Cửa sổ ngữ cảnh như nhau. | **PASS** | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L70, L152) |
-| **12** | **Cùng quantization** (Mục 7.2, L225) | Toàn bộ các cấu hình đều chạy ở độ chính xác FP16 (`torch.float16`) trên phần cứng GPU GTX 1650 Ti. | **PASS** | [`run_phase2_5_controlled.py`](file:///d:/NCKH/run_phase2_5_controlled.py#L211, L280) |
-| **13** | **Baseline freeze** (Mục 4 & 7.2) | Kiến trúc Hope-Attention, quy tắc cập nhật Phương trình 71 trong `src/cms/continuum_memory.py` và backbone giữ nguyên 100%, không bị sửa đổi. | **PASS** | [`src/cms/continuum_memory.py`](file:///d:/NCKH/src/cms/continuum_memory.py#L115-L180); [`src/hope_attention/pretrained_hope.py`](file:///d:/NCKH/src/hope_attention/pretrained_hope.py#L54-L57) |
+| **1** | **3 random seeds** (Mục 7.5, L253) | Đã chạy đủ seeds `42`, `43`, `44` cho 7 cấu hình (tổng cộng 21 hàng trong CSV). | **PASS** | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L225): L225; [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv): L2-22 |
+| **2** | **Bootstrap CI 95%** (Mục 7.5, L253) | **Phase 2.5 cũ**: Gọi `bootstrap_ci(accs)` trên mảng 3 phần tử (3 seed averages), vi phạm giả định thống kê.<br>**Phase 2.5.1**: Đã sửa thành bootstrap trên từng đơn vị quan sát ($n=100$ mẫu MK-NIAH, $n=10$ tài liệu QASPER). | **FAIL** *(cũ)*<br>$\rightarrow$ **PASS** *(mới)* | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L357-L372); [`scripts/audit_phase2_5_statistics.py`](scripts/audit_phase2_5_statistics.py#L34-L58) |
+| **3** | **Paired statistical test P1 vs B5** (Mục 7.5, L253) | **Phase 2.5 cũ**: Tuyên bố "statistically verified improvement" nhưng không có hàm tính $t$, $W$ hay $p$-value.<br>**Phase 2.5.1**: Đã tính toàn diện paired t-test, Wilcoxon signed-rank, McNemar test và Cohen's $d_z$ từ từng cặp mẫu. | **FAIL** *(cũ)*<br>$\rightarrow$ **PASS** *(mới)* | [`docs/phase2_5_scientific_validation.md`](docs/phase2_5_scientific_validation.md#L186); [`scripts/audit_phase2_5_statistics.py`](scripts/audit_phase2_5_statistics.py#L61-L160) |
+| **4** | **Fixed-token vs structure cùng total update budget** (Mục 7.4, L246) | Thuật toán `StructureAlignedSchedule` cân bằng chính xác số điểm ngắt: Level 2 = 1.540 cập nhật, Level 3 = 1.650 cập nhật ($\Delta = 0$). | **PASS** | [`src/hope_attention/sa_cms.py`](src/hope_attention/sa_cms.py#L56-L105); [`tests/test_sa_cms_update.py`](tests/test_sa_cms_update.py#L273-L284) |
+| **5** | **Real boundaries vs random boundaries cùng số boundary** (Mục 7.4, L247) | Ablation ranh giới ngẫu nhiên (`schedule_mode="random"`) sinh đúng số lượng boundary với ranh giới cấu trúc thật: Level 2 = 1.540, Level 3 = 1.650. | **PASS** | [`src/hope_attention/sa_cms.py`](src/hope_attention/sa_cms.py#L82-L93); [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv): L11-13, L20-22 |
+| **6** | **QASPER answer-level metric: F1/EM** (Mục 7.3, L230-232) | Đã triển khai chấm điểm Token F1 và Exact Match (EM) theo chuẩn gốc của benchmark QASPER (Dasigi et al., 2021). | **PASS** | [`src/evaluation/pretrained_benchmarks.py`](src/evaluation/pretrained_benchmarks.py#L320-L370); [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L186-L189) |
+| **7** | **PPL là metric phụ, không thay thế answer-level metric** (Đề cương & Prompt) | Báo cáo và bảng kết quả hiển thị song song F1, EM, Loss và PPL. Không dùng riêng PPL để kết luận năng lực QA. | **PASS** | [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv): cột `QASPER_F1`, `QASPER_EM`, `QASPER_PPL` |
+| **8** | **MK-NIAH evaluation** (Mục 7.1, L191-193) | Đánh giá 100 mẫu truy xuất đa khóa (RULER-style) với các chỉ số: Verbatim Accuracy, Target Probability, Target Rank. | **PASS** | [`src/evaluation/pretrained_benchmarks.py`](src/evaluation/pretrained_benchmarks.py#L15-L99); [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L47-L129) |
+| **9** | **Reproducibility** (Mục 7.5, L253) | Mọi bộ sinh số ngẫu nhiên đều được cố định seed (`torch.manual_seed`, `np.random.seed`, `random.seed`), pipeline hoàn toàn tái lập được. 27/27 unit tests PASS. | **PASS** | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L270-L273); [`tests/test_sa_cms_update.py`](tests/test_sa_cms_update.py) |
+| **10** | **Cùng backbone** (Mục 7.2, L225) | Toàn bộ 7 cấu hình đều sử dụng chung mô hình `HuggingFaceTB/SmolLM2-135M` (134.5M parameters, frozen weights). | **PASS** | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L276) |
+| **11** | **Cùng context window** (Mục 7.2, L225) | Cùng nhận văn bản nguyên vẹn, không cắt ngắn ngữ cảnh giữa các phương pháp. Cửa sổ ngữ cảnh như nhau. | **PASS** | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L70, L152) |
+| **12** | **Cùng quantization** (Mục 7.2, L225) | Toàn bộ các cấu hình đều chạy ở độ chính xác FP16 (`torch.float16`) trên phần cứng GPU GTX 1650 Ti. | **PASS** | [`run_phase2_5_controlled.py`](run_phase2_5_controlled.py#L211, L280) |
+| **13** | **Baseline freeze** (Mục 4 & 7.2) | Kiến trúc Hope-Attention, quy tắc cập nhật Phương trình 71 trong `src/cms/continuum_memory.py` và backbone giữ nguyên 100%, không bị sửa đổi. | **PASS** | [`src/cms/continuum_memory.py`](src/cms/continuum_memory.py#L115-L180); [`src/hope_attention/pretrained_hope.py`](src/hope_attention/pretrained_hope.py#L54-L57) |
 
 ---
 
 ## TASK 2 — KIỂM TRA PAIRED STATISTICAL TEST (P1 VS B5)
 
 ### 2.1 Hiện trạng kiểm định trong báo cáo Phase 2.5 cũ
-- Trong báo cáo [`docs/phase2_5_scientific_validation.md`](file:///d:/NCKH/docs/phase2_5_scientific_validation.md#L186), dòng 186 có câu: *"SA-CMS delivers a large, statistically verified improvement in document modeling..."*.
+- Trong báo cáo [`docs/phase2_5_scientific_validation.md`](docs/phase2_5_scientific_validation.md#L186), dòng 186 có câu: *"SA-CMS delivers a large, statistically verified improvement in document modeling..."*.
 - **Kết luận kiểm toán**: Câu khẳng định trên là **HOÀN TOÀN CHƯA CÓ CĂN CỨ THỐNG KÊ** tại thời điểm viết báo cáo, vì trong mã nguồn `run_phase2_5_controlled.py` **không có bất kỳ dòng code nào** tính toán paired t-test, Wilcoxon signed-rank test hay McNemar test. Không có giá trị test statistic ($t$, $W$, $\chi^2$) hay $p$-value nào được ghi nhận.
 
 ### 2.2 Kết quả kiểm định bắt cặp thực nghiệm (Seed 42)
-Thông qua script kiểm toán tự động [`scripts/audit_phase2_5_statistics.py`](file:///d:/NCKH/scripts/audit_phase2_5_statistics.py), toàn bộ 10 tài liệu QASPER và 100 truy vấn MK-NIAH được đánh giá bắt cặp trên cùng một mẫu dữ liệu giữa:
+Thông qua script kiểm toán tự động [`scripts/audit_phase2_5_statistics.py`](scripts/audit_phase2_5_statistics.py), toàn bộ 10 tài liệu QASPER và 100 truy vấn MK-NIAH được đánh giá bắt cặp trên cùng một mẫu dữ liệu giữa:
 - **B5**: `CMS Level 2 (Fixed Token)` (Budget: 1.540 cập nhật)
 - **P1**: `SA-CMS Level 2 (Structure Aligned)` (Budget: 1.540 cập nhật)
 
@@ -129,7 +129,7 @@ acc_ci = bootstrap_ci(accs)
 
 ## TASK 4 — KIỂM TRA TOÀN VẸN 3 SEED
 
-Đọc trực tiếp tệp [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv):
+Đọc trực tiếp tệp [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv):
 
 1. **Kiểm tra số lượng hàng và hạt giống**:
    - Tệp chứa đúng **21 hàng dữ liệu** tương ứng với 7 cấu hình $\times$ 3 hạt giống (`42`, `43`, `44`).
@@ -148,7 +148,7 @@ acc_ci = bootstrap_ci(accs)
 
 ## TASK 5 — RÀ SOÁT TỪNG CON SỐ TRONG BÁO CÁO PHASE 2.5
 
-Đối chiếu từng con số trong [`docs/phase2_5_scientific_validation.md`](file:///d:/NCKH/docs/phase2_5_scientific_validation.md) với CSV và kiểm định thực tế:
+Đối chiếu từng con số trong [`docs/phase2_5_scientific_validation.md`](docs/phase2_5_scientific_validation.md) với CSV và kiểm định thực tế:
 
 | Vị trí trong Báo cáo | Con số được ghi | Nguồn gốc dữ liệu | Trạng thái kiểm toán | Bản chất & Đánh giá khoa học |
 | :--- | :--- | :--- | :---: | :--- |
@@ -204,7 +204,7 @@ Toàn bộ các phát biểu trong tài liệu nghiên cứu được phân lo�
   - Random Boundary: 1.650 cập nhật
   - $\Delta(\text{updates}) = 0$. Hai điều kiện của đề cương được **TUÂN THỦ TUYỆT ĐỐI**.
 
-Toàn bộ logic chia ngân sách phân cấp (Hierarchical Budget Scheduler) trong [`src/hope_attention/sa_cms.py`](file:///d:/NCKH/src/hope_attention/sa_cms.py#L56-L105) đã được kiểm chứng bằng bài test tự động `test_equal_budget_guarantee` trong [`tests/test_sa_cms_update.py`](file:///d:/NCKH/tests/test_sa_cms_update.py) và đã vượt qua 100%.
+Toàn bộ logic chia ngân sách phân cấp (Hierarchical Budget Scheduler) trong [`src/hope_attention/sa_cms.py`](src/hope_attention/sa_cms.py#L56-L105) đã được kiểm chứng bằng bài test tự động `test_equal_budget_guarantee` trong [`tests/test_sa_cms_update.py`](tests/test_sa_cms_update.py) và đã vượt qua 100%.
 
 ---
 
@@ -268,10 +268,10 @@ Trọng tâm chuyển sang **Hệ thống Chatbot Lai (Hybrid Architecture P2)**
 
 ## DANH MỤC TỆP PHỤC VỤ KIỂM TOÁN (AUDIT ARTIFACTS)
 
-1. Tệp kết quả kiểm toán thống kê: [`results/phase2_5_1_statistical_audit.csv`](file:///d:/NCKH/results/phase2_5_1_statistical_audit.csv)
-2. Mã nguồn script kiểm toán: [`scripts/audit_phase2_5_statistics.py`](file:///d:/NCKH/scripts/audit_phase2_5_statistics.py)
-3. Tệp kết quả gốc Phase 2.5: [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv)
-4. Báo cáo thực nghiệm Phase 2.5: [`docs/phase2_5_scientific_validation.md`](file:///d:/NCKH/docs/phase2_5_scientific_validation.md)
-5. Báo cáo kiểm toán Phase 2.5.1: [`docs/phase2_5_1_statistical_audit.md`](file:///d:/NCKH/docs/phase2_5_1_statistical_audit.md)
+1. Tệp kết quả kiểm toán thống kê: [`results/phase2_5_1_statistical_audit.csv`](results/phase2_5_1_statistical_audit.csv)
+2. Mã nguồn script kiểm toán: [`scripts/audit_phase2_5_statistics.py`](scripts/audit_phase2_5_statistics.py)
+3. Tệp kết quả gốc Phase 2.5: [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv)
+4. Báo cáo thực nghiệm Phase 2.5: [`docs/phase2_5_scientific_validation.md`](docs/phase2_5_scientific_validation.md)
+5. Báo cáo kiểm toán Phase 2.5.1: [`docs/phase2_5_1_statistical_audit.md`](docs/phase2_5_1_statistical_audit.md)
 
 **KẾT THÚC KIỂM TOÁN PHASE 2.5.1. DỪNG LẠI CHỜ REVIEW CỦA NGHIÊN CỨU VIÊN CHÍNH.**

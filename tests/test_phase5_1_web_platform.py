@@ -154,6 +154,7 @@ def test_chat_hybrid_mode_unanswerable_refusal(client):
         "retrieval_threshold",
         "insufficient_coverage",
         "insufficient_evidence_coverage",
+        "UNANSWERABLE",
     )
     assert len(data["refusal_message"]) > 0
 

@@ -259,9 +259,11 @@
   function stripTrailingSourcesMarkdown(content, hasStructuredCitations) {
     if (!content) return "";
     let cleaned = String(content);
+    cleaned = cleaned.replace(/\n*💡\s*\*\*Câu hỏi tự học tiếp theo:\*\*[\s\S]*?(?=\n*###\s*Nguồn|$)/i, "").trim();
     if (hasStructuredCitations) {
       cleaned = cleaned.replace(/\n*###\s*Nguồn tham khảo[\s\S]*$/i, "").trim();
     }
+    cleaned = cleaned.replace(/\n*💡\s*\*\*Câu hỏi tự học tiếp theo:\*\*[\s\S]*$/i, "").trim();
     return cleaned;
   }
 
@@ -649,32 +651,56 @@
     const focusDoc = attachedDocs[0] || state.documents[0] || null;
     const focusTitle = focusDoc ? focusDoc.title : "tài liệu trong kho";
 
-    const cards = [
-      {
-        title: "Tóm tắt ý chính của tài liệu",
-        detail: `Tổng hợp cấu trúc các luận điểm cốt lõi từ "${focusTitle}"`,
-        prompt: attachedDocs.length === 1
-          ? `Tóm tắt toàn bộ tài liệu ${focusDoc.title} cho tôi.`
-          : "Tóm tắt cơ chế nén tri thức của SA-CMS.",
-      },
-      {
-        title: "Trích xuất số liệu quan trọng",
-        detail: "Tra cứu chính xác thông số kỹ thuật kèm trích dẫn nguyên văn [1]",
-        prompt:
-          "Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?",
-      },
-      {
-        title: "Giải thích cơ chế bộ nhớ 3 tầng",
-        detail: "Phân tích vai trò Tầng 1, Tầng 2, Tầng 3 và cổng hòa trộn phần dư",
-        prompt:
-          "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) hoạt động như thế nào?",
-      },
-      {
-        title: "So sánh & đối chiếu đa tài liệu",
-        detail: "Tổng hợp điểm tương đồng và khác biệt xuyên suốt các văn bản",
-        prompt: "So sánh nội dung và lĩnh vực chính giữa các tài liệu trong kho.",
-      },
-    ];
+    let cards = [];
+    if (focusDoc) {
+      cards = [
+        {
+          title: "Tóm tắt ý chính tài liệu",
+          detail: `Khái quát các luận điểm cốt lõi và nội dung từ "${focusTitle}"`,
+          prompt: `Tóm tắt toàn bộ tài liệu ${focusDoc.title} cho tôi.`,
+        },
+        {
+          title: "Thông tin tác giả & Chức danh",
+          detail: "Tra cứu danh tính, đơn vị công tác và vị trí của người lập",
+          prompt: "Tác giả của tài liệu là ai, công tác tại đơn vị nào và giữ chức vụ gì?",
+        },
+        {
+          title: "Mục tiêu & Kế hoạch phấn đấu",
+          detail: "Tìm hiểu các chỉ tiêu, nhiệm vụ và phương hướng hành động năm 2026",
+          prompt: "Các nhiệm vụ trọng tâm và mục tiêu phấn đấu trong năm 2026 là gì?",
+        },
+        {
+          title: "Sáng kiến & Cải tiến quy trình",
+          detail: "Xem các đề xuất cải tiến quy trình công tác và giải pháp thực hiện",
+          prompt: "Những đề xuất, sáng kiến cải tiến quy trình công tác gồm những gì?",
+        },
+      ];
+    } else {
+      cards = [
+        {
+          title: "Tóm tắt ý chính của tài liệu",
+          detail: `Tổng hợp cấu trúc các luận điểm cốt lõi từ tài liệu`,
+          prompt: "Tóm tắt toàn bộ nội dung tài liệu cho tôi.",
+        },
+        {
+          title: "Trích xuất số liệu quan trọng",
+          detail: "Tra cứu chính xác thông số kỹ thuật kèm trích dẫn nguyên văn [1]",
+          prompt:
+            "Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?",
+        },
+        {
+          title: "Giải thích cơ chế bộ nhớ 3 tầng",
+          detail: "Phân tích vai trò Tầng 1, Tầng 2, Tầng 3 và cổng hòa trộn phần dư",
+          prompt:
+            "Cơ chế cổng hòa trộn phần dư (Gated Residual Blending) hoạt động như thế nào?",
+        },
+        {
+          title: "So sánh & đối chiếu đa tài liệu",
+          detail: "Tổng hợp điểm tương đồng và khác biệt xuyên suốt các văn bản",
+          prompt: "So sánh nội dung và lĩnh vực chính giữa các tài liệu trong kho.",
+        },
+      ];
+    }
 
     dom.welcomeSuggestionsGrid.innerHTML = cards
       .map(
@@ -686,6 +712,31 @@
       `
       )
       .join("");
+
+    // Dynamically update Quick Verify Chips to match attached document
+    const quickChipsContainer = document.querySelector(".quick-verify-chips");
+    if (quickChipsContainer) {
+      if (focusDoc) {
+        quickChipsContainer.innerHTML = `
+          <button type="button" class="verify-chip" data-query="Tác giả của tài liệu là ai, công tác tại đơn vị nào và giữ chức vụ gì?">👤 Tác giả & Chức vụ</button>
+          <button type="button" class="verify-chip" data-query="Các nhiệm vụ trọng tâm và mục tiêu phấn đấu trong năm 2026 là gì?">🎯 Mục tiêu năm 2026</button>
+          <button type="button" class="verify-chip" data-query="Những đề xuất, sáng kiến cải tiến quy trình công tác gồm những gì?">💡 Sáng kiến cải tiến</button>
+          <button type="button" class="verify-chip" data-query="Tóm tắt toàn bộ tài liệu ${escapeHtml(focusDoc.title)} cho tôi.">📋 Tóm tắt nội dung</button>
+        `;
+      } else {
+        quickChipsContainer.innerHTML = `
+          <button type="button" class="verify-chip" data-query="Tầng 1 của hệ thống CMS đảm nhiệm vai trò gì?">Vai trò Tầng 1 SA-CMS</button>
+          <button type="button" class="verify-chip" data-query="Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?">Đường sắt Bắc - Nam</button>
+          <button type="button" class="verify-chip" data-query="Thuốc nào là lựa chọn đầu tay trong đơn trị liệu đái tháo đường tuýp 2?">Phác đồ Metformin</button>
+          <button type="button" class="verify-chip verify-chip-refusal" data-query="Hệ thống CMS sử dụng vi xử lý lượng tử loại nào để mã hóa bộ nhớ?" title="Kiểm tra cổng từ chối chống ảo giác">🛡️ Câu hỏi bẫy ngoài tài liệu</button>
+        `;
+      }
+      quickChipsContainer.querySelectorAll(".verify-chip[data-query]").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          sendQuestion(chip.dataset.query);
+        });
+      });
+    }
   }
 
   // ============================================================================
@@ -771,7 +822,8 @@
   function startFreshChatView() {
     state.activeSessionId = null;
     state.activeMessages = [];
-    state.attachedDocIds = [];
+    const latestDoc = state.documents[0] || null;
+    state.attachedDocIds = latestDoc ? [latestDoc.document_id] : [];
     renderSidebarSessions();
     renderSidebarDocuments();
     renderComposerChips();
@@ -899,10 +951,14 @@
       state.attachedDocIds.includes(d.document_id)
     );
     if (dom.lblAttachedCount) {
-      if (attachedDocs.length === 0) {
-        dom.lblAttachedCount.textContent = `Toàn bộ tài liệu (${state.documents.length})`;
+      if (attachedDocs.length === 1) {
+        dom.lblAttachedCount.textContent = `🔒 Khóa độc quyền: ${attachedDocs[0].title}`;
+      } else if (attachedDocs.length > 1) {
+        dom.lblAttachedCount.textContent = `🔒 So sánh ${attachedDocs.length} tài liệu`;
+      } else if (state.documents.length > 0) {
+        dom.lblAttachedCount.textContent = `Chưa chọn tài liệu`;
       } else {
-        dom.lblAttachedCount.textContent = `Đã ghim ${attachedDocs.length} tài liệu`;
+        dom.lblAttachedCount.textContent = `Chưa có tài liệu`;
       }
     }
 
@@ -1035,14 +1091,16 @@
         dom.ingestionTokenNote.textContent = `${memStatus} · ${sizeSafe} · ${res.passage_count || 1} đoạn${savedPct > 0 ? ` · Giảm ${savedPct}% nhiễu token` : ""}`;
 
         await refreshDocuments();
-        if (res.document_id && !state.attachedDocIds.includes(res.document_id)) {
-          state.attachedDocIds.push(res.document_id);
+        if (res.document_id) {
+          // EXCLUSIVE ATTACH: Lock exclusively to newly uploaded file!
+          state.attachedDocIds = [res.document_id];
         }
         if (state.activeSessionId) {
           await selectSession(state.activeSessionId);
         } else {
           renderSidebarDocuments();
           renderComposerChips();
+          renderWelcomeSuggestions();
         }
 
         showToast(`Đã nạp "${res.title}" — SA-CMS Memory đã sẵn sàng.`);
@@ -1169,6 +1227,46 @@
         : "";
     const queryForCompare = diag.effective_query || state.lastUserQuery || "";
 
+    // Suggested follow-up questions
+    let suggestedQuestions =
+      msg.suggested_questions ||
+      (msg.diagnostics && msg.diagnostics.suggested_questions) ||
+      [];
+    if ((!suggestedQuestions || suggestedQuestions.length === 0) && msg.content) {
+      const matchQ = msg.content.match(/💡\s*\*\*Câu hỏi.*?\*\*([\s\S]*?)(?:###|$)/i);
+      if (matchQ && matchQ[1]) {
+        const lines = matchQ[1]
+          .split("\n")
+          .map((l) => l.replace(/^\s*\d+[\.\)]\s*/, "").trim())
+          .filter((l) => l.length > 5);
+        if (lines.length > 0) {
+          suggestedQuestions = lines;
+        }
+      }
+    }
+    let suggestedBlockHtml = "";
+    if (!isRefused && suggestedQuestions && suggestedQuestions.length > 0) {
+      const chipsHtml = suggestedQuestions
+        .map(
+          (q) => `
+        <button type="button" class="suggest-chip" data-suggest-query="${escapeHtml(q)}">
+          <span class="suggest-chip-icon">✨</span>
+          <span class="suggest-chip-text">${escapeHtml(q)}</span>
+        </button>
+      `
+        )
+        .join("");
+
+      suggestedBlockHtml = `
+        <div class="msg-suggested-block">
+          <div class="msg-suggested-label">💡 Gợi ý câu hỏi tiếp theo:</div>
+          <div class="msg-suggested-chips">
+            ${chipsHtml}
+          </div>
+        </div>
+      `;
+    }
+
     const telemetryBarHtml =
       totalTok !== null || latMs !== null
         ? `
@@ -1199,6 +1297,7 @@
           <div class="section-label-header">TRẢ LỜI</div>
           ${answerBodyHtml}
           ${evidenceBlockHtml}
+          ${suggestedBlockHtml}
           ${telemetryBarHtml}
         </div>
       </div>
@@ -1268,6 +1367,9 @@
       dom.thinkingIndicator.hidden = true;
 
       if (res.message) {
+        if (!res.message.suggested_questions && res.suggested_questions) {
+          res.message.suggested_questions = res.suggested_questions;
+        }
         state.activeMessages.push(res.message);
       } else {
         state.activeMessages.push({
@@ -1277,6 +1379,7 @@
           telemetry: res.telemetry || {},
           diagnostics: res.diagnostics || {},
           refused: Boolean(res.refused),
+          suggested_questions: res.suggested_questions || [],
         });
       }
 
@@ -1988,18 +2091,34 @@
     dom.welcomeSuggestionsGrid.addEventListener("click", (e) => {
       const card = e.target.closest("[data-prompt]");
       if (card) {
-        sendQuestion(card.dataset.prompt);
+        const promptText = card.getAttribute("data-prompt") || card.dataset.prompt;
+        if (promptText) {
+          sendQuestion(promptText);
+        }
       }
     });
 
     document.querySelectorAll(".verify-chip[data-query]").forEach((chip) => {
       chip.addEventListener("click", () => {
-        sendQuestion(chip.dataset.query);
+        const query = chip.getAttribute("data-query") || chip.dataset.query;
+        if (query) {
+          sendQuestion(query);
+        }
       });
     });
 
-    // Delegated clicks inside Messages Stream (Citations, Fulltext, Compare)
+    // Delegated clicks inside Messages Stream (Citations, Fulltext, Compare, Suggested Chips)
     dom.messagesList.addEventListener("click", (e) => {
+      const suggestBtn = e.target.closest("[data-suggest-query]");
+      if (suggestBtn) {
+        const queryText =
+          suggestBtn.getAttribute("data-suggest-query") ||
+          suggestBtn.dataset.suggestQuery;
+        if (queryText) {
+          sendQuestion(queryText);
+        }
+        return;
+      }
       const citeBtn = e.target.closest("[data-passage-id]");
       if (citeBtn) {
         inspectPassageCitation(citeBtn.dataset.passageId);

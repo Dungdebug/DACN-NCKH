@@ -95,11 +95,11 @@ Trong kịch bản `tests/debug_mkniah.py` (Audit Item 6), chúng tôi thực hi
 ## 6. SỬA ĐỔI TỐI THIỂU (MINIMAL FIX) VÀ KẾT QUẢ RERUN ĐỐI CHỨNG
 
 ### Sửa đổi tối thiểu được áp dụng:
-1. **File [src/evaluation/mk_niah.py](file:///d:/NCKH/src/evaluation/mk_niah.py):**
+1. **File [src/evaluation/mk_niah.py](src/evaluation/mk_niah.py):**
    - Bổ sung cờ `enable_online_cms: bool = True` vào phương thức `evaluate_model()`.
    - Trước khi evaluate câu hỏi, gọi `OnlineDocumentTrainer.ingest_document()` để nạp ngữ cảnh vào CMS theo đúng Equation 71.
    - Bổ sung đo đạc và lưu trữ trường `avg_target_prob` (xác suất trung bình gán cho token đáp án mục tiêu).
-2. **File [run_experiment.py](file:///d:/NCKH/run_experiment.py):**
+2. **File [run_experiment.py](run_experiment.py):**
    - Kích hoạt `enable_online_cms=(num_levels > 1)` cho các cấu hình có CMS.
    - Ghi nhận `mk_niah_avg_target_prob` vào bảng kết quả tổng hợp `results/experiment_results.json`.
 3. **Tuyệt đối tuân thủ:**
@@ -118,9 +118,9 @@ Trong kịch bản `tests/debug_mkniah.py` (Audit Item 6), chúng tôi thực hi
 | `level_3_cms` | 0.00% | ~0.1s | 0.00% | **0.001017 (+17.2% so với ICL)** | **Đã kích hoạt** (chạy ~15s) |
 | `level_4_cms` | 0.00% | ~0.1s | 0.00% | **0.001025 (+18.1% so với ICL)** | **Đã kích hoạt** (chạy ~21s) |
 
-- **Nhật ký trước sửa (Dormant CMS):** [logs/micro_experiment_20261002_201026.log](file:///d:/NCKH/logs/micro_experiment_20261002_201026.log)
-- **Nhật ký chạy chẩn đoán (Diagnostic Trace):** [logs/debug_mkniah_20261002_201959.log](file:///d:/NCKH/logs/debug_mkniah_20261002_201959.log)
-- **Nhật ký sau sửa (Active Online CMS):** [logs/micro_experiment_20261002_202518.log](file:///d:/NCKH/logs/micro_experiment_20261002_202518.log)
+- **Nhật ký trước sửa (Dormant CMS):** [logs/micro_experiment_20261002_201026.log](logs/micro_experiment_20261002_201026.log)
+- **Nhật ký chạy chẩn đoán (Diagnostic Trace):** [logs/debug_mkniah_20261002_201959.log](logs/debug_mkniah_20261002_201959.log)
+- **Nhật ký sau sửa (Active Online CMS):** [logs/micro_experiment_20261002_202518.log](logs/micro_experiment_20261002_202518.log)
 
 ---
 

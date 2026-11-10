@@ -6,8 +6,8 @@
 **Trạng thái**: **PROTOCOL FROZEN (ĐÃ ĐÓNG BĂNG TOÀN DIỆN)**  
 **Phần cứng chuẩn hóa**: NVIDIA GeForce GTX 1650 Ti (4GB VRAM), Python 3.9.13, Windows 11  
 **Mô hình nền (Backbone)**: HuggingFaceTB/SmolLM2-135M (134,515,008 tham số, đóng băng 100%)  
-**Tập tin cấu hình gốc**: [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml)  
-**Kết quả Pilot Sanity Check**: [`results/phase4_0_sanity_check.json`](file:///d:/NCKH/results/phase4_0_sanity_check.json)  
+**Tập tin cấu hình gốc**: [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml)  
+**Kết quả Pilot Sanity Check**: [`results/phase4_0_sanity_check.json`](results/phase4_0_sanity_check.json)  
 
 ---
 
@@ -216,7 +216,7 @@ graph LR
 
 ## TASK 8 — CẤU HÌNH THỰC NGHIỆM ĐÓNG BĂNG (`configs/phase4_experiment.yaml`)
 
-Tệp cấu hình đã được tạo lập tại [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml) với đầy đủ các tham số định lượng:
+Tệp cấu hình đã được tạo lập tại [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml) với đầy đủ các tham số định lượng:
 
 ```yaml
 meta:
@@ -259,7 +259,7 @@ statistics:
 
 ## TASK 9 — KẾT QUẢ PILOT SANITY CHECK TOÀN DIỆN
 
-Trước khi khởi động full benchmark, kịch bản [`scripts/run_phase4_sanity_check.py`](file:///d:/NCKH/scripts/run_phase4_sanity_check.py) đã thực hiện kiểm thử trên mẫu kiểm định độc lập cho toàn bộ các phương pháp.
+Trước khi khởi động full benchmark, kịch bản [`scripts/run_phase4_sanity_check.py`](scripts/run_phase4_sanity_check.py) đã thực hiện kiểm thử trên mẫu kiểm định độc lập cho toàn bộ các phương pháp.
 
 ### Kết quả kiểm định tính toàn vẹn (Integrity Audit Matrix):
 
@@ -287,7 +287,7 @@ Trước khi khởi động full benchmark, kịch bản [`scripts/run_phase4_sa
 | **P2 (Hybrid)** | VALIDATED | 3 | 9 | 4,040.7 | Kết hợp bộ nhớ tham số + dẫn chứng BM25 + từ chối có kiểm soát. |
 
 > [!NOTE]
-> Kết quả đo đạc của Pilot Sanity Check được lưu trữ độc lập tại [`results/phase4_0_sanity_check.json`](file:///d:/NCKH/results/phase4_0_sanity_check.json) và **TUYỆT ĐỐI KHÔNG ĐƯỢC ĐƯA VÀO BẢNG THỐNG KÊ FINAL BENCHMARK**.
+> Kết quả đo đạc của Pilot Sanity Check được lưu trữ độc lập tại [`results/phase4_0_sanity_check.json`](results/phase4_0_sanity_check.json) và **TUYỆT ĐỐI KHÔNG ĐƯỢC ĐƯA VÀO BẢNG THỐNG KÊ FINAL BENCHMARK**.
 
 ---
 
@@ -299,7 +299,7 @@ Giai đoạn **Phase 4.0 — Experimental Protocol Freeze** đã hoàn thành 10
 3. Đóng băng nguyên vẹn 5 Research Questions (RQ1–RQ5) và hệ thống thước đo.
 4. Xác lập giao thức thống kê nghiêm ngặt (3 hạt giống, bootstrap sample-level, paired test P1 vs B5).
 5. Phân hoạch dữ liệu 3 vùng cách ly triệt để chống rò rỉ.
-6. Ban hành tệp cấu hình chuẩn [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml).
+6. Ban hành tệp cấu hình chuẩn [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml).
 7. Hoàn tất kiểm định Pilot Sanity Check với kết quả **ALL PASSED**.
 
 **QUY TẮC DỪNG (STOP):** Hệ thống dừng thực thi tại đây. Tuyệt đối không tự ý chạy full Phase 4 benchmark cho đến khi có chỉ lệnh tiếp theo từ người dùng.

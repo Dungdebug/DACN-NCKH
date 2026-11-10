@@ -6,9 +6,9 @@
 **Ngày thực hiện**: 03/10/2026  
 **Trạng thái**: **AUDIT COMPLETE — ALL 6 GATES PASSED (SẴN SÀNG CHO BENCHMARK)**  
 **Phần cứng**: NVIDIA GeForce GTX 1650 Ti (4GB VRAM), Python 3.9.13, PyTorch 2.x  
-**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml)  
-**Dữ liệu kiểm toán hiệu chuẩn RAG**: [`results/phase4_0_1_rag_calibration.csv`](file:///d:/NCKH/results/phase4_0_1_rag_calibration.csv)  
-**Dữ liệu kiểm toán phân hoạch**: [`results/phase4_0_1_protocol_check.json`](file:///d:/NCKH/results/phase4_0_1_protocol_check.json)  
+**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml)  
+**Dữ liệu kiểm toán hiệu chuẩn RAG**: [`results/phase4_0_1_rag_calibration.csv`](results/phase4_0_1_rag_calibration.csv)  
+**Dữ liệu kiểm toán phân hoạch**: [`results/phase4_0_1_protocol_check.json`](results/phase4_0_1_protocol_check.json)  
 
 ---
 
@@ -38,7 +38,7 @@ $$\text{Faithfulness} = \text{Citation-Supported Answer Rate} = \frac{\sum_{i=1}
 
 ### 2.3. Quy trình Đánh giá 2 Lớp (Dual Evaluation Pillars):
 1. **Lớp 1 — Trọng tài Cục bộ (Local Judge)**:
-   - Module [`src/hybrid_qa/evidence.py`](file:///d:/NCKH/src/hybrid_qa/evidence.py) và [`faithfulness.py`](file:///d:/NCKH/src/hybrid_qa/faithfulness.py).
+   - Module [`src/hybrid_qa/evidence.py`](src/hybrid_qa/evidence.py) và [`faithfulness.py`](src/hybrid_qa/faithfulness.py).
    - Kiểm tra tự động độ trùng khớp từ khóa (lexical coverage), phát hiện thực thể và suy luận logic NLI (Natural Language Inference) giữa từng tuyên bố trong câu trả lời với nội dung đoạn trích dẫn.
 2. **Lớp 2 — Kiểm chứng Thủ công Mù (Blind Manual Verification)**:
    - Thực hiện trên mẫu ngẫu nhiên gồm đúng **100 samples** từ tập TEST.
@@ -65,7 +65,7 @@ $$\text{Faithfulness} = \text{Citation-Supported Answer Rate} = \frac{\sum_{i=1}
 
 ### 3.2. Kết quả Kiểm toán Thực tế giữa B5 và P1:
 - **Kiểm tra trạng thái ban đầu:** Giá trị sai lệch cực đại $\max |\theta_0^{(B5)} - \theta_0^{(P1)}| = 0.000000$. Hai mô hình có không gian tham số và điểm khởi đầu đồng nhất tuyệt đối.
-- **Kiểm tra ngân sách cập nhật:** Trên đoạn văn bản thử nghiệm kiểm toán, thuật toán [`StructureAlignedSchedule`](file:///d:/NCKH/src/hope_attention/sa_cms.py) phân bổ chính xác **9 sự kiện cập nhật cho P1** và **9 sự kiện cập nhật cho B5** ($\Delta = 0$).
+- **Kiểm tra ngân sách cập nhật:** Trên đoạn văn bản thử nghiệm kiểm toán, thuật toán [`StructureAlignedSchedule`](src/hope_attention/sa_cms.py) phân bổ chính xác **9 sự kiện cập nhật cho P1** và **9 sự kiện cập nhật cho B5** ($\Delta = 0$).
 - **Kết luận:** Giữa B5 và P1 **hoàn toàn không có bất kỳ sự sai lệch nào ngoại trừ quy luật kích hoạt ranh giới cập nhật (Schedule)**. Điều kiện công bằng khoa học đạt mức tối đa.
 
 ### 3.3. Kiểm toán P2 (Task 3):
@@ -77,7 +77,7 @@ $$\text{Faithfulness} = \text{Citation-Supported Answer Rate} = \frac{\sum_{i=1}
 
 ## 4. KIỂM TOÁN TASK 4: HIỆU CHUẨN RÀNG BUỘC CHO B2 RAG (RAG CALIBRATION)
 
-Quy trình hiệu chuẩn được thực hiện thông qua kịch bản [`scripts/calibrate_b2_rag.py`](file:///d:/NCKH/scripts/calibrate_b2_rag.py) trên tập **Calibration Set độc lập** (gồm 5 tài liệu `VAL_DOC_001`–`VAL_DOC_005` và 50 câu hỏi kiểm định, tách biệt 100% khỏi tập TEST).
+Quy trình hiệu chuẩn được thực hiện thông qua kịch bản [`scripts/calibrate_b2_rag.py`](scripts/calibrate_b2_rag.py) trên tập **Calibration Set độc lập** (gồm 5 tài liệu `VAL_DOC_001`–`VAL_DOC_005` và 50 câu hỏi kiểm định, tách biệt 100% khỏi tập TEST).
 
 ### 4.1. Bảng Dữ Liệu Hiệu Chuẩn Các Cấu Hình Ứng Viên (results/phase4_0_1_rag_calibration.csv):
 
@@ -108,7 +108,7 @@ Quy trình hiệu chuẩn được thực hiện thông qua kịch bản [`scrip
 
 ## 5. KIỂM TOÁN TASK 5: PHÂN HOẠCH DỮ LIỆU & CHỐNG RÒ RỈ (DATA PARTITION AUDIT)
 
-Kết quả kiểm tra tự động qua kịch bản [`scripts/verify_protocol_and_partitions.py`](file:///d:/NCKH/scripts/verify_protocol_and_partitions.py):
+Kết quả kiểm tra tự động qua kịch bản [`scripts/verify_protocol_and_partitions.py`](scripts/verify_protocol_and_partitions.py):
 
 | Rào Chắn Kiểm Toán (Leakage Gate) | Số Mẫu Trùng Lặp Phát Hiện | Trạng Thái Đạt Chuẩn |
 | :--- | :---: | :---: |
@@ -144,7 +144,7 @@ Kịch bản kiểm toán đã xác minh khả năng thực thi của các ablat
 
 ## 7. KIỂM TOÁN TASK 7: TỆP CẤU HÌNH ĐÓNG BĂNG ĐẦY ĐỦ
 
-Tệp [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml) đã được cập nhật bổ sung đầy đủ 4 section chuẩn hóa:
+Tệp [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml) đã được cập nhật bổ sung đầy đủ 4 section chuẩn hóa:
 - `faithfulness_definition`: Định nghĩa tỷ lệ câu trả lời có trích dẫn được bằng chứng hỗ trợ, không có ngưỡng cứng.
 - `training_fairness`: Khẳng định tính công bằng tuyệt đối giữa B5 và P1, cơ chế kế thừa P2.
 - `rag_calibration`: Lưu thông số đóng băng của cấu hình `CAND_07`.

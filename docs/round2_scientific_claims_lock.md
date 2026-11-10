@@ -39,7 +39,7 @@
 
 ### 2.2. Cấm Thổi phồng Tỷ lệ Từ chối RQ3
 * ❌ **TUYỆT ĐỐI CẤM**: Tuyên bố *"Độ chính xác từ chối đạt 95.0% hoặc 96.0%"*.
-  * *Lý do*: Dữ liệu gốc lưu vết [`results/phase4_2/rq3_raw_results.json`](file:///d:/NCKH/results/phase4_2/rq3_raw_results.json) ghi chính xác là 76.0% (38/50).
+  * *Lý do*: Dữ liệu gốc lưu vết [`results/phase4_2/rq3_raw_results.json`](results/phase4_2/rq3_raw_results.json) ghi chính xác là 76.0% (38/50).
   * *Câu thay thế bắt buộc*: *"P2 đạt 76.0% refusal accuracy trong bộ dữ liệu hiện tại."*
 * ❌ **TUYỆT ĐỐI CẤM**: Tuyên bố *"Bộ nhớ tham số tự biết tránh ảo giác và từ chối câu hỏi lạ"*.
   * *Lý do*: Mô hình thuần bộ nhớ (P1, B5) đạt tỷ lệ từ chối 0% (bịa câu trả lời 100%).

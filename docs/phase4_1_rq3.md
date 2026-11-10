@@ -27,7 +27,7 @@
 
 ## 2. KẾT QUẢ KIỂM TOÁN MÙ THỦ CÔNG 100 MẪU (BLIND MANUAL VERIFICATION AUDIT)
 
-Tập tin kiểm toán chi tiết: [`results/phase4_1/rq3/blinded_manual_verification_100.csv`](file:///d:/NCKH/results/phase4_1/rq3/blinded_manual_verification_100.csv)
+Tập tin kiểm toán chi tiết: [`results/phase4_1/rq3/blinded_manual_verification_100.csv`](results/phase4_1/rq3/blinded_manual_verification_100.csv)
 
 - **Tổng số mẫu kiểm toán**: 100
 - **Tỷ lệ xác nhận có bằng chứng (Verified Supported)**: 99.00%

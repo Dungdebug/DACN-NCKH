@@ -44,10 +44,15 @@ def block_external_networks(monkeypatch):
 
 
 @pytest.fixture(scope="module")
-def client():
-    """Test client for FastAPI app."""
+def client(tmp_path_factory):
+    """Test client for FastAPI app with isolated session storage."""
+    test_session_dir = tmp_path_factory.mktemp("test_sessions_e2e")
+    service = PipelineService.get_instance()
+    orig_sm = service.session_manager
+    service.session_manager = SessionManager(storage_dir=str(test_session_dir))
     with TestClient(app) as test_client:
         yield test_client
+    service.session_manager = orig_sm
 
 
 def test_local_model_loader_offline():
@@ -166,7 +171,7 @@ def test_offline_history_persistence_across_restart(client):
     )
 
     # Re-initialize SessionManager to simulate application restart
-    new_manager = SessionManager(storage_dir="data/chat_sessions")
+    new_manager = SessionManager(storage_dir=PipelineService.get_instance().session_manager.storage_dir)
     reloaded_sess = new_manager.get_session(session_id)
 
     assert reloaded_sess is not None

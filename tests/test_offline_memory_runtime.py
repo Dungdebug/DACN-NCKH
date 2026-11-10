@@ -269,7 +269,7 @@ def test_restart_persistence_from_disk(client):
     -> load SAME memory -> ask same question -> verified restored from local files.
     """
     # 1. Ask question in session 1
-    sess_res = client.post("/api/chat/sessions", json={"title": "Phiên Thử Nghiệm Khởi Động Lại"})
+    sess_res = client.post("/api/chat/sessions", json={"title": "Phiên Thử Nghiệm Khởi Động Lại", "document_ids": ["DEMO_DOC_001"]})
     session_id = sess_res.json()["session_id"]
 
     msg1 = client.post(

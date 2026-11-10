@@ -113,7 +113,7 @@ Tất cả 4 quy mô huấn luyện đều được thực hiện theo **cùng m
 2. **Level 2 (Section timescale):** Cập nhật theo chủ đề tiêu đề mục (bước thời gian trung bình).
 3. **Level 3 (Document timescale):** Trừu tượng hóa bất biến toàn văn bản (bước thời gian chậm).
 
-Thực nghiệm kiểm định kỹ thuật tại [`results/phase3_2_1_three_level_feasibility.json`](file:///d:/NCKH/results/phase3_2_1_three_level_feasibility.json) với `num_levels=3`:
+Thực nghiệm kiểm định kỹ thuật tại [`results/phase3_2_1_three_level_feasibility.json`](results/phase3_2_1_three_level_feasibility.json) với `num_levels=3`:
 
 ```json
 {
@@ -149,7 +149,7 @@ Thực nghiệm kiểm định kỹ thuật tại [`results/phase3_2_1_three_lev
 4. **Cơ chế Khôi phục Bộ nhớ (Memory Reset - Section 7.3):**
    - Sau khi optimizer bước 1 bước và làm thay đổi chuẩn trọng số ($137.3385$), hàm `model.reset_memory()` khôi phục chính xác về trạng thái khởi tạo gốc $\theta_0$ ($137.3374$).
 5. **Lưu trữ & Khôi phục Checkpoint:**
-   - Lưu trữ tại: [`checkpoints/three_level_feasibility/cms_weights_3lvl.pt`](file:///d:/NCKH/checkpoints/three_level_feasibility/cms_weights_3lvl.pt) (20.28 MB).
+   - Lưu trữ tại: [`checkpoints/three_level_feasibility/cms_weights_3lvl.pt`](checkpoints/three_level_feasibility/cms_weights_3lvl.pt) (20.28 MB).
    - Nạp lại vào mô hình mới: $\Delta_{\text{max}} = \max |\text{logits}_{\text{orig}} - \text{logits}_{\text{reloaded}}| = \mathbf{0.00000000}$.
 6. **Kết luận Tính Khả thi:** Kiến trúc 3 cấp **HOÀN TOÀN TƯƠNG THÍCH VÀ KHẢ THI** về mặt kỹ thuật, sẵn sàng để đưa vào kế hoạch benchmark ở Phase 4 mà không gặp trở ngại phần cứng hay phần mềm.
 

@@ -1,0 +1,39 @@
+@echo off
+title NL DocChat — SA-CMS Online / LAN Server Studio
+cd /d "%~dp0"
+
+echo ==============================================================================
+echo [NL DocChat / SA-CMS] KHOI DONG SERVER TRUC TUYEN / MANG LAN (0.0.0.0)
+echo ==============================================================================
+echo Backbone:   SmolLM2-135M (Frozen 100%%) + 5.31M SA-CMS Continuum Memory
+echo Checkpoint: cms_3lvl_extended.pt (Extended Bilingual GPU Verified)
+echo Mode:       Online / LAN Multi-Device Access (Host: 0.0.0.0, Port: 8000)
+echo ==============================================================================
+
+set HF_HUB_OFFLINE=1
+set TRANSFORMERS_OFFLINE=1
+set SA_CMS_OFFLINE_MODE=1
+
+REM Xac thuc moi truong Python co day du uvicorn + fastapi + torch
+set PYTHON_EXE=
+if exist "D:\Applaptrinh\Python\python.exe" (
+    "D:\Applaptrinh\Python\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=D:\Applaptrinh\Python\python.exe"
+)
+if "%PYTHON_EXE%"=="" if exist ".venv\Scripts\python.exe" (
+    ".venv\Scripts\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=.venv\Scripts\python.exe"
+)
+if "%PYTHON_EXE%"=="" if exist "..\.venv\Scripts\python.exe" (
+    "..\.venv\Scripts\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=..\.venv\Scripts\python.exe"
+)
+if "%PYTHON_EXE%"=="" set PYTHON_EXE=python
+
+REM Mo trinh duyet may cuc bo
+start /b "" cmd /c "timeout /t 2 >nul & start "" "http://127.0.0.1:8000""
+
+echo Dang mo cong 8000 cho toan mang noi bo...
+"%PYTHON_EXE%" run_offline.py --host 0.0.0.0 --port 8000
+pause
+

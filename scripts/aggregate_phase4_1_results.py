@@ -261,7 +261,7 @@ def generate_rq3_report(rq3_data: Dict[str, Any], aggregated: Dict[str, Any]) ->
     lines.append("")
     lines.append("## 2. KẾT QUẢ KIỂM TOÁN MÙ THỦ CÔNG 100 MẪU (BLIND MANUAL VERIFICATION AUDIT)")
     lines.append("")
-    lines.append("Tập tin kiểm toán chi tiết: [`results/phase4_1/rq3/blinded_manual_verification_100.csv`](file:///d:/NCKH/results/phase4_1/rq3/blinded_manual_verification_100.csv)")
+    lines.append("Tập tin kiểm toán chi tiết: [`results/phase4_1/rq3/blinded_manual_verification_100.csv`](results/phase4_1/rq3/blinded_manual_verification_100.csv)")
     lines.append("")
     m_audit = aggregated.get("rq3", {}).get("manual_audit_summary", {})
     lines.append(f"- **Tổng số mẫu kiểm toán**: {m_audit.get('total_audited', 100)}")

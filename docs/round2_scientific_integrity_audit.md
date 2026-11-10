@@ -73,7 +73,7 @@ Every audited claim is strictly classified under one of five verdicts:
      2. **Parameter Count / Memory Depth**: P2 has 3 memory levels (5.3M parameters); B4 has 1 memory level (1.77M parameters).
    * Comparing P2 against B4 does not isolate structure alignment. Attributing the +29.4% gap to structure alignment is scientifically ungrounded.
 3. **The True Controlled Experiment**:
-   * The official frozen Phase 4.2 artifact [`results/phase4_2/rq2_statistical_audit.json`](file:///d:/NCKH/results/phase4_2/rq2_statistical_audit.json) evaluated the true controlled pair:
+   * The official frozen Phase 4.2 artifact [`results/phase4_2/rq2_statistical_audit.json`](results/phase4_2/rq2_statistical_audit.json) evaluated the true controlled pair:
      * **P1 (SA-CMS 3-level, zero retrieval)**: Mean Accuracy = **0.8056**
      * **B5 (Token-CMS 3-level, zero retrieval)**: Mean Accuracy = **0.8007**
      * **Absolute Difference**: $+0.0049$ (+0.62% relative gain)
@@ -92,10 +92,10 @@ Every audited claim is strictly classified under one of five verdicts:
 
 #### Scientific Analysis & Provenance Checks
 1. **Context Eviction Verification**:
-   * In [`results/phase4_2/rq3_raw_results.json`](file:///d:/NCKH/results/phase4_2/rq3_raw_results.json), context eviction was strictly enforced: the model answered questions solely using its updated memory state (and retrieved chunks for hybrid models), with the original document completely excluded from the generation prompt. This protocol is **VALID**.
+   * In [`results/phase4_2/rq3_raw_results.json`](results/phase4_2/rq3_raw_results.json), context eviction was strictly enforced: the model answered questions solely using its updated memory state (and retrieved chunks for hybrid models), with the original document completely excluded from the generation prompt. This protocol is **VALID**.
 2. **Refusal Accuracy Provenance**:
    * Narrative text in Round 2 reports claimed a refusal accuracy of **95.0%** or **96.0%**.
-   * **Audit Finding**: Inspection of the frozen data file [`results/phase4_2/rq3_raw_results.json`](file:///d:/NCKH/results/phase4_2/rq3_raw_results.json) reveals the exact empirical breakdown across 50 unanswerable test queries:
+   * **Audit Finding**: Inspection of the frozen data file [`results/phase4_2/rq3_raw_results.json`](results/phase4_2/rq3_raw_results.json) reveals the exact empirical breakdown across 50 unanswerable test queries:
      * Correct Refusals: **38 / 50 (76.0%)**
      * False Answers (Hallucinations): **12 / 50 (24.0%)**
      * False Refusals: **0 / 50 (0.0%)**
@@ -104,7 +104,7 @@ Every audited claim is strictly classified under one of five verdicts:
 3. **Mechanistic Origin of Refusal**:
    * Pure continual memory models (**P1** and **B5**) achieved a refusal rate of **0.0%** (answering 50/50 unanswerable queries falsely).
    * Continual memory alone cannot detect when information is absent; it hallucinates based on parametric associations.
-   * All unanswerable detection capability stems from the BM25 lexical score thresholding inside [`RefusalController`](file:///d:/NCKH/src/pipeline/refusal_controller.py).
+   * All unanswerable detection capability stems from the BM25 lexical score thresholding inside [`RefusalController`](src/pipeline/refusal_controller.py).
 
 ---
 
@@ -117,7 +117,7 @@ Every audited claim is strictly classified under one of five verdicts:
    * Round 2 narrative overviews claimed an **88.0%** or **92.0%** retention rate across 20 sequential document ingestion events.
 2. **Artifact Inspection**:
    * A systematic grep across the codebase for sequential evaluation artifacts revealed that no sequential training run was executed for P2.
-   * In the official Phase 4 tracking file [`results/phase4_2/04_rq4_status.csv`](file:///d:/NCKH/results/phase4_2/04_rq4_status.csv), the sequential stream experiment is explicitly marked:
+   * In the official Phase 4 tracking file [`results/phase4_2/04_rq4_status.csv`](results/phase4_2/04_rq4_status.csv), the sequential stream experiment is explicitly marked:
      $$\text{Status} = \mathbf{NEED\_EXTERNAL\_GPU}$$
    * No checkpoints exist for intermediate sequential states ($D_0+5, D_0+10, D_0+20$).
 3. **Conclusion**:
@@ -132,7 +132,7 @@ Every audited claim is strictly classified under one of five verdicts:
 #### Metric-by-Metric Verification
 1. **Peak VRAM Footprint**:
    * Claim: Peak VRAM = **357.28 MB**.
-   * Source: Measured during local decode inference in [`results/phase4_2/rq5_efficiency.json`](file:///d:/NCKH/results/phase4_2/rq5_efficiency.json).
+   * Source: Measured during local decode inference in [`results/phase4_2/rq5_efficiency.json`](results/phase4_2/rq5_efficiency.json).
    * Status: **VALID**. Confirms extreme parameter efficiency on consumer hardware.
 2. **Memory Checkpoint Footprint**:
    * Claim: Checkpoint size = **20.28 MB**.
@@ -145,7 +145,7 @@ Every audited claim is strictly classified under one of five verdicts:
    * The 58.89 ms figure represents **single-token decode latency**, not full response generation. Full multi-token generation requires approximately **4,249.20 ms**. Reporting 58.89 ms without specifying single-token decode is misleading.
 4. **Token Optimization**:
    * Claim: Concise mode achieves **-56.2%** output tokens; Minimal mode achieves **-81.2%** output tokens.
-   * Source: Analytical maximum-token configurations in [`results/round2/efficiency/token_optimization_report.json`](file:///d:/NCKH/results/round2/efficiency/token_optimization_report.json).
+   * Source: Analytical maximum-token configurations in [`results/round2/efficiency/token_optimization_report.json`](results/round2/efficiency/token_optimization_report.json).
    * **Audit Finding**: These figures represent prompt template configuration limits, not an empirical evaluation on a benchmark test set. Preservation of answer quality (ROUGE/F1/faithfulness) under compressed token budgets has not been measured.
 
 ---
@@ -156,7 +156,7 @@ Every audited claim is strictly classified under one of five verdicts:
 * **Claim in Documentation**: SA-CMS achieves 1.00 robustness across 8/8 perturbation conditions (typo, paraphrase, sentence reorder, negation, distractor, truncation, noise, cross-lingual).
 * **Audit Verdict**: **`PARTIALLY_VALID` (Valid as a pipeline test, INVALID as a model benchmark)**
 * **Provenance Deconstruction**:
-  * The evaluation harness [`src/evaluation/robustness_bench.py`](file:///d:/NCKH/src/evaluation/robustness_bench.py) evaluated synthetic mock documents:
+  * The evaluation harness [`src/evaluation/robustness_bench.py`](src/evaluation/robustness_bench.py) evaluated synthetic mock documents:
     * `DOC_ROB_01`: *"Hệ thống SA-CMS xử lý tài liệu dài..."* (5 sentences)
     * `DOC_ROB_02`: *"Nghiên cứu khoa học về trí tuệ nhân tạo..."* (5 sentences)
     * `DOC_DISTRACT_01`: *"Thời tiết Hà Nội hôm nay rất đẹp..."* (3 sentences)
@@ -167,7 +167,7 @@ Every audited claim is strictly classified under one of five verdicts:
 * **Claim in Documentation**: Mechanistic analysis proves layer contributions are L1 (Working Memory) = 50%, L2 (Syntactic/Structural) = 30%, L3 (Semantic/Global) = 20%.
 * **Audit Verdict**: **`PARTIALLY_VALID`**
 * **Scientific Distinction**:
-  * These percentages represent descriptive architectural weights and calibrated heuristic norms used for UI visualization in [`src/web/mechanistic_visualizer.py`](file:///d:/NCKH/src/web/mechanistic_visualizer.py).
+  * These percentages represent descriptive architectural weights and calibrated heuristic norms used for UI visualization in [`src/web/mechanistic_visualizer.py`](src/web/mechanistic_visualizer.py).
   * They were **NOT** derived from causal interventions such as causal activation patching, layer knockout ablations, or path tracing.
   * Scientific integrity requires labeling these metrics as **"Observed Diagnostic Profiles"**, not **"Causal Contribution Proofs"**.
 

@@ -83,7 +83,7 @@ When unanswerable queries bypass the refusal controller due to incidental keywor
 
 ## 5. Artifact Provenance
 
-- **Raw Evaluation Data:** [`results/phase4_1/rq3/rq3_raw_results.json`](file:///d:/NCKH/results/phase4_1/rq3/rq3_raw_results.json)
-- **Blinded Verification Annotations:** [`results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv`](file:///d:/NCKH/results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv)
-- **Phase 4.2 Consistency Audit:** [`results/phase4_2/rq3_consistency_audit.json`](file:///d:/NCKH/results/phase4_2/rq3_consistency_audit.json)
-- **Audit JSON:** [`results/phase4_3/rq3_anomaly_audit.json`](file:///d:/NCKH/results/phase4_3/rq3_anomaly_audit.json)
+- **Raw Evaluation Data:** [`results/phase4_1/rq3/rq3_raw_results.json`](results/phase4_1/rq3/rq3_raw_results.json)
+- **Blinded Verification Annotations:** [`results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv`](results/phase4_1/non_training/rq3/blinded_manual_verification_100.csv)
+- **Phase 4.2 Consistency Audit:** [`results/phase4_2/rq3_consistency_audit.json`](results/phase4_2/rq3_consistency_audit.json)
+- **Audit JSON:** [`results/phase4_3/rq3_anomaly_audit.json`](results/phase4_3/rq3_anomaly_audit.json)

@@ -100,13 +100,13 @@ In accordance with the **Global Hard Rule**:
 
 | Component | Target Specification | Audited Status | Artifact Location |
 |-----------|----------------------|----------------|-------------------|
-| **Corpus Manifest** | 21 documents (`INC_DOC_000` to `INC_DOC_020`) | **VERIFIED READY** | [`external_gpu/phase4_2/RQ4/corpus_manifest.json`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/corpus_manifest.json) |
-| **Document Ordering** | Deterministic sequential order ($D_1 \to D_2 \to \dots \to D_{20}$) | **VERIFIED STRICT** | [`external_gpu/phase4_2/RQ4/run_rq4_ingestion.py`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/run_rq4_ingestion.py) |
-| **Snapshot Schedule** | 4 intervals: $D_0$, $D_0+5$, $D_0+10$, $D_0+20$ | **VERIFIED MATCHED** | [`external_gpu/phase4_2/RQ4/snapshot_schedule.json`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/snapshot_schedule.json) |
-| **Evaluation Script** | Standalone retention and forgetting computation | **VERIFIED READY** | [`external_gpu/phase4_2/RQ4/eval_rq4_retention.py`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/eval_rq4_retention.py) |
-| **Forgetting Metric** | $F_k = \\text{{Acc}}(D_0) - \\text{{Acc}}(D_{{0+k}})$ for $k \\in \\{{5, 10, 20\\}}$ | **VERIFIED EXACT** | [`external_gpu/phase4_2/RQ4/eval_rq4_retention.py`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/eval_rq4_retention.py) |
-| **Checkpoint Naming** | `rq4_{{method}}_seed_{{seed}}_{{interval}}.pt` (36 total) | **VERIFIED CONVENTION** | [`external_gpu/phase4_2/RQ4/config_rq4.yaml`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/config_rq4.yaml) |
-| **Integrity Checksums**| SHA-256 validation for all package files | **VERIFIED HASHED** | [`external_gpu/phase4_2/RQ4/checksum_manifest.json`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/checksum_manifest.json) |
+| **Corpus Manifest** | 21 documents (`INC_DOC_000` to `INC_DOC_020`) | **VERIFIED READY** | [`external_gpu/phase4_2/RQ4/corpus_manifest.json`](external_gpu/phase4_2/RQ4/corpus_manifest.json) |
+| **Document Ordering** | Deterministic sequential order ($D_1 \to D_2 \to \dots \to D_{20}$) | **VERIFIED STRICT** | [`external_gpu/phase4_2/RQ4/run_rq4_ingestion.py`](external_gpu/phase4_2/RQ4/run_rq4_ingestion.py) |
+| **Snapshot Schedule** | 4 intervals: $D_0$, $D_0+5$, $D_0+10$, $D_0+20$ | **VERIFIED MATCHED** | [`external_gpu/phase4_2/RQ4/snapshot_schedule.json`](external_gpu/phase4_2/RQ4/snapshot_schedule.json) |
+| **Evaluation Script** | Standalone retention and forgetting computation | **VERIFIED READY** | [`external_gpu/phase4_2/RQ4/eval_rq4_retention.py`](external_gpu/phase4_2/RQ4/eval_rq4_retention.py) |
+| **Forgetting Metric** | $F_k = \\text{{Acc}}(D_0) - \\text{{Acc}}(D_{{0+k}})$ for $k \\in \\{{5, 10, 20\\}}$ | **VERIFIED EXACT** | [`external_gpu/phase4_2/RQ4/eval_rq4_retention.py`](external_gpu/phase4_2/RQ4/eval_rq4_retention.py) |
+| **Checkpoint Naming** | `rq4_{{method}}_seed_{{seed}}_{{interval}}.pt` (36 total) | **VERIFIED CONVENTION** | [`external_gpu/phase4_2/RQ4/config_rq4.yaml`](external_gpu/phase4_2/RQ4/config_rq4.yaml) |
+| **Integrity Checksums**| SHA-256 validation for all package files | **VERIFIED HASHED** | [`external_gpu/phase4_2/RQ4/checksum_manifest.json`](external_gpu/phase4_2/RQ4/checksum_manifest.json) |
 
 ---
 
@@ -127,7 +127,7 @@ In accordance with the **Global Hard Rule**:
 
 ## 4. Final Verdict
 
-Package [`external_gpu/phase4_2/RQ4/`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/) is **100% self-contained, reproducible, and ready for external execution**. Status is officially recorded as **`NEED_EXTERNAL_GPU`**.
+Package [`external_gpu/phase4_2/RQ4/`](external_gpu/phase4_2/RQ4/) is **100% self-contained, reproducible, and ready for external execution**. Status is officially recorded as **`NEED_EXTERNAL_GPU`**.
 """
 
 md_path = DOCS_DIR / "phase4_3_rq4_external_readiness.md"

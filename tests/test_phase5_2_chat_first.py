@@ -16,9 +16,12 @@ from src.web.session_manager import SessionManager, ChatSession
 
 
 @pytest.fixture(scope="module")
-def client():
-    """TestClient fixture with initialized demo documents."""
+def client(tmp_path_factory):
+    """TestClient fixture with initialized demo documents and isolated session storage."""
+    test_session_dir = tmp_path_factory.mktemp("test_sessions")
     service = PipelineService.get_instance()
+    orig_sm = service.session_manager
+    service.session_manager = SessionManager(storage_dir=str(test_session_dir))
     service._initialize_retriever()
     if service.store.document_count == 0:
         from src.web.demo_data import seed_demo_documents
@@ -26,6 +29,7 @@ def client():
         service._initialize_retriever()
     with TestClient(app) as c:
         yield c
+    service.session_manager = orig_sm
 
 
 # ==============================================================================
@@ -60,8 +64,8 @@ def test_question_router_classification():
 # 2. CONVERSATIONAL CONTEXT MEMORY TESTS (Task 12)
 # ==============================================================================
 
-def test_conversation_context_resolution():
-    sm = SessionManager(storage_dir="data/chat_sessions")
+def test_conversation_context_resolution(tmp_path):
+    sm = SessionManager(storage_dir=str(tmp_path))
     session = sm.create_session(title="Test Context Session")
 
     # User asks Q1

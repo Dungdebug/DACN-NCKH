@@ -40,11 +40,11 @@
 
 All packages for the external RTX 3050 machine are sealed and verified with SHA-256 checksums:
 
-1. **A1 Package:** [`external_gpu/phase4_2/A1/`](file:///d:/NCKH/external_gpu/phase4_2/A1/)
+1. **A1 Package:** [`external_gpu/phase4_2/A1/`](external_gpu/phase4_2/A1/)
    - 200 samples, SmolLM2-135M backbone, AdamW, $\text{LR}=10^{-4}$, effective batch = 4, 150 steps, seeds 42, 43, 44. Expected parameters: 5,314,752.
-2. **A3 Package:** [`external_gpu/phase4_2/A3/`](file:///d:/NCKH/external_gpu/phase4_2/A3/)
+2. **A3 Package:** [`external_gpu/phase4_2/A3/`](external_gpu/phase4_2/A3/)
    - Additive residual architecture, 200 samples, seeds 42, 43, 44. Expected parameters: 5,314,752.
-3. **RQ4 Package:** [`external_gpu/phase4_2/RQ4/`](file:///d:/NCKH/external_gpu/phase4_2/RQ4/)
+3. **RQ4 Package:** [`external_gpu/phase4_2/RQ4/`](external_gpu/phase4_2/RQ4/)
    - 21 sequential documents, 4 snapshot intervals ($D_0, D_0+5, D_0+10, D_0+20$), 36 target checkpoints, standalone evaluation script.
 
 ---

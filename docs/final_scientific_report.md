@@ -17,8 +17,8 @@ Các mô hình ngôn ngữ lớn (LLM) hiện nay khi xử lý hỏi đáp trên
 Nghiên cứu này đề xuất và hiện thực hóa kiến trúc **Structure-Aligned Continuum Memory System (SA-CMS)** kết hợp **Hỏi đáp Lai (Hybrid QA - Reading Before Retrieving)** dựa trên lý thuyết Nested Learning. Hệ thống tích hợp bộ nhớ tham số đa tầng (Level 1: 1.77M, Level 2: 3.54M, Level 3: 5.31M tham số) vào mô hình nền `SmolLM2-135M` (được đông cứng 100%). Thay vì cập nhật theo các khối token cố định (Fixed-token chunking), SA-CMS căn chỉnh lịch cập nhật thích ứng theo ranh giới ngữ nghĩa tự nhiên của tài liệu (câu, đoạn, mục) và tổng hợp thông tin qua mạng cổng học được $g_\ell(x_t)$.
 
 Thực nghiệm toàn diện trên 5 câu hỏi nghiên cứu (RQ1–RQ5) và tập ngữ liệu kiểm chuẩn đa ngôn ngữ (QASPER, LongHealth, MK-NIAH, Incremental Stream 21 tài liệu và 20 tài liệu tiếng Việt / 350 câu hỏi) qua 3 random seeds [42, 43, 44] chứng minh 4 đóng góp cốt lõi:
-1. **Ưu thế của Cấu trúc và Cổng Động (Ablation Study):** SA-CMS chuẩn (**P1**) đạt Token F1 `0.2014` trên QASPER và `63.33%` trên LongHealth, vượt trội so với ranh giới ngẫu nhiên (**A1**: F1 `0.1866`, Acc `58.33%`) và vượt xa kiến trúc không cổng (**A3**: F1 `0.1579`, Acc `43.33%`).
-2. **Tính Vượt trội của Cập nhật Căn chỉnh Cấu trúc (RQ2):** Dưới cùng ngân sách cập nhật, P1 vượt trội Baseline B5 (Fixed-token) có ý nghĩa thống kê cực kỳ mạnh ($p = 3.03 \times 10^{-7} < 0.001$, Paired t-test).
+1. **Ưu thế của Cấu trúc và Cổng Động (Ablation Study):** Trên bộ đo tái lập được từ checkpoint (`results/phase4_2/ablation_reproduction_audit.json`), SA-CMS chuẩn (**P1**) đạt Token F1 trung bình `0.1779` trên QASPER và `56.67%` trên LongHealth. Ranh giới ngẫu nhiên (**A1**, đo từ `results/raw_predictions/ablation_raw_predictions.jsonl`) đạt F1 `0.1867` và Acc `58.33%`; kiến trúc không cổng (**A3**) đạt F1 `0.1578` và Acc `43.33%`. Ở quy mô 3 seeds, P1 chỉ vượt A3 một cách rõ rệt; chênh lệch P1 so với A1 **không** đạt mức ý nghĩa thống kê (xem §5.1).
+2. **Tính Vượt trội của Cập nhật Căn chỉnh Cấu trúc (RQ2):** Dưới cùng ngân sách cập nhật, P1 đạt Token F1 `0.0496` so với Baseline B5 (Fixed-token) `0.0437`, chênh lệch `+0.0059` trên $N = 1{,}140$. Paired $t$-test cho $p = 0.2618$ (Wilcoxon $p = 0.4206$) — **chưa đủ bằng chứng để bác bỏ giả thuyết không**. Xu hướng thuận lợi nhưng không có ý nghĩa thống kê.
 3. **Hiệu quả Đột phá của Kiến trúc Lai P2 (RQ3):** P2 giải quyết triệt để bài toán trích dẫn và ảo giác, đạt **100% MK-NIAH**, **100% Độ trung thực Trích dẫn (Citation Faithfulness)** và **76.0% Tỷ lệ từ chối chính xác (Refusal Recall)**.
 4. **Độ ổn định Ghi nhớ Tuần tự (RQ4) & Tối ưu Phần cứng (RQ5):** Trên 36 snapshot checkpoints thực tế, SA-CMS duy trì độ quên thấp ($F_{20} = -0.0034$) và nâng cao log-likelihood (+0.399). Hệ thống huấn luyện thành công trên GPU thương mại phổ thông RTX 3050 6GB với mức tiêu thụ VRAM đỉnh điểm chỉ **743.86 MB**.
 
@@ -137,7 +137,7 @@ Quy trình trả lời câu hỏi của P2 được thiết kế theo 4 bước 
 
 ## 5. KẾT QUẢ THỰC NGHIỆM CHI TIẾT (EMPIRICAL RESULTS)
 
-Toàn bộ kết quả dưới đây được tổng hợp từ dữ liệu thực tế tại [`results/phase4_2_verified_master_results.csv`](file:///d:/NCKH/results/phase4_2_verified_master_results.csv) và các tệp raw predictions `.jsonl`:
+Toàn bộ kết quả dưới đây được tổng hợp từ dữ liệu thực tế tại [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv) và các tệp raw predictions `.jsonl`:
 
 ### 5.1. RQ1: Khả năng Ghi nhớ khi Tài liệu Rời Ngữ cảnh
 Đo lường năng lực của mô hình khi văn bản bị loại bỏ hoàn toàn khỏi context window (Context Eviction):
@@ -149,10 +149,10 @@ So sánh trực tiếp giữa P1 (Cập nhật căn ranh giới ngữ nghĩa) v�
 
 | Phương pháp | Token F1 (Mean ± SD) | Exact Match (%) | Target Log-Probability | Chênh lệch (P1 - B5) | Paired $t$-test $p$-value | Kết luận Thống kê |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **B5 (Fixed-Token CMS)** | 0.0036 ± 0.0202 | 0.00% | -11.7730 | — | — | Baseline |
-| **P1 (SA-CMS)** | **0.0421 ± 0.1188** | 0.00% | -12.1731 | **+0.0385** | $\mathbf{3.03 \times 10^{-7}}$ | **STATISTICALLY SIGNIFICANT** |
+| **B5 (Fixed-Token CMS)** | 0.0437 ± 0.1315 | 0.00% | -11.7730 | — | — | Baseline |
+| **P1 (SA-CMS)** | **0.0496 ± 0.1461** | 0.00% | -12.1731 | **+0.0059** | $0.2618$ | **Không có ý nghĩa thống kê** |
 
-> **Phân tích:** Dưới thước đo học thuật đa token nghiêm ngặt, P1 vượt trội hơn B5 gấp 11.6 lần về Token F1 ($p < 0.001$). Việc tôn trọng ranh giới ngữ nghĩa ngăn ngừa tình trạng cắt vụn khái niệm, giúp biểu diễn trọng số của P1 bảo tồn cấu trúc cú pháp của câu hỏi và tài liệu tốt hơn rõ rệt.
+> **Phân tích:** Trên $N = 1{,}140$ cặp quan sát (item-level, `results/raw_predictions/rq2_raw_predictions.jsonl`), P1 đạt Token F1 `0.0496` và B5 đạt `0.0437`; chênh lệch ghép cặp là `+0.0059` với độ lệch chuẩn của chênh lệch `0.1782`. Paired $t$-test cho $t = 1.1227$, $p = 0.2618$; Wilcoxon signed-rank cho $p = 0.4206$; bootstrap 95% CI của chênh lệch là $[-0.0044,\ 0.0165]$ — **khoảng tin cậy chứa 0**. Kết luận trung thực: dữ liệu hiện tại cho thấy xu hướng thuận lợi cho P1 nhưng **chưa đủ bằng chứng thống kê** để khẳng định P1 vượt B5. Nguyên nhân khả dĩ là độ biến thiên rất lớn giữa các item (SD `0.1461` so với mean `0.0496`) trên mô hình nền 135M chỉ được tinh chỉnh 5.3M tham số.
 
 ### 5.3. RQ3: Tính Vượt trội của Kiến trúc Lai P2 (Reading Before Retrieving)
 Chẩn đoán khả năng kết hợp giữa bộ nhớ nội tại và truy xuất chứng cứ bên ngoài:
@@ -201,17 +201,21 @@ Nhằm tuân thủ tuyệt đối 100% yêu cầu tại **Mục 7.4 của Đề 
 
 | Phép Ablation (Mục 7.4) | Biến thể Đối chứng | QASPER F1 | LongHealth Acc (%) | MK-NIAH Acc (%) | Kết luận Khoa học & Ý nghĩa Thực nghiệm |
 |:---|:---|:---:|:---:|:---:|:---|
-| **(a) Số mức bộ nhớ** *(Tái hiện Hình 7 PDF)* | • 1 Mức (B4: Đoạn)<br>• 2 Mức (A2: Đoạn+Mục)<br>• 3 Mức (P1: Đầy đủ SA-CMS) | 0.1025 ± 0.0136<br>0.0970 ± 0.0150<br>**0.2014 ± 0.0125** | 23.33% ± 7.64%<br>26.67% ± 6.00%<br>**63.33% ± 5.77%** | 0.0%<br>0.0%<br>**70.0%** | **Tái hiện thành công xu hướng Hình 7 bài báo Nested Learning:** Thêm mức bộ nhớ giúp tăng vọt khả năng hiểu ngữ cảnh dài (**Cổng G1 ĐẠT**). |
-| **(b) Lịch token vs Cấu trúc** | • B5: Lịch cố định (128 tok)<br>• P1: Lịch cấu trúc ($b_\ell(t)=1$) | 0.0036 ± 0.0202<br>**0.0421 ± 0.1188** | 20.00% ± 5.00%<br>**63.33% ± 5.77%** | 0.0%<br>**70.0%** | Ở cùng số lần cập nhật, P1 vượt trội B5 với mức độ tin cậy thống kê $p = 3.03 \times 10^{-7} < 0.001$ (**Cổng G2 ĐẠT**). |
-| **(c) Ranh giới thật vs Ngẫu nhiên** | • A1: Ranh giới ngẫu nhiên<br>• P1: Ranh giới cấu trúc thật | 0.1866 ± 0.0153<br>**0.2014 ± 0.0125** | 58.33% ± 2.89%<br>**63.33% ± 5.77%** | 63.33%<br>**70.0%** | Ranh giới cú pháp tự nhiên tăng +7.9% F1 và +8.6% Acc so với ranh giới ngẫu nhiên có cùng số lượng, chứng minh cấu trúc văn bản mang giá trị thông tin thực sự. |
-| **(d) Tổng thường vs Cổng học** | • A3: Tổng cộng không cổng<br>• P1: Cổng động $g_\ell(x_t)$ | 0.1579 ± 0.0190<br>**0.2014 ± 0.0125** | 43.33% ± 10.41%<br>**63.33% ± 5.77%** | 70.0%<br>**70.0%** | Cổng học được $g_\ell(x_t)$ giúp tăng +27.5% F1 trên QASPER và +46.2% tương đối trên LongHealth; gỡ cổng làm suy sụp biểu diễn do nhiễu xuyên tầng. |
-| **(e) Có và không có Tự học** *(Self-Study Mục 6.4)* | • Không có Tự học (No SS)<br>• Có Tự học bằng QA tự sinh | 0.1864 ± 0.0140<br>**0.2014 ± 0.0125** | 56.67% ± 4.50%<br>**63.33% ± 5.77%** | 65.0%<br>**70.0%** | Tự học ở cuối mỗi mục/tài liệu củng cố biểu diễn Level 2 & 3, giảm tốc độ quên trên luồng tài liệu tuần tự từ -0.0134 xuống -0.0034. |
-| **(f) Hạng adapter $r$ & Số tầng $K$** | • $r=8, K=4$<br>• $r=16, K=4$ (Chuẩn P1)<br>• $r=32, K=4$<br>• $r=16, K=12$ (Tất cả tầng) | 0.1742 ± 0.0110<br>**0.2014 ± 0.0125**<br>0.2038 ± 0.0130<br>0.2085 ± 0.0120 | 50.00% ± 5.00%<br>**63.33% ± 5.77%**<br>63.33% ± 6.00%<br>65.00% ± 5.00% | 60.0%<br>**70.0%**<br>70.0%<br>70.0% | $r=16, K=4$ đạt điểm cân bằng Pareto tối ưu (55.4s / 150 steps); cập nhật cả 12 tầng tốn 142s (+156% thời gian) nhưng chỉ tăng nhẹ +0.007 F1. |
+| **(a) Số mức bộ nhớ** *(Tái hiện Hình 7 PDF)* | • 1 Mức (B4: Đoạn)<br>• 2 Mức (A2: Đoạn+Mục)<br>• 3 Mức (P1: Đầy đủ SA-CMS) | 0.1025 ± 0.0136<br>0.0970 ± 0.0150 †<br>**0.1779 ± 0.0157** | 23.33% ± 7.64%<br>26.67% ± 6.00% †<br>**56.67% ± 5.77%** | 0.0%<br>0.0% †<br>**63.33% ± 5.77%** | Xu hướng "nhiều mức hơn → tốt hơn" được tái hiện ở cặp B4 → P1 trên cả ba benchmark. Số liệu A2 (2 mức) chưa tái lập được nên không dùng để kết luận. |
+| **(b) Lịch token vs Cấu trúc** | • B5: Lịch cố định<br>• P1: Lịch cấu trúc ($b_\ell(t)=1$) | 0.0437 ± 0.1315<br>**0.0496 ± 0.1461** | 20.00% ± 5.00%<br>**56.67% ± 5.77%** | 0.0%<br>**63.33% ± 5.77%** | Chênh lệch QASPER `+0.0059` nghiêng về P1 nhưng $p = 0.2618$ (Wilcoxon $0.4206$, CI 95% $[-0.0044, 0.0165]$) → **chưa đủ bằng chứng thống kê** (**Cổng G2 KHÔNG ĐẠT**). |
+| **(c) Ranh giới thật vs Ngẫu nhiên** | • A1: Ranh giới ngẫu nhiên<br>• P1: Ranh giới cấu trúc thật | 0.1867 ± 0.0153<br>**0.1779 ± 0.0157** | 58.33% ± 2.89%<br>**56.67% ± 5.77%** | 63.33% ± 11.55%<br>**63.33% ± 5.77%** | **Kết quả KHÔNG ủng hộ giả thuyết:** ranh giới cấu trúc thật thấp hơn ranh giới ngẫu nhiên `−0.0088` F1 và `−1.67` điểm Acc. Với 3 seeds, chênh lệch này nằm trong nhiễu; không thể kết luận cấu trúc văn bản mang giá trị thông tin vượt trội. |
+| **(d) Tổng thường vs Cổng học** | • A3: Tổng cộng không cổng<br>• P1: Cổng động $g_\ell(x_t)$ | 0.1578 ± 0.0190<br>**0.1779 ± 0.0157** | 43.33% ± 10.41%<br>**56.67% ± 5.77%** | 70.00% ± 0.00%<br>**63.33% ± 5.77%** | P1 cao hơn A3 trên QASPER (`+0.0201`) và LongHealth (`+13.34` điểm) nhưng thấp hơn trên MK-NIAH (`−6.67` điểm). Cổng học có lợi trên câu hỏi ngữ nghĩa, không có lợi trên truy hồi chuỗi. |
+| **(e) Có và không có Tự học** *(Self-Study Mục 6.4)* | • Không có Tự học (No SS)<br>• Có Tự học bằng QA tự sinh | Không có artifact †<br>**0.1779 ± 0.0157** | Không có artifact †<br>**56.67% ± 5.77%** | Không có artifact †<br>**63.33% ± 5.77%** | **Chưa có số liệu tái lập được** cho nhánh "Không có Tự học". Không thể xác nhận tác động của self-study; cần chạy lại thí nghiệm trước khi kết luận. |
+| **(f) Hạng adapter $r$ & Số tầng $K$** | • $r=16, K=4$ (Chuẩn P1)<br>• các cấu hình khác | **0.1779 ± 0.0157**<br>Không có artifact † | **56.67% ± 5.77%**<br>Không có artifact † | **63.33% ± 5.77%**<br>Không có artifact † | **Chưa có số liệu tái lập được** cho các cấu hình $r$/$K$ khác. Không thể xác nhận "$r=16, K=4$ là điểm cân bằng Pareto". |
 
-> Toàn bộ 4 biểu đồ trực quan hóa độ phân giải cao của 6 phép ablation và xu hướng Hình 7 được lưu trữ tại [`results/figures/fig2_ablation_study.png`](file:///d:/NCKH/results/figures/fig2_ablation_study.png).
+> **Nguồn số liệu.** P1 lấy từ `results/phase4_2/ablation_reproduction_audit.json` (chạy lại trên `checkpoints/phase4_1/cms_3lvl_seed_{42,43,44}.pt`). A1/A3 lấy từ `results/raw_predictions/ablation_raw_predictions.jsonl` — cũng chính là nguồn khớp với `training_output_final/{A1_random_boundary,A3_additive_ungated}/`. B4/B5 (QASPER, LongHealth) lấy từ `results/phase4_1_master_results.json`; riêng dòng (b) dùng thống kê RQ2 ghép cặp $N=1{,}140$.
+>
+> **Giới hạn quan trọng.** (i) Checkpoint A1/A3 nằm trong `training_output_final/checkpoints/` — thư mục bị `.gitignore`, nên một bản clone mới **không thể** tái lập A1/A3; các số A1/A3 ở trên là đọc lại từ log dự đoán mức item đã lưu, không phải chạy lại. (ii) Ký hiệu † nghĩa là **không có artifact nào** chứa số liệu đó; những ô này trước đây từng ghi số cụ thể nhưng không truy được nguồn. (iii) Mỗi cấu hình chỉ có 3 seeds, nên mọi so sánh đơn lẻ đều có độ bất định lớn.
+
+> Toàn bộ 4 biểu đồ trực quan hóa độ phân giải cao của 6 phép ablation và xu hướng Hình 7 được lưu trữ tại [`results/figures/fig2_ablation_study.png`](results/figures/fig2_ablation_study.png).
 
 ### 6.2. Phân tích Hiện tượng Token F1 trên Ngữ liệu Tiếng Việt
-Trên tập kiểm chuẩn tiếng Việt (350 câu hỏi), các phương pháp đều ghi nhận Token F1 ở mức ~0.0002. Phân tích pháp y từ dữ liệu dự đoán thô trích xuất từ [`rq3_hybrid_raw_predictions.jsonl`](file:///d:/NCKH/results/raw_predictions/rq3_hybrid_raw_predictions.jsonl) làm sáng tỏ hai khía cạnh:
+Trên tập kiểm chuẩn tiếng Việt (350 câu hỏi), các phương pháp đều ghi nhận Token F1 ở mức ~0.0002. Phân tích pháp y từ dữ liệu dự đoán thô trích xuất từ [`rq3_hybrid_raw_predictions.jsonl`](results/raw_predictions/rq3_hybrid_raw_predictions.jsonl) làm sáng tỏ hai khía cạnh:
 1. **Kiểm tra Luồng Prompt:** Đoạn văn bản truy hồi được từ BM25 **đã thực sự được chèn đầy đủ vào context window** (`Context: [{c.passage_id}] {c.text}\n\nQuestion: {q}\nAnswer:`).
 2. **Nguyên nhân Gốc rễ:** Mô hình nền `SmolLM2-135M` được huấn luyện chủ đạo trên ngữ liệu tiếng Anh (>95%). BPE Tokenizer của mô hình phân tách các ký tự có dấu tiếng Việt thành chuỗi byte rời rạc (Byte-level fallback). Khi sinh văn bản tự hồi quy, mô hình 135M sinh ra các cụm từ trích đoạn thô từ văn bản (ví dụ: `"_DOC_013::P000] ## 1. Cơ sở Lý luận và"`, `"p dụng các tiêu chuẩn quốc tế ISO và khung hư"`, `"dự kiến hoàn thành vào quý IV năm 2026 với"`) thay vì trích xuất đúng cụm từ đích ngắn gọn (ví dụ `"35% hiệu suất vận hành"`).
 3. **Sự Độc lập của Hệ thống Hybrid P2:** Mặc dù bộ sinh 135M gặp hạn chế ngôn ngữ, nhưng hệ thống hybrid P2 vẫn chứng minh tính ưu việt tuyệt đối ở tầng logic:
@@ -234,8 +238,8 @@ Trên tập kiểm chuẩn tiếng Việt (350 câu hỏi), các phương pháp 
 
 | Cổng Kiểm tra | Tiêu chí Quy định trong Đề cương (Mục 8.4) | Kết quả Thực tế Đạt được | Đánh giá Nghiệm thu |
 |:---|:---|:---|:---:|
-| **Cổng G1 (Gate G1)** | Tái hiện thành công xu hướng của bài báo gốc (*Nested Learning*, arXiv:2512.24695v1) trên QASPER và MK-NIAH ở quy mô nhỏ. | Đã chứng minh xu hướng thêm mức bộ nhớ giúp tăng vọt khả năng hiểu ngữ cảnh dài: 1-mức ($0\%$) $\to$ 2-mức ($0\%$) $\to$ 3-mức ($70\%$) trên MK-NIAH; QASPER F1 tăng từ $0.1025$ lên $0.2014$. | **ĐẠT (PASS)** |
-| **Cổng G2 (Gate G2)** | P1 (SA-CMS) vượt trội B5 (Fixed-Token CMS) có ý nghĩa thống kê trên tập phát triển / kiểm chuẩn ($p < 0.001$). | Trên $N=1,140$ mẫu kiểm chuẩn qua 3 seeds: P1 ($0.0421$) vs B5 ($0.0036$), chênh lệch $\Delta = +0.0385$, $t = 5.14$, **$p = 3.03 \times 10^{-7} < 0.001$**. P1 vượt trội B5 có ý nghĩa thống kê cao. | **ĐẠT (PASS)** |
+| **Cổng G1 (Gate G1)** | Tái hiện thành công xu hướng của bài báo gốc (*Nested Learning*, arXiv:2512.24695v1) trên QASPER và MK-NIAH ở quy mô nhỏ. | Xu hướng "nhiều mức hơn → tốt hơn" **được tái hiện một phần**: trên MK-NIAH, 1-mức B4 đạt $0.0\%$ và 3-mức P1 đạt $63.33\%$; trên QASPER, F1 tăng từ $0.1025$ (B4) lên $0.1779$ (P1). Tuy nhiên mức 2 (A2) **không có artifact tái lập được**, nên chuỗi 3 điểm đầy đủ mà đề cương yêu cầu chưa được chứng minh. | **ĐẠT MỘT PHẦN (PARTIAL)** |
+| **Cổng G2 (Gate G2)** | P1 (SA-CMS) vượt trội B5 (Fixed-Token CMS) có ý nghĩa thống kê trên tập phát triển / kiểm chuẩn ($p < 0.001$). | Trên $N=1{,}140$ cặp mẫu qua 3 seeds: P1 (`0.0496`) vs B5 (`0.0437`), chênh lệch $\Delta = +0.0059$, $t = 1.1227$, **$p = 0.2618$**, Wilcoxon $p = 0.4206$, CI 95% $[-0.0044,\ 0.0165]$. Chênh lệch **không** có ý nghĩa thống kê. | **KHÔNG ĐẠT (FAIL)** |
 
 ---
 
@@ -245,7 +249,7 @@ Trên tập kiểm chuẩn tiếng Việt (350 câu hỏi), các phương pháp 
 1. **Hiện thực hóa thành công Kiến trúc SA-CMS** tích hợp hài hòa vào mô hình transformer với 5.3M tham số thích ứng, điều phối cập nhật qua 5 cấp độ cấu trúc tài liệu (Bảng 6.2) với cơ chế đặt lại Mức 1 ở cuối mỗi mục.
 2. **Xây dựng hoàn chỉnh Hệ thống Hỏi đáp Lai P2 (Hybrid QA)** kết hợp bộ nhớ tham số, bộ máy truy hồi BM25, bộ lọc bằng chứng và cổng từ chối thông minh.
 3. **Quản lý Kho tài liệu Bền vững (Mục 6.7)**: Hỗ trợ chụp snapshot, quay lui tức thì (Rollback Snapshot), và cập nhật phiên bản mới (v2) tự động điều chỉnh câu trả lời theo số liệu mới.
-4. **Thiết lập quy trình kiểm chuẩn khoa học nghiêm ngặt**: Vượt qua cả hai Cổng G1 & G2, chạy trên phần cứng thật RTX 3050, ghi vết 100% dự đoán thô ra `.jsonl`, và hoàn thành đầy đủ kiểm định thống kê suy luận có ý nghĩa.
+4. **Thiết lập quy trình kiểm chuẩn khoa học nghiêm ngặt**: Chạy trên phần cứng thật RTX 3050, ghi vết dự đoán thô ra `.jsonl`, và thực hiện kiểm định thống kê suy luận. Kết quả kiểm định **không** xác nhận cả hai cổng: Cổng G1 đạt một phần (thiếu nhánh 2 mức), Cổng G2 **không đạt** ($p = 0.2618$). Báo cáo ghi nhận trung thực các kết quả phủ định này thay vì che giấu.
 
 ---
 
@@ -253,10 +257,10 @@ Trên tập kiểm chuẩn tiếng Việt (350 câu hỏi), các phương pháp 
 
 | Nhóm Tài liệu / Artifact | Đường dẫn Tệp trong Repository | Trạng thái Toàn vẹn (Integrity) |
 |:---|:---|:---:|
-| **Bảng Kết quả Tổng thể Master** | [`results/phase4_2_verified_master_results.csv`](file:///d:/NCKH/results/phase4_2_verified_master_results.csv) | `VERIFIED` |
-| **Báo cáo Kiểm toán Pháp y** | [`docs/post_push_training_audit.md`](file:///d:/NCKH/docs/post_push_training_audit.md) | `VERIFIED` |
-| **Danh mục 53 Mã băm SHA-256** | [`training_output_final/checksums.sha256`](file:///d:/NCKH/training_output_final/checksums.sha256) | `53/53 PASSED (100%)` |
-| **Raw Predictions: Ablation (A1, A3)** | [`results/raw_predictions/ablation_raw_predictions.jsonl`](file:///d:/NCKH/results/raw_predictions/ablation_raw_predictions.jsonl) | `240 dòng JSONL` |
-| **Raw Predictions: RQ4 (36 Snapshots)** | [`results/raw_predictions/rq4_raw_predictions.jsonl`](file:///d:/NCKH/results/raw_predictions/rq4_raw_predictions.jsonl) | `360 dòng JSONL` |
-| **Raw Predictions: RQ3 (Hybrid & MK-NIAH)**| [`results/raw_predictions/rq3_hybrid_raw_predictions.jsonl`](file:///d:/NCKH/results/raw_predictions/rq3_hybrid_raw_predictions.jsonl) | `2,130 dòng JSONL` |
-| **Raw Predictions: RQ2 (P1 vs B5)** | [`results/raw_predictions/rq2_raw_predictions.jsonl`](file:///d:/NCKH/results/raw_predictions/rq2_raw_predictions.jsonl) | `Ghi trực tiếp` |
+| **Bảng Kết quả Tổng thể Master** | [`results/phase4_2_verified_master_results.csv`](results/phase4_2_verified_master_results.csv) | `VERIFIED` |
+| **Báo cáo Kiểm toán Pháp y** | [`docs/post_push_training_audit.md`](docs/post_push_training_audit.md) | `VERIFIED` |
+| **Danh mục 53 Mã băm SHA-256** | [`training_output_final/checksums.sha256`](training_output_final/checksums.sha256) | `53/53 PASSED (100%)` |
+| **Raw Predictions: Ablation (A1, A3)** | [`results/raw_predictions/ablation_raw_predictions.jsonl`](results/raw_predictions/ablation_raw_predictions.jsonl) | `240 dòng JSONL` |
+| **Raw Predictions: RQ4 (36 Snapshots)** | [`results/raw_predictions/rq4_raw_predictions.jsonl`](results/raw_predictions/rq4_raw_predictions.jsonl) | `360 dòng JSONL` |
+| **Raw Predictions: RQ3 (Hybrid & MK-NIAH)**| [`results/raw_predictions/rq3_hybrid_raw_predictions.jsonl`](results/raw_predictions/rq3_hybrid_raw_predictions.jsonl) | `2,130 dòng JSONL` |
+| **Raw Predictions: RQ2 (P1 vs B5)** | [`results/raw_predictions/rq2_raw_predictions.jsonl`](results/raw_predictions/rq2_raw_predictions.jsonl) | `Ghi trực tiếp` |

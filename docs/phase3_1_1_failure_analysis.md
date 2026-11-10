@@ -40,7 +40,7 @@ Hệ thống phân loại lỗi được chuẩn hóa thành 8 mã định danh 
 | **H** | **Evaluation/pipeline failure** | Lỗi ánh xạ kết quả hoặc sai sót trong logic bộ đánh giá. |
 
 ### Phân bố lỗi thực tế trên 33 ca FAIL (Task 1 Export):
-Dữ liệu chi tiết từng ca thất bại đã được trích xuất đầy đủ tại tệp máy đọc: [`results/phase3_1_1_failed_cases.csv`](file:///d:/NCKH/results/phase3_1_1_failed_cases.csv).
+Dữ liệu chi tiết từng ca thất bại đã được trích xuất đầy đủ tại tệp máy đọc: [`results/phase3_1_1_failed_cases.csv`](results/phase3_1_1_failed_cases.csv).
 
 | Nhóm câu hỏi | Số ca FAIL | Dạng lỗi chính (Primary) | Nguyên nhân phụ (Secondary) | Số lượng | Tỷ lệ |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -53,7 +53,7 @@ Dữ liệu chi tiết từng ca thất bại đã được trích xuất đầy
 
 ## 3. MA TRẬN NHẦM LẪN (CONFUSION MATRICES - TASK 3, 4, 8)
 
-Dữ liệu ma trận nhầm lẫn tổng hợp và phân rã theo danh mục được lưu trữ tại [`results/phase3_1_1_confusion_matrix.json`](file:///d:/NCKH/results/phase3_1_1_confusion_matrix.json).
+Dữ liệu ma trận nhầm lẫn tổng hợp và phân rã theo danh mục được lưu trữ tại [`results/phase3_1_1_confusion_matrix.json`](results/phase3_1_1_confusion_matrix.json).
 
 ### 3.1. Ma trận nhầm lẫn tổng thể (Overall Confusion Matrix, N=100)
 
@@ -157,7 +157,7 @@ Phân tích này giải quyết trực tiếp yêu cầu khoa học cốt lõi: 
 
 ## 5. BẢNG 25 TRƯỜNG HỢP ĐẠI DIỆN ĐIỂN HÌNH (CASE EXAMPLES - TASK 8.9)
 
-Dưới đây là 25 trường hợp thất bại đại diện được trích xuất từ [`results/phase3_1_1_failed_cases.csv`](file:///d:/NCKH/results/phase3_1_1_failed_cases.csv):
+Dưới đây là 25 trường hợp thất bại đại diện được trích xuất từ [`results/phase3_1_1_failed_cases.csv`](results/phase3_1_1_failed_cases.csv):
 
 | STT | Mã ID | Nhóm câu hỏi | Câu hỏi truy vấn | Lỗi chính | Đoạn trích dẫn & Điểm BM25 | Thực tế | Phân tích chẩn đoán |
 | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
@@ -251,8 +251,8 @@ Các tham số hệ thống đang vận hành trong thử nghiệm Phase 3.1 và
 ## 8. KẾT LUẬN VÀ KIẾN NGHỊ CHO PHASE 4
 
 1. **Kết quả kiểm toán đạt yêu cầu**:
-   - Đã xuất đầy đủ 33 ca thất bại ra định dạng chuẩn tại [`results/phase3_1_1_failed_cases.csv`](file:///d:/NCKH/results/phase3_1_1_failed_cases.csv).
-   - Đã tính toán và lưu trữ các ma trận nhầm lẫn tại [`results/phase3_1_1_confusion_matrix.json`](file:///d:/NCKH/results/phase3_1_1_confusion_matrix.json).
+   - Đã xuất đầy đủ 33 ca thất bại ra định dạng chuẩn tại [`results/phase3_1_1_failed_cases.csv`](results/phase3_1_1_failed_cases.csv).
+   - Đã tính toán và lưu trữ các ma trận nhầm lẫn tại [`results/phase3_1_1_confusion_matrix.json`](results/phase3_1_1_confusion_matrix.json).
    - Đã chứng minh bằng thực nghiệm: **Traceability $\neq$ Semantic Grounding** (Citation Support Failure Rate đạt 39.51%).
 2. **Ý nghĩa lớn đối với Đề tài NCKH**:
    - Phát hiện về *Lexical False Positives* và *Entity-Dominant Failure* của BM25 là bằng chứng thực tế xác đáng khẳng định vì sao đề tài cần nghiên cứu cơ chế bộ nhớ cấu trúc SA-CMS và Hybrid P2, thay vì chỉ dựa vào RAG truyền thống.

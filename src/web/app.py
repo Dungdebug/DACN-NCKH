@@ -27,6 +27,18 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+
+def count_tokens(text: str, tokenizer: Optional[Any] = None) -> int:
+    """Count tokens with the BPE tokenizer when available, else a word heuristic."""
+    if not text:
+        return 0
+    if tokenizer is not None:
+        try:
+            return len(tokenizer.encode(text))
+        except Exception:
+            pass
+    return int(len(text.split()) * 1.35)
+
 from src.hybrid_qa.document_store import DocumentStore, DocumentRecord, Passage
 from src.hybrid_qa.chunker import DocumentChunker
 from src.hybrid_qa.retriever import BM25Retriever
@@ -50,6 +62,7 @@ from src.web.token_optimizer import (
     compress_evidence_context,
     synthesize_accurate_grounded_answer,
     split_clean_sentences,
+    expand_query_semantics,
 )
 from src.web.demo_data import seed_demo_documents, DEMO_DOCUMENTS
 from src.web.session_manager import SessionManager, ChatSession
@@ -59,6 +72,15 @@ from src.memory.mechanistic_inspector import MemoryMechanisticInspector
 from src.evaluation.rq_deep_analyzer import DeepRQAnalyzer
 from src.evaluation.token_efficiency_scorecard import TokenEfficiencyScorecard
 from src.web.local_model_loader import LocalModelLoader
+from src.web.document_analyzer import DocumentAnalyzer
+from src.hybrid_qa.answer_span import (
+    ensure_trailing_question,
+    extract_answer_span,
+    generate_followup_questions,
+    select_best_sentence,
+    split_sentences,
+    strip_question_block,
+)
 
 
 # ==============================================================================
@@ -180,6 +202,10 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 FIGURES_DIR = PROJECT_ROOT / "results" / "figures"
 if FIGURES_DIR.exists():
     app.mount("/results/figures", StaticFiles(directory=str(FIGURES_DIR)), name="figures")
+
+# Mount Self-Study Autonomous Brain Router (Proposal Sections 6.4 & 6.5)
+from src.self_study.api import self_study_router
+app.include_router(self_study_router)
 
 
 # ==============================================================================
@@ -350,7 +376,7 @@ async def upload_document(
         raise HTTPException(status_code=400, detail=str(e))
 
     doc_title = title or Path(filename).stem.replace("_", " ").title()
-    doc_id = f"DOC_{int(time.time())}"
+    doc_id = f"DOC_{int(time.time() * 1000)}_{uuid.uuid4().hex[:6]}"
 
     doc_record = service.store.add_document(
         title=doc_title,
@@ -930,23 +956,69 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     effective_query = service.session_manager.resolve_conversation_context(session_id, raw_query)
 
     # Step 3: Question Routing (Task 4 & 5)
-    attached_docs = session.document_ids
+    attached_docs = list(session.document_ids) if session.document_ids else []
+
+    # Strict Document Isolation: If no document is explicitly attached, bind to the latest user document
+    if not attached_docs:
+        all_store_docs = service.store.list_documents()
+        if all_store_docs:
+            user_docs = [d for d in all_store_docs if not d.get("document_id", "").startswith("DEMO_DOC_")]
+            target_list = user_docs if user_docs else all_store_docs
+            attached_docs = [target_list[-1]["document_id"]]
+            # Persist binding to session so subsequent messages stay isolated
+            try:
+                service.session_manager.attach_document(session_id, attached_docs[0])
+            except Exception:
+                pass
+
     route, route_meta = service.question_router.classify_intent(
         effective_query, num_attached_documents=len(attached_docs)
     )
 
-    # Step 4: Retrieval based on routing & attached documents
+    # Step 4: Retrieval based on routing & attached documents (Pre-filtered for Zero Leakage)
     t_ret_start = time.perf_counter()
     retrieval_candidates = []
 
     if route != QuestionRoute.UNANSWERABLE:
         # Retrieve more candidates if comparing or synthesizing across docs
         top_k_retrieve = req.top_k * 3 if (route in (QuestionRoute.CROSS_DOCUMENT_COMPARISON, QuestionRoute.DOCUMENT_SUMMARY) or len(attached_docs) > 1) else req.top_k * 2
-        all_hits = service.retriever.retrieve(effective_query, top_k=top_k_retrieve)
+        expanded_query_text, _ = expand_query_semantics(effective_query)
 
-        # Filter strictly by attached documents if any are attached
+        # Pre-filter strictly at BM25 level: ONLY passages from attached_docs are even scored
         if attached_docs:
-            retrieval_candidates = [h for h in all_hits if getattr(h, "document_id", "") in attached_docs]
+            retrieval_candidates = service.retriever.retrieve(
+                expanded_query_text,
+                top_k=top_k_retrieve,
+                allowed_document_ids=attached_docs,
+            )
+            best_score = max((getattr(h, "score", 0.0) for h in retrieval_candidates), default=0.0)
+
+            # If document summary or weak hit on exploratory summary, pull document's passages directly
+            if route == QuestionRoute.DOCUMENT_SUMMARY or (best_score < service.evidence_selector.score_threshold and route in (QuestionRoute.DOCUMENT_SUMMARY, QuestionRoute.MULTI_PASSAGE_SYNTHESIS)):
+                from src.hybrid_qa.retriever import RetrievalResult
+                fallback_candidates = []
+                for d_id in attached_docs:
+                    try:
+                        d_obj = service.store.get_document(d_id)
+                        if d_obj and d_obj.passages:
+                            for p in d_obj.passages[:top_k_retrieve]:
+                                fallback_candidates.append(
+                                    RetrievalResult(
+                                        passage_id=p.passage_id,
+                                        document_id=p.document_id,
+                                        text=p.text,
+                                        score=10.0,
+                                        start_char=p.start_char,
+                                        end_char=p.end_char,
+                                        section_title=p.section_title,
+                                        metadata=p.metadata,
+                                    )
+                                )
+                    except Exception:
+                        pass
+                if fallback_candidates:
+                    retrieval_candidates = fallback_candidates
+
             # If cross document comparison, prioritize multi-document coverage
             if route == QuestionRoute.CROSS_DOCUMENT_COMPARISON and len(attached_docs) > 1:
                 grouped_by_doc = {}
@@ -959,8 +1031,8 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
                 if balanced:
                     retrieval_candidates = balanced
         else:
-            # If no document attached to session, search over all store
-            retrieval_candidates = all_hits
+            # Fallback only when absolutely no documents exist anywhere
+            retrieval_candidates = service.retriever.retrieve(expanded_query_text, top_k=top_k_retrieve)
 
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
@@ -986,12 +1058,28 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
     refusal_message = ""
 
     if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY):
-        refused = True
-        refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
-        refusal_message = (
-            "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
-            "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
-        )
+        if attached_docs and route == QuestionRoute.DOCUMENT_SUMMARY and len(retrieval_candidates) > 0:
+            refused = False
+            effective_route = QuestionRoute.DOCUMENT_SUMMARY
+        else:
+            refused = True
+            refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "out_of_domain")
+            if attached_docs:
+                try:
+                    target_doc = service.store.get_document(attached_docs[0])
+                    target_title = target_doc.title if target_doc else attached_docs[0]
+                except Exception:
+                    target_title = "tài liệu đang chọn"
+                refusal_message = (
+                    f"Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                    f"Tài liệu **{target_title}** không có thông tin trả lời cho câu hỏi này. "
+                    "Hệ thống không sử dụng dữ liệu từ tài liệu khác để bảo đảm độ chính xác tuyệt đối."
+                )
+            else:
+                refusal_message = (
+                    "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn. "
+                    "Tài liệu được cung cấp hiện chưa đủ thông tin cho câu hỏi này."
+                )
 
     # Step 6: Build citations & evidence structures
     citations_data = []
@@ -1037,6 +1125,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             question=effective_query,
             evidence_passages=citations_data,
             max_sentences_per_passage=2 if req.answer_mode in ("concise", "minimal") else 3,
+            tokenizer=service.tokenizer,
         )
         body = synthesize_accurate_grounded_answer(
             question=effective_query,
@@ -1045,23 +1134,148 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
             answer_mode=req.answer_mode,
         )
 
-        # Append structured Sources section (Task 6)
-        sources_list = []
-        for c in citations_data:
-            sources_list.append(f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}")
+        # Route-specific overrides below need the primary passage, its sentences and the
+        # leading citation label. `split_clean_sentences` preserves decimal numbers such as
+        # "30,9%" that a naive split on "." would shred.
+        best_passage = citations_data[0]["text"] if citations_data else ""
+        sentences = split_clean_sentences(best_passage)
+        cit_1 = citations_data[0]["citation_label"] if citations_data else ""
 
-        if sources_list:
-            answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
+        q_lower = effective_query.lower()
+        wants_suggested_questions = any(
+            k in q_lower for k in [
+                "câu hỏi ôn tập", "câu hỏi gợi ý", "sinh câu hỏi", "tạo câu hỏi",
+                "câu hỏi liên quan", "gợi ý câu hỏi", "suggest questions", "generate questions",
+            ]
+        )
+
+        if wants_suggested_questions and attached_docs:
+            try:
+                attached_doc = service.store.get_document(attached_docs[0])
+                auto_qs = DocumentAnalyzer.generate_suggested_questions(attached_doc.raw_text, title=attached_doc.title, max_questions=5)
+                q_lines = [f"{idx}. **[{q['category']}]**: {q['question']}" for idx, q in enumerate(auto_qs, start=1)]
+                body = (
+                    f"Dựa trên cấu trúc phân tích tài liệu **{attached_doc.title}**, hệ thống tự động sinh ra các câu hỏi trọng tâm sau:\n\n"
+                    + "\n\n".join(q_lines)
+                    + "\n\n👉 Bạn có thể nhấn hoặc nhập bất kỳ câu hỏi nào ở trên để xem câu trả lời chi tiết kèm trích dẫn nguồn!"
+                )
+            except Exception:
+                body = "Dựa trên tài liệu đã cung cấp, dưới đây là các câu hỏi trọng tâm có thể tham khảo từ văn bản."
+        elif effective_route == QuestionRoute.DOCUMENT_SUMMARY:
+            if attached_docs:
+                try:
+                    attached_doc = service.store.get_document(attached_docs[0])
+                    from src.brain.progressive_summarizer import ProgressiveSummarizer
+                    prog_sum = ProgressiveSummarizer()
+                    digest = prog_sum.generate_digest(attached_doc.raw_text, doc_title=attached_doc.title)
+                    body = (
+                        f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n"
+                        f"- **Tóm lược cốt lõi**: {digest.l1_tldr}\n"
+                        f"- **Tổng quan thực nghiệm**: {digest.l2_executive} {cit_1}"
+                    )
+                except Exception:
+                    intel = DocumentAnalyzer.extract_key_points_and_summary(attached_doc.raw_text, title=attached_doc.title, max_points=3)
+                    summary_points = [f"- {kp.lstrip('- ').strip()} {cit_1}" for kp in intel["key_points"]]
+                    body = f"Tài liệu **{attached_doc.title}** tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+            else:
+                summary_points = []
+                for c in citations_data[:3]:
+                    pts = [s.strip() for s in c["text"].split(".") if len(s.strip()) > 20]
+                    if pts:
+                        summary_points.append(f"- {pts[0]} {c['citation_label']}")
+                if not summary_points:
+                    summary_points = [f"- {sentences[0]} {cit_1}"]
+                body = "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+        elif effective_route == QuestionRoute.CROSS_DOCUMENT_COMPARISON:
+            comp_points = []
+            for c in citations_data[:2]:
+                pts = [s.strip() for s in c["text"].split(".") if len(s.strip()) > 15]
+                lead = pts[0] if pts else c["text"][:120]
+                comp_points.append(f"- **{c['document_title']}**: {lead} {c['citation_label']}")
+            body = "Khi đối chiếu giữa các tài liệu, có các điểm phân biệt chính:\n" + "\n".join(comp_points)
+        elif effective_route == QuestionRoute.SECTION_LOOKUP:
+            salient_source = select_best_sentence(effective_query, sentences) or (sentences[0] if sentences else best_passage[:180])
+            salient = extract_answer_span(effective_query, salient_source) or salient_source
+            body = f"Tại mục được tra cứu, tài liệu ghi nhận: {salient}. {cit_1}"
         else:
-            answer_text = body
+            # Smart sentence selection: select the sentence with highest semantic match to the query
+            smart_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+                query=effective_query,
+                evidence_passages=evidence.evidence_passages,
+                answer_mode=req.answer_mode,
+            )
+            # Extract body (strip out Sources section if present, handled below)
+            if "### Nguồn tham khảo" in smart_answer:
+                body = smart_answer.split("### Nguồn tham khảo")[0].strip()
+            else:
+                body = smart_answer.strip()
+
+            # The analyzer refused internally (no on-topic evidence): propagate the refusal
+            # instead of dressing it up with citations that were never used.
+            if body.startswith("Không tìm thấy đủ thông tin bằng chứng"):
+                refused = True
+                refusal_reason = "insufficient_coverage"
+                citations_data = []
+                evidence_passages_out = []
+
+        if refused:
+            answer_text = (
+                "Tài liệu không có thông tin hoặc chưa đủ căn cứ. "
+                "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
+            )
+        else:
+            seen_source_keys = set()
+            sources_list = []
+            for c in citations_data:
+                s_key = (c["document_title"], c["section_title"], c["paragraph_index"])
+                if s_key not in seen_source_keys:
+                    seen_source_keys.add(s_key)
+                    sources_list.append(
+                        f"[{c['citation_index']}] **{c['document_title']}** — {c['section_title']} — Đoạn {c['paragraph_index']}"
+                    )
+
+            # Strip any question block the body may already carry so it can be re-attached last.
+            body = strip_question_block(body)
+
+            # Boundary advisory check (Ticket 7.2)
+            try:
+                from src.reasoning.boundary_inspector import BoundaryInspector
+                _b_inspector = BoundaryInspector()
+                _b_advisory = _b_inspector.inspect_and_advise(citations_data, effective_query)
+                if _b_advisory.has_boundary and _b_advisory.clauses:
+                    _b_cond = _b_advisory.clauses[0].condition_text
+                    if _b_cond not in body and _b_advisory.advisory_text not in body:
+                        body = f"{body}\n\n👉 **{_b_advisory.advisory_text}**"
+            except Exception:
+                pass
+
+            if sources_list:
+                answer_text = f"{body}\n\n### Nguồn tham khảo\n" + "\n\n".join(sources_list)
+            else:
+                answer_text = body
+
+            # Product invariant: every explanatory answer terminates with a follow-up question.
+            source_context = citations_data[0]["text"] if citations_data else best_passage
+            source_section = citations_data[0]["section_title"] if citations_data else ""
+            follow_up_questions = generate_followup_questions(
+                query=effective_query,
+                context=source_context,
+                section_title=source_section,
+            )
+            answer_text = ensure_trailing_question(answer_text, follow_up_questions)
 
     t_gen_end = time.perf_counter()
     generation_ms = (t_gen_end - t_gen_start) * 1000
     total_latency_ms = (time.perf_counter() - t_start) * 1000
 
     compressed_ctx_tok = compression_stats.get("compressed_context_tokens", 0)
-    input_tokens = int(len(effective_query.split()) * 1.35) + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
-    output_tokens = int(len(answer_text.split()) * 1.35)
+    if service.tokenizer:
+        query_tok = len(service.tokenizer.encode(effective_query, add_special_tokens=False))
+        output_tokens = len(service.tokenizer.encode(answer_text, add_special_tokens=False))
+        input_tokens = query_tok + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
+    else:
+        input_tokens = int(len(effective_query.split()) * 1.35) + (compressed_ctx_tok if (not refused and compressed_ctx_tok > 0) else (120 if not refused else 30))
+        output_tokens = int(len(answer_text.split()) * 1.35)
 
     telemetry_data = {
         "input_tokens": input_tokens,
@@ -1095,6 +1309,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "context_compression": compression_stats,
         "refusal_reason": refusal_reason,
         "memory_level": memory_level_label,
+        "suggested_questions": follow_up_questions if not refused else [],
     }
 
     # Step 8: Add assistant message to session & persist
@@ -1108,6 +1323,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         refused=refused,
         refusal_reason=refusal_reason,
         diagnostics=diagnostics_data,
+        suggested_questions=follow_up_questions if not refused else [],
     )
     service.session_manager.save()
 
@@ -1155,6 +1371,7 @@ async def send_session_message(session_id: str, req: SessionMessageRequest):
         "routing": effective_route.value,
         "refused": refused,
         "citations": citations_data,
+        "suggested_questions": follow_up_questions if not refused else [],
         "telemetry": telemetry_data,
         "diagnostics": diagnostics_data,
         "memory_diagnostics": mem_diag,
@@ -1233,12 +1450,33 @@ async def chat_query(req: ChatRequest):
     t_ret_start = time.perf_counter()
     retrieval_results = []
     if qa_mode in (QAMode.HYBRID, QAMode.CONTEXT):
-        retrieval_results = service.retriever.retrieve(query, top_k=req.top_k)
+        expanded_query, _ = expand_query_semantics(query)
+        retrieval_results = service.retriever.retrieve(expanded_query, top_k=req.top_k)
         if resolved_doc_id:
             # Filter or prioritize current document
             doc_passages = [r for r in retrieval_results if getattr(r, "document_id", "") == resolved_doc_id]
             if doc_passages:
                 retrieval_results = doc_passages
+            else:
+                from src.hybrid_qa.retriever import RetrievalResult
+                try:
+                    d_obj = service.store.get_document(resolved_doc_id)
+                    if d_obj and d_obj.passages:
+                        retrieval_results = [
+                            RetrievalResult(
+                                passage_id=p.passage_id,
+                                document_id=p.document_id,
+                                text=p.text,
+                                score=10.0,
+                                start_char=p.start_char,
+                                end_char=p.end_char,
+                                section_title=p.section_title,
+                                metadata=p.metadata,
+                            )
+                            for p in d_obj.passages[:req.top_k * 2]
+                        ]
+                except Exception:
+                    pass
     t_ret_end = time.perf_counter()
     retrieval_ms = (t_ret_end - t_ret_start) * 1000
 
@@ -1268,7 +1506,7 @@ async def chat_query(req: ChatRequest):
     evidence_diagnostics = {}
 
     if qa_mode == QAMode.HYBRID:
-        if not is_grounded or (refusal_decision and refusal_decision.should_refuse):
+        if not is_grounded or (refusal_decision and refusal_decision.should_refuse and route != QuestionRoute.DOCUMENT_SUMMARY and not resolved_doc_id):
             refused = True
             refusal_reason = effective_route.value if not is_grounded else (refusal_decision.reason.value if refusal_decision and refusal_decision.reason else "no_evidence")
             refusal_message = "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
@@ -1311,14 +1549,27 @@ async def chat_query(req: ChatRequest):
         input_tokens = len(query.split()) + 30
         output_tokens = len(answer.split())
     else:
-        # Sub-passage context compression to reduce input token footprint & remove noise
-        context_str, comp_stats = compress_evidence_context(
-            question=query,
-            evidence_passages=evidence_passages_out,
-            max_sentences_per_passage=2 if req.answer_mode in (AnswerLengthMode.MINIMAL, AnswerLengthMode.CONCISE) else 3,
+        # Answer span extraction first: the model-free path keeps the exact clause.
+        evidence_pool = [
+            type("_P", (), {
+                "text": e["text"],
+                "passage_id": e["passage_id"],
+                "document_id": e["document_id"],
+                "document_title": e.get("document_title", e["document_id"]),
+                "section_title": e.get("section_title", ""),
+                "paragraph_index": 1,
+                "score": e["score"],
+            })()
+            for e in evidence_passages_out
+        ]
+        extracted_answer, _ = DocumentAnalyzer.find_best_grounded_answer(
+            query=query,
+            evidence_passages=evidence_pool,
+            answer_mode=req.answer_mode,
         )
-        evidence_diagnostics["context_compression"] = comp_stats
 
+        # Build prompt using Token-Efficient Prompt Engine (Task 10)
+        context_str = "\n\n".join(f"[{e['passage_id']}] {e['text']}" for e in evidence_passages_out)
         prompt, max_ans_tokens = build_token_efficient_prompt(
             question=query,
             context_text=context_str if qa_mode != QAMode.MEMORY else "",
@@ -1328,24 +1579,19 @@ async def chat_query(req: ChatRequest):
 
         input_tokens = int(len(prompt.split()) * 1.35)
 
-        # Generate answer using loaded model or structured high-fidelity grounded synthesizer
         if service.model_loaded and service.model is not None and service.tokenizer is not None:
             raw_answer = service.pipeline._generate_answer(prompt)
-            answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
+            model_answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
+            # A 135M backbone often emits degenerate text; fall back to the grounded
+            # extractive answer whenever the generation is not usable.
+            if len(model_answer.strip()) < 8 or citations == []:
+                answer = extracted_answer
+            else:
+                answer = model_answer
             output_tokens = len(service.tokenizer.encode(answer))
         else:
-            if evidence_passages_out:
-                raw_answer = synthesize_accurate_grounded_answer(
-                    question=query,
-                    citations_data=evidence_passages_out,
-                    route=effective_route.value,
-                    answer_mode=req.answer_mode,
-                )
-            else:
-                raw_answer = "Thông tin đã được đồng bộ vào bộ nhớ tham số SA-CMS."
-
-            answer = postprocess_concise_answer(raw_answer, citations, req.answer_mode, refused)
-            output_tokens = int(len(answer.split()) * 1.35)
+            answer = extracted_answer
+            output_tokens = count_tokens(answer, service.tokenizer)
 
     t_gen_end = time.perf_counter()
     generation_ms = (t_gen_end - t_gen_start) * 1000

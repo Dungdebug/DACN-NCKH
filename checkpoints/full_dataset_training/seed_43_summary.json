@@ -1,0 +1,236 @@
+{
+  "seed": 43,
+  "checkpoint_path": "checkpoints/full_dataset_training/cms_3lvl_full_seed_43.pt",
+  "checkpoint_sha256": "52482213678ea58d7622a1eadf6954348e47ec608fccf779a83a17bc126c00fe",
+  "parent_checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+  "parent_sha256_verified_unchanged": "1f218da279121857921dc9cf3f3b2a6a10395c22afbef5fe4dc4b035dd27f2e7",
+  "best_epoch": 6,
+  "epochs_completed": 6,
+  "tokens_scanned_total": 3595758,
+  "sequences_scanned_total": 12108,
+  "duration_sec": 562.05,
+  "peak_vram_mb": 1749.78,
+  "baseline_metrics": {
+    "en_val": {
+      "full_loss": 4.7996,
+      "full_ppl": 121.4617,
+      "answer_loss": 3.4513,
+      "answer_ppl": 31.5399
+    },
+    "vn_val": {
+      "full_loss": 2.6271,
+      "full_ppl": 13.8341,
+      "answer_loss": 3.0395,
+      "answer_ppl": 20.8955
+    },
+    "combined_answer_loss": 3.2454
+  },
+  "best_metrics": {
+    "en_val": {
+      "full_loss": 4.2279,
+      "full_ppl": 68.5736,
+      "answer_loss": 2.1011,
+      "answer_ppl": 8.1752
+    },
+    "vn_val": {
+      "full_loss": 1.6595,
+      "full_ppl": 5.2565,
+      "answer_loss": 0.8431,
+      "answer_ppl": 2.3235
+    },
+    "combined_answer_loss": 1.4721
+  },
+  "weight_delta_from_parent": {
+    "max_abs_param_delta": 0.044041,
+    "l2_norm_by_module": {
+      "level_0": 7.539369,
+      "level_1": 7.444332,
+      "level_2": 7.023124,
+      "cms_norm": 0.175663
+    }
+  },
+  "epoch_history": [
+    {
+      "epoch": 1,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.9801,
+      "train_full_loss": 3.0049,
+      "train_answer_loss": 1.6385,
+      "en_val": {
+        "full_loss": 4.1654,
+        "full_ppl": 64.4171,
+        "answer_loss": 2.2876,
+        "answer_ppl": 9.8508
+      },
+      "vn_val": {
+        "full_loss": 1.8545,
+        "full_ppl": 6.3888,
+        "answer_loss": 0.8586,
+        "answer_ppl": 2.3598
+      },
+      "combined_val_answer_loss": 1.5731,
+      "avg_grad_norm": 2.4221,
+      "lr_end": 0.0001569,
+      "duration_sec": 283.02,
+      "peak_vram_mb": 1676.65,
+      "is_best": true
+    },
+    {
+      "epoch": 2,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.5791,
+      "train_full_loss": 2.585,
+      "train_answer_loss": 1.2438,
+      "en_val": {
+        "full_loss": 4.1198,
+        "full_ppl": 61.5459,
+        "answer_loss": 2.2174,
+        "answer_ppl": 9.1835
+      },
+      "vn_val": {
+        "full_loss": 1.7845,
+        "full_ppl": 5.9565,
+        "answer_loss": 0.814,
+        "answer_ppl": 2.2569
+      },
+      "combined_val_answer_loss": 1.5157,
+      "avg_grad_norm": 1.6987,
+      "lr_end": 0.0001317,
+      "duration_sec": 48.38,
+      "peak_vram_mb": 1749.78,
+      "is_best": true
+    },
+    {
+      "epoch": 3,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.4077,
+      "train_full_loss": 2.3499,
+      "train_answer_loss": 1.0937,
+      "en_val": {
+        "full_loss": 4.1694,
+        "full_ppl": 64.6782,
+        "answer_loss": 2.1394,
+        "answer_ppl": 8.494
+      },
+      "vn_val": {
+        "full_loss": 1.7133,
+        "full_ppl": 5.5472,
+        "answer_loss": 0.8395,
+        "answer_ppl": 2.3152
+      },
+      "combined_val_answer_loss": 1.4895,
+      "avg_grad_norm": 1.5222,
+      "lr_end": 9.38e-05,
+      "duration_sec": 50.39,
+      "peak_vram_mb": 1749.78,
+      "is_best": true
+    },
+    {
+      "epoch": 4,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.2794,
+      "train_full_loss": 2.1923,
+      "train_answer_loss": 0.9751,
+      "en_val": {
+        "full_loss": 4.1745,
+        "full_ppl": 65.0102,
+        "answer_loss": 2.0945,
+        "answer_ppl": 8.1213
+      },
+      "vn_val": {
+        "full_loss": 1.6787,
+        "full_ppl": 5.3587,
+        "answer_loss": 0.8836,
+        "answer_ppl": 2.4196
+      },
+      "combined_val_answer_loss": 1.489,
+      "avg_grad_norm": 1.5026,
+      "lr_end": 5.35e-05,
+      "duration_sec": 78.06,
+      "peak_vram_mb": 1749.78,
+      "is_best": true
+    },
+    {
+      "epoch": 5,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.1928,
+      "train_full_loss": 2.0829,
+      "train_answer_loss": 0.8961,
+      "en_val": {
+        "full_loss": 4.2119,
+        "full_ppl": 67.4858,
+        "answer_loss": 2.0722,
+        "answer_ppl": 7.9419
+      },
+      "vn_val": {
+        "full_loss": 1.6711,
+        "full_ppl": 5.3177,
+        "answer_loss": 0.8799,
+        "answer_ppl": 2.4106
+      },
+      "combined_val_answer_loss": 1.4761,
+      "avg_grad_norm": 1.4328,
+      "lr_end": 2.53e-05,
+      "duration_sec": 50.33,
+      "peak_vram_mb": 1749.78,
+      "is_best": true
+    },
+    {
+      "epoch": 6,
+      "sequences_scanned": 2018,
+      "tokens_scanned": 599293,
+      "train_combined_loss": 1.1481,
+      "train_full_loss": 2.0237,
+      "train_answer_loss": 0.8562,
+      "en_val": {
+        "full_loss": 4.2279,
+        "full_ppl": 68.5736,
+        "answer_loss": 2.1011,
+        "answer_ppl": 8.1752
+      },
+      "vn_val": {
+        "full_loss": 1.6595,
+        "full_ppl": 5.2565,
+        "answer_loss": 0.8431,
+        "answer_ppl": 2.3235
+      },
+      "combined_val_answer_loss": 1.4721,
+      "avg_grad_norm": 1.3975,
+      "lr_end": 1.6e-05,
+      "duration_sec": 50.96,
+      "peak_vram_mb": 1749.78,
+      "is_best": true
+    }
+  ],
+  "qualitative_preview": [
+    {
+      "lang": "vi",
+      "question": "Hệ thống UWB hoạt động ở băng tần nào và độ rộng xung bao nhiêu?",
+      "reference": "Ở băng tần 6.5 GHz với độ rộng xung 2 nano-giây [VN_VAL_DOC_001::P001].",
+      "prediction": "Đạt 120 xe AGV và độ rộng xung 2 nano-giây chống nhiễu đa"
+    },
+    {
+      "lang": "vi",
+      "question": "Sai số định vị trung bình của xe tự hành AGV là bao nhiêu?",
+      "reference": "Sai số trung bình 8.5 cm [VN_VAL_DOC_001::P001].",
+      "prediction": "Đạt 120 xe AGV và tự hành AGV ở tần số 20 Hz [VN_TR_"
+    },
+    {
+      "lang": "en",
+      "question": "What do standard language models learn instead of causal mechanisms?",
+      "reference": "statistical correlations",
+      "prediction": "Standard language models learn causal mechanisms from causal graphs."
+    },
+    {
+      "lang": "en",
+      "question": "What does counterfactual prompting evaluate in language models?",
+      "reference": "whether models can reason about altered antecedent conditions",
+      "prediction": "Counterfactual prompting evaluates whether models can reason about altered antecedent conditions."
+    }
+  ]
+}

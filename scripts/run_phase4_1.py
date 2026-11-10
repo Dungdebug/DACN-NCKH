@@ -136,6 +136,9 @@ def train_or_load_adapter(
             loss.backward()
 
             if (idx + 1) % grad_accum_steps == 0 or (idx + 1) == len(encoded_samples):
+                # Match scripts/train_ablation_a1_a3.py exactly so the P1 vs A1/A3
+                # ablation is not confounded by a differing optimisation recipe.
+                torch.nn.utils.clip_grad_norm_(model.get_cms_parameters(), 1.0)
                 optimizer.step()
                 optimizer.zero_grad()
 

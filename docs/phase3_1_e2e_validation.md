@@ -64,7 +64,7 @@ Ngoài ra, **20 lượt kiểm tra đa chế độ (Cross-Mode Evaluations)** đ
 
 ## 3. KẾT QUẢ KIỂM CHỨNG END-TO-END CHI TIẾT
 
-Toàn bộ 120 bài test đã được thực thi trên môi trường tính toán thực tế (`SmolLM2-135M` + `SA-CMS` trên phần cứng NVIDIA GeForce GTX 1650 Ti GPU CUDA). Dữ liệu chi tiết đã được xuất ra định dạng chuẩn tại [phase3_1_e2e_results.json](file:///d:/NCKH/results/phase3_1_e2e_results.json) và [phase3_1_e2e_results.csv](file:///d:/NCKH/results/phase3_1_e2e_results.csv).
+Toàn bộ 120 bài test đã được thực thi trên môi trường tính toán thực tế (`SmolLM2-135M` + `SA-CMS` trên phần cứng NVIDIA GeForce GTX 1650 Ti GPU CUDA). Dữ liệu chi tiết đã được xuất ra định dạng chuẩn tại [phase3_1_e2e_results.json](results/phase3_1_e2e_results.json) và [phase3_1_e2e_results.csv](results/phase3_1_e2e_results.csv).
 
 ### 3.1. Bảng tổng hợp kết quả (Execution Summary)
 

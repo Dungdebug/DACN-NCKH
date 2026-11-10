@@ -24,7 +24,7 @@
 ## 🔬 TASK 1: ĐỐI SOÁT TỪNG CÂU HỎI TRÊN TOÀN BỘ 350 CÂU (PER-QUESTION COMPARISON)
 
 Kết quả so sánh đối đầu chi tiết đã được trích xuất tại tập tin:  
-👉 [`results/phase4_1_vietnamese_p2_b2_per_question.csv`](file:///d:/NCKH/results/phase4_1_vietnamese_p2_b2_per_question.csv)
+👉 [`results/phase4_1_vietnamese_p2_b2_per_question.csv`](results/phase4_1_vietnamese_p2_b2_per_question.csv)
 
 | Chỉ số Đối soát (Per-Question Metrics) | Seed 43 | Seed 44 | Ghi chú khoa học |
 | :--- | :---: | :---: | :--- |
@@ -97,7 +97,7 @@ Thực nghiệm đo đạc tensor trực tiếp trên 10 câu hỏi đại diệ
 
 ## 🛡️ TASK 4: KIỂM TRA MÃ NGUỒN CÓ CƠ CHẾ DỰ PHÒNG NGẦM KHÔNG? (FALLBACK DETECTION)
 
-Đã rà soát toàn bộ các hàm `_answer_hybrid_mode`, `_generate_answer` trong [`src/hybrid_qa/pipeline.py`](file:///d:/NCKH/src/hybrid_qa/pipeline.py) và phương thức `forward` trong [`src/hope_attention/pretrained_hope.py`](file:///d:/NCKH/src/hope_attention/pretrained_hope.py):
+Đã rà soát toàn bộ các hàm `_answer_hybrid_mode`, `_generate_answer` trong [`src/hybrid_qa/pipeline.py`](src/hybrid_qa/pipeline.py) và phương thức `forward` trong [`src/hope_attention/pretrained_hope.py`](src/hope_attention/pretrained_hope.py):
 - **Không tìm thấy bất kỳ câu lệnh fallback nào** (chẳng hạn `if error: return b2` hay `use_rag_only`).
 - Khối `if self.cms is not None:` trong `PretrainedHopeLM.forward()` luôn được kích hoạt trong P2:
   ```python

@@ -361,12 +361,19 @@ class HybridQAPipeline:
     ) -> str:
         """
         Step 3 (Clean Extractive-Guided Output):
-        Synthesizes a fluent, concise, grounded answer by performing extractive sentence
-        and span matching from top retrieved evidence passages, post-processing to remove
-        regex/token artifacts (e.g. '_DOC_013::P000]'), and ensuring complete terminal sentences.
-        If concise=True, focuses strictly on the salient answer fact (< 15 tokens).
+        Synthesizes a grounded answer by locating the single sentence that answers the
+        question, then cutting the minimal answer span inside it so the response never
+        over-captures a whole paragraph. Every non-refusal answer terminates with a
+        follow-up question block (Section 6.4 of the proposal).
         """
-        import re
+        from src.hybrid_qa.answer_span import (
+            ensure_trailing_question,
+            extract_answer_span,
+            generate_followup_questions,
+            select_best_sentence,
+            split_sentences,
+            strip_question_block,
+        )
 
         if not evidence_passages:
             return (
@@ -375,181 +382,44 @@ class HybridQAPipeline:
                 else "The provided document does not contain sufficient information to answer this question."
             )
 
-        q_tokens = set(re.findall(r"\w+", question.lower()))
-        stop_words = {
-            "là", "của", "và", "những", "các", "có", "trong", "được", "cho", "với", "này",
-            "đến", "khi", "tại", "một", "gì", "nào", "bao", "nhiêu", "sao", "thế", "đâu",
-            "mấy", "ai", "như", "theo",
-            "is", "the", "of", "and", "in", "to", "a", "what", "which", "how", "when", "where", "why"
-        }
-        content_q_tokens = q_tokens - stop_words
+        # 1. Collect candidate sentences from the focused evidence passage(s).
+        candidates: List[str] = []
+        for passage in evidence_passages:
+            candidates.extend(split_sentences(getattr(passage, "text", "") or ""))
 
-        scored_sentences = []
-        for p_idx, p in enumerate(evidence_passages):
-            raw_text = getattr(p, "text", "") or ""
-            clean_p_text = re.sub(r"\[?[A-Z0-9_\-]+::P\d+\]?", "", raw_text)
-            clean_p_text = re.sub(r"\[DOC_\w+\]", "", clean_p_text)
-            clean_p_text = re.sub(r"_[A-Z0-9_]+::P\d+\]?", "", clean_p_text)
+        if not candidates:
+            return (
+                "Tài liệu được cung cấp không chứa thông tin để trả lời câu hỏi này."
+                if language in ("vi", "vietnamese")
+                else "The provided document does not contain sufficient information to answer this question."
+            )
 
-            raw_sents = re.split(r"(?<=[.!?])\s+", clean_p_text)
-            for s in raw_sents:
-                s_clean = s.strip()
-                if len(s_clean) < 10 or s_clean.startswith("#"):
-                    continue
-                s_tokens = set(re.findall(r"\w+", s_clean.lower()))
-                overlap = len(content_q_tokens & s_tokens)
-                jaccard = overlap / max(1, len(content_q_tokens | s_tokens))
-                score = overlap * 2.0 + jaccard * 5.0 - (p_idx * 0.2)
-                scored_sentences.append((score, s_clean, p))
+        # 2. Pick the sentence with the strongest alignment, then cut the exact span.
+        best_sentence = select_best_sentence(question, candidates) or candidates[0]
+        answer_span = extract_answer_span(question, best_sentence)
 
-        scored_sentences.sort(key=lambda x: x[0], reverse=True)
+        if not answer_span:
+            answer_span = best_sentence
 
-        selected_sentences = []
-        used_texts = set()
-        for score, sent, p in scored_sentences:
-            if any(sent in u or u in sent for u in used_texts):
-                continue
-            selected_sentences.append(sent)
-            used_texts.add(sent)
-            if concise:
-                break
-            if len(selected_sentences) >= 2:
-                break
-
-        if not selected_sentences and evidence_passages:
-            first_p = getattr(evidence_passages[0], "text", "")
-            first_p = re.sub(r"\[?[A-Z0-9_\-]+::P\d+\]?", "", first_p).strip()
-            first_sent = first_p.split(".")[0] if "." in first_p else first_p[:180]
-            if first_sent:
-                selected_sentences.append(first_sent)
-
-        answer_body = " ".join(selected_sentences).strip()
-        answer_body = re.sub(r"\s+", " ", answer_body)
-        answer_body = re.sub(r"[\[\(_\w]*::P\d+\]?", "", answer_body).strip()
-
-        # If concise mode, perform high-precision key entity extraction (< 15 tokens)
-        if concise:
-            q_lower = question.lower()
-            combined_ev_text = " ".join([getattr(p, "text", "") for p in evidence_passages])
-            clean_ev = re.sub(r"\[?[A-Z0-9_\-]+::P\d+\]?", "", combined_ev_text)
-            clean_ev = re.sub(r"_[A-Z0-9_]+::P\d+\]?", "", clean_ev)
-            clean_ev = re.sub(r"#+\s*", "", clean_ev)
-
-            extracted_fact = None
-
-            if "lĩnh vực" in q_lower:
-                m = re.search(r"lĩnh vực\s+([^,.;\n]+?)(?=\s+(?:khẳng định|nhằm|bao gồm|được|giúp|\.|\,)|$)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "bao nhiêu đơn vị" in q_lower or "đơn vị cơ sở" in q_lower:
-                m = re.search(r"(\d+\s+đơn\s+vị\s+cơ\s+sở|\d+\s+đơn\s+vị)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "ngân sách tiết kiệm" in q_lower or "tiết kiệm được" in q_lower:
-                m = re.search(r"(\d+(?:[,\.]\d+)?\s*tỷ\s+đồng)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "hài lòng" in q_lower:
-                m = re.search(r"hài\s+lòng[\s\S]*?(\d+(?:[,\.]\d+)?\s*%)", clean_ev, re.IGNORECASE)
-                if not m:
-                    m = re.search(r"(\d+(?:[,\.]\d+)?\s*%)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "mở rộng toàn quốc" in q_lower and ("thời gian nào" in q_lower or "hoàn thành" in q_lower):
-                m = re.search(r"(quý\s+[IVX\d]+\s+năm\s+\d{4})", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif any(w in q_lower for w in ["năm nào đến năm nào", "kéo dài từ năm nào"]):
-                m = re.search(r"(giai\s+đoạn\s+\d{4}\s*[-–]\s*\d{4}|\d{4}\s*[-–]\s*\d{4})", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif any(w in q_lower for w in ["bao nhiêu phần trăm", "phần trăm"]):
-                m = re.search(r"(\d+(?:[,\.]\d+)?\s*%\s*(?:hiệu\s+suất\s+vận\s+hành)?)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "bao nhiêu tầng" in q_lower or "phân cấp thành" in q_lower:
-                m = re.search(r"(\d+\s*tầng\s+chức\s+năng(?:\s+độc\s+lập)?)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "tầng đầu tiên" in q_lower or ("tầng 1" in q_lower and "vai trò" in q_lower):
-                if "thu thập dữ liệu cơ sở" in clean_ev.lower():
-                    extracted_fact = "thu thập dữ liệu cơ sở"
-            elif "tầng chức năng trung gian" in q_lower or ("trung gian" in q_lower and "nhiệm vụ" in q_lower):
-                if "phân tích xử lý trung gian" in clean_ev.lower():
-                    extracted_fact = "phân tích xử lý trung gian"
-            elif "tầng cao nhất" in q_lower or ("cao nhất" in q_lower and "nhiệm vụ" in q_lower):
-                if "báo cáo điều hành vĩ mô" in clean_ev.lower():
-                    extracted_fact = "báo cáo điều hành vĩ mô"
-            elif "yếu tố an toàn" in q_lower:
-                if "an toàn dữ liệu" in clean_ev.lower():
-                    extracted_fact = "an toàn dữ liệu và bảo mật chuyên ngành"
-            elif any(w in q_lower for w in ["độ trễ", "thời gian đáp ứng tối đa"]):
-                m = re.search(r"(dưới\s+\d+\s+mili-giây|\d+\s+mili-giây)", clean_ev, re.IGNORECASE)
-                if m:
-                    extracted_fact = m.group(1).strip()
-            elif "phương pháp nào" in q_lower:
-                if "phương pháp truyền thống" in clean_ev.lower():
-                    extracted_fact = "phương pháp truyền thống"
-            elif "cơ quan nào" in q_lower or "phối hợp của" in q_lower:
-                if "bộ ngành chuyên trách" in clean_ev.lower():
-                    extracted_fact = "sự phối hợp của các bộ ngành chuyên trách"
-            # Demo domain entities
-            elif "đường sắt" in q_lower and ("chiều dài" in q_lower or "tốc độ" in q_lower):
-                extracted_fact = "chiều dài khoảng 1.541 km, tốc độ thiết kế 350 km/h"
-            elif "đái tháo đường" in q_lower and "đầu tay" in q_lower:
-                extracted_fact = "Metformin là lựa chọn đầu tay"
-            elif "smollm2" in q_lower and ("parameter" in q_lower or "size" in q_lower or "tham số" in q_lower):
-                extracted_fact = "134.5 million parameters"
-
-            if extracted_fact:
-                answer_body = extracted_fact
-            else:
-                clauses = [c.strip() for c in re.split(r"[,;:\n\(\)]", answer_body) if len(c.strip().split()) >= 2]
-                wants_number = any(w in q_lower for w in ["bao nhiêu", "mấy", "how many", "size", "thời gian", "kéo dài từ", "mức", "tỷ lệ", "chiều dài", "tốc độ"])
-                best_clause = None
-                best_c_score = -1.0
-                for c in clauses:
-                    c_toks = set(re.findall(r"\w+", c.lower()))
-                    c_clean = c.strip()
-                    if not c_clean:
-                        continue
-                    overlap = len(content_q_tokens & c_toks)
-                    has_num = bool(re.search(r"\d+", c_clean))
-                    num_boost = 3.0 if (wants_number and has_num) else 0.0
-                    len_penalty = len(c_clean.split()) * 0.08
-                    score = overlap * 2.0 + num_boost - len_penalty
-                    if score > best_c_score:
-                        best_c_score = score
-                        best_clause = c_clean
-
-                if best_clause:
-                    answer_body = best_clause
-
-                words = answer_body.split()
-                if len(words) > 10:
-                    answer_body = " ".join(words[:10])
+        # 3. Multi-aspect synthesis keeps the answer body short and traceable.
+        primary = getattr(evidence_passages[0], "text", "") or ""
+        follow_ups = generate_followup_questions(
+            query=question,
+            context=primary,
+            section_title=getattr(evidence_passages[0], "section_title", "") or "",
+        )
 
         if concise:
-            # Short QA mode (< 15 tokens) - clean concise answer without raw passage tag clutter
-            clean_ans = re.sub(r"\[?[A-Z0-9_\-]+::P\d+\]?", "", answer_body).strip()
-            clean_ans = re.sub(r"_[A-Z0-9_]+::P\d+\]?", "", clean_ans).strip()
-            return clean_ans
-
-        first_pid = getattr(evidence_passages[0], "passage_id", "") if evidence_passages else ""
-        cit_tag = f"[{first_pid}]" if first_pid else ""
-
-        if language in ("vi", "vietnamese"):
-            if not answer_body.startswith("Dựa trên") and not answer_body.startswith("Theo"):
-                lead = f"Dựa trên tài liệu {cit_tag}, " if cit_tag else "Dựa trên tài liệu đã cung cấp, "
-                if answer_body and answer_body[0].isupper() and not answer_body.startswith("Mục tiêu") and not answer_body.startswith("Dự án"):
-                    answer_body = answer_body[0].lower() + answer_body[1:]
-                return f"{lead}{answer_body}".strip()
-            return f"{answer_body} {cit_tag}".strip()
+            body = answer_span
         else:
-            lead = f"Based on the provided document {cit_tag}, " if cit_tag else "Based on the provided document, "
-            if answer_body and answer_body[0].isupper():
-                answer_body = answer_body[0].lower() + answer_body[1:]
-            return f"{lead}{answer_body}".strip()
+            parts = [f"**Nội dung cốt lõi:**\n{answer_span}"]
+            support = [s for s in candidates if s != best_sentence][:2]
+            if support:
+                parts.append(f"📌 **Bối cảnh bổ sung:**\n{' '.join(support)}")
+            body = "\n\n".join(parts)
+
+        body = strip_question_block(body)
+        return ensure_trailing_question(body, follow_ups)
 
     def _answer_memory_mode(
         self,

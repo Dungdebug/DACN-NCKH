@@ -24,7 +24,7 @@ This audit assesses the state of the repository following the completion of Phas
 ### 2.2 Model & Inference Entry Points
 - **Backbone Model**: `HuggingFaceTB/SmolLM2-135M` (135M parameters, hidden size $d=576$, 30 layers, 9 heads).
 - **SA-CMS Memory Architecture**:
-  - Implementation: [`src/hope_attention/sa_cms.py`](file:///d:/NCKH/src/hope_attention/sa_cms.py) (`StructureAlignedHopeLM`).
+  - Implementation: [`src/hope_attention/sa_cms.py`](src/hope_attention/sa_cms.py) (`StructureAlignedHopeLM`).
   - Gated Residual Blending: $\mathbf{H}_t = (1 - \mathbf{g}_t) \odot \mathbf{H}_t^{\text{attn}} + \mathbf{g}_t \odot \mathbf{M}_t^{\text{CMS}}$ (Equation 71).
   - Levels: 3 hierarchical timescales ($k=3$):
     - **Level 1**: Paragraph boundaries (fine timescale).
@@ -35,35 +35,35 @@ This audit assesses the state of the repository following the completion of Phas
   - **Checkpoints**: Pretrained and multi-seed Phase 4.1 checkpoints available on disk in `checkpoints/phase4_1/` (`cms_3lvl_seed_42.pt`, etc.).
 
 ### 2.3 Document Storage & Corpus Management
-- **DocumentStore**: [`src/hybrid_qa/document_store.py`](file:///d:/NCKH/src/hybrid_qa/document_store.py).
+- **DocumentStore**: [`src/hybrid_qa/document_store.py`](src/hybrid_qa/document_store.py).
   - Directory: `data/document_store/`.
   - Storage format: JSON-backed (`v1.json`, `v2.json`, ...), content hashed (`SHA-256` prefix), immutable version chain.
   - Snapshot linkage: Ties PyTorch memory states to `(document_id, version)` pairs under `data/document_store/snapshots/`.
   - Active Corpus: 20 Vietnamese documents loaded and indexed (`VN_DOC_001` to `VN_DOC_020`).
-- **Document Structure Parser**: [`src/document_structure/parser.py`](file:///d:/NCKH/src/document_structure/parser.py).
+- **Document Structure Parser**: [`src/document_structure/parser.py`](src/document_structure/parser.py).
   - Extracts `DocumentStructure` containing `DocumentSpan`, `sections`, `paragraphs`, and `chunks`.
   - Provides exact start/end character and token offsets.
   - Multi-timescale boundary detection based on markdown headings, numbered sections, all-caps headings, and double newline paragraph splits.
 
 ### 2.4 Retrieval & Evidence Subsystem
-- **Retriever**: [`src/hybrid_qa/retriever.py`](file:///d:/NCKH/src/hybrid_qa/retriever.py) (`BM25Retriever`).
+- **Retriever**: [`src/hybrid_qa/retriever.py`](src/hybrid_qa/retriever.py) (`BM25Retriever`).
   - Parameters: $k_1 = 1.5, b = 0.75$, tokenized via lexical analyzer with Vietnamese support.
-- **Evidence Selector**: [`src/hybrid_qa/evidence.py`](file:///d:/NCKH/src/hybrid_qa/evidence.py) (`EvidenceSelector`).
+- **Evidence Selector**: [`src/hybrid_qa/evidence.py`](src/hybrid_qa/evidence.py) (`EvidenceSelector`).
   - Filters passages with score threshold $\tau = 3.0$ (calibrated in CAND_07 / Phase 4.0.2).
   - Minimum coverage threshold: $0.35$.
-- **Refusal Controller**: [`src/hybrid_qa/refusal.py`](file:///d:/NCKH/src/hybrid_qa/refusal.py) (`RefusalController`).
+- **Refusal Controller**: [`src/hybrid_qa/refusal.py`](src/hybrid_qa/refusal.py) (`RefusalController`).
   - Separates `NO_EVIDENCE`, `LOW_CONFIDENCE`, and `INSUFFICIENT_COVERAGE`.
   - Produces bilingual refusal explanations (Vietnamese and English).
 
 ### 2.5 Hybrid QA Pipeline & Operational Modes
-- **Implementation**: [`src/hybrid_qa/pipeline.py`](file:///d:/NCKH/src/hybrid_qa/pipeline.py) (`HybridQAPipeline`).
+- **Implementation**: [`src/hybrid_qa/pipeline.py`](src/hybrid_qa/pipeline.py) (`HybridQAPipeline`).
 - **Core Modes**:
   1. `MODE A` (**Context Mode / B1 / B2**): In-context document feeding.
   2. `MODE B` (**Memory-Only Mode / B4 / B5 / P1**): Ingestion into SA-CMS memory layers, context purged, query answered directly from parametric memory state.
   3. `MODE C` (**Hybrid Mode / P2**): Memory state retained + BM25 retrieved passages injected as evidence context + citation extraction and refusal gate.
 
 ### 2.6 Existing CLI & Scripts
-- Root CLI entry point: [`run_chatbot.py`](file:///d:/NCKH/run_chatbot.py) -> [`scripts/run_chatbot.py`](file:///d:/NCKH/scripts/run_chatbot.py).
+- Root CLI entry point: [`run_chatbot.py`](run_chatbot.py) -> [`scripts/run_chatbot.py`](scripts/run_chatbot.py).
   - Accepts `--document`, `--query`, `--mode`, `--device`, `--top-k`.
   - Outputs standardized JSON with answer, citations, refusal status, evidence list, and latency.
 

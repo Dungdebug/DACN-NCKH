@@ -6,8 +6,8 @@
 **Ngày thực hiện**: 03/10/2026  
 **Trạng thái**: **FINAL PROTOCOL STATUS = READY_FOR_PHASE_4_1 (TẤT CẢ CỔNG KIỂM TOÁN ĐẠT CHUẨN)**  
 **Phần cứng**: NVIDIA GeForce GTX 1650 Ti (4GB VRAM), Python 3.9.13, PyTorch 2.x  
-**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml)  
-**Tệp dữ liệu kiểm toán JSON**: [`results/phase4_0_2_protocol_check.json`](file:///d:/NCKH/results/phase4_0_2_protocol_check.json)  
+**Tập tin cấu hình chuẩn hóa**: [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml)  
+**Tệp dữ liệu kiểm toán JSON**: [`results/phase4_0_2_protocol_check.json`](results/phase4_0_2_protocol_check.json)  
 
 ---
 
@@ -27,7 +27,7 @@ Phase 4.0.2 là bước kiểm soát chất lượng khoa học **cuối cùng v
 
 ### 2.1. Quy tắc Khóa Tuyệt đối (Locked Rule)
 Mọi phương pháp có thành phần tham số huấn luyện (B4, B5, P1, và P2 nếu có huấn luyện adapter) **BẮT BUỘC SỬ DỤNG CHÍNH XÁC 200 MẪU HUẤN LUYỆN** trong final benchmark:
-- **Tập dữ liệu**: Lấy chính xác từ 20 tài liệu đầu tiên (`TR_DOC_001` đến `TR_DOC_020`) thuộc [`src/training/training_corpus.py`](file:///d:/NCKH/src/training/training_corpus.py) qua hàm `get_scale_training_corpus(200)`.
+- **Tập dữ liệu**: Lấy chính xác từ 20 tài liệu đầu tiên (`TR_DOC_001` đến `TR_DOC_020`) thuộc [`src/training/training_corpus.py`](src/training/training_corpus.py) qua hàm `get_scale_training_corpus(200)`.
 - **Số câu hỏi QA**: Đúng 200 cặp (`TR_Q001` đến `TR_Q200`).
 - **Ngân sách token huấn luyện**: 21,905 tokens/epoch $\times$ 3 epochs = **65,715 tokens**.
 - **Cấm hoàn toàn**: Nghiêm cấm sử dụng các quy mô 100 samples, 500 samples hoặc 1,000 samples trong báo cáo benchmark chính thức. Quy mô 200 samples đã được kiểm chứng tại Phase 3.2.1 là điểm cân bằng tối ưu giữa khả năng học thích nghi và nguy cơ quá khớp (overfitting) trên adapter rank thấp ($r=16$).
@@ -52,7 +52,7 @@ Hai phương pháp đa thang thời gian trung tâm của nghiên cứu:
 - **P1 (SA-CMS)**: Continuum Memory System cập nhật theo ranh giới cấu trúc văn bản tự nhiên (Đoạn văn, Mục, Tài liệu).
 
 ### 3.1. Kết Quả Đo Lường Thực Tế Bằng Mã Nguồn:
-Kịch bản kiểm toán độc lập [`scripts/verify_phase4_0_2_fairness.py`](file:///d:/NCKH/scripts/verify_phase4_0_2_fairness.py) đã thực thi kiểm tra định lượng:
+Kịch bản kiểm toán độc lập [`scripts/verify_phase4_0_2_fairness.py`](scripts/verify_phase4_0_2_fairness.py) đã thực thi kiểm tra định lượng:
 
 $$\Delta \theta_0 = \max_{w \in \Omega} |\theta_{0, w}^{(B5)} - \theta_{0, w}^{(P1)}| = 0.000000 \quad \text{(Khởi tạo đồng nhất ở mức bit)}$$
 $$\Delta \text{training\_data} = 0 \quad \text{(Chính xác cùng 200 samples)}$$
@@ -87,7 +87,7 @@ Cấu hình truy xuất tối ưu đã được hiệu chuẩn độc lập trê
 ### 4.2. Ràng Buộc Chia Sẻ Ngang Hàng (Shared Retrieval for B2 & P2):
 - **B2 (Standard BM25 RAG)**: Chỉ sử dụng nhánh truy xuất để đưa 5 đoạn văn bản vào prompt context window; không có bộ nhớ tham số.
 - **P2 (SA-CMS + Retrieval Hybrid)**: Sử dụng **CHÍNH XÁC CÙNG BỘ TRUY XUẤT** `CAND_07` (ngưỡng 3.0, top-5, chunk 256/32) kết hợp với bộ nhớ SA-CMS 3 cấp của P1.
-- **Xác nhận**: Tuyệt đối **không cho phép P2 dùng ngưỡng 5.0 trong khi B2 dùng ngưỡng 3.0**. Cả hai phương pháp cùng chia sẻ cờ cấu hình `shared_retrieval_for_b2_p2: true` trong [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml).
+- **Xác nhận**: Tuyệt đối **không cho phép P2 dùng ngưỡng 5.0 trong khi B2 dùng ngưỡng 3.0**. Cả hai phương pháp cùng chia sẻ cờ cấu hình `shared_retrieval_for_b2_p2: true` trong [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml).
 
 ---
 
@@ -116,7 +116,7 @@ Nghiên cứu bóc tách rành mạch 3 khái niệm thường bị nhầm lẫn
 
 ## 6. KIỂM TOÁN TASK 5: XÁC MINH TỆP CẤU HÌNH ĐÓNG BĂNG
 
-Tệp [`configs/phase4_experiment.yaml`](file:///d:/NCKH/configs/phase4_experiment.yaml) đã được cập nhật và kiểm tra tự động:
+Tệp [`configs/phase4_experiment.yaml`](configs/phase4_experiment.yaml) đã được cập nhật và kiểm tra tự động:
 - `training.final_training_samples: 200` $\implies$ **VERIFIED**
 - `retrieval.bm25_k1: 1.5` $\implies$ **VERIFIED**
 - `retrieval.bm25_b: 0.75` $\implies$ **VERIFIED**

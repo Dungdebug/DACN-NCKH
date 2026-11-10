@@ -47,11 +47,25 @@ class QuestionRouter:
 
     # Document summary patterns
     SUMMARY_PATTERNS = [
-        r"\btóm tắt\b", r"\bsummary\b", r"\bsummarize\b",
-        r"\bnội dung chính\b", r"\bkhái quát\b", r"\btổng quan\b",
+        r"\btóm tắt\b", r"\btóm lược\b", r"\btóm gọn\b", r"\btổng kết\b",
+        r"\bsummary\b", r"\bsummarize\b", r"\boverview\b",
+        r"\bnội dung chính\b", r"\bkhái quát\b", r"\btổng quan\b", r"\bđại ý\b",
+        r"\bý chính\b", r"\bđiểm chính\b", r"\bđiểm nổi bật\b", r"\btrọng tâm\b",
+        r"\bgạch đầu dòng\b", r"\bcho vài ý\b", r"\bnói chung là\b",
+        r"\bkể cái gì\b", r"\bviết cái gì\b", r"\bnói cái gì\b",
+        r"\bý nào quan trọng\b", r"\bcó gì quan trọng\b",
+        r"\bnhững ý quan trọng\b", r"\bthông tin chính\b",
         r"\btài liệu này nói về\b", r"\btài liệu này viết về\b",
-        r"\bwhat is this document about\b", r"\boverview\b",
+        r"\bwhat is this document about\b",
         r"\bcho tôi biết nội dung\b", r"\bnói về vấn đề gì\b",
+        r"\btrong này có gì\b", r"\bcó gì trong này\b",
+        r"\bfile này có gì\b", r"\btài liệu này có gì\b",
+        r"\btài liệu có gì\b", r"\bfile có gì\b",
+        r"\bnói về cái gì\b", r"\bviết về cái gì\b",
+        r"\bnội dung là gì\b", r"\bnội dung của tài liệu\b",
+        r"\bgiới thiệu tài liệu\b", r"\btrong file có gì\b",
+        r"\bfile này nói gì\b", r"\bfile này viết gì\b",
+        r"\bfile này kể gì\b", r"\btài liệu này kể gì\b",
     ]
 
     # Section lookup patterns
@@ -150,7 +164,33 @@ class QuestionRouter:
                     "explanation": "Tổng hợp thông tin từ nhiều đoạn khác nhau.",
                 }
 
-        # 7. Default to Direct Lookup (Definitions, specific facts)
+        # 7. Check Exploratory / Conversational summary phrases when documents are attached
+        if num_attached_documents > 0:
+            exploratory_phrases = [
+                r"\bnói\s+sơ\b", r"\bsơ\s+qua\b", r"\bnói\s+qua\b",
+                r"\bkể\s+(sơ|qua|nghe)\b", r"\bkể\s+cái\s+gì\b", r"\bkể\s+gì\b",
+                r"\btrong\s+(này|file|đây|tài liệu)\s+có\s+gì\b",
+                r"\bcó\s+gì\s+trong\s+(này|file|đây|tài liệu)\b",
+                r"\b(bài|file|tài liệu)\s+này\s+(viết|nói|kể|chứa)\s+về\s+(cái\s+)?gì\b",
+                r"\b(bài|file|tài liệu)\s+này\s+(viết|nói|kể)\s+(cái\s+)?gì\b",
+                r"\bgiúp\s+(tớ|mình|tôi|em)\s+hiểu\b",
+                r"\bhiểu\s+(sơ\s+)?về\s+tài\s+liệu\b",
+                r"\bđọc\s+hộ\b", r"\bđọc\s+giúp\b",
+                r"\bcho\s+(vài\s+)?gạch\s+đầu\s+dòng\b",
+                r"\bý\s+(nào\s+)?quan\s+trọng\b",
+                r"\b(điểm|ý)\s+chính\b",
+                r"\btóm\s+(lược|gọn|tắt)\b",
+                r"\bnói\s+chung\b",
+                r"\bquan\s+trọng\s+nhất\b",
+            ]
+            for ep in exploratory_phrases:
+                if re.search(ep, q_norm, re.IGNORECASE):
+                    return QuestionRoute.DOCUMENT_SUMMARY, {
+                        "matched_pattern": ep,
+                        "explanation": "Câu hỏi thăm dò/khái quát nội dung về tài liệu đang ghim.",
+                    }
+
+        # 8. Default to Direct Lookup (Definitions, specific facts)
         return QuestionRoute.DIRECT_LOOKUP, {
             "explanation": "Tra cứu trực tiếp định nghĩa hoặc dữ kiện cụ thể.",
         }

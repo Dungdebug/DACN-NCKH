@@ -1,0 +1,123 @@
+{
+  "purpose": "Determine which ablation artifact set is reproducible from the checkpoints on disk, using the official harness in scripts/evaluate_ablation_a1_a3.py.",
+  "harness": {
+    "qasper_prompt": "Context: {...} Question: {...} Answer:  (context INCLUDED)",
+    "qasper_decode": "greedy, max_new_tokens=32, KV-cache",
+    "longhealth": "argmax over A/B/C/D option logits",
+    "mkniah": "10 samples, enable_online_cms=False, greedy 6 tokens, exact code match",
+    "device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "variants": {
+    "A1": {
+      "variant": "A1",
+      "runs": [],
+      "status": "checkpoints_missing",
+      "missing_checkpoints": [
+        "training_output_final/checkpoints/cms_3lvl_random_seed_42.pt",
+        "training_output_final/checkpoints/cms_3lvl_random_seed_43.pt",
+        "training_output_final/checkpoints/cms_3lvl_random_seed_44.pt"
+      ],
+      "aggregate": {
+        "qasper_f1": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        },
+        "longhealth_acc_pct": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        },
+        "mkniah_acc_pct": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        }
+      }
+    },
+    "A3": {
+      "variant": "A3",
+      "runs": [],
+      "status": "checkpoints_missing",
+      "missing_checkpoints": [
+        "training_output_final/checkpoints/cms_3lvl_additive_seed_42.pt",
+        "training_output_final/checkpoints/cms_3lvl_additive_seed_43.pt",
+        "training_output_final/checkpoints/cms_3lvl_additive_seed_44.pt"
+      ],
+      "aggregate": {
+        "qasper_f1": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        },
+        "longhealth_acc_pct": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        },
+        "mkniah_acc_pct": {
+          "mean": null,
+          "sd": null,
+          "per_seed": []
+        }
+      }
+    },
+    "P1": {
+      "variant": "P1",
+      "runs": [
+        {
+          "seed": 42,
+          "checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_42.pt",
+          "qasper_f1": 0.161,
+          "longhealth_acc_pct": 60.0,
+          "mkniah_acc_pct": 70.0
+        },
+        {
+          "seed": 43,
+          "checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_43.pt",
+          "qasper_f1": 0.192,
+          "longhealth_acc_pct": 50.0,
+          "mkniah_acc_pct": 60.0
+        },
+        {
+          "seed": 44,
+          "checkpoint": "checkpoints/phase4_1/cms_3lvl_seed_44.pt",
+          "qasper_f1": 0.1808,
+          "longhealth_acc_pct": 60.0,
+          "mkniah_acc_pct": 60.0
+        }
+      ],
+      "status": "ok",
+      "missing_checkpoints": [],
+      "aggregate": {
+        "qasper_f1": {
+          "mean": 0.1779,
+          "sd": 0.0157,
+          "per_seed": [
+            0.161,
+            0.192,
+            0.1808
+          ]
+        },
+        "longhealth_acc_pct": {
+          "mean": 56.6667,
+          "sd": 5.7735,
+          "per_seed": [
+            60.0,
+            50.0,
+            60.0
+          ]
+        },
+        "mkniah_acc_pct": {
+          "mean": 63.3333,
+          "sd": 5.7735,
+          "per_seed": [
+            70.0,
+            60.0,
+            60.0
+          ]
+        }
+      }
+    }
+  }
+}

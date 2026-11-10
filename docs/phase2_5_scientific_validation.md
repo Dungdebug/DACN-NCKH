@@ -30,7 +30,7 @@ Because gradient updates modify the memory weights $\theta_{\text{CMS}}$ accordi
 
 ### 2.1 The Mathematical Matching Algorithm
 
-To eliminate update frequency as a confounding variable while testing boundary semantics, we implemented a hierarchical budget-matching scheduler in [`src/hope_attention/sa_cms.py`](file:///d:/NCKH/src/hope_attention/sa_cms.py):
+To eliminate update frequency as a confounding variable while testing boundary semantics, we implemented a hierarchical budget-matching scheduler in [`src/hope_attention/sa_cms.py`](src/hope_attention/sa_cms.py):
 
 For an ingested document of $T$ tokens and $L$ memory levels:
 1. **SA-CMS (Target Schedule)**: Parses natural document structure into paragraph boundaries (Level 1: $K_1$ boundaries), section boundaries (Level 2: $K_2$ boundaries), and document boundary (Level 3: $K_3 = 1$ boundary).
@@ -45,7 +45,7 @@ For an ingested document of $T$ tokens and $L$ memory levels:
 - **Budget Equality Proof**:
   $$|B_{\text{fixed}}| = |B_{\text{SA}}| = |B_{\text{random}}| = \sum_{l=1}^L K_l$$
   $$\Delta(\text{update\_count}) \equiv 0$$
-- **Verification**: Verified via automated unit tests in [`tests/test_sa_cms_update.py`](file:///d:/NCKH/tests/test_sa_cms_update.py):
+- **Verification**: Verified via automated unit tests in [`tests/test_sa_cms_update.py`](tests/test_sa_cms_update.py):
   - `test_mathematical_equivalence_schedule`: PASSED.
   - `test_mathematical_equivalence_weights_update`: PASSED ($\Delta\theta < 10^{-4}$).
   - `test_equal_budget_guarantee`: PASSED ($\text{count}_{\text{struct}} = \text{count}_{\text{fixed}} = \text{count}_{\text{rand}}$).
@@ -61,7 +61,7 @@ In Phase 2, SA-CMS scored low on synthetic MK-NIAH numerical needle retrieval. A
 
 ### 3.2 Controlled Experimental Design
 
-To scientifically test whether template repetition causes retrieval failure, we implemented [`scripts/test_template_overfitting.py`](file:///d:/NCKH/scripts/test_template_overfitting.py) evaluating 30 samples under three strictly controlled syntactic conditions:
+To scientifically test whether template repetition causes retrieval failure, we implemented [`scripts/test_template_overfitting.py`](scripts/test_template_overfitting.py) evaluating 30 samples under three strictly controlled syntactic conditions:
 1. **Condition A (Original Repeated Template)**:
    - Needles: `"The secret identification code for {k} is {v}."`
    - Query: `"What is the secret identification code for {queried_key}? Answer:"`
@@ -214,9 +214,9 @@ To adhere to the highest standards of scientific integrity, findings are partiti
   - NO RAG built.
   - NO Citation/Refusal system added.
 - **Artifacts Generated**:
-  - Controlled Comparison CSV: [`results/phase2_5_controlled_comparison.csv`](file:///d:/NCKH/results/phase2_5_controlled_comparison.csv)
-  - Scientific Validation Report: [`docs/phase2_5_scientific_validation.md`](file:///d:/NCKH/docs/phase2_5_scientific_validation.md)
-  - Task 5 Failure Analysis Script: [`scripts/test_template_overfitting.py`](file:///d:/NCKH/scripts/test_template_overfitting.py)
-  - Unit Tests: [`tests/test_sa_cms_update.py`](file:///d:/NCKH/tests/test_sa_cms_update.py) (All 27 suite tests passing).
+  - Controlled Comparison CSV: [`results/phase2_5_controlled_comparison.csv`](results/phase2_5_controlled_comparison.csv)
+  - Scientific Validation Report: [`docs/phase2_5_scientific_validation.md`](docs/phase2_5_scientific_validation.md)
+  - Task 5 Failure Analysis Script: [`scripts/test_template_overfitting.py`](scripts/test_template_overfitting.py)
+  - Unit Tests: [`tests/test_sa_cms_update.py`](tests/test_sa_cms_update.py) (All 27 suite tests passing).
 
 **STATUS: AWAITING USER REVIEW.**
