@@ -418,7 +418,7 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
             lang=lang,
             source_group=src_grp,
             window_tokens=384,
-            stride_tokens=352,
+            stride_tokens=128,
         )
         domain_doc_chunks.extend(chunks)
         domain_doc_manifest.append(meta)
@@ -452,6 +452,78 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
                 )
         except Exception:
             pass
+
+    # 4.5 Academic Vietnamese Open QA Corpus (Method 2: ViQuAD & train_IR SQuAD 2.0 format)
+    acad_corpus_dir = ROOT_DIR / "data" / "vietnamese_qa_corpus"
+    v2_file = acad_corpus_dir / "train-v2.0.json"
+    ir_file = acad_corpus_dir / "train_IR.json"
+    acad_qa_train: List[Dict[str, Any]] = []
+
+    if v2_file.exists():
+        try:
+            v2_json = json.loads(v2_file.read_text(encoding="utf-8"))
+            for t_idx, topic in enumerate(v2_json.get("data", [])):
+                t_title = topic.get("title", f"Topic_{t_idx}")
+                for p_idx, para in enumerate(topic.get("paragraphs", [])):
+                    p_ctx = para.get("context", "").strip()
+                    if len(p_ctx) < 25:
+                        continue
+                    p_doc_id = f"VN_ACAD_V2_{t_idx:03d}_{p_idx:02d}"
+                    all_train_doc_ids.append(p_doc_id)
+                    for q_idx, qa in enumerate(para.get("qas", [])):
+                        q_text = qa.get("question", "").strip()
+                        if not q_text:
+                            continue
+                        ans_text = ""
+                        if qa.get("answers") and len(qa["answers"]) > 0:
+                            ans_text = qa["answers"][0].get("text", "").strip()
+                        elif qa.get("is_impossible", False):
+                            ans_text = "Thông tin không được đề cập trong tài liệu."
+                        if ans_text:
+                            prompt_text = f"Ngữ cảnh ({t_title}):\n{p_ctx}\n\nCâu hỏi: {q_text}\nTrả lời:"
+                            full_text = f"{prompt_text} {ans_text}\n"
+                            acad_qa_train.append(
+                                encode_qa_sample(
+                                    tokenizer=tokenizer,
+                                    prompt_text=prompt_text,
+                                    full_text=full_text,
+                                    lang="vi",
+                                    sample_id=f"VN_ACAD_V2_{qa.get('id', f'{t_idx}_{p_idx}_{q_idx}')}",
+                                    doc_id=p_doc_id,
+                                    source_group="academic_vietnamese_viquad",
+                                    max_length=max_length,
+                                )
+                            )
+        except Exception as exc:
+            print(f"[WARN] Failed loading train-v2.0.json: {exc}")
+
+    if ir_file.exists():
+        try:
+            ir_json = json.loads(ir_file.read_text(encoding="utf-8"))
+            pos_samples = [x for x in ir_json if x.get("label") is True][:2000]
+            for idx, item in enumerate(pos_samples):
+                p_ctx = item.get("text", "").strip()
+                q_text = item.get("question", "").strip()
+                title = item.get("title", "Tài liệu học thuật")
+                if len(p_ctx) >= 30 and q_text:
+                    p_doc_id = f"VN_ACAD_IR_{idx:05d}"
+                    all_train_doc_ids.append(p_doc_id)
+                    prompt_text = f"Ngữ cảnh ({title}):\n{p_ctx}\n\nCâu hỏi: {q_text}\nTrả lời:"
+                    full_text = f"{prompt_text} {p_ctx}\n"
+                    acad_qa_train.append(
+                        encode_qa_sample(
+                            tokenizer=tokenizer,
+                            prompt_text=prompt_text,
+                            full_text=full_text,
+                            lang="vi",
+                            sample_id=f"VN_ACAD_IR_{item.get('id', idx)}",
+                            doc_id=p_doc_id,
+                            source_group="academic_vietnamese_ir",
+                            max_length=max_length,
+                        )
+                    )
+        except Exception as exc:
+            print(f"[WARN] Failed loading train_IR.json: {exc}")
 
     # Enforce strict zero-leakage verification before returning
     verify_zero_benchmark_leakage(all_train_doc_ids)
@@ -493,6 +565,7 @@ def build_full_datasets(tokenizer: Any, max_length: int = 1280) -> Dict[str, Any
     return {
         "en_qa_train": en_qa_train,
         "vn_qa_train": vn_qa_train,
+        "acad_qa_train": acad_qa_train,
         "demo_qa_train": demo_qa_train,
         "domain_doc_chunks": domain_doc_chunks,
         "domain_doc_manifest": domain_doc_manifest,
@@ -833,29 +906,30 @@ def make_epoch_batches(
     demo_qa_train: List[Dict[str, Any]],
     domain_doc_chunks: List[Dict[str, Any]],
     rng: random.Random,
-    vn_oversample: int = 2,
+    acad_qa_train: Optional[List[Dict[str, Any]]] = None,
+    vn_oversample: int = 1,
     dry_run: bool = False,
 ) -> List[List[Dict[str, Any]]]:
     """
     Combines 100% of all non-test training sources:
-      - 1,000 EN QA + 2x(275 VN QA + 12 Demo QA) + 388 Full-Document Chunks = 1,962 sequences/epoch.
-    Applies noisy length bucketing for GPU throughput while preserving stochastic batching:
-      - `bsz = 6` for short sequences (`<= 260` tokens)
-      - `bsz = 4` for medium sequences (`<= 460` tokens)
-      - `bsz = 2` for long sequences (`> 460` tokens)
+      - 1,000 EN QA + Academic Vietnamese QA (ViQuAD / IR) + 275 VN QA + Demo QA + Multi-Stride Chunks.
+    Applies noisy length bucketing for GPU throughput while preserving stochastic batching.
     """
+    acad_list = list(acad_qa_train or [])
     if dry_run:
         pool = (
             list(en_qa_train[:6])
             + list(vn_qa_train[:4])
             + list(demo_qa_train[:2])
+            + list(acad_list[:6])
             + list(domain_doc_chunks[:4])
         )
     else:
         pool = (
             list(en_qa_train)
+            + list(acad_list)
             + (list(vn_qa_train) * vn_oversample)
-            + (list(demo_qa_train) * vn_oversample)
+            + list(demo_qa_train)
             + list(domain_doc_chunks)
         )
 
@@ -1378,6 +1452,7 @@ def train_single_seed(
             vn_qa_train=datasets["vn_qa_train"],
             demo_qa_train=datasets["demo_qa_train"],
             domain_doc_chunks=datasets["domain_doc_chunks"],
+            acad_qa_train=datasets.get("acad_qa_train", []),
             rng=rng,
             vn_oversample=vn_oversample,
             dry_run=dry_run,
@@ -1955,6 +2030,7 @@ def main() -> None:
     all_samples = (
         datasets["en_qa_train"]
         + datasets["vn_qa_train"]
+        + datasets.get("acad_qa_train", [])
         + datasets["demo_qa_train"]
         + datasets["domain_doc_chunks"]
         + datasets["en_val"]
@@ -1964,6 +2040,7 @@ def main() -> None:
     unique_train_seq_count = (
         len(datasets["en_qa_train"])
         + len(datasets["vn_qa_train"])
+        + len(datasets.get("acad_qa_train", []))
         + len(datasets["demo_qa_train"])
         + len(datasets["domain_doc_chunks"])
     )
@@ -1973,6 +2050,7 @@ def main() -> None:
         for s in (
             datasets["en_qa_train"]
             + datasets["vn_qa_train"]
+            + datasets.get("acad_qa_train", [])
             + datasets["demo_qa_train"]
             + datasets["domain_doc_chunks"]
         )
@@ -1987,13 +2065,16 @@ def main() -> None:
         f"  ├─ English Scale QA (TR_DOC_001..100):     {len(datasets['en_qa_train']):4d} samples"
     )
     print(
-        f"  ├─ Vietnamese QA (VN_TR_DOC_001..025):     {len(datasets['vn_qa_train']):4d} samples ({vn_oversample}x/epoch)"
+        f"  ├─ Vietnamese Open Academic QA (ViQuAD/IR): {len(datasets.get('acad_qa_train', [])):4d} samples"
     )
     print(
-        f"  ├─ Demo Grounded+Refusal QA (DEMO_001..4): {len(datasets['demo_qa_train']):4d} samples ({vn_oversample}x/epoch)"
+        f"  ├─ Vietnamese Structured QA (001..025):     {len(datasets['vn_qa_train']):4d} samples ({vn_oversample}x/epoch)"
     )
     print(
-        f"  ├─ Full-Text Domain & Local Docs (10 docs): {len(datasets['domain_doc_chunks']):3d} chunks ({domain_total_tokens:,} doc tokens)"
+        f"  ├─ Demo Grounded+Refusal QA (DEMO_001..4): {len(datasets['demo_qa_train']):4d} samples"
+    )
+    print(
+        f"  ├─ Full-Text Multi-Stride Chunks (10 docs): {len(datasets['domain_doc_chunks']):3d} chunks ({domain_total_tokens:,} doc tokens)"
     )
     print(
         f"  └─ Disjoint Validation (0% overlap):       EN={len(datasets['en_val'])}, VN={len(datasets['vn_val'])}"
@@ -2013,6 +2094,7 @@ def main() -> None:
         cache_targets = (
             (
                 datasets["en_qa_train"][:6]
+                + datasets.get("acad_qa_train", [])[:6]
                 + datasets["vn_qa_train"][:4]
                 + datasets["demo_qa_train"][:2]
                 + datasets["domain_doc_chunks"][:4]
