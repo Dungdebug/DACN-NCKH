@@ -1333,65 +1333,6 @@ def sync_progress_and_markdown_report(
         "",
         "---",
         "",
-        "## 4. HƯỚNG DẪN DÀNH CHO NGƯỜI TẢI VỀ TIẾP TỤC TRAIN TIẾP (RESUME WORKFLOW)",
-        "",
-        "Khi người khác tải về hoặc clone mã nguồn từ GitHub (`https://github.com/Dungdebug/DACN-NCKH.git`), toàn bộ trạng thái đang dừng đã được lưu đầy đủ trong các file checkpoint tạm `cms_3lvl_full_seed_{seed}_partial.pt` và cấu hình hệ thống.",
-        "",
-        "### 🔹 Bước 1: Mở Terminal và di chuyển vào thư mục dự án",
-        "```powershell",
-        "cd c:\\laragon\\laragon\\www\\DACN-NCKH-main1\\DACN-NCKH-main",
-        "# (Hoặc đường dẫn tương ứng trên máy tính của bạn)",
-        "```",
-        "",
-        "### 🔹 Bước 2: Chạy lệnh tự động tiếp tục tiến trình (Auto-Resume)",
-        "Script huấn luyện được tích hợp cơ chế tự động phát hiện checkpoint dừng dở và tự động thích ứng cấu hình phần cứng CPU/GPU:",
-        "",
-        "#### 🎯 Cách 1: Tự động chạy tiếp toàn bộ các Seed còn lại (Khuyên dùng)",
-        "```powershell",
-        "python scripts/run_training.py --seed all --epochs 5",
-        "```",
-        "*(Script sẽ tự động nạp trạng thái optimizer, khôi phục đúng epoch và step đang dở, và tiếp tục train mà không bị mất dữ liệu)*",
-        "",
-        "#### 🎯 Cách 2: Chạy riêng cho máy GPU 4GB VRAM (RTX 3050 Laptop, GTX 1650)",
-        "```powershell",
-        "python scripts/run_training.py --seed all --epochs 5 --hardware-profile 4gb",
-        "```",
-        "*(Khống chế bộ nhớ VRAM đỉnh < 2.5 GB, chia nhỏ slice 256 tokens, tuyệt đối không bị tràn VRAM)*",
-        "",
-        "#### 🎯 Cách 3: Chạy riêng cho máy GPU 6GB VRAM (RTX 3060 Laptop, RTX 2060)",
-        "```powershell",
-        "python scripts/run_training.py --seed all --epochs 5 --hardware-profile 6gb",
-        "```",
-        "*(Tối ưu hóa throughput với slice 512 tokens, VRAM đỉnh < 4.2 GB)*",
-        "",
-        "#### 🎯 Cách 4: Chạy huấn luyện mới Seed 42 trên bộ dữ liệu 5,115 tài liệu (Đạt > 12.7M tokens kiến thức thật)",
-        "```powershell",
-        "python scripts/run_training.py --seed 42 --epochs 5 --force-retrain",
-        "```",
-        "",
-        "### 🔹 Bước 3: Cách tạm dừng tiến trình an toàn bất kỳ lúc nào (Safe Stop)",
-        "- **Cách A (Trên cửa sổ Terminal đang chạy)**: Nhấn `Ctrl + C`. Script sẽ bắt tín hiệu, hoàn tất bước hiện tại, lưu toàn bộ trạng thái vào `cms_3lvl_full_seed_{seed}_partial.pt`, đồng bộ `training_progress_state.json` và cập nhật báo cáo `Training_report.md` ngay tức khắc.",
-        "- **Cách B (Từ một cửa sổ PowerShell khác)**:",
-        "  ```powershell",
-        "  New-Item checkpoints/full_dataset_training/STOP_TRAINING -ItemType File -Force",
-        "  ```",
-        "",
-        "### 🔹 Bước 4: Khởi chạy Web App / Chatbot hỏi đáp tài liệu Offline",
-        "```powershell",
-        "python run_offline.py --host 127.0.0.1 --port 8000",
-        "```",
-        "*(Truy cập trình duyệt: `http://127.0.0.1:8000`)*",
-        "",
-        "---",
-        "",
-        "## 5. DANH MỤC VÀ VỊ TRÍ CÁC CHECKPOINT / DỮ LIỆU ĐANG LƯU TRỮ",
-        "- **Trọng số Backbone gốc (SmolLM2-135M)**: `local_runtime/model/model.safetensors` (`269 MB`, Offline 100%)",
-        "- **Checkpoint xuất xưởng kích hoạt hiện tại**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt` (SHA-256: `52482213678ea58d...`)",
-        "- **Tập dữ liệu câu hỏi học thuật mở (Phương pháp 2)**:",
-        "  - `data/vietnamese_qa_corpus/train-v2.0.json` (`2.19 MB`)",
-        "  - `data/vietnamese_qa_corpus/train_IR.json` (`10.42 MB`)",
-        "- **Bộ nhớ đệm ma trận ẩn Backbone (Bảo vệ ổ đĩa C:)**: `D:\\dacn_training_cache\\frozen_hidden_fp16_cache.pt` (Lưu trên ổ D có 43.32 GB trống)",
-        "- **Tệp theo dõi tiến trình máy đọc**: `checkpoints/full_dataset_training/training_progress_state.json`",
     ])
 
     for s in all_target_seeds:
@@ -1498,17 +1439,24 @@ def sync_progress_and_markdown_report(
     md_content = "\n".join(md_lines) + "\n"
     report_targets = [
         ROOT_DIR / "Training_report.md",
-        ROOT_DIR / "Traning_report.md",
         ROOT_DIR.parent / "Training_report.md",
-        ROOT_DIR.parent / "Traning_report.md",
         Path("c:/laragon/laragon/www/DACN-NCKH-main/Training_report.md"),
-        Path("c:/laragon/laragon/www/DACN-NCKH-main/Traning_report.md"),
     ]
     for r_path in report_targets:
         try:
+            r_path.parent.mkdir(parents=True, exist_ok=True)
             r_path.write_text(md_content, encoding="utf-8")
         except Exception:
             pass
+
+    # Tự động dọn dẹp các tệp báo cáo sai chính tả trùng lặp 'Traning_report.md'
+    for typo_dir in [ROOT_DIR, ROOT_DIR.parent, Path("c:/laragon/laragon/www/DACN-NCKH-main")]:
+        typo_file = typo_dir / "Traning_report.md"
+        if typo_file.exists():
+            try:
+                typo_file.unlink()
+            except Exception:
+                pass
 
     return progress_state
 

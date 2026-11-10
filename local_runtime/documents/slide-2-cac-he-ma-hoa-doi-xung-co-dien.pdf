@@ -1,0 +1,427 @@
+=== Page 1 ===
+BẢO MẬT THÔNG TIN (CMP174)
+BÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN
+GV: ThS. Đinh Phương Nam
+
+=== Page 2 ===
+NỘI DUNG BÀI HỌC
+- Giới thiệu hệ mã khóa đối xứng.
+- Các định nghĩa cơ bản.
+- Phá mã.
+- Phép đồng dư.
+- Các hệ mã thay thế
+- Các hệ mã hoán vị.
+
+=== Page 3 ===
+1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:
+- Xuất hiện đầu tiên trong ngành mã hóa.
+- Các hệ mã này phần có từ trước năm 1970.
+- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.
+- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.
+- Có 2 phương pháp phổ biến:
+⁺ Mã hóa thay thế.
+⁺ Mã hóa hoán vị.
+
+=== Page 4 ===
+2. ĐỊNH NGHĨA CƠ BẢN:
+- Mã đối xứng là mã sử dụng cùng một khóa cho việc mã hóa và giải mã.
+- Hệ mật mã là bộ năm (P, C, K, E, D), thỏa mãn các điều kiện sau:
+⁺ P là không gian bản rõ.
+⁺ C là không gian bản mã.
+⁺ K là không gian khóa.
+- Với mỗi kK, tồn tại hàm lập mã ekE và hàm giải mã dkD.
+- Mỗi ek: P → C và dk: C → P là các hàm thỏa dk(ek(x)) = x với mỗi xP.
+
+=== Page 5 ===
+2. ĐỊNH NGHĨA CƠ BẢN (tt):
+- Mô hình mã đối xứng:
+
+=== Page 6 ===
+3. PHÁ MÃ:
+- Là nỗ lực giải mã văn bản đã được mã hóa không biết trước khóa bí mật.
+- Có hai phương pháp phá mã:
+⁺ Vét cạn: Thử tất cả các khóa có thể.
+⁺ Thám mã:
+• Khai thác những nhược điểm của giải thuật.
+• Dựa trên những đặc trưng chung của nguyên bản hoặc một số cặp nguyên bản -
+bản mã mẫu.
+
+=== Page 7 ===
+Phương pháp phá mã vét cạn:
+- Về lý thuyết có thể thử tất cả các giá trị khóa cho đến khi tìm thấy nguyên bản từ bản mã.
+- Dựa trên giả thiết có thể nhận biết được nguyên bản cần tìm.
+- Tính trung bình cần thử một nửa tổng số các trường hợp có thể.
+- Thực tế không khả khi nếu độ dài khóa lớn.
+
+=== Page 8 ===
+Thời gian tìm kiếm trung bình:
+Kích thước
+khóa (bit)
+Số lượng khóa Thời gian cần thiết
+(1 giải mã/μs)
+Thời gian cần thiết
+(106 giải mã/μs)
+26 ký tự
+(hoán vị)
+232 = 4,3 x 109
+256 = 7,2 x 1016
+2128 = 3,4 x 1038
+2168 = 3,7 x 1050
+26! = 4 x 1026
+231 μs = 35,8 phút
+255 μs = 1142 năm
+2127 μs = 5,4 x 1024 năm
+2167 μs = 5,9 x 1036 năm
+2 x 1026 μs =
+6,4 x 1012 năm
+2,15 ms
+10,01 giờ
+5,4 x 1018 năm
+5,9 x 1030 năm
+6,4 x 106 năm
+Khóa DES dài 56 bit
+Khóa AES dài 128+ bit
+Khóa 3DES dài 168 bit
+Tuổi vũ trụ : ~ 1010 năm
+μs : microsecond
+
+=== Page 9 ===
+Các tần số chữ cái Tiếng Anh:
+Tần số tương đối (%)
+
+=== Page 10 ===
+An ninh hệ mã khoá:
+- An ninh vô điều kiện:
+⁺ Bản mã không chứa đủ thông tin để xác định duy nhất nguyên bản tương ứng, bất kể
+với số lượng bao nhiêu và tốc độ máy tính thế nào.
+⁺ Chỉ hệ mã hóa độn một lần là an ninh vô điều kiện.
+
+=== Page 11 ===
+An ninh hệ mã khoá:
+- An ninh tính toán:
+⁺ Thỏa mãn một trong hai điều kiện:
+• Chi phí phá mã vượt quá giá trị thông tin.
+• Thời gian phá mã vượt quá tuổi thọ thông tin.
+⁺ Thực tế thỏa mãn hai điều kiện:
+• Không có nhược điểm.
+• Khóa có quá nhiều giá trị không thể thử hết.
+
+=== Page 12 ===
+4. ĐỊNH NGHĨA MODULO:
+- Cho 3 số nguyên a, b, m. Nếu a - b chia hết cho m thì:
+⁺ a = b (mod m)
+⁺ Hay a đồng dư với b theo mô đun m.
+⁺ 100 = 1 (mod 11)
+⁺ 34 = 1 (mod 11)
+⁺ 100 = 34 (mod 11)
+
+=== Page 13 ===
+Nhận xét Modulo:
+- Nếu b[0, m-1] thì b được gọi là đại diện của a.
+- Quan hệ đồng dư modulo m sẽ phân hoạch tập số nguyên thành m lớp tương đương ứng
+với các số dư: 0, 1, ..., m-1. Ký hiệu là: 0, 1, … , 𝑚 − 1.
+- Hay Zm = {0, 1, …, m-1}.
+- Mọi số nguyên khi chia cho m đều rơi vào đúng một trong các giá trị này (chính là phần
+dư). Ta gọi đây là tập các lớp thặng dư modulo m.
+
+=== Page 14 ===
+Ví dụ tập Z7:
+
+=== Page 15 ===
+Tính chất của Zm:
+- Phép cộng là đóng:  a, b  Zm: a + b  Zm
+- Phép cộng là kết hợp:  a, b, c  Zm: (a + b) + c = a + (b + c)
+- Tồn tại phần tử đảo của bất kỳ a  Zm là m – a.
+Nghĩa là: a + (m - a) = (m - a) + a = 0, a
+- Phép cộng là giao hoán:  a, b  Zm: a + b = b + a
+- 0 là phần tử trung hòa của phép cộng: a + 0 = 0 + a
+
+=== Page 16 ===
+Tính chất của Zm:
+- Phép nhân là đóng:  a, b  Zm: a * b  Zm
+- Phép nhân là giao hoán:  a, b  Zm: a * b = b * a
+- Phép nhân là kết hợp:  a, b, c  Zm: (a * b) * c = a * (b * c)
+- 1 là phần tử trung hòa của phép nhân: a * 1 = 1 * a
+- Phép nhân là phân phối với phép cộng:
+(a + b) * c = a * c + b * c và a * (b + c) = a * b + a * c
+- Nếu m là nguyên tố thì Zm là một trường (cộng, trừ, nhân, chia).
+
+=== Page 17 ===
+Các phép toán trên Zm:
+- (a + b) mod n = [a mod n + b mod n] mod n
+- (a * b) mod n = [a mod n * b mod n] mod n
+- Nếu (a + b) = (a + c) mod n thì b = c mod n
+- Nếu (a * b) =(a * c) mod n
+thì b = c mod n chỉ khi (a, n) = 1 hay a là nguyên tố cùng nhau với n.
+
+=== Page 18 ===
+Ví dụ: (11 * 19 + 1017) mod 7 = ?
+
+=== Page 19 ===
+Ví dụ: (1927 + 3515) mod 11 = ?
+
+=== Page 20 ===
+5. HỆ MÃ ĐẨY – SHIFT CIPHER:
+- Cho P = C = K = Z26. Với x, y  Z26, 0 ≤ k ≤ 25, ta định nghĩa:
+y = ek = x + k (mod 26) và x = dk = y - k (mod 26)
+- Hệ mã được gọi là mã Ceasar.
+- Bảng số hóa:
+Ví dụ:
+M = CHIENTRANH, K = 17
+ C = TYZVEKIREY
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+
+=== Page 21 ===
+5. HỆ MÃ ĐẨY – SHIFT CIPHER (tt):
+Ví dụ: Thực hiện hệ mã đẩy với k = 11 và bản rõ là: meetatmidnight
+Bài tập: P = HANHDONGGIUADEM, K = 7  C = ?
+7 0 13 7 3 14 13 6 6 8 20 0 3 4 12 14 7 20 14 10 21 20 13 13 15 1 7 10 11 19
+ OHUOKVUNNPBHKLT
+Bản rõ M E E T A T M I D N I G H T
+Dãy số hoá 12 4 4 19 0 19 12 8 3 13 8 6 7 19
+Mã hoá 23 15 15 4 11 4 23 19 14 24 19 17 18 4
+Chuyển
+thành chữ
+X P P E L E X T O Y T R S E
+
+=== Page 22 ===
+5. HỆ MÃ ĐẨY – SHIFT CIPHER (tt):
+Phá hệ mã đẩy:
+- Phương pháp vét cạn:
+⁺ Khóa chỉ là một chữ cái (hay một số giữa 1 và 25).
+⁺ Thử tất cả 25 khóa có thể.
+⁺ Dễ dàng thực hiện.
+- Ba yếu tố quan trọng:
+⁺ Biết trước các giải thuật mã hóa và giải mã.
+⁺ Chỉ có 25 khóa để thử.
+⁺ Biết và có thể dễ dàng nhận ra được ngôn ngữ của nguyên bản.
+
+=== Page 23 ===
+- Mã hóa các chuỗi thông điệp sau với K = 5.
+LAMQUEN, CHIENTRANH
+- Giải mã chuỗi thông điệp sau: YMFYQFAZN, JOINUOUJGA
+ Có 25 phép thử để phá mã đẩy.
+
+=== Page 24 ===
+THẢO LUẬN:
+Alice: (M = HELLOYOU), (c1 = e(HELLOYOU)ka)), ka = 17  c1= YVCCFPFL
+Bob: c1  (c2 = e(c1)kb), kb = 21  c2 = TQXXAKAG
+Alice: c2  (c3 = d(c2)ka), ka = 17  c3 = CZGGJTJP
+Bob: c3  M = d(c3)kb = HELLOYOU
+
+=== Page 25 ===
+6. HỆ KEYWORD :
+- Khóa là một từ. Ví dụ: plain  Z26(15, 11, 0, 8, 13).
+- Lấy lần lược 5 ký tự để mã hóa bằng 5 khóa tương ứng.
+- Ví dụ: M = sendmoremoney  E = HPNLZDCEUBCPY
+- Bảng số hóa:
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+=== Page 26 ===
+6. HỆ KEYWORD (tt):
+Ví dụ: : M = sendmoremoney, K = plain  Z26(15, 11, 0, 8, 13).
+M S E N D M O R E M O N E Y
+X 18 4 13 3 12 14 17 4 12 14 13 4 24
++ K 15 11 0 8 13 15 11 0 8 13 15 11 0
+Y 33 15 13 11 25 29 28 4 20 27 28 15 24
+%26 7 15 13 11 25 3 2 4 20 1 2 15 24
+C H P N L Z D C E Y B C P Y
+
+=== Page 27 ===
+7. HỆ MÃ HOÁ VIGENÈRE:
+- Là một hệ mã hóa đa bảng. Sử dụng nhiều bảng mã hóa.
+- Khóa giúp chọn bảng tương ứng với mỗi chữ cái.
+- Kết hợp 26 hệ Ceasar (bước dịch chuyển 0 - 25).
+- Khóa K = k1k2...kd gồm d chữ cái sử dụng lặp đi lặp lại với các chữ cái của văn bản.
+- Chữ cái thứ i tương ứng với hệ Ceasar bước chuyển i.
+Khóa: DECEPTIVEDECEPTIVEDECEPTIVE
+Nguyên bản: WEAREDISCOVEREDSAVEYOURSELF
+Bản mã: ZICVTWQNGRZGVTWAVZHCQYGLMGJ
+
+=== Page 28 ===
+7. HỆ MÃ HOÁ VIGENÈRE (tt):
+Phá mã hệ mã hóa Vigenère:
+- Phương pháp vét cạn: Khó thực hiện, nhất là nếu khóa gồm nhiều chữ cái.
+- Khai thác những nhược điểm của giải thuật:
+⁺ Cấu trúc của nguyên bản được che đậy tốt hơn nhưng không hoàn toàn biến mất.
+⁺ Chỉ việc tìm độ dài khóa sau đó phá mã từng hệ Ceasar.
+- Cách tìm độ dài khóa:
+⁺ Nếu độ dài khóa nhỏ so với độ dài văn bản, có thể phát hiện 1 dãy văn bản lặp lại
+nhiều lần.
+⁺ Khoảng cách giữa 2 dãy văn bản lặp là 1 bội số của độ dài khóa. Từ đó suy ra độ dài
+khóa.
+
+=== Page 29 ===
+8. HỆ MÃ HOÁ ĐỘN MỘT LẦN:
+- Là hệ mã hóa thay thế không thể phá được.
+- Đề xuất bởi Joseph Mauborgne.
+- Khóa ngẫu nhiên, độ dài bằng độ dài văn bản, chỉ sử dụng một lần.
+- Giữa nguyên bản và bản mã không có bất kỳ quan hệ nào về thống kê.
+- Với bất kỳ nguyên bản và bản mã nào cũng tồn tại một khóa tương ứng.
+- Khó khăn ở việc tạo khóa và đảm bảo phân phối khóa an ninh.
+
+=== Page 30 ===
+9. HỆ MÃ HOÁ DÒNG:
+- Sinh ra một chuỗi khóa z = z1, z2, ..., zn và sử dụng nó để mã hóa xâu văn bản x = x1, x2,
+..., xn.
+- Ta có: zi = fi (K, x1, ..., xi-1).
+- zi được sử dụng để mã hóa và giả mã ký tự rõ xi.
+
+=== Page 31 ===
+10. HỆ MÃ HOÁ AUTOKEY:
+- Cho P = C = K = L = Z26. Cho z1 = K và zi = xi-1 (i  2).
+- Với zi  0, zi  25, ta xác định:
+ez(xi) = xi + zi (mod 26) và dz(yi) = yi - zi (mod 26)
+Trong đó: xi, yi  Z26.
+
+=== Page 32 ===
+10. HỆ MÃ HOÁ AUTOKEY (tt):
+Ví dụ: k = 8 và bản rõ là rendezvous
+- Mã hoá:
+⁺ B1: Chuyển bản rõ thành dãy số nguyên: 17 4 13 3 4 25 21 14 20 18
+⁺ B2: Chuỗi khóa như sau: 8 17 4 13 3 4 25 21 14 20
+⁺ B3: Chuỗi mã hóa: 25 21 17 16 7 3 20 9 8 12
+⁺ B4: ứng với bản rõ là: ZVRQHDUJIM
+- Giải mã:
+- x1 = d8(25) = 25 - 8 (mod 26) = 17 (r)
+- x2 = d17(21) = 21 – 17 (mod 26) = 4 (e) …
+ Hệ không an toàn vì chỉ có 26 khóa.
+
+=== Page 33 ===
+11. HỆ MÃ HOÁ PLAYFAIR:
+- Là một hệ mã hóa nhiều chữ.
+- Giảm bớt tương quan cấu trúc giữa bản mã và nguyên bản bằng cách mã hóa đồng thời
+nhiều chữ cái của nguyên bản.
+- Phát minh bởi Charles Wheatstone vào năm 1854, lấy tên người bạn Baron Playfair.
+- Sử dụng 1 ma trận chữ cái 5x5 xây dựng trên cơ sở 1 từ khóa.
+- Điền các chữ cái của từ khóa (bỏ các chữ trùng).
+- Điền nốt ma trận với các chữ khác của bảng chữ cái.
+- I và J chiếm cùng một ô của ma trận.
+
+=== Page 34 ===
+- Ví dụ ma trận với từ khóa MONARCHY:
+M O N A R
+C H Y B D
+E F G I/J K
+L P Q S T
+U V W X Z
+
+=== Page 35 ===
+- Mã hóa 2 chữ cái một lúc:
+⁺ Nếu 2 chữ giống nhau, tách ra bởi 1 chữ điền thêm.
+⁺ Nếu 2 chữ nằm cùng hàng, thay bởi các chữ bên phải.
+⁺ Nếu 2 chữ nằm cùng cột, thay bởi các chữ bên dưới.
+⁺ Các trường hợp khác, mỗi chữ cái được thay bởi chữ cái khác cùng hàng, trên cột chữ
+cái cùng cặp.
+- VD: HELLOUXME: HE  CF, LX  SU, LO  PM, UX  VZ, ME  CL
+Kết quả: CFSUPMVZCL
+K = HANHDONG  Ma trận thay thế ?
+M = TOINAYAAGAPNHE  C = ?
+
+=== Page 36 ===
+Phá mã hệ mã hóa Playfair:
+- An ninh đảm bảo hơn nhiều hệ mã hóa đơn chữ.
+- Có 26 x 26 = 676 cặp chữ cái.
+⁺ Việc giải mã từng cặp khó khăn hơn.
+⁺ Cần phân tích 676 tần số xuất hiện thay vì 26.
+⁺ Từng được quân đội Anh, Mỹ sử dụng rộng rãi.
+- Bản mã vẫn còn lưu lại nhiều cấu trúc của nguyên bản.
+- Vẫn có thể phá mã được vì chỉ có vài trăm cặp chữ cái cần giải mã.
+
+=== Page 37 ===
+Cho sơ đồ: M  e1, k1  c1  e2, k2  c2  e3, k3  c3
+Tìm c1, c2, c3 = ?. Biết:
+e1 = Keyword Ceasar, k1 = plain
+e2 = PlayFair,k2 = baomat
+e3 = autokey, k3 = 5
+M = hanhdonggiuadem
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+=== Page 38 ===
+12. HỆ MÃ HOÁ HÀNG RÀO – RAIL FENCE:
+- Viết các chữ cái theo đường chéo trên một số hàng nhất định.
+- Sau đó đọc theo từng hàng một.
+Nguyên bản: HELLO WORLD
+Mã hóa với độ cao hàng rào là 3:
+Bản mã: HOREL OLLWD
+H . . . O . . . R . . .
+. E . L . _ . O . L . .
+. . L . . . W . . . D .
+
+=== Page 39 ===
+13. HỆ MÃ HOÁ HOÁN VỊ:
+- Che đậy nội dung văn bản bằng cách sắp xếp lại trật tự các chữ cái.
+- Không thay đổi các chữ cái của nguyên bản.
+- Bản mã có tần số xuất hiện các chữ cái giống như nguyên bản.
+- Có nhiều cách thức để thực hiện mật mã Transposition:
+⁺ Đảo ngược toàn bộ bản rõ: Nghĩa là bản rõ được viết theo thứ tự ngược lại từ sau ra
+trước. Ví dụ: SECUREEMAIL  LIAMEERUCES
+
+=== Page 40 ===
+⁺ Mã hóa theo mẫu hình học: Bản rõ được sắp xếp lại theo một mẫu hình học nào đó,
+thường là một mảng hoặc ma trận hai chiều. Ví dụ:
+• Bản rõ: BAOMAT
+• Chuyển thành ma trận 2x3:
+• Nếu lấy các cột theo thứ tự 2, 3, 1 thì bản mã sẽ là: AAOTBM.
+B A O
+M A T
+
+=== Page 41 ===
+⁺ Đổi chỗ cột: Đổi chỗ các kí tự trong bản rõ thành dạng hình chữ nhật theo cột. Ví dụ:
+• Bản rõ: BAOMATTHUDIENTU
+• Bản rõ được chuyển thành ma trận 3x5 như sau:
+• Vì có 5 cột nên có thể được sắp xếp theo 5! = 120 cách khác nhau.
+• Nếu ta chuyển vị các cột theo thứ tự 3, 5, 2, 4, 1 rồi lấy các kí tự theo hàng
+ngang ta sẽ thu được bản mã: TNMDBHTAIAUUTEO.
+B M T D N
+A A H I T
+O T U E U
+
+=== Page 42 ===
+⁺ Hoán vị các kí tự của bản rõ theo chu kỳ cố định d: Nếu hàm f là hoán vị của một khối
+gồm d kí tự thì khóa mã hóa được biểu diễn bởi K(d, f). Ví dụ:
+• Với d = 5, hoán vị f của dãy 12345 là 35142.
+• Bản rõ: GROUP. Ta có bảng như sau:
+• Theo bảng trên bản rõ “GROUP” được mã hóa thành “OPGUR”.
+Vị trí ban đầu Vị trí hoán vị Nội dung mã hoá Mã hoá
+1 3 G O
+2 5 R P
+3 1 O G
+4 4 U U
+5 2 P R
+
+=== Page 43 ===
+BÀI TẬP:
+Bài 1: M  e1, k1  c1  e2, k2  c2  e3, k3  c3. c1, c2, c3 = ?
+M=hanhdongxx
+a.
+e1 = hoán vị, k1 = 3, 5, 1, 4, 2
+e2 = Keyword Ceasar, k2 = bimat
+e3 = Playfair,k3 = khongbiet
+b.
+e1 = hàng rào, k1 = 3
+e2 = hoán vị, k2 = 4, 2, 1, 5, 3
+e3 = Autokey, k3 = hi
+
+=== Page 44 ===
+BÀI TẬP (tt):
+Bài 2: M  e1, k1  c1  c1||c2  e3, k3  c3
+S  e2, k2  c2
+c1, c2, c3 = ?
+M = tancong, S = giuadem
+e1 = Keyword Ceasar, k1 = khongbiet
+e2 = hoán vị, k2 = 3, 1, 7, 6, 4, 5, 2
+e3 = Playfair,k3 = imlang
+Bài 3: (1315 * 1711 + 1117) mod 7 = ?
+
+=== Page 45 ===
+CÂU HỎI ÔN TẬP:
+1. Tại sao phương pháp mã hóa đơn bảng có thể bị tấn công phá mã dùng thống kê tần
+suất?
+2. Cho biến đoạn mã sau dùng mã Cesar "GCUA VQ DTGCM“. Suy luận tìm bản rõ.
+3. Sử dụng kỹ thuật thám mã bảng chữ đơn, lập bảng tần suất các chữ, bộ chữ đôi, bộ chữ
+ba của đọan mã sau:
+UZQSOVUOHXMOPVGPOZPEVSGZWSZOPFPESXUDBMETSXAIVUEPHZHMDZSHZOWSFPAPPDT
+SVPQUZWYMXUZUHSXEPYEPOPDZSZUFPOUDTMOHMQ
+
+=== Page 46 ===

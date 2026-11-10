@@ -7399,5 +7399,384 @@
         ]
       }
     ]
+  },
+  {
+    "session_id": "chat_d62a0bec09ec",
+    "title": "Nội dung trong này giúp tôi",
+    "document_ids": [
+      "DOC_1794305685297_928674"
+    ],
+    "created_at": 1794305759.0359168,
+    "updated_at": 1794305955.1978316,
+    "messages": [
+      {
+        "id": "msg_2fb88f094b",
+        "role": "user",
+        "content": "Tóm tắt nội dung trong này giúp tôi",
+        "timestamp": 1794305759.4420316,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_148ea33169",
+        "role": "assistant",
+        "content": "Tài liệu **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien đề xuất kiến trúc - Mô hình mã đối xứng:\n=== Page 6 === và thực nghiệm chứng minh ba của đọan mã sau:\nUZQSOVUOHXMOPVGPOZPEVSGZWSZOPFPESXUDBMETSXAIVUEPHZHMDZSHZOWSFPAPPDT\nSVPQUZWYMXUZUHSXEPYEPOPDZSZUFPOUDTMOHMQ\n=== Page 46 ===.\n- **Tổng quan thực nghiệm**: Về bài toán, === Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Về giải pháp, - Mô hình mã đối xứng:\n=== Page 6 ===. Về thực nghiệm, ba của đọan mã sau:\nUZQSOVUOHXMOPVGPOZPEVSGZWSZOPFPESXUDBMETSXAIVUEPHZHMDZSHZOWSFPAPPDT\nSVPQUZWYMXUZUHSXEPYEPOPDZSZUFPOUDTMOHMQ\n=== Page 46 ===. [1]\n\n### Nguồn tham khảo\n[1] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 1\n\n[2] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 2\n\n[3] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 3\n\n[4] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 4\n\n[5] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — 1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG: — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Tóm tắt nội dung trong này giúp tôi' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794305759.6480417,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794305685297_928674::P000",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794305685297_928674::P001",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam === Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794305685297_928674::P002",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794305685297_928674::P003",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794305685297_928674::P004",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị. === Page 4 ===\n2.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794305685297_928674::P000",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794305685297_928674::P001",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam === Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794305685297_928674::P002",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794305685297_928674::P003",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794305685297_928674::P004",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị. === Page 4 ===\n2.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 781,
+          "output_tokens": 954,
+          "total_tokens": 1735,
+          "tokens_saved": 485,
+          "compression_ratio_pct": 39.02,
+          "total_latency_ms": 194.14,
+          "retrieval_ms": 7.06,
+          "generation_ms": 129.07
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Tóm tắt nội dung trong này giúp tôi",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 1243,
+            "compressed_context_tokens": 758,
+            "tokens_saved": 485,
+            "compression_ratio_pct": 39.02
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Tóm tắt nội dung trong này giúp tôi' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Tóm tắt nội dung trong này giúp tôi' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      },
+      {
+        "id": "msg_a9917755b3",
+        "role": "user",
+        "content": "Nội dung trọng tâm liên quan đến 'Tóm tắt nội dung trong này giúp tôi' gồm những gì?",
+        "timestamp": 1794305955.166735,
+        "citations": [],
+        "evidence": [],
+        "telemetry": {},
+        "routing": "DIRECT_LOOKUP",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {},
+        "suggested_questions": []
+      },
+      {
+        "id": "msg_a78ab4f2ea",
+        "role": "assistant",
+        "content": "Tài liệu **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** tập trung vào các nội dung trọng tâm sau:\n- **Tóm lược cốt lõi**: Tài liệu Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien đề xuất kiến trúc - Mô hình mã đối xứng:\n=== Page 6 === và thực nghiệm chứng minh ba của đọan mã sau:\nUZQSOVUOHXMOPVGPOZPEVSGZWSZOPFPESXUDBMETSXAIVUEPHZHMDZSHZOWSFPAPPDT\nSVPQUZWYMXUZUHSXEPYEPOPDZSZUFPOUDTMOHMQ\n=== Page 46 ===.\n- **Tổng quan thực nghiệm**: Về bài toán, === Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Về giải pháp, - Mô hình mã đối xứng:\n=== Page 6 ===. Về thực nghiệm, ba của đọan mã sau:\nUZQSOVUOHXMOPVGPOZPEVSGZWSZOPFPESXUDBMETSXAIVUEPHZHMDZSHZOWSFPAPPDT\nSVPQUZWYMXUZUHSXEPYEPOPDZSZUFPOUDTMOHMQ\n=== Page 46 ===. [1]\n\n### Nguồn tham khảo\n[1] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 1\n\n[2] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 2\n\n[3] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 3\n\n[4] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — Phần nội dung — Đoạn 4\n\n[5] **Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien** — 1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG: — Đoạn 5\n\n💡 **Câu hỏi tự học tiếp theo:**\n1. Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'Tóm tắt' gồm những gì?\n2. Những biện pháp chính được tài liệu đề xuất là gì?",
+        "timestamp": 1794305955.1978316,
+        "citations": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794305685297_928674::P000",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794305685297_928674::P001",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam === Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794305685297_928674::P002",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794305685297_928674::P003",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794305685297_928674::P004",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị. === Page 4 ===\n2.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "evidence": [
+          {
+            "citation_index": 1,
+            "citation_label": "[1]",
+            "passage_id": "DOC_1794305685297_928674::P000",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 1,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 2,
+            "citation_label": "[2]",
+            "passage_id": "DOC_1794305685297_928674::P001",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 2,
+            "score": 10.0,
+            "text": "=== Page 1 ===\nBẢO MẬT THÔNG TIN (CMP174)\nBÀI 2: CÁC HỆ MÃ HOÁ ĐỐI XỨNG CỔ ĐIỂN\nGV: ThS. Đinh Phương Nam === Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 3,
+            "citation_label": "[3]",
+            "passage_id": "DOC_1794305685297_928674::P002",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 3,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 4,
+            "citation_label": "[4]",
+            "passage_id": "DOC_1794305685297_928674::P003",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "Phần nội dung",
+            "paragraph_index": 4,
+            "score": 10.0,
+            "text": "=== Page 2 ===\nNỘI DUNG BÀI HỌC\n- Giới thiệu hệ mã khóa đối xứng.\n- Các định nghĩa cơ bản.\n- Phá mã.\n- Phép đồng dư.\n- Các hệ mã thay thế\n- Các hệ mã hoán vị. === Page 3 ===\n1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị.",
+            "support_status": "SUPPORTED"
+          },
+          {
+            "citation_index": 5,
+            "citation_label": "[5]",
+            "passage_id": "DOC_1794305685297_928674::P004",
+            "document_id": "DOC_1794305685297_928674",
+            "document_title": "Slide-2-Cac-He-Ma-Hoa-Doi-Xung-Co-Dien",
+            "section_title": "1. GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:",
+            "paragraph_index": 5,
+            "score": 10.0,
+            "text": "GIỚI THIỆU HỆ MÃ KHÓA ĐỐI XỨNG:\n- Xuất hiện đầu tiên trong ngành mã hóa.\n- Các hệ mã này phần có từ trước năm 1970.\n- Hệ mã khóa bí mật hoặc hệ mã khóa cổ điển.\n- Các phương pháp này là cơ sở để phát triển các thuật toán mã hóa đối xứng hiện nay.\n- Có 2 phương pháp phổ biến:\n⁺ Mã hóa thay thế.\n⁺ Mã hóa hoán vị. === Page 4 ===\n2.",
+            "support_status": "SUPPORTED"
+          }
+        ],
+        "telemetry": {
+          "input_tokens": 817,
+          "output_tokens": 961,
+          "total_tokens": 1778,
+          "tokens_saved": 485,
+          "compression_ratio_pct": 39.02,
+          "total_latency_ms": 26.2,
+          "retrieval_ms": 3.53,
+          "generation_ms": 14.25
+        },
+        "routing": "DOCUMENT_SUMMARY",
+        "refused": false,
+        "refusal_reason": null,
+        "diagnostics": {
+          "mode": "hybrid",
+          "method": "P2",
+          "routing": "DOCUMENT_SUMMARY",
+          "route_explanation": "Đã tổng hợp được ngữ cảnh toàn diện từ tài liệu.",
+          "effective_query": "Nội dung trọng tâm liên quan đến 'Tóm tắt nội dung trong này giúp tôi' gồm những gì?",
+          "is_follow_up": false,
+          "attached_document_count": 1,
+          "evidence_count": 5,
+          "dynamic_top_k": false,
+          "context_compression": {
+            "raw_context_tokens": 1243,
+            "compressed_context_tokens": 758,
+            "tokens_saved": 485,
+            "compression_ratio_pct": 39.02
+          },
+          "refusal_reason": null,
+          "memory_level": "Level 3 (SA-CMS Gated Multi-Level)",
+          "suggested_questions": [
+            "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'Tóm tắt' gồm những gì?",
+            "Những biện pháp chính được tài liệu đề xuất là gì?"
+          ]
+        },
+        "suggested_questions": [
+          "Nội dung trọng tâm liên quan đến 'Nội dung trọng tâm liên quan đến 'Tóm tắt' gồm những gì?",
+          "Những biện pháp chính được tài liệu đề xuất là gì?"
+        ]
+      }
+    ]
   }
 ]
