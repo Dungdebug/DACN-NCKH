@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-11-10T09:40:33Z",
-  "overall_status": "PAUSED_SAFE_RESUMABLE",
+  "updated_at_utc": "2026-11-10T10:08:26Z",
+  "overall_status": "PAUSED_SAFE_RESUMABLE (Tiến trình đang dừng an toàn — Sẵn sàng lấy ra chạy tiếp bất kỳ lúc nào)",
   "completed_seeds": [
     42,
     43,
@@ -9,7 +9,7 @@
   "pending_seeds": [],
   "token_accounting": {
     "target_tokens": 10000000,
-    "tokens_per_full_epoch": 599293,
+    "tokens_per_full_epoch": 2458514,
     "full_dataset_multi_seed_tokens_scanned": 10450416,
     "full_dataset_multi_seed_sequences_scanned": 35576,
     "prior_completed_phases_tokens": 2275170,
@@ -23,12 +23,32 @@
     "sha256": "52482213678ea58d7622a1eadf6954348e47ec608fccf779a83a17bc126c00fe"
   },
   "resume_commands": {
-    "train_seed_42_new_dataset_5epochs": "python scripts/run_training.py --seed 42 --epochs 5 --force-retrain",
-    "train_all_seeds_new_dataset_5epochs": "python scripts/run_training.py --seed all --epochs 5 --force-retrain",
-    "dry_run_verification": "python scripts/run_training.py --dry-run",
-    "resume_partial_checkpoint": "python scripts/run_training.py --seed all --epochs 5",
+    "resume_all_remaining": "python scripts/run_training.py --seed all --epochs 5",
+    "train_seed_42_only": "python scripts/run_training.py --seed 42 --epochs 5",
+    "train_with_4gb_profile": "python scripts/run_training.py --seed all --epochs 5 --hardware-profile 4gb",
+    "train_with_6gb_profile": "python scripts/run_training.py --seed all --epochs 5 --hardware-profile 6gb",
+    "force_retrain_all": "python scripts/run_training.py --seed all --epochs 5 --force-retrain",
     "graceful_stop_command": "New-Item checkpoints/full_dataset_training/STOP_TRAINING -ItemType File -Force",
     "run_offline_app": "python run_offline.py --host 127.0.0.1 --port 8000"
+  },
+  "hardware_profile": {
+    "tier": "4GB_TIER",
+    "tier_label": "4GB VRAM TIER (Laptop / Budget GPU: RTX 3050, GTX 1650/1050Ti)",
+    "cpu_model": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "cpu_logical_cores": 20,
+    "cpu_threads_allocated": 8,
+    "ram_total_gb": 15.71,
+    "ram_available_gb": 4.44,
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_vram_total_mb": 4095.5,
+    "cuda_version": "11.8",
+    "slice_chunk_tokens": 256,
+    "target_effective_batch": 8,
+    "precompute_batch_size": 8,
+    "empty_cache_freq": 25,
+    "vram_ceiling_mb": 2500,
+    "safe_margin_mb": 1595.5,
+    "pytorch_version": "2.0.0+cu118"
   },
   "seeds": {
     "42": {
@@ -603,28 +623,6 @@
           "is_best": false
         }
       ]
-    }
-  },
-  "current_pipeline_mode": "UPGRADED_3_METHODS_REAL_KNOWLEDGE",
-  "new_dataset_3methods_accounting": {
-    "unique_non_test_documents": 5115,
-    "unique_training_sequences": 7444,
-    "unique_tokens_scanned_per_epoch": 2458514,
-    "effective_tokens_per_epoch_with_vn_oversample": 2545000,
-    "epochs_to_reach_10m_single_seed": 4,
-    "single_seed_tokens_4epochs": 10184056,
-    "single_seed_tokens_5epochs": 12725000,
-    "multi_seed_tokens_5epochs": 38175000,
-    "anti_rote_mechanisms": {
-      "epistemic_surprise_gate_min_loss": 1.1,
-      "label_smoothing": 0.08,
-      "stride_tokens": 128,
-      "multi_perspective_qa_rules": 6
-    },
-    "cache_configuration": {
-      "cache_path": "D:\\dacn_training_cache\\frozen_hidden_fp16_cache.pt",
-      "drive_d_free_gb": 43.32,
-      "drive_c_free_gb": 12.68
     }
   }
 }
