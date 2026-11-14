@@ -2,7 +2,10 @@
 Pytest integration for smoke test.
 """
 
-from smoke_test import run_smoke_test
+try:
+    from smoke_test import run_smoke_test
+except ImportError:
+    from scripts.experiments.smoke_test import run_smoke_test
 
 
 def test_full_smoke_pipeline():

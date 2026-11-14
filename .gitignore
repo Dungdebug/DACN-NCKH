@@ -35,6 +35,7 @@ htmlcov/
 # Local offline runtime generated files & heavy weights (>100MB)
 local_runtime/model/*.safetensors
 local_runtime/snapshots/
+local_runtime/parsed/*.json
 local_runtime/parsed/DOC_179*
 local_runtime/parsed/LIFECYCLE_DOC_*
 local_runtime/parsed/TEST_DOC_*

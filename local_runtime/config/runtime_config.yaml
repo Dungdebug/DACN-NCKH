@@ -20,14 +20,12 @@ model:
   freeze_backbone: true
 
 checkpoints:
-  current_active: "cms_3lvl_full_dataset.pt"
-  current_path: "local_runtime/checkpoints/cms_3lvl_full_dataset.pt"
+  current_active: "cms_3lvl_seed_42.pt"
+  current_path: "local_runtime/checkpoints/cms_3lvl_seed_42.pt"
   current_status: "CURRENT_VALID_CHECKPOINT"
-  current_protocol: "Full-Dataset 3-Level SA-CMS Offline GPU Checkpoint (135 non-test docs / 1,731 sequences, Seed 42 Verified)"
-  extended_bilingual_checkpoint: "local_runtime/checkpoints/cms_3lvl_extended.pt"
-  base_phase4_checkpoint: "local_runtime/checkpoints/cms_3lvl_seed_42.pt"
-  final_external_checkpoint: "local_runtime/checkpoints/cms_3lvl_full_dataset.pt"
-  final_external_status: "READY_VERIFIED_GPU"
+  current_protocol: "Phase 4.1 Frozen Empirical Checkpoint"
+  final_external_checkpoint: "local_runtime/checkpoints/final_external_gpu.pt"
+  final_external_status: "PENDING_EXTERNAL_GPU"
 
 retrieval:
   algorithm: "BM25"

@@ -34,24 +34,30 @@ class ContinuumMemorySystem(BaseMemoryModule):
         base_lr: float = 1e-4,
         dropout: float = 0.0,
         chain_type: str = "sequential",  # "sequential" (Eq 70) or "independent" (Eq 74)
+        schedule: Optional[Any] = None,
     ):
         super().__init__()
         self.d_model = d_model
         self.d_ff = d_ff
-        self.num_levels = num_levels
         self.chain_type = chain_type
 
-        # Multi-timescale schedule
-        self.schedule = CMSSchedule(
-            num_levels=num_levels,
-            lowest_chunk_size=lowest_chunk_size,
-            chunk_sizes=chunk_sizes,
-            learning_rates=learning_rates,
-            base_lr=base_lr,
-        )
+        # Multi-timescale schedule (SA-CMS or fixed baseline)
+        if schedule is not None:
+            self.schedule = schedule
+            self.num_levels = getattr(schedule, "num_levels", num_levels)
+        else:
+            self.num_levels = num_levels
+            self.schedule = CMSSchedule(
+                num_levels=num_levels,
+                lowest_chunk_size=lowest_chunk_size,
+                chunk_sizes=chunk_sizes,
+                learning_rates=learning_rates,
+                base_lr=base_lr,
+            )
 
         # Chunk boundary buffer
-        self.buffer = MemoryChunkBuffer(self.schedule.chunk_sizes)
+        buf_sizes = getattr(self.schedule, "chunk_sizes", [64] * self.num_levels)
+        self.buffer = MemoryChunkBuffer(buf_sizes)
 
         # Construct MLP chain
         if chain_type == "sequential":
@@ -99,6 +105,23 @@ class ContinuumMemorySystem(BaseMemoryModule):
                 k: v.clone() for k, v in self._initial_state_dict.items()
             })
         self.buffer.reset()
+
+    def reset_level(self, level_idx: int) -> None:
+        """
+        Reset a single memory level back to its initial state theta_0.
+        Paper Section 6.2: Level 1 (Paragraph) resets at section boundaries,
+        while Level 2 (Section) and Level 3 (Document) persist.
+        """
+        if not self._initial_state_dict:
+            return
+        prefix = f"blocks.{level_idx}."
+        sub_dict = {
+            k[len(prefix):]: v.clone()
+            for k, v in self._initial_state_dict.items()
+            if k.startswith(prefix)
+        }
+        if sub_dict and level_idx < len(self.chain.blocks):
+            self.chain.blocks[level_idx].load_state_dict(sub_dict)
 
     def get_memory_state(self) -> Dict[str, torch.Tensor]:
         """
@@ -157,8 +180,9 @@ class ContinuumMemorySystem(BaseMemoryModule):
             updated_levels: List of level indices that executed an update step.
         """
         should_update = self.buffer.step(num_tokens)
-        updated_levels = []
+        updates = []
 
+        # 1. Compute all gradients before any in-place mutation
         for l_idx, must_update in enumerate(should_update):
             if must_update:
                 block = self.chain.blocks[l_idx]
@@ -170,11 +194,55 @@ class ContinuumMemorySystem(BaseMemoryModule):
                         retain_graph=True,
                         allow_unused=True,
                     )
-                    grad_dict = {}
-                    for (name, p), g in zip(block.named_parameters(), grads):
-                        if g is not None:
-                            grad_dict[name] = g
-                    self.apply_gradient_update(l_idx, grad_dict)
-                    updated_levels.append(l_idx)
+                    grad_dict = {
+                        name: g for (name, p), g in zip(block.named_parameters(), grads) if g is not None
+                    }
+                    updates.append((l_idx, grad_dict))
+
+        # 2. Apply updates
+        updated_levels = []
+        for l_idx, grad_dict in updates:
+            self.apply_gradient_update(l_idx, grad_dict)
+            updated_levels.append(l_idx)
+
+        return updated_levels
+
+    def update_at_token_position(
+        self,
+        loss: torch.Tensor,
+        token_pos: int,
+        retain_graph: bool = False,
+    ) -> List[int]:
+        """
+        Executes gradient update for any level whose schedule triggers at token_pos.
+        Supports both StructureAlignedSchedule (b_l(t) = 1) and fixed schedules.
+        """
+        levels_to_update = []
+        for l_idx in range(self.num_levels):
+            if hasattr(self.schedule, "should_update") and self.schedule.should_update(l_idx, token_pos):
+                levels_to_update.append(l_idx)
+
+        # 1. Compute gradients for all targeted levels before applying any in-place updates
+        updates = []
+        for l_idx in levels_to_update:
+            block = self.chain.blocks[l_idx]
+            params = [p for p in block.parameters() if p.requires_grad]
+            if params and loss is not None:
+                grads = torch.autograd.grad(
+                    loss,
+                    params,
+                    retain_graph=True,
+                    allow_unused=True,
+                )
+                grad_dict = {
+                    name: g for (name, p), g in zip(block.named_parameters(), grads) if g is not None
+                }
+                updates.append((l_idx, grad_dict))
+
+        # 2. Apply updates
+        updated_levels = []
+        for l_idx, grad_dict in updates:
+            self.apply_gradient_update(l_idx, grad_dict)
+            updated_levels.append(l_idx)
 
         return updated_levels

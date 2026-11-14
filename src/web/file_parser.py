@@ -15,7 +15,7 @@ from typing import Dict, Any, Tuple, Optional, List
 
 
 MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024  # 15 MB
-ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".png", ".jpg", ".jpeg"}
+ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".csv", ".tsv", ".json", ".html", ".htm", ".png", ".jpg", ".jpeg"}
 
 
 def sanitize_filename(filename: str) -> str:
@@ -101,28 +101,121 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
     return "\n\n".join(extracted_pages)
 
 
+def _format_table_rows_to_sentences(rows_data: List[List[str]]) -> List[str]:
+    """Converts 2D table rows into self-contained factual sentences with column headers attached."""
+    if not rows_data:
+        return []
+    cleaned_rows = []
+    for r in rows_data:
+        dedup_r = []
+        for cell in r:
+            c_txt = re.sub(r"\s+", " ", cell or "").strip()
+            if c_txt and (not dedup_r or dedup_r[-1] != c_txt):
+                dedup_r.append(c_txt)
+        if dedup_r:
+            cleaned_rows.append(dedup_r)
+    if not cleaned_rows:
+        return []
+    if len(cleaned_rows) == 1:
+        s = ", ".join(cleaned_rows[0])
+        return [s if s.endswith(".") else f"{s}."]
+
+    headers = cleaned_rows[0]
+    sentences = []
+    for row in cleaned_rows[1:]:
+        pairs = []
+        for idx, val in enumerate(row):
+            if not val:
+                continue
+            hdr = headers[idx] if idx < len(headers) else f"Cột {idx + 1}"
+            if hdr and hdr.lower() != val.lower():
+                pairs.append(f"{hdr}: {val}")
+            else:
+                pairs.append(val)
+        if pairs:
+            sent = ", ".join(pairs)
+            if not sent.endswith((".", "!", "?")):
+                sent += "."
+            sentences.append(sent)
+    return sentences
+
+
 def extract_text_from_docx(file_bytes: bytes) -> str:
-    """Extracts text from DOCX bytes using python-docx."""
+    """Extracts both paragraphs and tables in document order from DOCX bytes using python-docx."""
     import docx
+    from docx.text.paragraph import Paragraph
+    from docx.table import Table
+
     stream = io.BytesIO(file_bytes)
     doc = docx.Document(stream)
-    paragraphs = []
-    for p in doc.paragraphs:
-        txt = p.text.strip()
-        if txt:
-            # Check style name for headings
-            style_name = p.style.name.lower() if p.style and p.style.name else ""
-            if "heading 1" in style_name:
-                paragraphs.append(f"# {txt}")
-            elif "heading 2" in style_name:
-                paragraphs.append(f"## {txt}")
-            elif "heading 3" in style_name:
-                paragraphs.append(f"### {txt}")
-            else:
-                paragraphs.append(txt)
-    if not paragraphs:
+    blocks: List[str] = []
+
+    for child in doc.element.body.iterchildren():
+        if child.tag.endswith("p"):
+            p = Paragraph(child, doc)
+            txt = p.text.strip()
+            if txt:
+                style_name = p.style.name.lower() if p.style and p.style.name else ""
+                if "heading 1" in style_name:
+                    blocks.append(f"# {txt}")
+                elif "heading 2" in style_name:
+                    blocks.append(f"## {txt}")
+                elif "heading 3" in style_name:
+                    blocks.append(f"### {txt}")
+                else:
+                    blocks.append(txt)
+        elif child.tag.endswith("tbl"):
+            tbl = Table(child, doc)
+            rows_data = [[cell.text.strip() for cell in row.cells] for row in tbl.rows]
+            table_sents = _format_table_rows_to_sentences(rows_data)
+            if table_sents:
+                blocks.append("\n".join(table_sents))
+
+    if not blocks:
         raise ValueError("Could not extract any readable text from DOCX.")
-    return "\n\n".join(paragraphs)
+    return "\n\n".join(blocks)
+
+
+def extract_text_from_structured_data(filename: str, file_bytes: bytes, ext: str) -> str:
+    """Extracts readable factual sentences from CSV, TSV, JSON, or HTML files."""
+    import csv
+    import json
+
+    try:
+        raw_str = file_bytes.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        raw_str = file_bytes.decode("latin-1", errors="replace")
+
+    if ext in (".csv", ".tsv"):
+        delim = "\t" if ext == ".tsv" else ","
+        reader = csv.reader(io.StringIO(raw_str), delimiter=delim)
+        rows = [row for row in reader if any(c.strip() for c in row)]
+        sents = _format_table_rows_to_sentences(rows)
+        return f"# Dữ liệu bảng {filename}\n\n" + "\n\n".join(sents) if sents else raw_str
+
+    if ext == ".json":
+        try:
+            data = json.loads(raw_str)
+            lines = [f"# Dữ liệu cấu trúc {filename}"]
+            items = data if isinstance(data, list) else [data]
+            for item in items:
+                if isinstance(item, dict):
+                    parts = [f"{k}: {v}" for k, v in item.items() if v is not None and str(v).strip()]
+                    if parts:
+                        s = ", ".join(parts)
+                        lines.append(s if s.endswith(".") else f"{s}.")
+                else:
+                    lines.append(f"{item}.")
+            return "\n\n".join(lines)
+        except Exception:
+            return raw_str
+
+    if ext in (".html", ".htm"):
+        no_script = re.sub(r"<(script|style)[^>]*>[\s\S]*?</\1>", " ", raw_str, flags=re.IGNORECASE)
+        no_tags = re.sub(r"<[^>]+>", "\n", no_script)
+        return re.sub(r"\n{3,}", "\n\n", no_tags).strip()
+
+    return raw_str
 
 
 def extract_text_from_image(filename: str, file_bytes: bytes) -> str:
@@ -290,6 +383,8 @@ def extract_text_from_file(filename: str, file_bytes: bytes) -> Tuple[str, Dict[
             raw_text = file_bytes.decode("utf-8")
         except UnicodeDecodeError:
             raw_text = file_bytes.decode("latin-1", errors="replace")
+    elif ext in (".csv", ".tsv", ".json", ".html", ".htm"):
+        raw_text = extract_text_from_structured_data(filename, file_bytes, ext)
     elif ext in (".png", ".jpg", ".jpeg"):
         raw_text = extract_text_from_image(filename, file_bytes)
     else:

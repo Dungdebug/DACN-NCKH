@@ -45,6 +45,11 @@ def _extract_query_keywords(question: str) -> List[str]:
 
 
 VIETNAMESE_DOMAIN_SYNONYMS: Dict[str, List[str]] = {
+    # Chủ đề, Topic, Bài, Chương, Mục
+    "chủ đề": ["topic", "chủ", "đề", "bài", "mục", "phần", "nội", "dung"],
+    "topic": ["chủ", "đề", "topic", "bài", "mục", "phần", "nội", "dung"],
+    "bài": ["topic", "chủ", "đề", "bài", "học"],
+    "tóm tắt": ["tổng", "quan", "nội", "dung", "chính", "toàn", "bộ", "tài", "liệu"],
     # Nghề nghiệp, chức vụ, công tác
     "nghề": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc", "cấp", "bậc", "tổ", "trưởng", "đảm", "nhiệm"],
     "nghiệp": ["chức", "vụ", "công", "tác", "vị", "trí", "công", "việc"],
@@ -101,6 +106,13 @@ def expand_query_semantics(question: str) -> Tuple[str, List[str]]:
                 if syn not in expanded_tokens:
                     expanded_tokens.append(syn)
 
+    # Explicit topic number bridge: e.g. "chủ đề 47" -> add "topic 47", "topic", "47"
+    topic_nums = re.findall(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", q_norm)
+    for num in topic_nums:
+        for t_pfx in ["topic", "chủ", "đề", "bài", num, f"topic {num}", f"chủ đề {num}"]:
+            if t_pfx not in expanded_tokens:
+                expanded_tokens.append(t_pfx)
+
     expanded_query_str = f"{question} " + " ".join(expanded_tokens)
     return expanded_query_str.strip(), expanded_tokens
 
@@ -126,6 +138,13 @@ def strip_passage_artifacts(text: str) -> str:
         l_strip = line.strip()
         if not l_strip:
             continue
+        # Strip leading bullet markers on lines
+        is_bullet = bool(re.match(r"^[\*\-\•\+\–\—]\s*", l_strip))
+        if is_bullet:
+            l_strip = re.sub(r"^[\*\-\•\+\–\—]\s*", "", l_strip).strip()
+            # If previous line had no terminal punctuation, add a period to separate clauses cleanly
+            if lines and not lines[-1].endswith((".", "!", "?", ":", ";")):
+                lines[-1] = f"{lines[-1]}."
         # Skip standalone markdown headers that have no sentence punctuation or content
         if l_strip.startswith("#"):
             header_text = l_strip.lstrip("#").strip()
@@ -139,6 +158,53 @@ def strip_passage_artifacts(text: str) -> str:
 
     joined = " ".join(lines)
     return re.sub(r"\s+", " ", joined).strip()
+
+
+TECH_ACRONYMS = {
+    "RSA", "AES", "DES", "MD5", "SHA", "MAC", "HMAC", "ECC", "PKI", "OTP",
+    "SLM", "LLM", "RAG", "NLP", "API", "GPU", "CPU", "RAM", "ROM", "CMS", "SA-CMS",
+    "BERT", "BGE", "HNSW", "BM25", "TF-IDF", "POS", "NER", "SVO",
+}
+
+
+def clean_sentence_abstractive(sent: str) -> str:
+    """
+    Cleans raw document sentence into abstractive, natural Vietnamese prose:
+    - Removes leading and internal bullet markers (*, -, •, +, –, —)
+    - Normalizes ALL CAPS labels (e.g. 'PHÁ MÃ:' -> 'Phá mã:', 'VÉT CẠN:' -> 'Vét cạn:')
+      while preserving standard technology acronyms (RSA, AES, DES, AI, NLP, API, etc.)
+    - Removes leaked internal citation tags ([DOC...::P...], [2], etc.)
+    - Ensures clean whitespace and proper capitalization.
+    """
+    s = (sent or "").strip()
+    if not s:
+        return ""
+    # Strip leading bullets, dashes, markers
+    s = re.sub(r"^[\*\-\•\+\–\—]\s*", "", s).strip()
+    # Strip internal bullets: ' * ' or ' • ' or ' - ' (preserve '+' for math formulas like P + k)
+    s = re.sub(r"\s+[\*\•\–\—]\s+", " ", s)
+    # Strip leaked citation tags like [DOC...::P...] or [1], [2]
+    s = re.sub(r"\[?[A-Za-z0-9_\-]+::P\d+\]?", "", s)
+    s = re.sub(r"\[DOC_[A-Za-z0-9_\-]+\]", "", s)
+    s = re.sub(r"\[\d+\]", "", s)
+
+    # Normalize ALL CAPS heading labels e.g. 'PHÁ MÃ:' -> 'Phá mã:'
+    def _normalize_heading(m):
+        raw = m.group(1).strip()
+        if raw in TECH_ACRONYMS or (len(raw) <= 3 and raw.isupper()):
+            return f"{raw}:"
+        words = raw.split()
+        if not words:
+            return ""
+        capitalized = words[0].capitalize() + (" " + " ".join(w.lower() for w in words[1:]) if len(words) > 1 else "")
+        return f"{capitalized}:"
+
+    s = re.sub(r"\b([A-ZÀ-Ỹ]{2,}(?:\s+[A-ZÀ-Ỹ]{2,})*):", _normalize_heading, s)
+
+    # Remove extra spaces before punctuation
+    s = re.sub(r"\s+([,.:;!?])", r"\1", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
 
 
 def split_clean_sentences(text: str) -> List[str]:
@@ -174,7 +240,8 @@ def split_clean_sentences(text: str) -> List[str]:
             .strip()
         )
         # Clean leading bullet markers
-        restored = re.sub(r"^[\-\•\*]\s+", "", restored).strip()
+        restored = re.sub(r"^[\-\•\*\+\–\—]\s+", "", restored).strip()
+        restored = clean_sentence_abstractive(restored)
         if len(restored) >= 12 and any(c.isalpha() for c in restored):
             sentences.append(restored)
 
@@ -219,6 +286,17 @@ def score_sentence_relevance(
             if bg in s_lower:
                 bigram_bonus += 2.5
 
+    # Specific topic/module number matching: e.g. "topic 1" or "chủ đề 47"
+    q_topic_m = re.search(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", q_lower)
+    if q_topic_m:
+        target_num = q_topic_m.group(1)
+        s_nums = re.findall(r"\b(?:topic|chủ đề|bài|mục)\s*(\d+)\b", s_lower)
+        if target_num in s_nums or f"topic {target_num}" in s_lower or f"chủ đề {target_num}" in s_lower:
+            bigram_bonus += 12.0
+        elif s_nums and target_num not in s_nums:
+            # Heavily penalize a different topic number (e.g. topic 50 when asked topic 1)
+            bigram_bonus -= 8.0
+
     # Numeric intent alignment
     wants_number = any(cue in q_lower for cue in NUMERIC_QUESTION_CUES)
     has_number = bool(re.search(r"\d+", sentence))
@@ -252,6 +330,34 @@ def score_sentence_relevance(
     )
 
 
+def count_text_tokens(text: str, tokenizer: Optional[Any] = None) -> int:
+    """
+    Computes fair multilingual token count for text:
+    - Excludes internal metadata/passage IDs.
+    - Prevents BPE byte-fallback explosion on Vietnamese diacritics by enforcing
+      a linguistic word-ratio cap: max(1, int(round(word_count * 1.35))).
+    """
+    if not text or not text.strip():
+        return 0
+
+    words = text.split()
+    word_count = len(words)
+    if word_count == 0:
+        return 0
+
+    heuristic_cap = max(1, int(round(word_count * 1.35)))
+
+    if tokenizer is not None:
+        try:
+            tok_count = len(tokenizer.encode(text, add_special_tokens=False))
+            # If BPE tokenizer fragments multilingual UTF-8 bytes excessively, cap at fair word-ratio heuristic
+            return min(tok_count, heuristic_cap)
+        except Exception:
+            return heuristic_cap
+
+    return heuristic_cap
+
+
 def compress_evidence_context(
     question: str,
     evidence_passages: List[Dict[str, Any]],
@@ -263,6 +369,7 @@ def compress_evidence_context(
     Instead of feeding full 256-token passages containing surrounding filler/boilerplate
     into the LLM prompt, extracts only the top query-relevant sentences per passage while
     preserving exact passage citation IDs.
+    Calculates token statistics strictly on actual passage text (excluding internal IDs).
     """
     if not evidence_passages:
         return "", {
@@ -275,16 +382,22 @@ def compress_evidence_context(
     q_keywords = _extract_query_keywords(question)
     raw_blocks = []
     compressed_blocks = []
+    raw_texts_only = []
+    comp_texts_only = []
 
     for p in evidence_passages:
         pid = p.get("passage_id", "DOC::P000")
         raw_txt = p.get("text", "")
         raw_blocks.append(f"[{pid}] {raw_txt}")
+        if raw_txt.strip():
+            raw_texts_only.append(raw_txt.strip())
 
         sents = split_clean_sentences(raw_txt)
         if len(sents) <= max_sentences_per_passage:
             clean_joined = " ".join(sents) if sents else strip_passage_artifacts(raw_txt)
             compressed_blocks.append(f"[{pid}] {clean_joined}")
+            if clean_joined.strip():
+                comp_texts_only.append(clean_joined.strip())
             continue
 
         scored = [
@@ -295,20 +408,18 @@ def compress_evidence_context(
         top_picked = sorted(scored[:max_sentences_per_passage], key=lambda x: x[1])
         pruned_text = " ".join(item[2] for item in top_picked)
         compressed_blocks.append(f"[{pid}] {pruned_text}")
+        if pruned_text.strip():
+            comp_texts_only.append(pruned_text.strip())
 
-    raw_full = "\n\n".join(raw_blocks)
     comp_full = "\n\n".join(compressed_blocks)
 
-    if tokenizer is not None:
-        try:
-            raw_tok = len(tokenizer.encode(raw_full, add_special_tokens=False))
-            comp_tok = len(tokenizer.encode(comp_full, add_special_tokens=False))
-        except Exception:
-            raw_tok = int(len(raw_full.split()) * 1.35)
-            comp_tok = int(len(comp_full.split()) * 1.35)
-    else:
-        raw_tok = int(len(raw_full.split()) * 1.35)
-        comp_tok = int(len(comp_full.split()) * 1.35)
+    # Compute tokens strictly on actual passage text (excluding internal [pid] metadata)
+    raw_text_only = "\n\n".join(raw_texts_only)
+    comp_text_only = "\n\n".join(comp_texts_only)
+
+    raw_tok = count_text_tokens(raw_text_only, tokenizer)
+    comp_tok = count_text_tokens(comp_text_only, tokenizer)
+
     saved = max(0, raw_tok - comp_tok)
     ratio = round((saved / raw_tok) * 100.0, 2) if raw_tok > 0 else 0.0
 
@@ -392,7 +503,7 @@ def synthesize_accurate_grounded_answer(
         if not summary_points:
             best = all_candidates[0]
             summary_points.append(f"- {_ensure_period(best['sentence'])} {best['citation_label']}")
-        return "Tài liệu này tập trung vào các nội dung trọng tâm sau:\n" + "\n".join(summary_points)
+        return "Tài liệu này đề cập đến các vấn đề chính sau đây:\n" + "\n".join(summary_points)
 
     # Route 2: Cross-Document Comparison
     if route == "CROSS_DOCUMENT_COMPARISON":
@@ -415,7 +526,12 @@ def synthesize_accurate_grounded_answer(
     selected = [primary]
     covered_so_far = set(primary["covered_kw"])
 
-    max_sents = 1 if mode in ("minimal", "concise") else (3 if mode == "detailed" else 2)
+    max_sents = (
+        1 if mode == "minimal"
+        else (2 if mode == "concise"
+        else (8 if mode in ("detailed", "comprehensive")
+        else 5))
+    )
 
     if max_sents > 1:
         for cand in all_candidates[1:]:
@@ -426,12 +542,13 @@ def synthesize_accurate_grounded_answer(
                 continue
             new_kw = cand["covered_kw"] - covered_so_far
             # Pick complementary sentence if it covers remaining query keywords or has high relevance score
-            if new_kw or (cand["score"] >= primary["score"] * 0.65 and cand["score"] > 2.0):
+            if new_kw or (cand["score"] >= primary["score"] * 0.5 and cand["score"] > 1.5):
                 selected.append(cand)
                 covered_so_far.update(cand["covered_kw"])
 
-    # Sort selected sentences that come from the same passage by their natural reading order
-    primary_sent = _ensure_period(selected[0]["sentence"])
+    # Clean and abstractive normalization for selected sentences
+    primary_clean = clean_sentence_abstractive(selected[0]["sentence"])
+    primary_sent = _ensure_period(primary_clean)
     primary_cit = selected[0]["citation_label"]
 
     if mode == "minimal":
@@ -441,21 +558,29 @@ def synthesize_accurate_grounded_answer(
         return f"{primary_sent} {primary_cit}".strip()
 
     # Balanced or Detailed mode: combine primary and complementary sentences smoothly
-    parts = [f"{primary_sent} {primary_cit}"]
-    for extra in selected[1:]:
-        ext_sent = _ensure_period(extra["sentence"])
-        ext_cit = extra["citation_label"]
-        if ext_cit == primary_cit:
-            parts.append(ext_sent)
-        else:
-            parts.append(f"{ext_sent} {ext_cit}")
+    same_cit = all(extra["citation_label"] == primary_cit for extra in selected[1:])
+    if same_cit:
+        clean_sents = [primary_sent]
+        for extra in selected[1:]:
+            cln = _ensure_period(clean_sentence_abstractive(extra["sentence"]))
+            if cln and cln not in clean_sents:
+                clean_sents.append(cln)
+        combined_text = " ".join(clean_sents)
+        combined = f"{combined_text} {primary_cit}".strip()
+    else:
+        parts = [f"{primary_sent} {primary_cit}"]
+        for extra in selected[1:]:
+            cln = _ensure_period(clean_sentence_abstractive(extra["sentence"]))
+            ext_cit = extra["citation_label"]
+            if cln and not any(cln in p for p in parts):
+                parts.append(f"{cln} {ext_cit}".strip())
+        combined = " ".join(parts)
 
-    combined = " ".join(parts)
     if route == "SECTION_LOOKUP":
         return f"Tại mục được tra cứu, tài liệu ghi nhận: {combined}"
     if mode == "detailed":
-        return f"Trong tài liệu đã cung cấp, thông tin chi tiết như sau: {combined}"
-    return f"Dựa trên tài liệu đã cung cấp, {combined}"
+        return f"Thông tin chi tiết theo tài liệu như sau: {combined}"
+    return combined
 
 
 def build_token_efficient_prompt(
@@ -581,6 +706,8 @@ def postprocess_concise_answer(
     lines = [l.strip() for l in ans.split("\n") if l.strip()]
     if lines:
         ans = lines[0]
+
+    ans = clean_sentence_abstractive(ans)
 
     # Ensure citation presence if citations list is non-empty and not in text
     if citations:

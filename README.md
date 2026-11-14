@@ -10,18 +10,17 @@
 
 ---
 
-## ✅ TRẠNG THÁI HUẤN LUYỆN FULL-DATASET (`>= 10M TOKENS`) & HƯỚNG DẪN LẤY RA SỬ DỤNG / CHẠY TIẾP
+## ⏸️ TRẠNG THÁI LƯU TIẾN TRÌNH TRAIN & HƯỚNG DẪN LẤY RA SỬ DỤNG / CHẠY TIẾP
 
-Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training.py`) đã **HOÀN TẤT 100% CẢ 3 SEEDS (`Seed 42`, `Seed 43`, `Seed 44`)**, đạt **`10,187,981` tokens** trên tập Full-Dataset (**`12,463,151` tokens** lũy kế toàn dự án) và lưu đầy đủ báo cáo tại [`Training_report.md`](Training_report.md), [`checkpoints/full_dataset_training/`](checkpoints/full_dataset_training/) và [`local_runtime/checkpoints/`](local_runtime/checkpoints/):
+Tiến trình huấn luyện toàn bộ tập dữ liệu (`scripts/run_training.py`) đã được **dừng an toàn** và **lưu trọn vẹn trạng thái** tại [`checkpoints/full_dataset_training/`](checkpoints/full_dataset_training/) và [`local_runtime/checkpoints/`](local_runtime/checkpoints/):
 
 | Hạng mục / Seed | Trạng thái | Đường dẫn Checkpoint & Báo cáo | Kết quả Đánh giá Validation (0% Overlap) |
 | :--- | :---: | :--- | :--- |
 | **Phase 4.1/4.2 Khoa học (54 files)** | 🔒 **ĐÃ KHÓA (100% VALID)** | `checkpoints/phase4_1/cms_3lvl_seed_{42,43,44}.pt`<br>`local_runtime/checkpoints/cms_3lvl_seed_42.pt` | Chuẩn đối sánh khoa học RQ1–RQ5 (SHA-256: `0a379f6a238a...`) |
 | **Extended Bilingual QA (`1,275` mẫu)** | ✅ **HOÀN TẤT (6/6 Epochs)** | `local_runtime/checkpoints/cms_3lvl_extended.pt`<br>`checkpoints/extended_training/training_report_extended.json` | **VN Answer PPL**: `19.07 → 2.34` (**-87.72%**)<br>**EN Answer PPL**: `31.54 → 8.91` (**-71.74%**) |
-| **Full-Dataset — Seed 42 (`2,996,465` tokens)** | ✅ **HOÀN TẤT (5/5 Epochs, Best Ep 4)** | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt`<br>👉 Đã xuất ra: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`<br>`checkpoints/full_dataset_training/seed_42_summary.json` | **VN Answer PPL**: `18.46 → 2.32` (**-87.46%**, Loss `0.8396`)<br>**EN Answer PPL**: `28.23 → 8.02` (**-71.59%**, Loss `2.0819`)<br>**Combined Answer Loss**: `3.1281 → 1.4607` (**-53.30%**) |
-| **Full-Dataset — Seed 43 (`3,595,758` tokens)** | ✅ **HOÀN TẤT (6/6 Epochs, Best Ep 6)** | `checkpoints/full_dataset_training/cms_3lvl_full_seed_43.pt`<br>`checkpoints/full_dataset_training/seed_43_summary.json` | **VN Answer PPL**: `20.90 → 2.32` (**-88.90%**, Loss `0.8434`)<br>**EN Answer PPL**: `31.54 → 8.18` (**-74.06%**, Loss `2.1008`)<br>**Combined Answer Loss**: `3.3204 → 1.4721` (**-55.66%**) |
-| **Full-Dataset — Seed 44 (`3,595,758` tokens)** | ✅ **HOÀN TẤT (6/6 Epochs, Best Ep 5)** | `checkpoints/full_dataset_training/cms_3lvl_full_seed_44.pt`<br>`checkpoints/full_dataset_training/seed_44_summary.json` | **VN Answer PPL**: `20.17 → 2.33` (**-88.45%**, Loss `0.8442`)<br>**EN Answer PPL**: `34.97 → 8.15` (**-76.69%**, Loss `2.1001`)<br>**Combined Answer Loss**: `3.3610 → 1.4722` (**-56.20%**) |
-| **Tổng hợp Multi-Seed (`10,187,981` tokens)** | 🏆 **ĐẠT MỐC `>= 10M` TOKENS (`101.88%`)** | `checkpoints/full_dataset_training/training_report_full_dataset.json`<br>`Training_report.md` | **Mean EN PPL**: `31.58 → 8.11 ± 0.08` (**-74.31%**)<br>**Mean VN PPL**: `19.84 → 2.32 ± 0.01` (**-88.29%**)<br>**Mean Combined Loss**: `1.4683 ± 0.0066` |
+| **Full-Dataset — Seed 42 (`135` docs / `1,731` chuỗi)** | ✅ **HOÀN TẤT (5/5 Epochs, Best Ep 4)** | `checkpoints/full_dataset_training/cms_3lvl_full_seed_42.pt`<br>👉 Đã xuất ra: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`<br>`checkpoints/full_dataset_training/seed_42_summary.json` | **VN Answer PPL**: `18.46 → 2.32` (**-87.46%**, Loss `0.8396`)<br>**EN Answer PPL**: `28.23 → 8.02` (**-71.59%**, Loss `2.0819`)<br>**Combined Answer Loss**: `3.1281 → 1.4607` (**-53.30%**) |
+| **Full-Dataset — Seed 43** | ⏸️ **ĐÃ TẠM DỪNG (`0/5` Epochs)** | Khởi tạo ấm từ `checkpoints/phase4_1/cms_3lvl_seed_43.pt` | Sẵn sàng chạy tiếp bất kỳ lúc nào (tự động lưu sau mỗi epoch) |
+| **Full-Dataset — Seed 44** | ⏸️ **ĐÃ TẠM DỪNG (`0/5` Epochs)** | Khởi tạo ấm từ `checkpoints/phase4_1/cms_3lvl_seed_44.pt` | Sẵn sàng chạy tiếp bất kỳ lúc nào (tự động lưu sau mỗi epoch) |
 
 ### 1. Cách lấy Checkpoint đã train ra sử dụng ngay (Web App / CLI / Python)
 Checkpoint tốt nhất của Full-Dataset (**Seed 42**: `local_runtime/checkpoints/cms_3lvl_full_dataset.pt`, SHA-256: `bcdaee6af95e7de96fbc523e4f24687a0c75bc44297d93c1c727fd342a01c059`) đã được **kích hoạt mặc định** trong `local_runtime/config/runtime_config.yaml`:
@@ -626,3 +625,7 @@ python scripts/run_training.py --seed 44
 
 ---
 *Ghi chú: Giữ nguyên toàn bộ cam kết khoa học, trọng số đã huấn luyện (`checkpoints/phase4_*`, `training_output_final/`, `cms_3lvl_seed_42.pt`) và kết quả thực nghiệm Phase 4 (`results/phase4_*`). Giao diện NL DocChat và các checkpoints mở rộng (`cms_3lvl_full_dataset.pt`, `cms_3lvl_extended.pt`) đã hoàn thiện đồng bộ.*
+
+
+
+hơi ít câu hỏi với lỗi những biện pháp đề xuất chính không có thể đọc được nội dung

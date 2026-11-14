@@ -56,38 +56,36 @@ def prepare_offline_assets():
         if snapshots:
             snapshot_dir = snapshots[0]
 
-    if not snapshot_dir or not snapshot_dir.exists():
-        print(f"[ERROR] Could not find cached SmolLM2-135M in {HF_CACHE_DIR}.")
-        print("Please ensure HuggingFace cache is present before one-time preparation.")
-        sys.exit(1)
+    if snapshot_dir and snapshot_dir.exists():
+        print(f"[2/5] Located cached model snapshot at:\n      {snapshot_dir}")
 
-    print(f"[2/5] Located cached model snapshot at:\n      {snapshot_dir}")
-
-    # Files to copy for model
-    model_files = ["config.json", "generation_config.json", "model.safetensors"]
-    for mf in model_files:
-        src = snapshot_dir / mf
-        dst = LOCAL_RUNTIME / "model" / mf
-        if src.exists() and not dst.exists():
-            shutil.copy2(src, dst)
-            print(f"      Copied model file: {mf} ({dst.stat().st_size / (1024**2):.1f} MB)")
-        elif dst.exists():
-            print(f"      Already present: model/{mf}")
-
-    # Files to copy for tokenizer
-    tokenizer_files = ["tokenizer.json", "tokenizer_config.json", "vocab.json", "merges.txt", "special_tokens_map.json"]
-    for tf in tokenizer_files:
-        src = snapshot_dir / tf
-        dst = LOCAL_RUNTIME / "tokenizer" / tf
-        dst_model = LOCAL_RUNTIME / "model" / tf
-        if src.exists():
-            if not dst.exists():
+        # Files to copy for model
+        model_files = ["config.json", "generation_config.json", "model.safetensors"]
+        for mf in model_files:
+            src = snapshot_dir / mf
+            dst = LOCAL_RUNTIME / "model" / mf
+            if src.exists() and not dst.exists():
                 shutil.copy2(src, dst)
-                print(f"      Copied tokenizer file: {tf} ({dst.stat().st_size / 1024:.1f} KB)")
-            if not dst_model.exists():
-                shutil.copy2(src, dst_model)
-        elif dst.exists():
-            print(f"      Already present: tokenizer/{tf}")
+                print(f"      Copied model file: {mf} ({dst.stat().st_size / (1024**2):.1f} MB)")
+            elif dst.exists():
+                print(f"      Already present: model/{mf}")
+
+        # Files to copy for tokenizer
+        tokenizer_files = ["tokenizer.json", "tokenizer_config.json", "vocab.json", "merges.txt", "special_tokens_map.json"]
+        for tf in tokenizer_files:
+            src = snapshot_dir / tf
+            dst = LOCAL_RUNTIME / "tokenizer" / tf
+            dst_model = LOCAL_RUNTIME / "model" / tf
+            if src.exists():
+                if not dst.exists():
+                    shutil.copy2(src, dst)
+                    print(f"      Copied tokenizer file: {tf} ({dst.stat().st_size / 1024:.1f} KB)")
+                if not dst_model.exists():
+                    shutil.copy2(src, dst_model)
+            elif dst.exists():
+                print(f"      Already present: tokenizer/{tf}")
+    else:
+        print("[2/5] HuggingFace cache not present on this machine — using bundled local_runtime/tokenizer & Sovereign Brain offline engine.")
 
     # 3. Copy Checkpoints
     src_ckpt = ROOT_DIR / "checkpoints" / "phase4_1" / "cms_3lvl_seed_42.pt"

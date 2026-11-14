@@ -24,6 +24,7 @@ __all__ = [
     "detect_query_intent",
     "split_clean_sentences",
     "strip_accents",
+    "extract_technical_entities",
 ]
 
 
@@ -51,6 +52,46 @@ _VI_STOPWORDS = {
 # Artifact regex to remove leftover chunk indices or page markers
 CITATION_ARTIFACT_RE = re.compile(r"\[?[A-Z0-9_\-]+::P\d+\]?")
 PAGE_NUM_RE = re.compile(r"(?:Trang\s+\d+|\bPage\s+\d+)", re.IGNORECASE)
+
+
+def extract_technical_entities(text: str) -> List[str]:
+    """
+    Extracts uppercase, hyphenated technical tokens, or model names
+    (e.g., 'SA-CMS', 'SmolLM2', 'BM25', 'RTX', 'B2', 'P2') from text.
+    Filters out common stopwords and regular title-cased words.
+    """
+    if not text:
+        return []
+    tokens = re.findall(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", text)
+    entities = []
+    for tok in tokens:
+        clean = tok.strip("-_.,;:!?()[]{}")
+        if not clean or clean.isdigit():
+            continue
+        if strip_accents(clean.lower()) in _VI_STOPWORDS:
+            continue
+        # 1. Hyphenated technical token with alphanumeric chars (e.g. SA-CMS, top-k)
+        if "-" in clean and any(c.isalnum() for c in clean):
+            entities.append(clean)
+        # 2. CamelCase / mixed-case model names (e.g. SmolLM2, RoBERTa, PhPhoBERT)
+        elif re.search(r"[a-z][A-Z0-9]", clean):
+            entities.append(clean)
+        # 3. Capital + digit(s) (e.g. B2, P2, M1)
+        elif re.match(r"^[A-Z]\d+$", clean):
+            entities.append(clean)
+        # 4. Uppercase acronyms / technical tokens (e.g. BM25, RTX, RAG, BERT, RTX4090)
+        elif clean.isupper() and len(clean) >= 2:
+            entities.append(clean)
+
+    # Preserve order while deduplicating case-insensitively
+    seen = set()
+    deduped = []
+    for ent in entities:
+        ent_lower = ent.lower()
+        if ent_lower not in seen:
+            seen.add(ent_lower)
+            deduped.append(ent)
+    return deduped
 
 
 def split_clean_sentences(text: str) -> List[str]:
@@ -118,6 +159,8 @@ def detect_query_intent(query: str) -> str:
         return "MECHANISM"
     if any(k in q for k in ["la gi", "dinh nghia", "khai niem", "nghia la", "what is", "define"]):
         return "DEFINITION"
+    if any(k in q for k in ["ung dung", "ap dung", "trien khai thuc te", "use case", "practical"]):
+        return "APPLICATION"
 
     return "GENERIC"
 
@@ -182,6 +225,9 @@ class NeuralReaderEngine:
         words = re.findall(r"\w+", strip_accents(text.lower()))
         return [w for w in words if w not in _VI_STOPWORDS and len(w) > 1]
 
+    def _extract_technical_entities(self, text: str) -> List[str]:
+        return extract_technical_entities(text)
+
     def _score_sentence(
         self,
         sentence: str,
@@ -204,15 +250,45 @@ class NeuralReaderEngine:
         # Soft matching via semantic thesaurus (bridges colloquial phrasing to technical terms)
         soft_score, soft_matches = self.thesaurus.compute_soft_match(query, sentence, intent)
 
-        # Grounding Gating: Require significant lexical overlap OR solid soft match
+        # 1. Acronym & Technical Entity Pinning Bonus (+2.0 per matched technical entity)
+        tech_entities = self._extract_technical_entities(query)
+        matched_entities = []
+        for ent in tech_entities:
+            ent_norm = strip_accents(ent.lower())
+            pat = rf'(?<![a-z0-9\-_]){re.escape(ent_norm)}(?![a-z0-9\-_])'
+            if re.search(pat, s_norm):
+                matched_entities.append(ent)
+        entity_boost = float(len(matched_entities) * 2.0)
+
+        # 2. Ordered Bigram Phrase Bonus (+1.5 if 2+ consecutive non-stopword query tokens appear adjacent in sentence)
+        phrase_boost = 0.0
+        q_words = re.findall(r"\w+", strip_accents(query.lower())) if query else []
+        query_bigrams = []
+        for i in range(len(q_words) - 1):
+            w1, w2 = q_words[i], q_words[i + 1]
+            if w1 not in _VI_STOPWORDS and len(w1) > 1 and w2 not in _VI_STOPWORDS and len(w2) > 1:
+                query_bigrams.append((w1, w2))
+
+        if not query_bigrams and len(query_keywords) >= 2:
+            for i in range(len(query_keywords) - 1):
+                if query_keywords[i] != query_keywords[i + 1]:
+                    query_bigrams.append((query_keywords[i], query_keywords[i + 1]))
+
+        if query_bigrams:
+            s_words_list = re.findall(r"\w+", s_norm)
+            sentence_bigrams = {(s_words_list[j], s_words_list[j + 1]) for j in range(len(s_words_list) - 1)}
+            if any(bg in sentence_bigrams for bg in query_bigrams):
+                phrase_boost = 1.5
+
+        # Grounding Gating: Require significant lexical overlap OR solid soft match OR pinned entity/phrase match
         min_matches = 1 if len(query_keywords) <= 2 else 2
         coverage_ratio = len(matches) / max(1, len(query_keywords))
-        if (len(matches) < min_matches or coverage_ratio < 0.25) and soft_score < 0.40:
+        if (len(matches) < min_matches or coverage_ratio < 0.25) and soft_score < 0.40 and not matched_entities and phrase_boost == 0.0:
             return 0.0
 
         overlap_score = (coverage_ratio * 4.5) + (soft_score * 2.5)
 
-        # 2. Intent alignment boost ONLY applies when there is actual lexical grounding
+        # 3. Intent alignment boost ONLY applies when there is actual lexical grounding
         intent_boost = 0.0
         if intent == "DEFINITION" and any(cue in s_norm for cue in ["là ", "la ", "duoc dinh nghia", "duoc hieu la", "nghia la", "refers to"]):
             intent_boost += 2.0
@@ -230,8 +306,10 @@ class NeuralReaderEngine:
             intent_boost += 2.0
         elif intent == "COMPARISON" and any(cue in s_norm for cue in ["so voi", "khac voi", "tot hon", "cao hon", "thap hon", "nguoc lai"]):
             intent_boost += 2.0
+        elif intent == "APPLICATION" and any(cue in s_norm for cue in ["ung dung", "ap dung", "trien khai", "thuc te", "he thong", "use case", "tich hop", "thuc tien"]):
+            intent_boost += 2.0
 
-        # 3. Structural section title boost
+        # 4. Structural section title boost
         section_boost = 0.0
         if section_title:
             sec_words = set(re.findall(r"\w+", strip_accents(section_title.lower())))
@@ -239,10 +317,10 @@ class NeuralReaderEngine:
             if sec_matches:
                 section_boost += 1.0
 
-        # 4. Passage rank discount
+        # 5. Passage rank discount
         rank_discount = passage_rank * 0.3
 
-        total_score = overlap_score + intent_boost + section_boost - rank_discount
+        total_score = overlap_score + intent_boost + section_boost + entity_boost + phrase_boost - rank_discount
         return max(0.0, total_score)
 
     def extract_core_span(self, query: str, sentence: str, intent: str) -> str:
@@ -297,6 +375,9 @@ class NeuralReaderEngine:
         elif intent == "LIMITATION":
             followups.append("Có giải pháp hoặc hướng nghiên cứu nào khắc phục hạn chế này không?")
             followups.append("Phương pháp này mang lại ưu thế lớn nhất trong kịch bản nào?")
+        elif intent == "APPLICATION":
+            followups.append("Các yêu cầu phần cứng hoặc hạ tầng khi triển khai thực tế là gì?")
+            followups.append("Hiệu năng và độ trễ thực tế thu được trong ứng dụng này như thế nào?")
         else:
             if "sa-cms" in q_norm or "cms" in q_norm:
                 followups.append("Tần suất cập nhật 3 mức của SA-CMS được cấu hình như thế nào?")

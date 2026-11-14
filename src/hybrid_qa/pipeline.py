@@ -573,8 +573,33 @@ class HybridQAPipeline:
             language=language,
         )
 
-    def _build_prompt(self, question: str, context_text: str = "", language: str = "en") -> str:
-        """Build a token-efficient prompt for the language model."""
+    def _build_prompt(
+        self,
+        question: str,
+        context_text: str = "",
+        language: str = "en",
+        strict_grounding: bool = True,
+        format_style: str = "plain",
+    ) -> str:
+        """
+        Build a calibrated prompt for the language model.
+        When strict_grounding is True, enforces the 3 hard constraints:
+        1. Strict Grounding (no external assumptions)
+        2. Anti-Hallucination (authorized to refuse with 'Không biết'/unsupported)
+        3. Mandatory Citation markers ([DOC...::P...] or [1])
+        """
+        if strict_grounding and context_text:
+            try:
+                from src.hybrid_qa.prompt_template import GroundedPromptTemplate
+                return GroundedPromptTemplate.build_prompt(
+                    question=question,
+                    context_text=context_text,
+                    language=language,
+                    format_style=format_style,
+                )
+            except Exception:
+                pass
+
         if language in ("vi", "vietnamese"):
             if context_text:
                 prompt = (
@@ -610,6 +635,7 @@ class HybridQAPipeline:
         prompt: str,
         max_new_tokens: Optional[int] = None,
         stop_sequences: Optional[List[str]] = None,
+        temperature: float = 0.25,
     ) -> str:
         """
         Generate an answer using the backbone model with strict StoppingCriteria.
@@ -641,7 +667,13 @@ class HybridQAPipeline:
             generated = list(input_ids)
             for _ in range(max_new_tokens):
                 next_logits = logits[0, -1, :]
-                next_token = next_logits.argmax().item()
+                if temperature > 0.05:
+                    import torch.nn.functional as F
+                    scaled = next_logits / temperature
+                    probs = F.softmax(scaled, dim=-1)
+                    next_token = torch.multinomial(probs, num_samples=1).item()
+                else:
+                    next_token = next_logits.argmax().item()
                 if next_token == self.tokenizer.eos_token_id:
                     break
                 generated.append(next_token)

@@ -1,0 +1,123 @@
+=== Page 1 ===
+BÁO CÁO ĐỒ ÁN CƠ SỞ
+PHÁT HIỆN XÂM NHẬP BẰNG PHÂN TÍCH TỆP NHẬT KÝ
+HỆ THỐNG
+Sinh viên thực hiện: Nguyễn Hữu Tài – 2187701105
+GVHD: Th.S Đinh Phương Nam
+
+=== Page 2 ===
+01 Đặt vấn đề
+02 Giới thiệu
+03 Kết quả thực
+nghiệm
+04 Kết luận
+
+=== Page 3 ===
+1, Đặt vấn đề
+- Dưới việc phát triển của hệ thống công
+nghệ hiện nay, việc bảo vệ một hệ
+thống thông tin đang ngày càng trở nên
+cần thiết.
+- Các biện pháp bảo mật truyền thống
+không còn được đảm bảo dưới sự tấn
+công ngày càng tinh vi và phức tạp.
+
+=== Page 4 ===
+1, Đặt vấn đề (tt)
+- Các thiết bị xâm nhập chỉ có thể phát hiện được những dấu hiệu xâm
+nhập đã được nhận biết sẵn
+- Các cuộc tấn công hiện nay ngày càng tinh vi và có thể qua mặt được
+các hệ thống phát hiện thông thường
+- Phân tích tệp nhật ký hệ thống đóng vai trò quan trọng trong việc phát
+hiện các mối đe doạ mới
+
+=== Page 5 ===
+2, Giới thiệu
+- Là một tập tin để ghi lại những sự kiện
+xảy ra trong máy tính, của hệ điều hành,
+của ứng dụng…
+- VD: Firewall, Router, Windows, Linux,…
+# Log File là gì?
+
+=== Page 6 ===
+Ghi lại liên tục những sự kiện,
+hoạt động của hệ thống
+Dự đoán khả năng có thể xảy
+ra đối với hệ thống
+Phân tích nguyên nhân khi hệ
+thống xảy ra vấn đề
+Phát triển phần mềm
+# Tác dụng của LogFile
+
+=== Page 7 ===
+- Cơ chế ghi log độc lập
+• Ghi vào các thư mục riêng lẻ
+• Khó phát hiện vấn đề
+• Không thể sử dụng chung nhật ký
+# Cơ chế ghi log file
+
+=== Page 8 ===
+- Cơ chế ghi log tập trung
+• Các ứng dụng gửi thông báo cho một
+ứng dụng chung
+• Chỉ ghi các thông tin phù hợp
+• Giúp quản trị viên có thể dễ dàng phân
+tích vấn đề
+# Cơ chế ghi log file (tt)
+
+=== Page 9 ===
+Windows phân loại sự kiện thành 5 loại
+- Application
+- Security
+- Setup
+- System
+- Forwarded Event
+- Được lưu trữ ở windows/system32/winevt/logs
+# Thu thập log file
+
+=== Page 10 ===
+- Unix cung cấp một dịch vụ nền Syslog
+để thu thập các thông tin từ chương
+trình và ghi vào một file log chung
+- Các file log thu thập được thường lưu
+trữ trong thư mục /var/log
+# Thu thập log file (tt)
+
+=== Page 11 ===
+Phân tích thủ công
+- Sử dụng các công cụ có săn ở trên
+hệ điều hành: notepad, awk, grep,…
+- Giúp chúng ta linh hoạt trong việc
+phân tích
+- Tốn thời gian, có thể bỏ qua những
+thông tin quan trọng
+# Phân tích Log File
+
+=== Page 12 ===
+Phân tích tự động
+- Sử dụng các công cụ thu thập và phân
+tích log file: Splunk, Log Explorer,…
+- Tiết kiệm thời gian phân tích, giảm
+thiểu lỗi trong quá trình phân tích
+- Chi phí đầu tư cao, chất lượng phân
+tích phụ thuộc vào nguồn file Log
+# Phân tích Log File (tt)
+Nguồn: https://www.datadoghq.com/product/log-management/
+
+=== Page 13 ===
+3, KẾT QUẢ THỰC NGHIỆM
+
+=== Page 14 ===
+4, KẾT LUẬN
+
+=== Page 15 ===
+TÀI LIỆU THAM KHẢO
+[1] Website: https://dcid.me/notes/log-analysis-for-intrusion-detection
+[2] Website: https://viblo.asia/p/tim-hieu-awk-co-ban-gGJ59229KX2
+[3] Website: https://bkhost.vn/blog/virtualbox/
+[4] Website: https://dcid.me/notes/log-analysis-for-intrusion-detection
+[5] Website: https://www.xplg.com/what-is-log-analysis-and-why-do-you-need
+it/?fbclid=IwAR13ScghDs3F7DlwONAmCTT8R
+[6] Umesh Raut, “Log Based Intrusion Detection System”, IOSR Journal of
+Computer Engineering (IOSR-JCE), vol. 20, issue. 5, pp. 15-22, 2018.
+DOI: 10.9790/0661-2005011522

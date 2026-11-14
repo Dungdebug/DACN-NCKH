@@ -14,21 +14,33 @@ set HF_HUB_OFFLINE=1
 set TRANSFORMERS_OFFLINE=1
 set SA_CMS_OFFLINE_MODE=1
 
-REM Xac thuc moi truong Python co day du uvicorn + fastapi + torch
+REM Xac thuc moi truong Python tren may thay hoac may local
 set PYTHON_EXE=
-if exist "D:\Applaptrinh\Python\python.exe" (
-    "D:\Applaptrinh\Python\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
-    if not errorlevel 1 set "PYTHON_EXE=D:\Applaptrinh\Python\python.exe"
-)
-if "%PYTHON_EXE%"=="" if exist ".venv\Scripts\python.exe" (
-    ".venv\Scripts\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
+if exist ".venv\Scripts\python.exe" (
+    ".venv\Scripts\python.exe" -c "import uvicorn, fastapi" >nul 2>&1
     if not errorlevel 1 set "PYTHON_EXE=.venv\Scripts\python.exe"
 )
 if "%PYTHON_EXE%"=="" if exist "..\.venv\Scripts\python.exe" (
-    "..\.venv\Scripts\python.exe" -c "import uvicorn, fastapi, torch" >nul 2>&1
+    "..\.venv\Scripts\python.exe" -c "import uvicorn, fastapi" >nul 2>&1
     if not errorlevel 1 set "PYTHON_EXE=..\.venv\Scripts\python.exe"
 )
-if "%PYTHON_EXE%"=="" set PYTHON_EXE=python
+if "%PYTHON_EXE%"=="" if exist "D:\Applaptrinh\Python\python.exe" (
+    "D:\Applaptrinh\Python\python.exe" -c "import uvicorn, fastapi" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=D:\Applaptrinh\Python\python.exe"
+)
+if "%PYTHON_EXE%"=="" (
+    python -c "import uvicorn, fastapi" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=python"
+)
+if "%PYTHON_EXE%"=="" (
+    py -3 -c "import uvicorn, fastapi" >nul 2>&1
+    if not errorlevel 1 set "PYTHON_EXE=py -3"
+)
+if "%PYTHON_EXE%"=="" (
+    set PYTHON_EXE=python
+    echo [Setup] Dang kiem tra va cai dat thu vien can thiet tu requirements.txt...
+    python -m pip install -r requirements.txt
+)
 
 REM Mo cua so Desktop App doc lap (khong thanh dia chi URL, khong tab trinh duyet)
 echo Dang mo cua so ung dung tai http://127.0.0.1:8000 ...

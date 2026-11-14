@@ -1,0 +1,23 @@
+=== Page 1 ===
+1. HỆ MÃ DỊCH VÒNG:
+- Không gian bản rõ P, bản mã C và khóa K đều thuộc vành số nguyên Z26.
+- Hàm mã hóa: e_k(x) = (x + k) mod 26.
+- Hàm giải mã: d_k(y) = (y - k) mod 26.
+- Ví dụ kinh điển là mật mã Caesar với khóa dịch chuyển k = 3, biến A thành D.
+
+=== Page 2 ===
+2. HỆ MÃ AFFINE:
+- Hàm mã hóa: e(x) = (a * x + b) mod 26 với điều kiện gcd(a, 26) = 1.
+- Hàm giải mã: d(y) = a^(-1) * (y - b) mod 26.
+- Khóa k = (a, b) thuộc không gian Z26 x Z26 với 312 khóa khả dụng.
+
+=== Page 3 ===
+3. HỆ MÃ VIGENERE:
+- Hệ mã thay thế đa bảng chữ cái sử dụng từ khóa lặp lại độ dài m: K = (k1, k2, ..., km).
+- Phép cộng modulo 26 cho từng ký tự tương ứng giúp làm phẳng phân bố tần suất chữ cái.
+- Khắc phục điểm yếu phân tích tần suất đơn bảng nhưng vẫn có thể bị phá bằng phương pháp Kasiski.
+
+=== Page 4 ===
+4. AN NINH HỆ MÃ:
+- An ninh vô điều kiện: Không thể phá mã dù đối phương có tài nguyên tính toán vô hạn (ví dụ One-Time Pad).
+- An ninh tính toán: Chi phí phá mã vượt quá giá trị thông tin hoặc thời gian hữu dụng của dữ liệu.

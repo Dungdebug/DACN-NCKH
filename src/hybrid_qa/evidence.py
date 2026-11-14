@@ -67,7 +67,11 @@ class EvidenceSelector:
         'theo', 'đã', 'sẽ', 'đang', 'như', 'thì', 'ai', 'nhiêu', 'bao', 'nơi',
         'mỗi', 'lại', 'qua', 'bởi', 'do', 'để', 'rằng', 'chính', 'xác', 'cụ',
         'the', 'is', 'are', 'a', 'an', 'of', 'in', 'to', 'for', 'with', 'on',
-        'at', 'by', 'from', 'and', 'or', 'what', 'which', 'how', 'when', 'where', 'who'
+        'at', 'by', 'from', 'and', 'or', 'what', 'which', 'how', 'when', 'where', 'who',
+        # Question framework & boilerplate terms
+        'yêu', 'cầu', 'chi', 'tiết', 'thể', 'liên', 'quan', 'đến', 'nội', 'dung',
+        'cách', 'triển', 'khai', 'mô', 'tả', 'gồm', 'khái', 'niệm', 'nguyên', 'lý',
+        'đặc', 'điểm', 'cho', 'biết', 'về', 'hãy',
     }
 
     def __init__(
@@ -134,16 +138,32 @@ class EvidenceSelector:
         query: str,
         retrieval_results: List[RetrievalResult],
         dynamic_top_k: Optional[bool] = None,
+        max_evidence: Optional[int] = None,
     ) -> EvidencePackage:
         """
         Select evidence from retrieval results.
         Returns an EvidencePackage with selected citations, coverage, and sufficiency flag.
         """
-        # Filter by threshold
+        # Filter by threshold, preserving candidates matching explicit quoted phrases
+        import re
+        quoted_phrases = [
+            qp.strip().lower()
+            for qp in re.findall(r"['\"“«]([^'\"”»]+)['\"”»]", query)
+            if qp.strip()
+        ]
+
         qualified = [r for r in retrieval_results if r.score >= self.score_threshold]
+        if quoted_phrases:
+            for r in retrieval_results:
+                if r not in qualified:
+                    r_text = (r.text or "").lower()
+                    r_sec = (r.section_title or "").lower()
+                    if any(qp in r_text or qp in r_sec for qp in quoted_phrases):
+                        qualified.append(r)
 
         # Take top-k
-        qualified = qualified[:self.max_evidence]
+        eff_max = max_evidence or self.max_evidence
+        qualified = qualified[:eff_max]
 
         q_tokens = set(self._tokenize_content(query))
         use_dynamic = self.dynamic_top_k if dynamic_top_k is None else dynamic_top_k
@@ -176,6 +196,18 @@ class EvidenceSelector:
             coverage = 0.0
 
         has_sufficient = len(citations) >= self.min_evidence and (coverage >= self.min_query_coverage)
+
+        # Special quoted span check: if query contains a quoted phrase matching section_title or passage text,
+        # set coverage = 1.0 and has_sufficient_evidence = True (0% refusal)
+        if quoted_phrases and citations:
+            for c in citations:
+                sec_title = (c.section_title or "").lower()
+                pass_text = (c.text or "").lower()
+                if any(qp in sec_title or qp in pass_text for qp in quoted_phrases):
+                    coverage = 1.0
+                    has_sufficient = True
+                    break
+
         max_score = max((c.score for c in citations), default=0.0)
 
         return EvidencePackage(

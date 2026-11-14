@@ -133,13 +133,24 @@ class DualProcessController:
         self.reader = reader_engine or NeuralReaderEngine()
         self.premise_validator = PremiseValidator()
 
-    def determine_mode(self, query: str, intent: str) -> str:
+    def determine_mode(self, query: str, intent: str, answer_mode: Optional[str] = None) -> str:
         """Decides between System 1 (Fast) and System 2 (Deliberate)."""
+        if answer_mode == "concise":
+            return "SYSTEM_1_FAST"
+
+        if answer_mode == "detailed":
+            return "SYSTEM_2_DELIBERATE"
+
         q_norm = strip_accents(query.lower())
 
         # Complex analytical, comparative, or multi-question triggers -> System 2
-        sys2_triggers = ["tai sao", "vi sao", "so sanh", "khac gi", "nguyen nhan", "danh gia", "tong hop", "nhu the nao"]
-        if any(trig in q_norm for trig in sys2_triggers) or intent in ("COMPARISON", "CAUSE", "SUMMARY"):
+        sys2_triggers = [
+            "tai sao", "vi sao", "so sanh", "khac gi", "nguyen nhan", "danh gia",
+            "tong hop", "nhu the nao", "co che", "phan tich", "giai thich", "lam sao",
+            "lam the nao", "tai sao lai", "anh huong", "nhuoc diem", "uu diem",
+            "tai sao can", "ly do",
+        ]
+        if any(trig in q_norm for trig in sys2_triggers) or intent in ("COMPARISON", "CAUSE", "SUMMARY", "MECHANISM"):
             return "SYSTEM_2_DELIBERATE"
 
         # Query has multiple clauses or length > 12 words -> System 2

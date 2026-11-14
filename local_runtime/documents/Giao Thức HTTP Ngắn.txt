@@ -1,0 +1,6 @@
+=== Page 1 ===
+1. GIAO THỨC HTTP VÀ CƠ CHẾ HOẠT ĐỘNG:
+- HTTP (Hypertext Transfer Protocol) là giao thức truyền tải siêu văn bản ở tầng ứng dụng theo mô hình Client-Server.
+- Giao thức hoạt động theo cơ chế Request-Response phi trạng thái (stateless), sử dụng các phương thức phổ biến như GET, POST, PUT, DELETE.
+- Ví dụ: Khi trình duyệt gửi yêu cầu GET /index.html, máy chủ phản hồi mã trạng thái 200 OK kèm nội dung trang web.
+- Phiên bản HTTPS bổ sung lớp mã hóa TLS/SSL để bảo vệ tính toàn vẹn và bảo mật dữ liệu trên đường truyền.

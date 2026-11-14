@@ -47,6 +47,25 @@ class CoherentAnswerComposer:
         "bao gom", "thanh phan",
     }
 
+    COMPARISON_TERMS = {
+        "so voi", "so sanh", "doi chieu", "khac voi", "khac biet",
+        "vuot troi", "tot hon", "kem hon", "nhanh hon", "hieu qua hon",
+        "toi uu hon", "cao hon", "thap hon", "nguoc lai", "trai lai",
+        "trong khi do", "trong khi", "doi lap", "tuong phan",
+        "compared to", "in comparison", "versus", "outperforms",
+        "better than", "faster than", "higher than", "lower than",
+        "unlike", "whereas", "in contrast",
+    }
+
+    CAUSAL_TERMS = {
+        "dan den", "gay ra", "tao ra", "tao nen", "nho do", "ket qua la",
+        "vi the", "boi vi", "do do", "vi vay", "nguyen nhan la",
+        "nguyen nhan do", "keo theo", "lam cho", "he qua",
+        "tac dong den", "anh huong den", "nhan qua",
+        "leads to", "led to", "caused by", "results in", "resulted in",
+        "therefore", "as a result", "consequently", "because of", "due to",
+    }
+
     def __init__(self):
         pass
 
@@ -66,6 +85,39 @@ class CoherentAnswerComposer:
             return "metric"
 
         # 3. Mechanism / Architecture
+        if any(term in s_norm for term in self.MECHANISM_TERMS):
+            return "mechanism"
+
+        return "elaboration"
+
+    def classify_discourse_dimension(self, sentence: str) -> str:
+        """
+        Classifies a candidate sentence into extended discourse dimensions for Sovereign Brain 4.0:
+        'limitation', 'comparison', 'causal', 'metric', 'mechanism', or 'elaboration'.
+        """
+        s_norm = strip_accents(sentence.lower())
+
+        # 1. Explicit / Strong Limitation
+        if any(term in s_norm for term in ("han che", "nhuoc diem", "khuyet diem", "yeu diem")):
+            return "limitation"
+
+        # 2. Comparative contrast
+        if any(term in s_norm for term in self.COMPARISON_TERMS) or bool(re.search(r"\bvs\.?\b", sentence, re.IGNORECASE)):
+            return "comparison"
+
+        # 3. General Limitation / Constraint
+        if any(term in s_norm for term in self.LIMITATION_TERMS):
+            return "limitation"
+
+        # 4. Causal chain / effect
+        if any(term in s_norm for term in self.CAUSAL_TERMS):
+            return "causal"
+
+        # 5. Quantitative Metric / Experimental Evidence
+        if self.METRIC_REGEX.search(sentence):
+            return "metric"
+
+        # 6. Mechanism / Architecture
         if any(term in s_norm for term in self.MECHANISM_TERMS):
             return "mechanism"
 
@@ -189,8 +241,8 @@ class CoherentAnswerComposer:
                 l_body = f"Tuy nhiên, tài liệu cũng lưu ý rằng {self._lower_first(l_sent)} {l_cit}"
             composed_parts.append(l_body)
             key_points.append(f"{l_sent} {l_cit}")
-        elif elaboration_candidate and answer_mode == "comprehensive":
-            # In comprehensive mode, include complementary structural detail if no limitation was found
+        elif elaboration_candidate and answer_mode in ("comprehensive", "detailed"):
+            # In comprehensive/detailed mode, include complementary structural detail if no limitation was found
             e_sent = self._clean_sentence(elaboration_candidate["sentence"])
             e_cit = elaboration_candidate.get("citation_label", f"[{len(active_citations)}]")
             e_body = f"Cụ thể hơn, {self._lower_first(e_sent)} {e_cit}"
@@ -200,4 +252,84 @@ class CoherentAnswerComposer:
         # Combine into cohesive paragraph
         composed_prose = " ".join(composed_parts).strip()
         return composed_prose, key_points, active_citations
+
+    def synthesize_comparative_block(
+        self,
+        candidates: List[Dict[str, Any]],
+        max_points: int = 5,
+    ) -> str:
+        """
+        Synthesizes a structured comparative block from candidate evidence for Sovereign Brain 4.0.
+        Formats with clean markdown using ONLY **bold** and `code` (ZERO ### headings, ZERO *italic*).
+
+        Example output:
+        ⚖️ **Đối chiếu đa chiều từ chứng cứ:**
+        - **So sánh & Đối chiếu** (`2. Kết quả Thực nghiệm`): Mô hình đạt tỷ lệ giảm 87,5% chi phí token so với RAG truyền thống. [2]
+        - **Số liệu & Thực nghiệm** (`3. Đo đạc`): Độ trễ trung bình đạt 18.2 ms trên RTX 3050. [1]
+        """
+        if not candidates:
+            return ""
+
+        # Deduplicate candidates by sentence
+        seen_sentences: Set[str] = set()
+        unique_cands: List[Dict[str, Any]] = []
+        for c in candidates:
+            sent = c.get("sentence", "").strip()
+            if not sent:
+                continue
+            sent_norm = strip_accents(sent.lower())
+            if sent_norm in seen_sentences:
+                continue
+            seen_sentences.add(sent_norm)
+            unique_cands.append(c)
+
+        if not unique_cands:
+            return ""
+
+        # Prioritize comparative points, then metrics, then causal/limitation/mechanism
+        priority_map = {
+            "comparison": 0,
+            "metric": 1,
+            "causal": 2,
+            "limitation": 3,
+            "mechanism": 4,
+            "elaboration": 5,
+        }
+        sorted_cands = sorted(
+            unique_cands,
+            key=lambda c: priority_map.get(
+                self.classify_discourse_dimension(c.get("sentence", "")), 5
+            ),
+        )
+
+        selected = sorted_cands[:max_points] if max_points > 0 else sorted_cands
+
+        role_labels = {
+            "comparison": "So sánh & Đối chiếu",
+            "metric": "Số liệu & Thực nghiệm",
+            "causal": "Tác động & Hệ quả",
+            "limitation": "Lưu ý & Giới hạn",
+            "mechanism": "Cơ chế & Cấu trúc",
+            "elaboration": "Thông tin chứng cứ",
+        }
+
+        lines = ["⚖️ **Đối chiếu đa chiều từ chứng cứ:**"]
+        for c in selected:
+            raw_sent = c.get("sentence", "").strip(" \t\n-–—")
+            if not raw_sent:
+                continue
+            clean_sent = raw_sent[0].upper() + raw_sent[1:] if len(raw_sent) > 1 else raw_sent.upper()
+            if clean_sent[-1] not in ".!?":
+                clean_sent += "."
+
+            cit = c.get("citation_label", "").strip() if c.get("citation_label") else ""
+            cit_str = f" {cit}" if cit else ""
+            sec = c.get("section_title", "").strip() if c.get("section_title") else ""
+            role = self.classify_discourse_dimension(raw_sent)
+            role_title = role_labels.get(role, "Điểm đối chiếu")
+
+            sec_tag = f" (`{sec}`)" if sec and sec not in {"DOC", "Section", "Nội dung", "Phần nội dung"} else ""
+            lines.append(f"- **{role_title}**{sec_tag}: {clean_sent}{cit_str}")
+
+        return "\n".join(lines)
 
