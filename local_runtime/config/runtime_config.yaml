@@ -40,5 +40,25 @@ retrieval:
 refusal:
   standard_message: "Không tìm thấy đủ thông tin trong tài liệu để trả lời chắc chắn."
 
+rag_advanced:
+  multi_query:
+    enabled: true
+    num_queries: 3
+    rrf_k: 60
+  sentence_window:
+    enabled: true
+    window_size: 2
+  prompt_engineering:
+    style: "cot_abstractive"
+    template_format: "chatml"
+  rag_tuned_models:
+    preferred_profile: "qwen2_5_1_5b"
+    supported_profiles:
+      - "qwen2_5_0_5b"
+      - "qwen2_5_1_5b"
+      - "qwen2_5_3b"
+      - "phi3_mini"
+      - "llama3_2_1b"
+
 chat_sessions:
   storage_dir: "data/chat_sessions"

@@ -580,17 +580,26 @@ class HybridQAPipeline:
         language: str = "en",
         strict_grounding: bool = True,
         format_style: str = "plain",
+        cot: bool = False,
     ) -> str:
         """
         Build a calibrated prompt for the language model.
-        When strict_grounding is True, enforces the 3 hard constraints:
+        When strict_grounding is True, enforces the hard constraints:
         1. Strict Grounding (no external assumptions)
         2. Anti-Hallucination (authorized to refuse with 'Không biết'/unsupported)
         3. Mandatory Citation markers ([DOC...::P...] or [1])
+        4. CoT (Chain-of-Thought) Abstractive Synthesis when cot=True
         """
         if strict_grounding and context_text:
             try:
                 from src.hybrid_qa.prompt_template import GroundedPromptTemplate
+                if cot:
+                    return GroundedPromptTemplate.build_cot_prompt(
+                        question=question,
+                        context_text=context_text,
+                        language=language,
+                        format_style=format_style,
+                    )
                 return GroundedPromptTemplate.build_prompt(
                     question=question,
                     context_text=context_text,

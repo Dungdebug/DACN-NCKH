@@ -909,3 +909,73 @@ class DocumentAnalyzer:
 
         full_answer = ensure_trailing_question(body, follow_ups)
         return full_answer, dedup_citations
+
+    @classmethod
+    def decompose_and_expand_query(
+        cls,
+        query: str,
+        count: int = 3,
+        model: Optional[Any] = None,
+        tokenizer: Optional[Any] = None,
+    ) -> List[str]:
+        """
+        Multi-Query Decomposition: Generates 3-5 query reformulations
+        to ensure comprehensive ('vét cạn') retrieval across the document store.
+        """
+        from src.hybrid_qa.multi_query import MultiQueryExpander
+        return MultiQueryExpander.generate_queries(query, count=count, model=model, tokenizer=tokenizer)
+
+    @classmethod
+    def expand_evidence_windows(
+        cls,
+        evidence_passages: List[Any],
+        full_text: str = "",
+        full_raw_text: str = "",
+        window_size: int = 2,
+    ) -> List[Any]:
+        """
+        Dynamic Sentence-Window Expansion: Expands each retrieved passage
+        by +window_size sentences before and after from the full document context.
+        """
+        source_text = full_text or full_raw_text
+        from src.hybrid_qa.sentence_window import SentenceWindowExpander
+        expanded_passages = []
+        for p in evidence_passages:
+            raw_p_text = getattr(p, "text", "") if hasattr(p, "text") else str(p)
+            exp_text = SentenceWindowExpander.expand_passage_window(
+                passage_text=raw_p_text,
+                full_text=source_text,
+                window_size=window_size,
+            )
+            if hasattr(p, "__dict__"):
+                import copy
+                cloned = copy.copy(p)
+                cloned.text = exp_text
+                expanded_passages.append(cloned)
+            elif isinstance(p, dict):
+                cloned = dict(p)
+                cloned["text"] = exp_text
+                expanded_passages.append(cloned)
+            else:
+                expanded_passages.append(exp_text)
+        return expanded_passages
+
+    @classmethod
+    def build_cot_grounded_prompt(
+        cls,
+        query: str,
+        evidence_passages: List[Any],
+        language: str = "vi",
+        format_style: str = "plain",
+    ) -> str:
+        """
+        Builds the Chain-of-Thought (CoT) Prompt:
+        [Chỉ thị Hệ thống], [Ngữ cảnh từ tài liệu], [Câu hỏi của người dùng], [Quy trình xử lý bắt buộc]
+        """
+        from src.hybrid_qa.prompt_template import GroundedPromptTemplate
+        return GroundedPromptTemplate.build_cot_prompt(
+            question=query,
+            context_passages=evidence_passages,
+            language=language,
+            format_style=format_style,
+        )

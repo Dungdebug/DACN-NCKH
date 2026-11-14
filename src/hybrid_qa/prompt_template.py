@@ -27,6 +27,21 @@ from typing import Any, Dict, List, Optional, Union
 # HARD CONSTRAINT DEFINITIONS (RÀNG BUỘC CỨNG)
 # -----------------------------------------------------------------------------
 
+COT_SYSTEM_INSTRUCTION_VI = (
+    "Bạn là một chuyên gia phân tích tài liệu. Nhiệm vụ của bạn là đọc các ngữ cảnh được cung cấp "
+    "và trả lời câu hỏi của người dùng một cách mạch lạc, chi tiết và đi thẳng vào trọng tâm."
+)
+
+COT_MANDATORY_PROCESS_VI = (
+    "[Quy trình xử lý bắt buộc]\n\n"
+    "1. Tuyệt đối không chép phạt: Không liệt kê lại các tiêu đề, không copy y nguyên định dạng gạch đầu dòng (*, -) của tài liệu gốc. Hãy dùng ngôn ngữ tự nhiên để diễn đạt lại (Abstractive).\n\n"
+    "2. Cấu trúc trả lời:\n"
+    "   - Mở bài: Trực tiếp trả lời thẳng vào câu hỏi (Ví dụ: \"Tài liệu đề cập đến X loại mã hóa chính...\").\n"
+    "   - Thân bài: Phân tích chi tiết từng loại/từng ý dựa trên ngữ cảnh. Gộp các ý trùng lặp lại với nhau.\n\n"
+    "3. Bám sát trọng tâm: Chỉ trả lời những gì người dùng hỏi. Nếu tài liệu chứa thông tin dư thừa (như bài tập, ví dụ không liên quan), hãy mạnh dạn bỏ qua.\n\n"
+    "4. Trích dẫn: Chèn số trích dẫn [1], [2] một cách tự nhiên vào cuối mỗi câu hoặc mỗi đoạn hoàn chỉnh."
+)
+
 STRICT_GROUNDING_VI = (
     "1. RÀNG BUỘC NGỮ CẢNH (Strict Grounding): Chỉ được phép trả lời dựa trên những thông tin "
     "được cung cấp rõ ràng trong phần 'NGỮ CẢNH TÀI LIỆU' dưới đây. Tuyệt đối KHÔNG suy đoán, "
@@ -197,3 +212,103 @@ class GroundedPromptTemplate:
 
         # Fallback default
         return f"{system_instr}\n\n{ctx_label}:\n{ctx_body}\n\n{q_label}: {question}\n{a_label}:"
+
+    @classmethod
+    def build_cot_prompt(
+        cls,
+        question: str,
+        context_passages: Optional[List[Any]] = None,
+        context_text: Optional[str] = None,
+        language: str = "vi",
+        format_style: str = "plain",
+    ) -> str:
+        """
+        Builds the Chain-of-Thought (CoT) structured prompt:
+        - [Chỉ thị Hệ thống]: Document analyst persona and direct reasoning mandate.
+        - [Ngữ cảnh từ tài liệu]: Evidence passages.
+        - [Câu hỏi của người dùng]: User query.
+        - [Quy trình xử lý bắt buộc]: Abstractive synthesis, Mở bài, Thân bài, Bám sát trọng tâm, Trích dẫn [1], [2].
+        """
+        if context_text is None:
+            if context_passages:
+                ctx_body = cls.format_context_passages(context_passages)
+            else:
+                ctx_body = ""
+        else:
+            ctx_body = context_text.strip()
+
+        is_vi = language in ("vi", "vietnamese")
+        sys_directive = COT_SYSTEM_INSTRUCTION_VI if is_vi else (
+            "You are a Document Analysis Specialist. Read the provided context passages carefully "
+            "and answer the user's question directly, cohesively, thoroughly, and strictly to the point."
+        )
+        proc_directive = COT_MANDATORY_PROCESS_VI if is_vi else (
+            "[Mandatory Reasoning Process]\n\n"
+            "1. Abstractive Synthesis: Do not verbatim copy raw markdown bullets (*, -) or disconnected headings. Rewrite in natural language.\n"
+            "2. Answer Structure:\n"
+            "   - Opening: Directly state the core answer to the question.\n"
+            "   - Body: Analyze each key aspect/category based on context, merging duplicates.\n"
+            "3. Grounded Focus: Focus strictly on what was asked; omit irrelevant noise.\n"
+            "4. Citations: Insert bracketed citations [1], [2] naturally at sentence ends."
+        )
+
+        sys_header = "[Chỉ thị Hệ thống]" if is_vi else "[System Instruction]"
+        ctx_header = "[Ngữ cảnh từ tài liệu]" if is_vi else "[Document Context]"
+        q_header = "[Câu hỏi của người dùng]" if is_vi else "[User Question]"
+
+        if format_style == "plain":
+            return (
+                f"{sys_header}\n{sys_directive}\n\n"
+                f"{ctx_header}\n{ctx_body}\n\n"
+                f"{q_header}\n{question}\n\n"
+                f"{proc_directive}\n\n"
+                f"{STRICT_GROUNDING_VI if is_vi else STRICT_GROUNDING_EN}\n"
+                f"{ANTI_HALLUCINATION_VI if is_vi else ANTI_HALLUCINATION_EN}\n"
+                f"{CITATION_VI if is_vi else CITATION_EN}\n\n"
+                f"[{'Câu trả lời hoàn chỉnh' if is_vi else 'Synthesized Answer'}]:"
+            )
+        elif format_style == "chatml":
+            user_content = (
+                f"{ctx_header}\n{ctx_body}\n\n"
+                f"{q_header}\n{question}\n\n"
+                f"{proc_directive}"
+            )
+            return (
+                f"<|im_start|>system\n{sys_directive}\n"
+                f"{STRICT_GROUNDING_VI if is_vi else STRICT_GROUNDING_EN}\n"
+                f"{ANTI_HALLUCINATION_VI if is_vi else ANTI_HALLUCINATION_EN}\n"
+                f"{CITATION_VI if is_vi else CITATION_EN}<|im_end|>\n"
+                f"<|im_start|>user\n{user_content}<|im_end|>\n"
+                f"<|im_start|>assistant\n"
+            )
+        elif format_style == "phi3":
+            user_content = (
+                f"{ctx_header}\n{ctx_body}\n\n"
+                f"{q_header}\n{question}\n\n"
+                f"{proc_directive}"
+            )
+            return (
+                f"<|system|>\n{sys_directive}\n"
+                f"{STRICT_GROUNDING_VI if is_vi else STRICT_GROUNDING_EN}\n"
+                f"{ANTI_HALLUCINATION_VI if is_vi else ANTI_HALLUCINATION_EN}\n"
+                f"{CITATION_VI if is_vi else CITATION_EN}<|end|>\n"
+                f"<|user|>\n{user_content}<|end|>\n"
+                f"<|assistant|>\n"
+            )
+        elif format_style == "llama3":
+            user_content = (
+                f"{ctx_header}\n{ctx_body}\n\n"
+                f"{q_header}\n{question}\n\n"
+                f"{proc_directive}"
+            )
+            return (
+                f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
+                f"{sys_directive}\n"
+                f"{STRICT_GROUNDING_VI if is_vi else STRICT_GROUNDING_EN}\n"
+                f"{ANTI_HALLUCINATION_VI if is_vi else ANTI_HALLUCINATION_EN}\n"
+                f"{CITATION_VI if is_vi else CITATION_EN}<|eot_id|>"
+                f"<|start_header_id|>user<|end_header_id|>\n\n"
+                f"{user_content}<|eot_id|>"
+                f"<|start_header_id|>assistant<|end_header_id|>\n\n"
+            )
+        return cls.build_prompt(question, context_passages, context_text, language, format_style)

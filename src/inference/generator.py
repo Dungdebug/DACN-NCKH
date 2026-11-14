@@ -20,6 +20,7 @@ Theoretical Foundations:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 
@@ -46,28 +47,86 @@ SUPPORTED_SLMS: Dict[str, SLMProfile] = {
         max_context_length=2048,
         chat_template_format="plain",
     ),
+    "smollm2_135m_instruct": SLMProfile(
+        name="SmolLM2-135M-Instruct",
+        hf_repo_id="HuggingFaceTB/SmolLM2-135M-Instruct",
+        parameter_count_str="134.5M",
+        max_context_length=2048,
+        chat_template_format="chatml",
+    ),
+    "qwen2_5_0_5b": SLMProfile(
+        name="Qwen-2.5-0.5B-Instruct",
+        hf_repo_id="Qwen/Qwen2.5-0.5B-Instruct",
+        parameter_count_str="0.49B",
+        max_context_length=32768,
+        chat_template_format="chatml",
+    ),
     "qwen2_5_1_5b": SLMProfile(
-        name="Qwen-2.5-1.5B",
+        name="Qwen-2.5-1.5B-Instruct",
         hf_repo_id="Qwen/Qwen2.5-1.5B-Instruct",
         parameter_count_str="1.54B",
         max_context_length=32768,
         chat_template_format="chatml",
     ),
+    "qwen2_5_3b": SLMProfile(
+        name="Qwen-2.5-3B-Instruct",
+        hf_repo_id="Qwen/Qwen2.5-3B-Instruct",
+        parameter_count_str="3.09B",
+        max_context_length=32768,
+        chat_template_format="chatml",
+    ),
     "phi3_mini": SLMProfile(
-        name="Phi-3-Mini-4K",
+        name="Phi-3-Mini-4K-Instruct",
         hf_repo_id="microsoft/Phi-3-mini-4k-instruct",
-        parameter_count_str="3.8B",
+        parameter_count_str="3.82B",
         max_context_length=4096,
         chat_template_format="phi3",
     ),
     "llama3_2_1b": SLMProfile(
-        name="Llama-3.2-1B",
+        name="Llama-3.2-1B-Instruct",
         hf_repo_id="meta-llama/Llama-3.2-1B-Instruct",
         parameter_count_str="1.24B",
         max_context_length=8192,
         chat_template_format="llama3",
     ),
 }
+
+
+def get_rag_tuned_profile(name_or_alias: str) -> SLMProfile:
+    """Resolves a RAG-tuned model alias or fallback to Qwen-2.5-1.5B."""
+    needle = re.sub(r"[^a-z0-9]", "", (name_or_alias or "").lower())
+    for key, prof in SUPPORTED_SLMS.items():
+        k_clean = re.sub(r"[^a-z0-9]", "", key.lower())
+        n_clean = re.sub(r"[^a-z0-9]", "", prof.name.lower())
+        r_clean = re.sub(r"[^a-z0-9]", "", prof.hf_repo_id.lower())
+        if needle in k_clean or needle in n_clean or needle in r_clean or k_clean in needle:
+            return prof
+    return SUPPORTED_SLMS["qwen2_5_1_5b"]
+
+
+def format_rag_instruct_prompt(
+    profile: SLMProfile,
+    question: str,
+    context_text: str = "",
+    cot: bool = True,
+    language: str = "vi",
+) -> str:
+    """Formats prompt with the exact Chat template required by the RAG-tuned model."""
+    from src.hybrid_qa.prompt_template import GroundedPromptTemplate
+
+    if cot:
+        return GroundedPromptTemplate.build_cot_prompt(
+            question=question,
+            context_text=context_text,
+            language=language,
+            format_style=profile.chat_template_format,
+        )
+    return GroundedPromptTemplate.build_prompt(
+        question=question,
+        context_text=context_text,
+        language=language,
+        format_style=profile.chat_template_format,
+    )
 
 
 class TextGenerator:
