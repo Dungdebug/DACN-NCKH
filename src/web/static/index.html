@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NL DocChat — Website Chatbot Hỏi Đáp Tài Liệu (SA-CMS &amp; Nested Learning)</title>
   <meta name="description" content="Hệ thống Chatbot hỏi đáp tài liệu dựa trên Nested Learning (SA-CMS &amp; Hybrid QA) vận hành 100% Offline." />
-  <link rel="stylesheet" href="/static/css/app.css?v=2.1" />
+  <link rel="stylesheet" href="/static/css/app.css?v=2.2" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237257FF'/%3E%3Cpath d='M16 6l2.2 5.8L24 14l-5.8 2.2L16 22l-2.2-5.8L8 14l5.8-2.2L16 6z' fill='white'/%3E%3C/svg%3E" />
   <script>
     (function () {
@@ -93,14 +93,19 @@
           <div class="sidebar-list" id="sidebar-documents-list">
             <!-- Populated dynamically from /api/documents -->
           </div>
-          <button type="button" class="sidebar-add-doc-btn" id="btn-sidebar-add-doc">
-            <span class="add-doc-dashed-box" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14"/><path d="M12 5v14"/>
-              </svg>
-            </span>
-            <span>Thêm tài liệu</span>
-          </button>
+          <div class="sidebar-doc-actions">
+            <button type="button" class="sidebar-add-doc-btn" id="btn-sidebar-add-doc">
+              <span class="add-doc-dashed-box" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"/><path d="M12 5v14"/>
+                </svg>
+              </span>
+              <span>Thêm tài liệu</span>
+            </button>
+            <button type="button" class="sidebar-add-doc-btn sidebar-fetch-online-btn" id="btn-sidebar-fetch-online" title="Nạp tài liệu trực tiếp từ Wikipedia hoặc arXiv API">
+              <span>🌐 Nạp API (Wiki/arXiv)</span>
+            </button>
+          </div>
         </div>
 
         <!-- Explicit 6-Stage SA-CMS Memory Ingestion Status Card -->
@@ -263,12 +268,32 @@
             <span class="hide-sm">Trình diễn</span>
           </button>
 
+          <button type="button" class="header-ghost-btn" id="btn-open-comparison-dashboard" title="Mở nhanh Dashboard So sánh Gốc vs Cải tiến, Thông số Huấn luyện &amp; Online vs Offline">
+            <span aria-hidden="true">📊</span>
+            <span class="hide-xs">Dashboard So sánh</span>
+          </button>
+
           <button type="button" class="header-ghost-btn" id="btn-open-research-lab" title="Mở phòng thí nghiệm đối sánh mô hình, số liệu &amp; biểu đồ Q1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/>
             </svg>
             <span class="hide-xs">Research Lab</span>
           </button>
+
+          <div class="header-export-group" role="group" aria-label="Xuất báo cáo Office">
+            <button type="button" class="header-ghost-btn" id="btn-export-word" title="Xuất phiên hỏi đáp hiện tại hoặc báo cáo so sánh ra file Word (.docx)">
+              <span aria-hidden="true">📄</span>
+              <span class="hide-sm">Word</span>
+            </button>
+            <button type="button" class="header-ghost-btn" id="btn-export-excel" title="Xuất phiên hỏi đáp hiện tại hoặc bảng số liệu ra file Excel (.xlsx)">
+              <span aria-hidden="true">📊</span>
+              <span class="hide-sm">Excel</span>
+            </button>
+            <button type="button" class="header-ghost-btn" id="btn-export-pptx" title="Xuất phiên hỏi đáp hiện tại hoặc slide báo cáo ra file PowerPoint (.pptx)">
+              <span aria-hidden="true">📽️</span>
+              <span class="hide-sm">PPTX</span>
+            </button>
+          </div>
 
           <button type="button" class="header-ghost-btn header-danger-btn" id="btn-clear-chat" hidden title="Bắt đầu cuộc trò chuyện sạch mới">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -380,6 +405,17 @@
                 <button type="button" class="composer-pill-btn composer-length-pill" id="btn-cycle-length" title="Nhấp để đổi độ dài câu trả lời (Ngắn gọn / Cân bằng / Chi tiết)">
                   <span id="lbl-composer-length">Cân bằng</span>
                 </button>
+
+                <button type="button" class="composer-pill-btn composer-online-pill" id="btn-toggle-online-api" aria-pressed="false" title="Mặc định Tắt (Air-Gap Offline). Bật để cho phép tự gọi Wikipedia/arXiv/OpenAlex/EuropePMC khi câu hỏi vượt kho local.">
+                  <span id="lbl-online-api">🌐 Auto API ngoài</span>
+                </button>
+
+                <div class="thinking-mode-segmented" id="thinking-mode-selector" role="group" aria-label="Chế độ tư duy WaveCMS-R²">
+                  <button type="button" class="thinking-seg-btn active" data-thinking-mode="fast" aria-pressed="true" title="Trả lời nhanh trực tiếp (mặc định)">⚡ Nhanh</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="deep" aria-pressed="false" title="Suy nghĩ sâu đa bước và tự kiểm chứng công thức">🧠 Suy nghĩ sâu</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="broad" aria-pressed="false" title="Tư duy rộng 5 khía cạnh × 4 mức phân giải Haar">🌐 Tư duy rộng</button>
+                  <button type="button" class="thinking-seg-btn" data-thinking-mode="deep_broad" aria-pressed="false" title="Kết hợp Suy nghĩ sâu và Tư duy rộng">🔥 Sâu + Rộng</button>
+                </div>
               </div>
 
               <button type="submit" class="composer-send-btn" id="btn-send" disabled aria-label="Gửi câu hỏi" title="Gửi câu hỏi (Enter)">
@@ -523,15 +559,23 @@
         </div>
 
         <div class="rlab-tabs-bar">
-          <button type="button" class="rlab-tab active" data-rlab-tab="arena">Đối sánh 4 Mô hình</button>
+          <button type="button" class="rlab-tab active" data-rlab-tab="baseline-compare">📊 So sánh Gốc vs Cải tiến</button>
+          <button type="button" class="rlab-tab" data-rlab-tab="arena">Đối sánh 4 Mô hình</button>
           <button type="button" class="rlab-tab" data-rlab-tab="demos">7 Kịch bản Bảo vệ</button>
           <button type="button" class="rlab-tab" data-rlab-tab="metrics">Số liệu RQ1–RQ5</button>
           <button type="button" class="rlab-tab" data-rlab-tab="figures">4 Biểu đồ Q1 (300 DPI)</button>
         </div>
 
         <div class="modal-body">
-          <!-- Tab 1: Head-to-Head Method Comparison Arena -->
-          <div class="rlab-panel" id="rlab-panel-arena">
+          <!-- Tab 1: Baseline vs Proposed Comparison Dashboard -->
+          <div class="rlab-panel" id="rlab-panel-baseline-compare">
+            <div id="rlab-baseline-compare-content" class="baseline-compare-dashboard">
+              <!-- Populated from GET /api/comparison/dashboard -->
+            </div>
+          </div>
+
+          <!-- Tab 1b: Head-to-Head Method Comparison Arena -->
+          <div class="rlab-panel" id="rlab-panel-arena" hidden>
             <div class="arena-query-bar">
               <input type="text" id="arena-query-input" class="modal-input" value="Tuyến đường sắt tốc độ cao Bắc - Nam có chiều dài bao nhiêu km và tốc độ thiết kế là bao nhiêu?" placeholder="Nhập câu hỏi cần đối sánh giữa B1, B2, P1 và P2..." />
               <button type="button" class="btn-primary" id="btn-run-arena">▶ Chạy Đối chiếu</button>
@@ -593,11 +637,61 @@
       </div>
     </div>
 
+    <!-- Modal 3: Fetch Online Document (Wikipedia / arXiv) -->
+    <div class="modal-overlay" id="modal-fetch-online" hidden>
+      <div class="modal-card modal-sm" role="dialog" aria-modal="true" aria-labelledby="fetch-online-title">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title" id="fetch-online-title">🌐 Nạp Tài liệu từ API Mạng</h2>
+            <p class="modal-subtitle">Tải trực tiếp tài liệu từ 8 nguồn API công khai (Wikipedia, arXiv, OpenAlex, Europe PMC, QASPER, SQuAD v2, SciQ, PubMedQA) vào kho WaveCMS.</p>
+          </div>
+          <button type="button" class="icon-btn" id="btn-close-fetch-modal" aria-label="Đóng hộp thoại">✕</button>
+        </div>
+        <form class="modal-body fetch-online-form" id="fetch-online-form">
+          <div class="fetch-form-row">
+            <label class="fetch-field">
+              <span>Nguồn API</span>
+              <select id="fetch-online-source" class="modal-input">
+                <option value="wikipedia_vi">Wikipedia (VI)</option>
+                <option value="wikipedia_en">Wikipedia (EN)</option>
+                <option value="arxiv">arXiv (AI/CS)</option>
+                <option value="openalex">OpenAlex (Học thuật Mở)</option>
+                <option value="europepmc">Europe PMC (Y sinh)</option>
+                <option value="qasper">QASPER (Paper QA)</option>
+                <option value="squad_v2">SQuAD v2</option>
+                <option value="sciq">SciQ (Khoa học)</option>
+                <option value="pubmedqa">PubMedQA (Y học)</option>
+              </select>
+            </label>
+            <label class="fetch-field" id="fetch-lang-field" style="display: none;">
+              <span>Ngôn ngữ</span>
+              <select id="fetch-online-lang" class="modal-input">
+                <option value="vi">Tiếng Việt (vi)</option>
+                <option value="en">English (en)</option>
+              </select>
+            </label>
+            <label class="fetch-field">
+              <span>Số lượng (1–20)</span>
+              <input type="number" id="fetch-online-max" class="modal-input" min="1" max="20" value="3" />
+            </label>
+          </div>
+          <label class="fetch-field">
+            <span>Từ khóa / Tiêu đề bài viết (tùy chọn với QASPER / SQuAD v2 / SciQ / PubMedQA)</span>
+            <input type="text" id="fetch-online-query" class="modal-input" placeholder="Ví dụ: Trí tuệ nhân tạo, Đường sắt cao tốc, hoặc Attention Is All You Need..." />
+          </label>
+          <div class="raw-doc-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-fetch-online">Hủy</button>
+            <button type="submit" class="btn-primary" id="btn-submit-fetch-online">Tải &amp; Lập chỉ mục</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Hidden File Input & Toast Container -->
     <input type="file" id="hidden-file-input" accept=".pdf,.docx,.txt,.md" multiple hidden />
     <div class="toast-stack" id="toast-container" aria-live="polite"></div>
   </div>
 
-  <script src="/static/js/app.js?v=2.1"></script>
+  <script src="/static/js/app.js?v=2.2"></script>
 </body>
 </html>

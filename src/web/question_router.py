@@ -16,6 +16,7 @@ STRICT RULE: NO TRAINING, NO GRADIENT UPDATES, FROZEN INFERENCE ONLY.
 """
 
 import re
+import unicodedata
 from enum import Enum
 from typing import Dict, Any, List, Optional, Tuple
 
@@ -51,6 +52,8 @@ class QuestionRouter:
         r"\bsummary\b", r"\bsummarize\b", r"\boverview\b",
         r"\bnội dung chính\b", r"\bkhái quát\b", r"\btổng quan\b", r"\bđại ý\b",
         r"\bý chính\b", r"\bđiểm chính\b", r"\bđiểm nổi bật\b", r"\btrọng tâm\b",
+        r"\bphần chính\b", r"\blấy phần chính\b", r"\blấy ý chính\b",
+        r"\brút ra ý chính\b", r"\bnhững ý chính\b", r"\bý cốt lõi\b",
         r"\bgạch đầu dòng\b", r"\bcho vài ý\b", r"\bnói chung là\b",
         r"\bkể cái gì\b", r"\bviết cái gì\b", r"\bnói cái gì\b",
         r"\bý nào quan trọng\b", r"\bcó gì quan trọng\b",
@@ -128,6 +131,96 @@ class QuestionRouter:
     ]
 
     @classmethod
+    def classify_section_granularity(cls, query: str) -> str:
+        """
+        Determines desired answer granularity for section/summary queries:
+        - 'full': return exhaustive verbatim contents of the requested section/subsections
+        - 'key_points': extract 3-5 salient bullet takeaways ('lấy phần chính / ý chính')
+        - 'focused': target a narrow aspect (formula, example, comparison, causal reason)
+        """
+        if not query or not query.strip():
+            return "focused"
+
+        raw = unicodedata.normalize("NFD", query.lower())
+        q_norm = "".join(ch for ch in raw if unicodedata.category(ch) != "Mn")
+        q_norm = re.sub(r"\s+", " ", q_norm.replace("đ", "d")).strip()
+
+        def _match_cues(cues: Tuple[str, ...]) -> bool:
+            return any(re.search(r"\b" + re.escape(c) + r"\b", q_norm) for c in cues)
+
+        key_points_cues = (
+            "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
+            "rut ra y chinh", "nhung y chinh", "y cot loi", "noi dung chinh",
+            "diem chinh", "diem noi bat", "trong tam", "cot loi",
+            "tom tat", "tom luoc", "tom gon", "gach dau dong", "dai y",
+            "key point", "main point", "takeaway",
+        )
+        explicit_kp_cues = (
+            "phan chinh", "lay phan chinh", "y chinh", "lay y chinh",
+            "rut ra y chinh", "nhung y chinh", "y cot loi", "gach dau dong",
+            "key point", "main point", "takeaway",
+        )
+        explain_cues = (
+            "giai thich", "de hieu", "ngan gon de hieu", "hieu nom na",
+            "noi de hieu", "tom tat ngan gon", "tom gon de hieu",
+            "giai thich ngan", "explain briefly", "in simple terms",
+        )
+        full_override_cues = (
+            "toan bo", "lay het", "day du", "co gi lay het",
+            "tat ca", "toan van", "liet ke het",
+        )
+        full_cues = full_override_cues + (
+            "chi tiet", "trong muc", "trong phan", "trong chuong", "trong bai",
+            "bao gom nhung gi", "gom nhung gi", "co nhung gi",
+        )
+        focused_cues = (
+            "vi du", "minh hoa", "cong thuc", "nguyen ly", "co che",
+            "uu diem", "nhuoc diem", "uu nhuoc diem", "so sanh", "phan biet",
+            "tai sao", "vi sao", "nguyen nhan", "an ninh", "tham ma",
+            "tan cong", "cac buoc", "quy trinh",
+        )
+
+        has_whats_in_section = bool(
+            re.search(
+                r"\b(?:muc|phan|chuong|bai|topic|chu de|section|chapter)\b.*\bco\s+(?:nhung\s+)?gi\b",
+                q_norm,
+            )
+            or re.search(
+                r"\bco\s+(?:nhung\s+)?gi\s+(?:trong|o)\s+(?:muc|phan|chuong|bai|topic|chu de|section|chapter)\b",
+                q_norm,
+            )
+        )
+        has_override_full = _match_cues(full_override_cues)
+        has_explicit_kp = _match_cues(explicit_kp_cues)
+        has_explain = _match_cues(explain_cues)
+        has_key_points = _match_cues(key_points_cues)
+        has_full = has_override_full or has_whats_in_section or _match_cues(full_cues)
+        has_focused = _match_cues(focused_cues)
+
+        if has_override_full:
+            return "full"
+        if has_explicit_kp:
+            return "key_points"
+        if has_explain and "chi tiet" not in q_norm and not has_whats_in_section:
+            return "explain"
+        if has_key_points and not has_override_full:
+            return "key_points"
+        if has_full and (has_override_full or not has_focused):
+            return "full"
+
+        # Bare section lookup without narrow aspect (e.g. "3. PHÁ MÃ", "mục 2", "nội dung phần 'PHÁ MÃ'")
+        if not has_focused and (
+            cls.TOPIC_SCOPE_PATTERN.search(query)
+            or any(re.search(pat, query.lower()) for pat in cls.SECTION_PATTERNS)
+            or cls.NUMBERED_HEADING_PATTERN.match(query.strip())
+            or cls.GENERAL_QUOTED_PATTERN.search(query)
+        ):
+            if not re.search(r"\b(?:khai niem|dinh nghia)\b", q_norm) or "noi dung" in q_norm:
+                return "full"
+
+        return "focused"
+
+    @classmethod
     def classify_intent(
         cls,
         query: str,
@@ -137,6 +230,7 @@ class QuestionRouter:
         Classifies query intent into QuestionRoute and metadata clues.
         """
         q_norm = query.lower().strip()
+        granularity = cls.classify_section_granularity(query)
 
         # 1. Check Out-of-domain obvious queries
         for pat in cls.OUT_OF_DOMAIN_PATTERNS:
@@ -177,6 +271,7 @@ class QuestionRouter:
                 "matched_pattern": cls.TOPIC_SCOPE_PATTERN.pattern,
                 "target_section": target,
                 "scope_type": "topic_alias",
+                "section_granularity": granularity,
                 "explanation": f"Tra cứu thông tin theo {target} cụ thể.",
             }
 
@@ -187,6 +282,7 @@ class QuestionRouter:
                 "matched_pattern": cls.NUMBERED_HEADING_PATTERN.pattern,
                 "target_section": target,
                 "scope_type": "numbered_heading",
+                "section_granularity": granularity,
                 "explanation": f"Tra cứu thông tin theo mục '{target}' cụ thể.",
             }
 
@@ -200,6 +296,7 @@ class QuestionRouter:
                 "matched_pattern": getattr(quoted_match, "re", cls.GENERAL_QUOTED_PATTERN).pattern,
                 "target_section": target,
                 "scope_type": "quoted_scope",
+                "section_granularity": granularity,
                 "explanation": f"Tra cứu thông tin theo phạm vi '{target}'.",
             }
 
@@ -210,6 +307,7 @@ class QuestionRouter:
                 return QuestionRoute.SECTION_LOOKUP, {
                     "matched_pattern": pat,
                     "target_section": match.group(0),
+                    "section_granularity": granularity,
                     "explanation": "Tra cứu thông tin theo chương/mục cụ thể.",
                 }
 
@@ -218,6 +316,7 @@ class QuestionRouter:
             if re.search(pat, q_norm, re.IGNORECASE):
                 return QuestionRoute.DOCUMENT_SUMMARY, {
                     "matched_pattern": pat,
+                    "section_granularity": granularity,
                     "explanation": "Yêu cầu tóm tắt/khái quát nội dung tài liệu.",
                 }
 
@@ -244,6 +343,8 @@ class QuestionRouter:
                 r"\bcho\s+(vài\s+)?gạch\s+đầu\s+dòng\b",
                 r"\bý\s+(nào\s+)?quan\s+trọng\b",
                 r"\b(điểm|ý)\s+chính\b",
+                r"\blấy\s+(phần|ý)\s+chính\b",
+                r"\brút\s+ra\s+ý\s+chính\b",
                 r"\btóm\s+(lược|gọn|tắt)\b",
                 r"\bnói\s+chung\b",
                 r"\bquan\s+trọng\s+nhất\b",
@@ -252,6 +353,7 @@ class QuestionRouter:
                 if re.search(ep, q_norm, re.IGNORECASE):
                     return QuestionRoute.DOCUMENT_SUMMARY, {
                         "matched_pattern": ep,
+                        "section_granularity": granularity,
                         "explanation": "Câu hỏi thăm dò/khái quát nội dung về tài liệu đang ghim.",
                     }
 

@@ -1,0 +1,17 @@
+{
+  "target_tokens": 500000,
+  "actual_tokens_trained": 500026,
+  "total_epochs": 2,
+  "total_time_seconds": 124.21,
+  "average_throughput_tokens_sec": 4025.77,
+  "history": [
+    {
+      "epoch": 2,
+      "cumulative_tokens": 500026,
+      "train_loss": 2.7024,
+      "tokens_per_sec": 2820.52,
+      "peak_vram_mb": 965.81,
+      "epoch_duration_sec": 124.09
+    }
+  ]
+}

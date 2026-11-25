@@ -177,17 +177,53 @@ class LocalModelLoader:
             logger.exception(self.model_error)
             return None, None
 
+    def _get_registered_checkpoint_paths(self) -> Dict[str, Path]:
+        """Collects valid checkpoint paths from local_runtime/checkpoints and config (including expanded API checkpoints)."""
+        candidates: Dict[str, Path] = {}
+        ckpt_dir = ROOT_DIR / "local_runtime" / "checkpoints"
+        if ckpt_dir.exists():
+            for p in sorted(ckpt_dir.glob("*.pt")):
+                candidates[p.name] = p
+
+        ckpt_cfg = self.config.get("checkpoints", {})
+        configured_keys = (
+            "current_path",
+            "extended_bilingual_checkpoint",
+            "base_phase4_checkpoint",
+            "final_external_checkpoint",
+            "expanded_api_checkpoint",
+        )
+        for key in configured_keys:
+            rel = ckpt_cfg.get(key)
+            if rel:
+                p = (ROOT_DIR / rel) if not Path(rel).is_absolute() else Path(rel)
+                if p.exists():
+                    candidates.setdefault(p.name, p)
+
+        default_expanded = ROOT_DIR / "checkpoints" / "train_api_expanded" / "cms_20m_tokens_final.pt"
+        if default_expanded.exists():
+            candidates.setdefault(default_expanded.name, default_expanded)
+
+        return candidates
+
     def switch_checkpoint(self, checkpoint_name: str) -> Dict[str, Any]:
         """
-        Allows switching between CURRENT_VALID_CHECKPOINT and future EXTERNAL-GPU CHECKPOINT.
+        Allows switching between CURRENT_VALID_CHECKPOINT, API-expanded checkpoints, and EXTERNAL-GPU CHECKPOINT.
         """
         ckpt_dir = ROOT_DIR / "local_runtime" / "checkpoints"
-        target_path = ckpt_dir / checkpoint_name
+        candidates = self._get_registered_checkpoint_paths()
+        target_path = candidates.get(checkpoint_name)
+        if target_path is None:
+            rel_candidate = ROOT_DIR / checkpoint_name
+            if rel_candidate.exists() and rel_candidate.suffix == ".pt":
+                target_path = rel_candidate
+            else:
+                target_path = ckpt_dir / checkpoint_name
 
         if not target_path.exists():
             return {
                 "success": False,
-                "error": f"Checkpoint '{checkpoint_name}' not found in {ckpt_dir}.",
+                "error": f"Checkpoint '{checkpoint_name}' not found in {ckpt_dir} or registered checkpoint paths.",
                 "active_checkpoint": self.active_checkpoint_name,
             }
 
@@ -206,9 +242,14 @@ class LocalModelLoader:
                     self.model.cms_norm.load_state_dict(state["cms_norm_state_dict"], strict=False)
                 self.model.cms.save_initial_state()
 
-            self.active_checkpoint_name = checkpoint_name
+            self.active_checkpoint_name = target_path.name
             self.active_checkpoint_path = str(target_path)
-            self.active_checkpoint_status = "EXTERNAL_GPU_VALIDATED" if "external" in checkpoint_name.lower() else "CURRENT_VALID_CHECKPOINT"
+            if "external" in target_path.name.lower():
+                self.active_checkpoint_status = "EXTERNAL_GPU_VALIDATED"
+            elif "20m" in target_path.name.lower() or "expanded" in str(target_path).lower():
+                self.active_checkpoint_status = "API_EXPANDED_VALIDATED"
+            else:
+                self.active_checkpoint_status = "CURRENT_VALID_CHECKPOINT"
 
             return {
                 "success": True,
@@ -229,8 +270,13 @@ class LocalModelLoader:
 
         model_ready = (model_dir / "model.safetensors").exists()
         tokenizer_ready = (tokenizer_dir / "tokenizer.json").exists()
-        ckpt_ready = (ckpt_dir / "cms_3lvl_seed_42.pt").exists() or (self.active_checkpoint_path and Path(self.active_checkpoint_path).exists())
-        available_ckpts = sorted([p.name for p in ckpt_dir.glob("*.pt")]) if ckpt_dir.exists() else []
+        registered = self._get_registered_checkpoint_paths()
+        ckpt_ready = (
+            (ckpt_dir / "cms_3lvl_seed_42.pt").exists()
+            or bool(registered)
+            or bool(self.active_checkpoint_path and Path(self.active_checkpoint_path).exists())
+        )
+        available_ckpts = sorted(registered.keys())
 
         return {
             "model": "READY" if (model_ready and self.model_loaded) else ("PRESENT (NOT LOADED)" if model_ready else "MISSING"),

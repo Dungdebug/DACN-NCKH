@@ -138,13 +138,6 @@ def strip_passage_artifacts(text: str) -> str:
         l_strip = line.strip()
         if not l_strip:
             continue
-        # Strip leading bullet markers on lines
-        is_bullet = bool(re.match(r"^[\*\-\•\+\–\—]\s*", l_strip))
-        if is_bullet:
-            l_strip = re.sub(r"^[\*\-\•\+\–\—]\s*", "", l_strip).strip()
-            # If previous line had no terminal punctuation, add a period to separate clauses cleanly
-            if lines and not lines[-1].endswith((".", "!", "?", ":", ";")):
-                lines[-1] = f"{lines[-1]}."
         # Skip standalone markdown headers that have no sentence punctuation or content
         if l_strip.startswith("#"):
             header_text = l_strip.lstrip("#").strip()
@@ -158,53 +151,6 @@ def strip_passage_artifacts(text: str) -> str:
 
     joined = " ".join(lines)
     return re.sub(r"\s+", " ", joined).strip()
-
-
-TECH_ACRONYMS = {
-    "RSA", "AES", "DES", "MD5", "SHA", "MAC", "HMAC", "ECC", "PKI", "OTP",
-    "SLM", "LLM", "RAG", "NLP", "API", "GPU", "CPU", "RAM", "ROM", "CMS", "SA-CMS",
-    "BERT", "BGE", "HNSW", "BM25", "TF-IDF", "POS", "NER", "SVO",
-}
-
-
-def clean_sentence_abstractive(sent: str) -> str:
-    """
-    Cleans raw document sentence into abstractive, natural Vietnamese prose:
-    - Removes leading and internal bullet markers (*, -, •, +, –, —)
-    - Normalizes ALL CAPS labels (e.g. 'PHÁ MÃ:' -> 'Phá mã:', 'VÉT CẠN:' -> 'Vét cạn:')
-      while preserving standard technology acronyms (RSA, AES, DES, AI, NLP, API, etc.)
-    - Removes leaked internal citation tags ([DOC...::P...], [2], etc.)
-    - Ensures clean whitespace and proper capitalization.
-    """
-    s = (sent or "").strip()
-    if not s:
-        return ""
-    # Strip leading bullets, dashes, markers
-    s = re.sub(r"^[\*\-\•\+\–\—]\s*", "", s).strip()
-    # Strip internal bullets: ' * ' or ' • ' or ' - ' (preserve '+' for math formulas like P + k)
-    s = re.sub(r"\s+[\*\•\–\—]\s+", " ", s)
-    # Strip leaked citation tags like [DOC...::P...] or [1], [2]
-    s = re.sub(r"\[?[A-Za-z0-9_\-]+::P\d+\]?", "", s)
-    s = re.sub(r"\[DOC_[A-Za-z0-9_\-]+\]", "", s)
-    s = re.sub(r"\[\d+\]", "", s)
-
-    # Normalize ALL CAPS heading labels e.g. 'PHÁ MÃ:' -> 'Phá mã:'
-    def _normalize_heading(m):
-        raw = m.group(1).strip()
-        if raw in TECH_ACRONYMS or (len(raw) <= 3 and raw.isupper()):
-            return f"{raw}:"
-        words = raw.split()
-        if not words:
-            return ""
-        capitalized = words[0].capitalize() + (" " + " ".join(w.lower() for w in words[1:]) if len(words) > 1 else "")
-        return f"{capitalized}:"
-
-    s = re.sub(r"\b([A-ZÀ-Ỹ]{2,}(?:\s+[A-ZÀ-Ỹ]{2,})*):", _normalize_heading, s)
-
-    # Remove extra spaces before punctuation
-    s = re.sub(r"\s+([,.:;!?])", r"\1", s)
-    s = re.sub(r"\s+", " ", s).strip()
-    return s
 
 
 def split_clean_sentences(text: str) -> List[str]:
@@ -240,8 +186,7 @@ def split_clean_sentences(text: str) -> List[str]:
             .strip()
         )
         # Clean leading bullet markers
-        restored = re.sub(r"^[\-\•\*\+\–\—]\s+", "", restored).strip()
-        restored = clean_sentence_abstractive(restored)
+        restored = re.sub(r"^[\-\•\*]\s+", "", restored).strip()
         if len(restored) >= 12 and any(c.isalpha() for c in restored):
             sentences.append(restored)
 
@@ -526,12 +471,7 @@ def synthesize_accurate_grounded_answer(
     selected = [primary]
     covered_so_far = set(primary["covered_kw"])
 
-    max_sents = (
-        1 if mode == "minimal"
-        else (2 if mode == "concise"
-        else (8 if mode in ("detailed", "comprehensive")
-        else 5))
-    )
+    max_sents = 1 if mode in ("minimal", "concise") else (3 if mode == "detailed" else 2)
 
     if max_sents > 1:
         for cand in all_candidates[1:]:
@@ -542,13 +482,12 @@ def synthesize_accurate_grounded_answer(
                 continue
             new_kw = cand["covered_kw"] - covered_so_far
             # Pick complementary sentence if it covers remaining query keywords or has high relevance score
-            if new_kw or (cand["score"] >= primary["score"] * 0.5 and cand["score"] > 1.5):
+            if new_kw or (cand["score"] >= primary["score"] * 0.65 and cand["score"] > 2.0):
                 selected.append(cand)
                 covered_so_far.update(cand["covered_kw"])
 
-    # Clean and abstractive normalization for selected sentences
-    primary_clean = clean_sentence_abstractive(selected[0]["sentence"])
-    primary_sent = _ensure_period(primary_clean)
+    # Sort selected sentences that come from the same passage by their natural reading order
+    primary_sent = _ensure_period(selected[0]["sentence"])
     primary_cit = selected[0]["citation_label"]
 
     if mode == "minimal":
@@ -558,29 +497,21 @@ def synthesize_accurate_grounded_answer(
         return f"{primary_sent} {primary_cit}".strip()
 
     # Balanced or Detailed mode: combine primary and complementary sentences smoothly
-    same_cit = all(extra["citation_label"] == primary_cit for extra in selected[1:])
-    if same_cit:
-        clean_sents = [primary_sent]
-        for extra in selected[1:]:
-            cln = _ensure_period(clean_sentence_abstractive(extra["sentence"]))
-            if cln and cln not in clean_sents:
-                clean_sents.append(cln)
-        combined_text = " ".join(clean_sents)
-        combined = f"{combined_text} {primary_cit}".strip()
-    else:
-        parts = [f"{primary_sent} {primary_cit}"]
-        for extra in selected[1:]:
-            cln = _ensure_period(clean_sentence_abstractive(extra["sentence"]))
-            ext_cit = extra["citation_label"]
-            if cln and not any(cln in p for p in parts):
-                parts.append(f"{cln} {ext_cit}".strip())
-        combined = " ".join(parts)
+    parts = [f"{primary_sent} {primary_cit}"]
+    for extra in selected[1:]:
+        ext_sent = _ensure_period(extra["sentence"])
+        ext_cit = extra["citation_label"]
+        if ext_cit == primary_cit:
+            parts.append(ext_sent)
+        else:
+            parts.append(f"{ext_sent} {ext_cit}")
 
+    combined = " ".join(parts)
     if route == "SECTION_LOOKUP":
         return f"Tại mục được tra cứu, tài liệu ghi nhận: {combined}"
     if mode == "detailed":
-        return f"Thông tin chi tiết theo tài liệu như sau: {combined}"
-    return combined
+        return f"Trong tài liệu đã cung cấp, thông tin chi tiết như sau: {combined}"
+    return f"Dựa trên tài liệu đã cung cấp, {combined}"
 
 
 def build_token_efficient_prompt(
@@ -706,8 +637,6 @@ def postprocess_concise_answer(
     lines = [l.strip() for l in ans.split("\n") if l.strip()]
     if lines:
         ans = lines[0]
-
-    ans = clean_sentence_abstractive(ans)
 
     # Ensure citation presence if citations list is non-empty and not in text
     if citations:

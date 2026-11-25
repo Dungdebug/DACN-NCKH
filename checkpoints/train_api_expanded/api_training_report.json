@@ -1,0 +1,43 @@
+{
+  "training_run": "SA-CMS + WaveCMS Expanded Online API Training",
+  "status": "COMPLETED_VERIFIED",
+  "device": "NVIDIA GeForce GTX 1650 Ti",
+  "warm_start_from": "checkpoints/train_api_expanded/cms_20m_tokens_final.pt",
+  "online_corpus_path": "data/online_training_corpus.json",
+  "num_documents": 2171,
+  "num_samples": 9690,
+  "online_samples_added": 8690,
+  "documents_by_source": {
+    "qasper": 200,
+    "squad_v2": 444,
+    "sciq": 533,
+    "pubmedqa": 400,
+    "arxiv": 200,
+    "openalex": 147,
+    "europepmc": 153,
+    "wikipedia_en": 47,
+    "wikipedia_vi": 47
+  },
+  "target_tokens": 500000,
+  "actual_tokens_trained": 500026,
+  "total_epochs": 2,
+  "train_loss": 2.7024,
+  "tokens_per_sec": 4025.77,
+  "peak_vram_mb": 965.81,
+  "total_time_seconds": 124.21,
+  "batch_size": 2,
+  "grad_accum_steps": 2,
+  "effective_batch_size": 4,
+  "lr": 0.0001,
+  "checkpoint_path": "checkpoints\\train_api_expanded\\cms_20m_tokens_final.pt",
+  "history": [
+    {
+      "epoch": 2,
+      "cumulative_tokens": 500026,
+      "train_loss": 2.7024,
+      "tokens_per_sec": 2820.52,
+      "peak_vram_mb": 965.81,
+      "epoch_duration_sec": 124.09
+    }
+  ]
+}

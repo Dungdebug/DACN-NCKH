@@ -74,6 +74,7 @@ from src.wave_cms import (
     WaveTreeMemory,
 )
 from src.wave_cms.continuum_memory import CertifiedUnlearningEngine
+from src.wave_cms.tree_memory import compute_deterministic_routing_key, extract_sparse_terms
 from src.web.local_model_loader import LocalModelLoader
 
 
@@ -311,12 +312,105 @@ def ingest_docs_into_rag(
 # =============================================================================
 
 
+def _load_pillar1_stream_docs(max_n: int) -> List[Dict[str, Any]]:
+    corpus = get_incremental_corpus()
+    stream_docs = list(corpus["stream_documents"])
+    if max_n > len(stream_docs):
+        online_path = ROOT_DIR / "data" / "online_benchmark_corpus.json"
+        if online_path.exists():
+            with open(online_path, "r", encoding="utf-8") as f:
+                online_data = json.load(f)
+            seen_ids = {d["doc_id"] for d in stream_docs}
+            seen_ids.add(corpus["d0_document"]["doc_id"])
+            for item in online_data.get("documents", []):
+                doc_id = str(item.get("document_id") or item.get("doc_id") or "")
+                text = str(item.get("text") or item.get("content") or "").strip()
+                title = str(item.get("title") or doc_id)
+                if not doc_id or doc_id in seen_ids or not text:
+                    continue
+                seen_ids.add(doc_id)
+                stream_docs.append({"doc_id": doc_id, "title": title, "text": text[:12000]})
+                if len(stream_docs) >= max_n:
+                    break
+    return stream_docs[:max_n]
+
+
+def _evaluate_routing_diagnostics(
+    wave_engine: WaveCMSEngine,
+    d0_doc_id: str,
+    d0_questions: Sequence[Dict[str, Any]],
+    routing_mode: str,
+) -> Dict[str, Any]:
+    """Computes tree_vs_flat_exact_match_rate, n_eff, and delta_prior for Proposition 1 & Theorem 4."""
+    leaves = wave_engine.tree_memory.get_leaves()
+    router = wave_engine.router
+    tau = max(1e-4, float(router.temperature))
+    tau_s = max(1e-4, float(router.tau_sparse))
+    device = router.w_q.weight.device
+    doc_nodes = list(wave_engine.tree_memory.documents.keys())
+
+    exact_matches: List[float] = []
+    n_effs: List[float] = []
+    delta_priors: List[float] = []
+
+    for q in d0_questions:
+        q_text = q["question"]
+        q_np = compute_deterministic_routing_key(q_text, dim=wave_engine.dim)
+        h = torch.tensor(q_np, dtype=torch.float32)
+        res = router.route(h, wave_engine.tree_memory, query_text=q_text, memory_tree=wave_engine.tree_memory)
+
+        tree_probs = res.leaf_weights
+        tree_argmax = max(tree_probs.items(), key=lambda kv: kv[1])[0]
+
+        q_proj = router.w_q(h.squeeze().to(device))
+        if routing_mode == "sparse_lse":
+            query_terms, idf_map, avgdl = router._prepare_sparse_context(
+                wave_engine.tree_memory.root, q_text, wave_engine.tree_memory
+            )
+            flat_logits = [
+                router._score_leaf_sparse_lse(lf, q_proj, query_terms, idf_map, avgdl, tau, tau_s, device)
+                for lf in leaves
+            ]
+        else:
+            flat_logits = [
+                float(torch.dot(q_proj, router._get_node_key(lf).to(device)).item()) / tau
+                for lf in leaves
+            ]
+        flat_argmax = leaves[int(np.argmax(flat_logits))].node_id
+        exact_matches.append(1.0 if tree_argmax == flat_argmax else 0.0)
+
+        entropy = -sum(p * math.log(max(p, 1e-15)) for p in tree_probs.values() if p > 0.0)
+        n_effs.append(math.exp(entropy))
+
+        if len(doc_nodes) > 1:
+            d0_node_id = wave_engine.tree_memory.documents[d0_doc_id].node_id
+            p_d0 = max(1e-15, float(res.node_probabilities.get(d0_node_id, 1e-15)))
+            p_other = max(
+                1e-15,
+                max(
+                    float(res.node_probabilities.get(wave_engine.tree_memory.documents[did].node_id, 1e-15))
+                    for did in doc_nodes
+                    if did != d0_doc_id
+                ),
+            )
+            delta_priors.append(math.log(p_d0) - math.log(p_other))
+
+    return {
+        "tree_vs_flat_exact_match_rate": round(statistics.mean(exact_matches), 4) if exact_matches else 0.0,
+        "n_eff": round(statistics.mean(n_effs), 4) if n_effs else 0.0,
+        "delta_prior": round(statistics.mean(delta_priors), 4) if delta_priors else None,
+    }
+
+
 def run_pillar_1_zero_forgetting(
     sa_model: Any,
     tokenizer: Any,
     base_cms_snapshot: Dict[str, Any],
     device: str,
     quick: bool = False,
+    routing_mode: str = "sparse_lse",
+    pillar1_max_n: int = 64,
+    only_wave: bool = False,
 ) -> Dict[str, Any]:
     print("\n" + "=" * 80)
     print("PILLAR 1: ZERO FORGETTING ACROSS N SEQUENTIAL DOCUMENTS")
@@ -324,154 +418,232 @@ def run_pillar_1_zero_forgetting(
 
     corpus = get_incremental_corpus()
     d0 = corpus["d0_document"]
-    stream_docs = corpus["stream_documents"][: (10 if quick else 20)]
-    checkpoints = [0, 5, 10] if quick else [0, 5, 10, 20]
+    max_n = 10 if quick else max(20, int(pillar1_max_n))
+    stream_docs = _load_pillar1_stream_docs(max_n)
+    base_ckpts = [0, 5, 10] if quick else [0, 5, 10, 20, 64]
+    checkpoints = [c for c in base_ckpts if c <= len(stream_docs)]
+    if not quick and max_n not in checkpoints and max_n <= len(stream_docs):
+        checkpoints.append(max_n)
     d0_questions = d0["questions"]
 
-    # --- 1A. SA-CMS (legacy) ---
-    restore_cms_state(sa_model, base_cms_snapshot)
-    sa_model.ingest_structured_document(d0["text"], schedule_mode="structure")
-    theta_after_d0 = flatten_cms_params(sa_model)
-
-    def eval_sa_cms_d0() -> Dict[str, float]:
-        f1s, kws, lps = [], [], []
-        for q in d0_questions:
-            prompt = f"Question: {q['question']}\nAnswer:"
-            pred = generate_greedy_lm(sa_model, tokenizer, prompt, device, max_new_tokens=16)
-            f1s.append(compute_token_f1(pred, q["ground_truth"]))
-            kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
-            lps.append(compute_target_logprob_lm(sa_model, tokenizer, prompt, q["ground_truth"], device))
-        return {
-            "token_f1": round(statistics.mean(f1s), 4),
-            "keyword_acc": round(statistics.mean(kws), 4),
-            "avg_target_logprob": round(statistics.mean(lps), 4),
-        }
-
     sa_results: Dict[int, Dict[str, Any]] = {}
-    m0_sa = eval_sa_cms_d0()
-    sa_results[0] = {**m0_sa, "param_drift_l2": 0.0, "forgetting_f1": 0.0, "forgetting_kw": 0.0}
-
-    for idx, sdoc in enumerate(stream_docs, start=1):
-        sa_model.ingest_structured_document(sdoc["text"], schedule_mode="structure")
-        if idx in checkpoints:
-            theta_now = flatten_cms_params(sa_model)
-            drift = float(torch.norm(theta_now - theta_after_d0, p=2).item())
-            m_now = eval_sa_cms_d0()
-            sa_results[idx] = {
-                **m_now,
-                "param_drift_l2": round(drift, 6),
-                "forgetting_f1": round(m0_sa["token_f1"] - m_now["token_f1"], 4),
-                "forgetting_kw": round(m0_sa["keyword_acc"] - m_now["keyword_acc"], 4),
-            }
-
-    # --- 1B. Standard RAG ---
-    restore_cms_state(sa_model, base_cms_snapshot)
-    retriever, chunker, _, _, _ = build_rag_pipeline(sa_model, tokenizer, device)
-    accumulated_docs = [d0]
-    ingest_docs_into_rag(accumulated_docs, chunker, retriever)
-
-    def eval_rag_d0() -> Dict[str, float]:
-        f1s, kws, hits3 = [], [], []
-        for q in d0_questions:
-            res = retriever.retrieve(q["question"], top_k=3)
-            hits3.append(1.0 if any(r.document_id == d0["doc_id"] for r in res) else 0.0)
-            ctx = "\n".join(r.text for r in res)
-            prompt = (
-                f"Based on the following context, answer in one short phrase:\n\n"
-                f"{ctx}\n\nQuestion: {q['question']}\nAnswer:"
-            )
-            pred = generate_greedy_lm(sa_model, tokenizer, prompt, device, max_new_tokens=16)
-            f1s.append(compute_token_f1(pred, q["ground_truth"]))
-            kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
-        return {
-            "token_f1": round(statistics.mean(f1s), 4),
-            "keyword_acc": round(statistics.mean(kws), 4),
-            "retrieval_hit_at_3": round(statistics.mean(hits3), 4),
-        }
-
     rag_results: Dict[int, Dict[str, Any]] = {}
-    m0_rag = eval_rag_d0()
-    rag_results[0] = {
-        **m0_rag,
-        "param_drift_l2": 0.0,
-        "num_passages": len(retriever.passages),
-        "forgetting_f1": 0.0,
-        "forgetting_kw": 0.0,
-    }
-    for idx, sdoc in enumerate(stream_docs, start=1):
-        accumulated_docs.append(sdoc)
-        if idx in checkpoints:
-            ingest_docs_into_rag(accumulated_docs, chunker, retriever)
-            m_now = eval_rag_d0()
-            rag_results[idx] = {
-                **m_now,
-                "param_drift_l2": 0.0,
-                "num_passages": len(retriever.passages),
-                "forgetting_f1": round(m0_rag["token_f1"] - m_now["token_f1"], 4),
-                "forgetting_kw": round(m0_rag["keyword_acc"] - m_now["keyword_acc"], 4),
+
+    if not only_wave:
+        # --- 1A. SA-CMS (legacy) ---
+        restore_cms_state(sa_model, base_cms_snapshot)
+        sa_model.ingest_structured_document(d0["text"], schedule_mode="structure")
+        theta_after_d0 = flatten_cms_params(sa_model)
+
+        def eval_sa_cms_d0() -> Dict[str, float]:
+            f1s, kws, lps = [], [], []
+            for q in d0_questions:
+                prompt = f"Question: {q['question']}\nAnswer:"
+                pred = generate_greedy_lm(sa_model, tokenizer, prompt, device, max_new_tokens=16)
+                f1s.append(compute_token_f1(pred, q["ground_truth"]))
+                kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
+                lps.append(compute_target_logprob_lm(sa_model, tokenizer, prompt, q["ground_truth"], device))
+            return {
+                "token_f1": round(statistics.mean(f1s), 4),
+                "keyword_acc": round(statistics.mean(kws), 4),
+                "avg_target_logprob": round(statistics.mean(lps), 4),
             }
 
-    # --- 1C. WaveCMS (new) ---
-    wave_engine = WaveCMSEngine(r=8, dim=256, max_hops=4, tau=0.20, refusal_threshold=0.35)
-    d0_node = wave_engine.ingest_document(d0["doc_id"], d0["title"], d0["text"])
-    d0_leaf_snapshots = {
-        lf.node_id: (lf.theta.copy(), lf.kappa.copy()) for lf in d0_node.get_leaves()
-    }
+        m0_sa = eval_sa_cms_d0()
+        sa_results[0] = {**m0_sa, "param_drift_l2": 0.0, "forgetting_f1": 0.0, "forgetting_kw": 0.0}
 
-    def eval_wave_d0() -> Dict[str, Any]:
-        f1s, kws, hit1, hit3 = [], [], [], []
-        for q in d0_questions:
-            res = wave_engine.query(question=q["question"], max_hops=4, top_k_citations=3)
-            pred = "" if res.refused else res.answer
-            f1s.append(compute_token_f1(pred, q["ground_truth"]))
-            kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
-            cits = res.causal_citations or []
-            cit_docs = [c.get("doc_id") or (c.get("leaf_id", "").split(":")[1] if ":" in c.get("leaf_id", "") else "") for c in cits]
-            hit1.append(1.0 if cit_docs[:1] and cit_docs[0] == d0["doc_id"] else 0.0)
-            hit3.append(1.0 if d0["doc_id"] in cit_docs[:3] else 0.0)
+        for idx, sdoc in enumerate(stream_docs, start=1):
+            sa_model.ingest_structured_document(sdoc["text"][:4000], schedule_mode="structure")
+            if idx in checkpoints:
+                theta_now = flatten_cms_params(sa_model)
+                drift = float(torch.norm(theta_now - theta_after_d0, p=2).item())
+                m_now = eval_sa_cms_d0()
+                sa_results[idx] = {
+                    **m_now,
+                    "param_drift_l2": round(drift, 6),
+                    "forgetting_f1": round(m0_sa["token_f1"] - m_now["token_f1"], 4),
+                    "forgetting_kw": round(m0_sa["keyword_acc"] - m_now["keyword_acc"], 4),
+                }
 
-        max_core_drift = 0.0
-        max_key_drift = 0.0
-        for lf in d0_node.get_leaves():
-            t0_arr, k0_arr = d0_leaf_snapshots[lf.node_id]
-            max_core_drift = max(max_core_drift, float(np.linalg.norm(lf.theta - t0_arr, ord="fro")))
-            max_key_drift = max(max_key_drift, float(np.linalg.norm(lf.kappa - k0_arr, ord=2)))
+        # --- 1B. Standard RAG ---
+        restore_cms_state(sa_model, base_cms_snapshot)
+        retriever, chunker, _, _, _ = build_rag_pipeline(sa_model, tokenizer, device)
+        accumulated_docs = [d0]
+        ingest_docs_into_rag(accumulated_docs, chunker, retriever)
 
-        return {
-            "token_f1": round(statistics.mean(f1s), 4),
-            "keyword_acc": round(statistics.mean(kws), 4),
-            "routing_hit_at_1": round(statistics.mean(hit1), 4),
-            "routing_hit_at_3": round(statistics.mean(hit3), 4),
-            "leaf_core_drift_fro": max_core_drift,
-            "leaf_key_drift_l2": max_key_drift,
+        def eval_rag_d0() -> Dict[str, float]:
+            f1s, kws, hits3 = [], [], []
+            for q in d0_questions:
+                res = retriever.retrieve(q["question"], top_k=3)
+                hits3.append(1.0 if any(r.document_id == d0["doc_id"] for r in res) else 0.0)
+                ctx = "\n".join(r.text for r in res)
+                prompt = (
+                    f"Based on the following context, answer in one short phrase:\n\n"
+                    f"{ctx}\n\nQuestion: {q['question']}\nAnswer:"
+                )
+                pred = generate_greedy_lm(sa_model, tokenizer, prompt, device, max_new_tokens=16)
+                f1s.append(compute_token_f1(pred, q["ground_truth"]))
+                kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
+            return {
+                "token_f1": round(statistics.mean(f1s), 4),
+                "keyword_acc": round(statistics.mean(kws), 4),
+                "retrieval_hit_at_3": round(statistics.mean(hits3), 4),
+            }
+
+        m0_rag = eval_rag_d0()
+        rag_results[0] = {
+            **m0_rag,
+            "param_drift_l2": 0.0,
+            "num_passages": len(retriever.passages),
+            "forgetting_f1": 0.0,
+            "forgetting_kw": 0.0,
+        }
+        for idx, sdoc in enumerate(stream_docs, start=1):
+            accumulated_docs.append(sdoc)
+            if idx in checkpoints:
+                ingest_docs_into_rag(accumulated_docs, chunker, retriever)
+                m_now = eval_rag_d0()
+                rag_results[idx] = {
+                    **m_now,
+                    "param_drift_l2": 0.0,
+                    "num_passages": len(retriever.passages),
+                    "forgetting_f1": round(m0_rag["token_f1"] - m_now["token_f1"], 4),
+                    "forgetting_kw": round(m0_rag["keyword_acc"] - m_now["keyword_acc"], 4),
+                }
+    else:
+        restore_cms_state(sa_model, base_cms_snapshot)
+
+    # --- 1C. WaveCMS: Direct comparison mean_key (W2) vs sparse_lse (W3, Theorem 4) ---
+    def _run_wave_variant(mode: str) -> Dict[int, Dict[str, Any]]:
+        wave_engine = WaveCMSEngine(
+            r=8, dim=256, max_hops=4, tau=0.20, refusal_threshold=0.35, routing_mode=mode
+        )
+        d0_node = wave_engine.ingest_document(d0["doc_id"], d0["title"], d0["text"])
+        d0_leaf_snapshots = {
+            lf.node_id: (lf.theta.copy(), lf.kappa.copy()) for lf in d0_node.get_leaves()
         }
 
-    wave_results: Dict[int, Dict[str, Any]] = {}
-    m0_wave = eval_wave_d0()
-    wave_results[0] = {**m0_wave, "forgetting_f1": 0.0, "forgetting_kw": 0.0}
-    for idx, sdoc in enumerate(stream_docs, start=1):
-        wave_engine.ingest_document(sdoc["doc_id"], sdoc["title"], sdoc["text"])
-        if idx in checkpoints:
-            m_now = eval_wave_d0()
-            wave_results[idx] = {
-                **m_now,
-                "forgetting_f1": round(m0_wave["token_f1"] - m_now["token_f1"], 4),
-                "forgetting_kw": round(m0_wave["keyword_acc"] - m_now["keyword_acc"], 4),
+        def eval_wave_d0() -> Dict[str, Any]:
+            f1s_lm, f1s_detailed, kws, kws_lm, hit1, hit3 = [], [], [], [], [], []
+            for q in d0_questions:
+                res = wave_engine.query(question=q["question"], max_hops=4, top_k_citations=3)
+                pred = "" if res.refused else res.answer
+                f1s_detailed.append(compute_token_f1(pred, q["ground_truth"]))
+                kws.append(compute_keyword_accuracy(pred, q["keywords"], q["ground_truth"]))
+                cits = res.causal_citations or []
+                if res.refused or not cits:
+                    lm_pred = ""
+                else:
+                    wave_ctx = "\n".join(c.get("text", "") for c in cits[:3] if c.get("text"))
+                    wave_prompt = (
+                        f"Based on the following context, answer in one short phrase:\n\n"
+                        f"{wave_ctx}\n\nQuestion: {q['question']}\nAnswer:"
+                    )
+                    lm_pred = generate_greedy_lm(sa_model, tokenizer, wave_prompt, device, max_new_tokens=16)
+                f1s_lm.append(compute_token_f1(lm_pred, q["ground_truth"]))
+                kws_lm.append(compute_keyword_accuracy(lm_pred, q["keywords"], q["ground_truth"]))
+                cit_docs = [
+                    c.get("doc_id") or (c.get("leaf_id", "").split(":")[1] if ":" in c.get("leaf_id", "") else "")
+                    for c in cits
+                ]
+                hit1.append(1.0 if cit_docs[:1] and cit_docs[0] == d0["doc_id"] else 0.0)
+                hit3.append(1.0 if d0["doc_id"] in cit_docs[:3] else 0.0)
+
+            max_core_drift = 0.0
+            max_key_drift = 0.0
+            for lf in d0_node.get_leaves():
+                t0_arr, k0_arr = d0_leaf_snapshots[lf.node_id]
+                max_core_drift = max(max_core_drift, float(np.linalg.norm(lf.theta - t0_arr, ord="fro")))
+                max_key_drift = max(max_key_drift, float(np.linalg.norm(lf.kappa - k0_arr, ord=2)))
+
+            diag = _evaluate_routing_diagnostics(wave_engine, d0["doc_id"], d0_questions, mode)
+            return {
+                "token_f1": round(statistics.mean(f1s_lm), 4),
+                "token_f1_detailed_report": round(statistics.mean(f1s_detailed), 4),
+                "keyword_acc": round(statistics.mean(kws), 4),
+                "keyword_acc_lm": round(statistics.mean(kws_lm), 4),
+                "routing_hit_at_1": round(statistics.mean(hit1), 4),
+                "routing_hit_at_3": round(statistics.mean(hit3), 4),
+                "tree_vs_flat_exact_match_rate": diag["tree_vs_flat_exact_match_rate"],
+                "n_eff": diag["n_eff"],
+                "delta_prior": diag["delta_prior"],
+                "n_docs": len(wave_engine.tree_memory.documents),
+                "n_leaves": len(wave_engine.tree_memory.get_leaves()),
+                "leaf_core_drift_fro": max_core_drift,
+                "leaf_key_drift_l2": max_key_drift,
             }
+
+        variant_results: Dict[int, Dict[str, Any]] = {}
+        m0_wave = eval_wave_d0()
+        variant_results[0] = {**m0_wave, "forgetting_f1": 0.0, "forgetting_kw": 0.0}
+        for idx, sdoc in enumerate(stream_docs, start=1):
+            wave_engine.ingest_document(sdoc["doc_id"], sdoc["title"], sdoc["text"])
+            if idx in checkpoints:
+                m_now = eval_wave_d0()
+                variant_results[idx] = {
+                    **m_now,
+                    "forgetting_f1": round(m0_wave["token_f1"] - m_now["token_f1"], 4),
+                    "forgetting_kw": round(m0_wave["keyword_acc"] - m_now["keyword_acc"], 4),
+                }
+        return variant_results
+
+    wave_mean_results = _run_wave_variant("mean_key")
+    wave_sparse_results = _run_wave_variant("sparse_lse")
+    wave_results = wave_sparse_results if routing_mode == "sparse_lse" else wave_mean_results
+
+    # Proposition 1 diagnostic: predict collapse threshold C* vs observed collapse
+    base_n_eff_mean = max(1.0, float(wave_mean_results[0]["n_eff"]))
+    c_star = round(base_n_eff_mean * 2.0, 4)
+    prop1_diagnostic: Dict[int, Dict[str, Any]] = {}
+    for n in checkpoints:
+        mk = wave_mean_results[n]
+        sl = wave_sparse_results[n]
+        dp_mk = mk["delta_prior"]
+        predicted_collapse_mk = bool((dp_mk is not None and dp_mk <= 0.0) or (mk["n_eff"] > c_star))
+        observed_collapse_mk = bool(mk["routing_hit_at_1"] < 0.5)
+        observed_collapse_sl = bool(sl["routing_hit_at_1"] < 0.5)
+        prop1_diagnostic[n] = {
+            "n_docs": mk["n_docs"],
+            "n_leaves": mk["n_leaves"],
+            "c_star": c_star,
+            "n_eff_mean_key": mk["n_eff"],
+            "n_eff_sparse_lse": sl["n_eff"],
+            "delta_prior_mean_key": dp_mk,
+            "delta_prior_sparse_lse": sl["delta_prior"],
+            "predicted_collapse_mean_key": predicted_collapse_mk,
+            "observed_collapse_mean_key": observed_collapse_mk,
+            "observed_collapse_sparse_lse": observed_collapse_sl,
+        }
 
     for n in checkpoints:
-        print(
-            f"  N=+{n:<2d} | SA-CMS kw={sa_results[n]['keyword_acc']:.2f} drift={sa_results[n]['param_drift_l2']:.4f} "
-            f"| RAG kw={rag_results[n]['keyword_acc']:.2f} hit@3={rag_results[n]['retrieval_hit_at_3']:.2f} "
-            f"| WaveCMS kw={wave_results[n]['keyword_acc']:.2f} core_drift={wave_results[n]['leaf_core_drift_fro']:.1e}"
-        )
+        mk = wave_mean_results[n]
+        sl = wave_sparse_results[n]
+        if only_wave:
+            print(
+                f"  N=+{n:<2d} | MeanKey f1={mk['token_f1']:.4f} hit@1={mk['routing_hit_at_1']:.2f} kw={mk['keyword_acc']:.2f} "
+                f"| SparseLSE f1={sl['token_f1']:.4f} (det={sl['token_f1_detailed_report']:.4f}) "
+                f"hit@1={sl['routing_hit_at_1']:.2f} kw={sl['keyword_acc']:.2f} kw_lm={sl['keyword_acc_lm']:.2f}"
+            )
+        else:
+            print(
+                f"  N=+{n:<2d} | SA-CMS kw={sa_results[n]['keyword_acc']:.2f} drift={sa_results[n]['param_drift_l2']:.4f} "
+                f"| RAG kw={rag_results[n]['keyword_acc']:.2f} hit@3={rag_results[n]['retrieval_hit_at_3']:.2f} "
+                f"| MeanKey f1={mk['token_f1']:.4f} hit@1={mk['routing_hit_at_1']:.2f} kw={mk['keyword_acc']:.2f} "
+                f"| SparseLSE f1={sl['token_f1']:.4f} hit@1={sl['routing_hit_at_1']:.2f} kw={sl['keyword_acc']:.2f} "
+                f"tree==flat={sl['tree_vs_flat_exact_match_rate']:.2f}"
+            )
 
-    return {
+    out = {
         "checkpoints": checkpoints,
-        "sa_cms": sa_results,
-        "standard_rag": rag_results,
         "wave_cms": wave_results,
+        "wave_cms_mean_key": wave_mean_results,
+        "wave_cms_sparse_lse": wave_sparse_results,
+        "prop1_diagnostic": prop1_diagnostic,
     }
+    if not only_wave:
+        out["sa_cms"] = sa_results
+        out["standard_rag"] = rag_results
+    return out
 
 
 # =============================================================================
@@ -533,6 +705,28 @@ def _max_tree_discrepancy(tree_a: WaveTreeMemory, tree_b: WaveTreeMemory) -> Dic
     }
 
 
+def _check_bit_exact_stats(tree_a: WaveTreeMemory, tree_b: WaveTreeMemory) -> bool:
+    """Theorem 3* check: term_count, corpus_df, and kappa_mass_fp match bit-for-bit."""
+    if tree_a.corpus_df != tree_b.corpus_df:
+        return False
+    if tree_a.root.term_count != tree_b.root.term_count:
+        return False
+    if tree_a.root.kappa_mass_fp != tree_b.root.kappa_mass_fp:
+        return False
+    if set(tree_a.documents.keys()) != set(tree_b.documents.keys()):
+        return False
+    for doc_id, node_a in tree_a.documents.items():
+        node_b = tree_b.documents[doc_id]
+        nodes_a = node_a.get_subtree_nodes()
+        nodes_b = node_b.get_subtree_nodes()
+        if len(nodes_a) != len(nodes_b):
+            return False
+        for sub_a, sub_b in zip(nodes_a, nodes_b):
+            if sub_a.term_count != sub_b.term_count or sub_a.kappa_mass_fp != sub_b.kappa_mass_fp:
+                return False
+    return True
+
+
 def run_pillar_2_exact_unlearning(
     sa_model: Any,
     base_cms_snapshot: Dict[str, Any],
@@ -573,6 +767,7 @@ def run_pillar_2_exact_unlearning(
         disc = _max_tree_discrepancy(tree_full, tree_scratch)
         max_disc = max(disc.values())
         thm_ok = tree_full.verify_all_theorems()["all_theorems_verified"]
+        bit_exact_ok = _check_bit_exact_stats(tree_full, tree_scratch)
 
         # 2. Standard RAG: unlearn = filter target passages + rebuild BM25 index O(N)
         chunker = DocumentChunker(chunk_size=256, chunk_overlap=32)
@@ -636,6 +831,7 @@ def run_pillar_2_exact_unlearning(
                 "max_discrepancy": max_disc,
                 "discrepancies": disc,
                 "passes_1e_12": bool(max_disc < 1e-12),
+                "bit_exact_stats_equal": bool(bit_exact_ok),
                 "theorems_preserved": bool(thm_ok),
                 "freed_nodes": int(unlearn_report.get("freed_nodes_count", 0)),
             },
@@ -652,7 +848,7 @@ def run_pillar_2_exact_unlearning(
         sa_str = f"{row['sa_cms']['exact_retrain_ms']:.1f}ms (approx_err={row['sa_cms']['approx_unlearn_param_discrepancy_l2']:.4f})" if sa_exact_retrain_ms is not None else "skipped"
         print(
             f"  N={n_docs:<2d} ({n_docs*9:<3d} leaves) | WaveCMS unlearn={wave_unlearn_ms:.3f}ms disc={max_disc:.2e} (<1e-12={max_disc<1e-12}) "
-            f"| RAG reindex={rag_unlearn_ms:.3f}ms | SA-CMS retrain={sa_str}"
+            f"bit_exact={bit_exact_ok} | RAG reindex={rag_unlearn_ms:.3f}ms | SA-CMS retrain={sa_str}"
         )
 
     wave_ratio = rows[-1]["wave_cms"]["unlearn_time_ms"] / max(1e-6, rows[0]["wave_cms"]["unlearn_time_ms"])
@@ -662,6 +858,7 @@ def run_pillar_2_exact_unlearning(
         "wave_cms_time_scaling_ratio_max_vs_min_N": round(wave_ratio, 3),
         "standard_rag_time_scaling_ratio_max_vs_min_N": round(rag_ratio, 3),
         "all_wave_discrepancies_below_1e_12": all(r["wave_cms"]["passes_1e_12"] for r in rows),
+        "all_wave_bit_exact_stats_equal": all(r["wave_cms"]["bit_exact_stats_equal"] for r in rows),
     }
 
 
@@ -897,6 +1094,7 @@ def run_pillar_3_banach_and_multihop(
     tokenizer: Any,
     base_cms_snapshot: Dict[str, Any],
     device: str,
+    routing_mode: str = "sparse_lse",
 ) -> Dict[str, Any]:
     print("\n" + "=" * 80)
     print("PILLAR 3: BANACH CONTRACTION (rho_hat < 1) & CROSS-DOCUMENT MULTI-HOP QA")
@@ -905,7 +1103,9 @@ def run_pillar_3_banach_and_multihop(
     docs, questions = _get_multihop_corpus_and_questions()
 
     # --- 3A. WaveCMS Multi-Hop & Banach Contraction Verification ---
-    wave_engine = WaveCMSEngine(r=8, dim=256, omega=0.5, max_hops=6, tau=0.20, refusal_threshold=0.25)
+    wave_engine = WaveCMSEngine(
+        r=8, dim=256, omega=0.5, max_hops=6, tau=0.20, refusal_threshold=0.25, routing_mode=routing_mode
+    )
     for d in docs:
         wave_engine.ingest_document(d["doc_id"], d["title"], d["sections"])
 
@@ -1138,6 +1338,7 @@ def run_pillar_4_conformal_risk_control(
     device: str,
     seed: int = 42,
     quick: bool = False,
+    routing_mode: str = "sparse_lse",
 ) -> Dict[str, Any]:
     print("\n" + "=" * 80)
     print("PILLAR 4: CONFORMAL RISK CONTROL (FALSE-ANSWER RATE < EPSILON)")
@@ -1149,7 +1350,7 @@ def run_pillar_4_conformal_risk_control(
         questions = questions[:25] + questions[50:63] + questions[75:87]  # 50 stratified items
 
     # 1. WaveCMS: ingest DOC001..DOC003, extract raw readout signals + correctness
-    wave_engine = WaveCMSEngine(r=8, dim=256, max_hops=4, tau=0.20)
+    wave_engine = WaveCMSEngine(r=8, dim=256, max_hops=4, tau=0.20, routing_mode=routing_mode)
     for d in docs:
         wave_engine.ingest_document(d["document_id"], d["title"], d["raw_text"])
 
@@ -1295,6 +1496,7 @@ def run_pillar_5_inference_latency(
     base_cms_snapshot: Dict[str, Any],
     device: str,
     quick: bool = False,
+    routing_mode: str = "sparse_lse",
 ) -> Dict[str, Any]:
     print("\n" + "=" * 80)
     print("PILLAR 5: END-TO-END INFERENCE LATENCY (MS)")
@@ -1306,7 +1508,7 @@ def run_pillar_5_inference_latency(
     warmup_questions = questions[15:18]
 
     # Setup WaveCMS
-    wave_engine = WaveCMSEngine(r=8, dim=256, max_hops=4, tau=0.20)
+    wave_engine = WaveCMSEngine(r=8, dim=256, max_hops=4, tau=0.20, routing_mode=routing_mode)
     for d in docs:
         wave_engine.ingest_document(d["document_id"], d["title"], d["raw_text"])
 
@@ -1434,7 +1636,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
     parser.add_argument("--quick", action="store_true", help="Run reduced-scale quick verification")
     parser.add_argument(
+        "--routing-mode",
+        type=str,
+        default="sparse_lse",
+        choices=["sparse_lse", "mean_key"],
+        help="Primary WaveCMS routing mode (default: sparse_lse)",
+    )
+    parser.add_argument(
+        "--pillar1-max-n",
+        type=int,
+        default=64,
+        help="Maximum sequential documents N in Pillar 1 (default: 64)",
+    )
+    parser.add_argument(
+        "--only-update-pillar1-wave",
+        action="store_true",
+        help="Only re-run WaveCMS variants in Pillar 1 and merge into existing --output JSON",
+    )
+    parser.add_argument(
         "--output-json",
+        "--output",
+        dest="output_json",
         type=str,
         default=str(ROOT_DIR / "results" / "wave_cms_vs_baselines_benchmark.json"),
         help="Path to write JSON benchmark report",
@@ -1463,10 +1685,40 @@ def main() -> None:
     base_cms_snapshot = clone_cms_state(sa_model)
     print(f"Loaded local model on device={device} (checkpoint={loader.active_checkpoint_name})")
 
+    out_path = Path(args.output_json)
+    if args.only_update_pillar1_wave:
+        if not out_path.exists():
+            raise FileNotFoundError(f"Cannot use --only-update-pillar1-wave: {out_path} does not exist.")
+        with open(out_path, "r", encoding="utf-8") as f:
+            report = json.load(f)
+        p1_wave = run_pillar_1_zero_forgetting(
+            sa_model,
+            tokenizer,
+            base_cms_snapshot,
+            device,
+            quick=args.quick,
+            routing_mode=args.routing_mode,
+            pillar1_max_n=args.pillar1_max_n,
+            only_wave=True,
+        )
+        p1 = report.setdefault("pillars", {}).setdefault("pillar_1_zero_forgetting", {})
+        p1["checkpoints"] = p1_wave["checkpoints"]
+        p1["wave_cms"] = p1_wave["wave_cms"]
+        p1["wave_cms_mean_key"] = p1_wave["wave_cms_mean_key"]
+        p1["wave_cms_sparse_lse"] = p1_wave["wave_cms_sparse_lse"]
+        p1["prop1_diagnostic"] = p1_wave["prop1_diagnostic"]
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+        elapsed = round(time.perf_counter() - t_start, 2)
+        print(f"\nUPDATED PILLAR 1 WAVECMS IN {elapsed}s -> {out_path}")
+        return
+
     report: Dict[str, Any] = {
         "benchmark": "WaveCMS_vs_SA_CMS_vs_Standard_RAG",
         "seed": args.seed,
         "quick_mode": bool(args.quick),
+        "routing_mode": args.routing_mode,
+        "pillar1_max_n": int(args.pillar1_max_n),
         "device": device,
         "offline_mode": True,
         "sa_cms_checkpoint": loader.active_checkpoint_name,
@@ -1475,7 +1727,13 @@ def main() -> None:
 
     if 1 in args.pillars:
         report["pillars"]["pillar_1_zero_forgetting"] = run_pillar_1_zero_forgetting(
-            sa_model, tokenizer, base_cms_snapshot, device, quick=args.quick
+            sa_model,
+            tokenizer,
+            base_cms_snapshot,
+            device,
+            quick=args.quick,
+            routing_mode=args.routing_mode,
+            pillar1_max_n=args.pillar1_max_n,
         )
     if 2 in args.pillars:
         report["pillars"]["pillar_2_exact_unlearning"] = run_pillar_2_exact_unlearning(
@@ -1483,15 +1741,26 @@ def main() -> None:
         )
     if 3 in args.pillars:
         report["pillars"]["pillar_3_banach_and_multihop"] = run_pillar_3_banach_and_multihop(
-            sa_model, tokenizer, base_cms_snapshot, device
+            sa_model, tokenizer, base_cms_snapshot, device, routing_mode=args.routing_mode
         )
     if 4 in args.pillars:
         report["pillars"]["pillar_4_conformal_risk_control"] = run_pillar_4_conformal_risk_control(
-            sa_model, tokenizer, base_cms_snapshot, device, seed=args.seed, quick=args.quick
+            sa_model,
+            tokenizer,
+            base_cms_snapshot,
+            device,
+            seed=args.seed,
+            quick=args.quick,
+            routing_mode=args.routing_mode,
         )
     if 5 in args.pillars:
         report["pillars"]["pillar_5_inference_latency"] = run_pillar_5_inference_latency(
-            sa_model, tokenizer, base_cms_snapshot, device, quick=args.quick
+            sa_model,
+            tokenizer,
+            base_cms_snapshot,
+            device,
+            quick=args.quick,
+            routing_mode=args.routing_mode,
         )
 
     report["total_runtime_sec"] = round(time.perf_counter() - t_start, 2)

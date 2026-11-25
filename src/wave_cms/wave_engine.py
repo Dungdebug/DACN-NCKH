@@ -108,6 +108,8 @@ class WaveCMSEngine:
         epsilon: float = 0.1,
         refusal_threshold: float = 0.40,
         corpus_id: str = "WAVECMS_CORPUS_ROOT",
+        routing_mode: str = "sparse_lse",
+        tau_sparse: float = 1.0,
     ) -> None:
         self.r = r
         self.dim = dim
@@ -116,6 +118,8 @@ class WaveCMSEngine:
         self.tau = tau
         self.epsilon = epsilon
         self.corpus_id = corpus_id
+        self.routing_mode = str(routing_mode)
+        self.tau_sparse = float(tau_sparse)
 
         # 1. Document-Tree Wavelet Memory
         self.tree_memory = WaveTreeMemory(
@@ -128,6 +132,8 @@ class WaveCMSEngine:
         self.router = TreeSoftmaxRouter(
             d_model=self.dim,
             temperature=self.tau,
+            routing_mode=self.routing_mode,
+            tau_sparse=self.tau_sparse,
         )
         self.readout_engine = EquilibriumMultiHopReadout(
             d_model=self.dim,
@@ -328,6 +334,7 @@ class WaveCMSEngine:
             query=clean_q,
             tree=self.tree_memory,
             max_hops=max_hops or self.max_hops,
+            query_text=clean_q,
         )
 
         final_alpha = eq_res.final_alpha or {}

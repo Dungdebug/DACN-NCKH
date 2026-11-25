@@ -29,7 +29,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.wave_cms.tree_memory import compute_deterministic_routing_key
+from src.wave_cms.tree_memory import compute_deterministic_routing_key, extract_sparse_terms
 
 
 class ResolutionLevel(str, Enum):
@@ -177,12 +177,16 @@ class TreeSoftmaxRouter(nn.Module):
         temperature: Optional[float] = None,
         level_temperatures: Optional[Dict[str, float]] = None,
         entropy_threshold: float = 0.85,
+        routing_mode: str = "mean_key",
+        tau_sparse: float = 1.0,
     ) -> None:
         super().__init__()
         self.d_model = d_model if d_model is not None else dim
         self.temperature = float(temperature if temperature is not None else tau)
         self.level_temperatures = level_temperatures or {}
         self.entropy_threshold = float(entropy_threshold)
+        self.routing_mode = str(routing_mode)
+        self.tau_sparse = max(1e-4, float(tau_sparse))
 
         # Projection matrix W_q \\in \\mathbb{R}^{d \\times d}; initialized as Identity so zero-shot
         # inference preserves exact semantic cosine alignment <h, kappa_v>.
@@ -263,17 +267,165 @@ class TreeSoftmaxRouter(nn.Module):
         """Returns level-wise temperature \\tau_\\ell or base temperature."""
         return self.level_temperatures.get(level, self.temperature)
 
-    def route(self, h: torch.Tensor, root: Any) -> RoutingResult:
+    def _prepare_sparse_context(
+        self,
+        root: Any,
+        query_text: Optional[str],
+        memory_tree: Optional[Any] = None,
+    ) -> Tuple[List[str], Dict[str, float], float]:
+        """Extracts query terms, lazy BM25 IDF weights, and average leaf length."""
+        leaves = self._collect_leaves(root)
+        n_leaves = len(leaves)
+        query_terms = list(dict.fromkeys(extract_sparse_terms(query_text or "")))
+        if not query_terms or n_leaves == 0:
+            return [], {}, 1.0
+
+        df_counter = None
+        if memory_tree is not None and hasattr(memory_tree, "corpus_df"):
+            df_counter = memory_tree.corpus_df
+        elif hasattr(root, "term_count"):
+            df_counter = root.term_count
+
+        idf_map: Dict[str, float] = {}
+        for t in query_terms:
+            if df_counter is not None and hasattr(df_counter, "idf"):
+                idf_map[t] = max(0.0, float(df_counter.idf(t, n_leaves)))
+            else:
+                idf_map[t] = math.log((n_leaves + 0.5) / 0.5) + 1.0
+
+        total_len = sum(max(0, int(self._get_node_attr(lf, "doc_len", 0))) for lf in leaves)
+        avgdl = max(1.0, total_len / max(1, n_leaves))
+        return query_terms, idf_map, avgdl
+
+    def _score_leaf_sparse_lse(
+        self,
+        leaf: Any,
+        q_proj: torch.Tensor,
+        query_terms: List[str],
+        idf_map: Dict[str, float],
+        avgdl: float,
+        tau: float,
+        tau_s: float,
+        device: torch.device,
+        k1: float = 1.2,
+        b: float = 0.75,
+    ) -> float:
+        """Computes exact leaf logit z_l(q, h) = sparse(q, l)/tau_s + <W_q h, kappa_l>/tau."""
+        sparse_sum = 0.0
+        if query_terms:
+            term_tf = self._get_node_attr(leaf, "term_tf", None)
+            if term_tf:
+                doc_len = max(0, int(self._get_node_attr(leaf, "doc_len", 0)))
+                denom_norm = k1 * (1.0 - b + b * (doc_len / avgdl))
+                for t in query_terms:
+                    tf = term_tf.get(t, 0)
+                    if tf > 0:
+                        g = float(tf) / (float(tf) + denom_norm)
+                        sparse_sum += idf_map[t] * g
+        key = self._get_node_key(leaf).to(device)
+        dense_score = float(torch.dot(q_proj, key).item()) / tau
+        return (sparse_sum / tau_s) + dense_score
+
+    def compute_upper_bound(
+        self,
+        node: Any,
+        query_terms: List[str],
+        idf_map: Dict[str, float],
+        q_proj_norm: float,
+        tau: float,
+        tau_s: float,
+    ) -> float:
+        """
+        Theorem 4 admissible upper bound:
+            U_v(q, h) = (1/tau_s) * sum_{t in T(q)} idf_t * 1[c_v(t) > 0] + ||W_q h||_2 / tau
+        """
+        sparse_ub = 0.0
+        if query_terms:
+            term_count = self._get_node_attr(node, "term_count", None)
+            if term_count is not None and hasattr(term_count, "nonzero"):
+                for t in query_terms:
+                    if term_count.nonzero(t):
+                        sparse_ub += idf_map.get(t, 0.0)
+            else:
+                for t in query_terms:
+                    sparse_ub += idf_map.get(t, 0.0)
+        return (sparse_ub / tau_s) + (q_proj_norm / tau)
+
+    def branch_and_bound_argmax(
+        self,
+        h: torch.Tensor,
+        root: Any,
+        query_text: Optional[str] = None,
+        memory_tree: Optional[Any] = None,
+    ) -> Tuple[str, float, int]:
+        """
+        Exact admissible Branch-and-Bound argmax using U_v(q, h).
+        Returns (best_leaf_id, best_score, pruned_subtrees_count).
+        """
+        mem_tree = memory_tree if memory_tree is not None else (root if hasattr(root, "corpus_df") else None)
+        root_node = self._unwrap_root(root)
+        h_vec = h.squeeze()
+        device = self.w_q.weight.device
+        q_proj = self.w_q(h_vec.to(device))
+        q_proj_norm = float(torch.norm(q_proj, p=2).item())
+
+        tau = max(1e-4, float(self.temperature))
+        tau_s = max(1e-4, float(self.tau_sparse))
+        query_terms, idf_map, avgdl = self._prepare_sparse_context(root_node, query_text, mem_tree)
+
+        best_id = ""
+        best_score = -math.inf
+        pruned = 0
+
+        def _bnb(node: Any) -> None:
+            nonlocal best_id, best_score, pruned
+            ub = self.compute_upper_bound(node, query_terms, idf_map, q_proj_norm, tau, tau_s)
+            if ub < best_score - 1e-12:
+                pruned += 1
+                return
+            children = self._get_node_children(node)
+            if not children:
+                score = self._score_leaf_sparse_lse(
+                    node, q_proj, query_terms, idf_map, avgdl, tau, tau_s, device
+                )
+                if score > best_score:
+                    best_score = score
+                    best_id = self._get_node_id(node)
+                return
+            scored_children = [
+                (self.compute_upper_bound(c, query_terms, idf_map, q_proj_norm, tau, tau_s), c)
+                for c in children
+            ]
+            scored_children.sort(key=lambda x: x[0], reverse=True)
+            for child_ub, child in scored_children:
+                if child_ub < best_score - 1e-12:
+                    pruned += 1
+                    continue
+                _bnb(child)
+
+        _bnb(root_node)
+        return best_id, best_score, pruned
+
+    def route(
+        self,
+        h: torch.Tensor,
+        root: Any,
+        query_text: Optional[str] = None,
+        memory_tree: Optional[Any] = None,
+    ) -> RoutingResult:
         """
         Hierarchical TreeSoftmax routing from query latent vector h.
-        
+
         Args:
             h: Query latent state vector of shape (d_model,) or (1, d_model)
             root: Root node or WaveTreeMemory instance
-            
+            query_text: Optional query string for Theorem 4 Sparse-LSE routing
+            memory_tree: Optional WaveTreeMemory for corpus_df lookup
+
         Returns:
             RoutingResult with leaf distribution, node probabilities, and entropy.
         """
+        mem_tree = memory_tree if memory_tree is not None else (root if hasattr(root, "corpus_df") else None)
         root = self._unwrap_root(root)
         h_vec = h.squeeze()
         if h_vec.dim() != 1:
@@ -284,52 +436,96 @@ class TreeSoftmaxRouter(nn.Module):
         h_vec = h_vec.to(device)
         q_proj = self.w_q(h_vec)
 
-        # Precompute subtree leaf counts for unbiased hierarchical prior log|L(c)|
-        # (independent of h, so Lipschitz constant of TreeSoftmax wrt h is unchanged)
-        leaf_counts: Dict[int, int] = {}
-
-        def _count_leaves(node: Any) -> int:
-            children = self._get_node_children(node)
-            if not children:
-                cnt = 1
-            else:
-                cnt = sum(_count_leaves(c) for c in children)
-            leaf_counts[id(node)] = cnt
-            return cnt
-
-        _count_leaves(root)
-
-        # 1. Recursive TreeSoftmax top-down pass
         node_probs: Dict[str, float] = {}
         root_id = self._get_node_id(root)
         node_probs[root_id] = 1.0
 
-        def _route_node(node: Any, current_p: float) -> None:
-            children = self._get_node_children(node)
-            if not children:
-                return
+        if self.routing_mode == "sparse_lse":
+            tau = max(1e-4, float(self.temperature))
+            tau_s = max(1e-4, float(self.tau_sparse))
+            query_terms, idf_map, avgdl = self._prepare_sparse_context(root, query_text, mem_tree)
+            node_z: Dict[int, float] = {}
 
-            node_level = self._get_node_level(node)
-            tau = max(1e-4, self.compute_temperature(node_level))
+            def _compute_lse(node: Any, active_terms: List[str]) -> float:
+                children = self._get_node_children(node)
+                if not children:
+                    z_val = self._score_leaf_sparse_lse(
+                        node, q_proj, active_terms, idf_map, avgdl, tau, tau_s, device
+                    )
+                    node_z[id(node)] = z_val
+                    return z_val
 
-            # Compute logits log|L(c)| + <W_q h, \\kappa_c> / \\tau
-            logits = []
-            for child in children:
-                key = self._get_node_key(child).to(device)
-                prior = math.log(max(1, leaf_counts.get(id(child), 1)))
-                dot = torch.dot(q_proj, key) / tau + prior
-                logits.append(dot)
+                # Filter active_terms via c_v(t) > 0 so zero-overlap subtrees skip sparse work
+                term_count = self._get_node_attr(node, "term_count", None)
+                if active_terms and term_count is not None and hasattr(term_count, "nonzero"):
+                    sub_terms = [t for t in active_terms if term_count.nonzero(t)]
+                else:
+                    sub_terms = active_terms
 
-            logits_tensor = torch.stack(logits)
-            branch_probs = F.softmax(logits_tensor, dim=0).detach().cpu().tolist()
+                child_zs = [_compute_lse(c, sub_terms) for c in children]
+                m = max(child_zs)
+                lse_val = m + math.log(sum(math.exp(cz - m) for cz in child_zs))
+                node_z[id(node)] = lse_val
+                return lse_val
 
-            for child, b_p in zip(children, branch_probs):
-                child_id = self._get_node_id(child)
-                child_p = current_p * float(b_p)
-                node_probs[child_id] = child_p
-                _route_node(child, child_p)
+            _compute_lse(root, query_terms)
 
-        _route_node(root, 1.0)
+            def _distribute_lse_probs(node: Any, current_p: float) -> None:
+                children = self._get_node_children(node)
+                if not children:
+                    return
+                z_u = node_z[id(node)]
+                for child in children:
+                    z_c = node_z[id(child)]
+                    b_p = math.exp(z_c - z_u)
+                    child_p = current_p * b_p
+                    node_probs[self._get_node_id(child)] = child_p
+                    _distribute_lse_probs(child, child_p)
+
+            _distribute_lse_probs(root, 1.0)
+        else:
+            # Precompute subtree leaf counts for unbiased hierarchical prior log|L(c)|
+            # (independent of h, so Lipschitz constant of TreeSoftmax wrt h is unchanged)
+            leaf_counts: Dict[int, int] = {}
+
+            def _count_leaves(node: Any) -> int:
+                children = self._get_node_children(node)
+                if not children:
+                    cnt = 1
+                else:
+                    cnt = sum(_count_leaves(c) for c in children)
+                leaf_counts[id(node)] = cnt
+                return cnt
+
+            _count_leaves(root)
+
+            # 1. Recursive TreeSoftmax top-down pass
+            def _route_node(node: Any, current_p: float) -> None:
+                children = self._get_node_children(node)
+                if not children:
+                    return
+
+                node_level = self._get_node_level(node)
+                tau = max(1e-4, self.compute_temperature(node_level))
+
+                # Compute logits log|L(c)| + <W_q h, \kappa_c> / \tau
+                logits = []
+                for child in children:
+                    key = self._get_node_key(child).to(device)
+                    prior = math.log(max(1, leaf_counts.get(id(child), 1)))
+                    dot = torch.dot(q_proj, key) / tau + prior
+                    logits.append(dot)
+
+                logits_tensor = torch.stack(logits)
+                branch_probs = F.softmax(logits_tensor, dim=0).detach().cpu().tolist()
+
+                for child, b_p in zip(children, branch_probs):
+                    child_id = self._get_node_id(child)
+                    child_p = current_p * float(b_p)
+                    node_probs[child_id] = child_p
+                    _route_node(child, child_p)
+
+            _route_node(root, 1.0)
 
         # 2. Extract leaf distribution \\alpha_p
         leaves = self._collect_leaves(root)
@@ -588,6 +784,7 @@ class EquilibriumMultiHopReadout(nn.Module):
         max_hops: Optional[int] = None,
         root: Any = None,
         query_embedding: Optional[Union[str, torch.Tensor]] = None,
+        query_text: Optional[str] = None,
     ) -> EquilibriumResult:
         """
         Runs the full Banach Equilibrium Multi-Hop Readout loop.
@@ -598,6 +795,7 @@ class EquilibriumMultiHopReadout(nn.Module):
             max_hops: Optional override for max Banach iterations
             root: Optional alias for tree
             query_embedding: Optional alias for query
+            query_text: Optional raw query string for Theorem 4 Sparse-LSE routing
             
         Returns:
             EquilibriumResult with fixed point h*, trajectory deltas, and contraction audit.
@@ -609,6 +807,8 @@ class EquilibriumMultiHopReadout(nn.Module):
         if query is None:
             query = torch.zeros(self.d_model, dtype=torch.float32)
 
+        q_text_resolved = query_text if query_text is not None else (query if isinstance(query, str) else None)
+        memory_tree_ref = tree if hasattr(tree, "corpus_df") else None
         root = self.router._unwrap_root(tree)
         device = self.w_0.weight.device
 
@@ -655,8 +855,13 @@ class EquilibriumMultiHopReadout(nn.Module):
         q_norm_sq = float(torch.dot(q_emb, q_emb))
 
         for hop in range(hops_limit):
-            # Step 1: Hierarchical TreeSoftmax routing
-            routing_res = self.router.route(h_current, root)
+            # Step 1: Hierarchical TreeSoftmax routing (sparse channel is h-invariant)
+            routing_res = self.router.route(
+                h_current,
+                root,
+                query_text=q_text_resolved,
+                memory_tree=memory_tree_ref,
+            )
             history_alpha.append(routing_res.leaf_weights)
             history_entropy.append(routing_res.entropy)
             final_routing = routing_res

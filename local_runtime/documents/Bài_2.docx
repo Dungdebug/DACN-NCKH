@@ -1,0 +1,17 @@
+Bài 2: Chuyên đề Hóa học – Phản ứng Oxi hóa - Khử và Định luật Bảo toàn Electron
+
+2.1. Bản chất điện tử và Nguyên tắc cân bằng
+
+Phản ứng oxi hóa - khử là loại phản ứng hóa học trong đó xảy ra sự chuyển dịch electron giữa các chất phản ứng, kéo theo sự thay đổi số oxi hóa của một hoặc nhiều nguyên tố hóa học. Quá trình này luôn diễn ra đồng thời hai bán phản ứng đối lập:
+
+Chất khử (bị oxi hóa): Là chất nhường electron, làm số oxi hóa của nguyên tố tăng lên sau phản ứng.
+
+Chất oxi hóa (bị khử): Là chất nhận electron, làm số oxi hóa của nguyên tố giảm xuống sau phản ứng.
+
+Nền tảng định lượng quan trọng nhất để giải quyết các bài toán oxi hóa - khử phức tạp là Định luật Bảo toàn Electron, phát biểu rằng tổng số mol electron do các chất khử nhường ra luôn bằng tổng số mol electron mà các chất oxi hóa thu vào:
+
+∑ n(e nhường) = ∑ n(e nhận) Công thức tính mol khí (ĐKC 25°C, 1 bar): n = V / 24,79 Công thức nồng độ mol dung dịch: C_M = n / V_dd.
+
+2.2. Ví dụ minh họa đa giai đoạn
+
+Ví dụ 2.1 (Hòa tan kim loại trong axit có tính oxi hóa mạnh): Đề bài: Hòa tan hoàn toàn 11,2 gam bột Sắt (Fe) vào dung dịch Axit nitric (HNO₃) loãng dư, thu được dung dịch muối Sắt (III) nitrat và V lít khí Nitơ monoxit (NO - sản phẩm khử duy nhất ở điều kiện chuẩn 25°C, 1 bar). Tính giá trị của V và khối lượng muối khan thu được. Bước 1 (Tính số mol chất tham gia): M(Fe) = 56 g/mol ⇒ n(Fe) = 11,2 / 56 = 0,2 mol. Bước 2 (Viết các bán phản ứng nhường - nhận electron): • Quá trình oxi hóa: Fe⁰ → Fe⁺³ + 3e (0,2 mol Fe nhường 0,6 mol electron) • Quá trình khử: N⁺⁵ + 3e → N⁺² (trong NO) Bước 3 (Áp dụng định luật bảo toàn electron): ∑ n(e nhận) = ∑ n(e nhường) = 0,6 mol ⇒ n(NO) = 0,6 / 3 = 0,2 mol. Bước 4 (Tính thể tích khí và khối lượng muối): V(NO) = 0,2 × 24,79 = 4,958 lít. Khối lượng muối Fe(NO₃)₃ = 0,2 × (56 + 62×3) = 0,2 × 242 = 48,4 gam.

@@ -46,7 +46,7 @@
       "document_id": "DEMO_DOC_003",
       "text": "Chẩn đoán đái tháo đường tuýp 2 dựa trên nồng độ glucose huyết tương lúc đói từ 126 mg/dL (7.0 mmol/L) trở lên, hoặc chỉ số HbA1c từ 6.5% trở lên qua xét nghiệm chuẩn hóa NGSP. Mục tiêu điều trị chung cho người trưởng thành không mang thai là duy trì mức HbA1c dưới 7.0% nhằm giảm thiểu nguy cơ biến chứng mạch máu nhỏ và mạch máu lớn.",
       "start_char": 45,
-      "end_char": 381,
+      "end_char": 380,
       "start_token": -1,
       "end_token": -1,
       "section_title": "1. Tiêu chuẩn Chẩn đoán và Mục tiêu HbA1c",
@@ -120,7 +120,7 @@
       "document_id": "DEMO_DOC_003",
       "text": "Metformin vẫn là lựa chọn đầu tay trong đơn trị liệu nếu bệnh nhân không có chống chỉ định suy thận nặng (eGFR < 30 mL/phút). Đối với bệnh nhân có bệnh tim mạch xơ vữa đã xác định hoặc có nguy cơ tim mạch rất cao, khuyến cáo phối hợp sớm với nhóm thuốc ức chế SGLT2 (SGLT2i) hoặc đồng vận thụ thể GLP-1 (GLP-1 RA).",
       "start_char": 432,
-      "end_char": 747,
+      "end_char": 746,
       "start_token": -1,
       "end_token": -1,
       "section_title": "2. Lựa chọn Thuốc Điều trị Ban đầu và Phối hợp",
@@ -252,6 +252,7 @@
         "answerable": false,
         "expected_answer": "Tài liệu không đề cập đến ghép thận nhân tạo sinh học (Refusal required)."
       }
-    ]
+    ],
+    "chunker_version": "v5.0"
   }
 }

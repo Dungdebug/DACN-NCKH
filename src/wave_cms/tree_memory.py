@@ -20,11 +20,14 @@ import unicodedata
 from typing import List, Dict, Any, Optional, Tuple, Union
 import numpy as np
 
+from src.wave_cms.sufficient_stats import FixedPointVector, TermCounter
+
 __all__ = [
     "TreeLevel",
     "DocumentTreeNode",
     "WaveTreeMemory",
     "compute_deterministic_routing_key",
+    "extract_sparse_terms",
     "strip_accents",
 ]
 
@@ -56,6 +59,20 @@ def strip_accents(text: str) -> str:
     text_nfd = unicodedata.normalize("NFD", str(text))
     cleaned = "".join(ch for ch in text_nfd if unicodedata.category(ch) != "Mn")
     return unicodedata.normalize("NFC", cleaned).lower().replace("đ", "d").strip()
+
+
+def extract_sparse_terms(text: str) -> List[str]:
+    """
+    Tokenizes text into accent-stripped alphanumeric terms of length >= 2,
+    excluding basic Vietnamese/English routing stopwords.
+    """
+    clean = strip_accents(text or "")
+    if not clean:
+        return []
+    return [
+        w for w in re.findall(r"[a-z0-9]+", clean)
+        if len(w) >= 2 and w not in _ROUTING_STOPWORDS
+    ]
 
 
 class TreeLevel(str, Enum):
@@ -149,6 +166,8 @@ class DocumentTreeNode:
         kappa: Optional[np.ndarray] = None,
         parent: Optional["DocumentTreeNode"] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        term_tf: Optional[Counter] = None,
+        doc_len: Optional[int] = None,
     ):
         self.node_id = str(node_id)
         self.level = level
@@ -171,6 +190,31 @@ class DocumentTreeNode:
         self.unnormalized_kappa: Optional[np.ndarray] = (
             self.weight * kappa.copy() if kappa is not None else None
         )
+
+        # Theorem 3* bit-exact sufficient statistics:
+        # - Fixed-point int64 unnormalized routing key mass
+        # - Leaf sparse term frequency & length
+        # - Subtree term leaf-count c_v(t)
+        self.kappa_mass_fp: Optional[FixedPointVector] = None
+        if kappa is not None:
+            k_arr = np.asarray(kappa, dtype=np.float64)
+            if k_arr.ndim == 1:
+                self.kappa_mass_fp = FixedPointVector(dim=int(k_arr.shape[0]), scale_bits=30)
+                self.kappa_mass_fp.add(self.weight * k_arr)
+
+        if term_tf is not None:
+            self.term_tf: Counter = Counter(term_tf)
+        elif self.level == TreeLevel.LEAF_PARAGRAPH and (self.title or self.text):
+            self.term_tf = Counter(extract_sparse_terms(f"{self.title}\n{self.text}".strip()))
+        else:
+            self.term_tf = Counter()
+
+        self.doc_len: int = (
+            int(doc_len) if doc_len is not None else int(sum(self.term_tf.values()))
+        )
+        self.term_count: TermCounter = TermCounter()
+        if self.level == TreeLevel.LEAF_PARAGRAPH and self.term_tf:
+            self.term_count.add_presence(self.term_tf.keys())
 
         self.parent: Optional["DocumentTreeNode"] = parent
         self.children: List["DocumentTreeNode"] = []
@@ -326,6 +370,8 @@ class WaveTreeMemory:
             detail=np.zeros((self.r, self.r), dtype=np.float64),
             kappa=np.zeros(self.dim, dtype=np.float64),
         )
+        self.root.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+        self.corpus_df: TermCounter = TermCounter()
         self.documents: Dict[str, DocumentTreeNode] = {}
 
     def _init_leaf_core(self, text: str, title: str) -> Tuple[np.ndarray, np.ndarray]:
@@ -495,6 +541,9 @@ class WaveTreeMemory:
             self.root.detail = np.zeros((self.r, self.r), dtype=np.float64)
             self.root.kappa = np.zeros(self.dim, dtype=np.float64)
             self.root.unnormalized_kappa = np.zeros(self.dim, dtype=np.float64)
+            self.root.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+            self.root.term_count = TermCounter()
+            self.corpus_df = TermCounter()
             return
 
         def _consolidate_node(node: DocumentTreeNode) -> Tuple[float, np.ndarray, np.ndarray]:
@@ -505,6 +554,12 @@ class WaveTreeMemory:
                     if node.kappa is not None
                     else np.zeros(self.dim, dtype=np.float64)
                 )
+                node.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+                if node.kappa is not None:
+                    node.kappa_mass_fp.add(node.weight * node.kappa)
+                node.term_count = TermCounter()
+                if node.term_tf:
+                    node.term_count.add_presence(node.term_tf.keys())
                 return node.total_weight, node.theta, node.unnormalized_kappa
 
             child_weights = []
@@ -523,11 +578,16 @@ class WaveTreeMemory:
             # Telescoping weighted sum of cores and additive unnormalized routing keys
             accum_theta = np.zeros((self.r, self.r), dtype=np.float64)
             accum_kappa = np.zeros(self.dim, dtype=np.float64)
+            node.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+            node.term_count = TermCounter()
 
-            for w, t, uk in zip(child_weights, child_thetas, child_unnorm_kappas):
+            for child, w, t, uk in zip(node.children, child_weights, child_thetas, child_unnorm_kappas):
                 fraction = w / total_w
                 accum_theta += fraction * t
                 accum_kappa += uk
+                if child.kappa_mass_fp is not None:
+                    node.kappa_mass_fp.add_raw(child.kappa_mass_fp.data)
+                node.term_count.add(child.term_count._counts)
 
             node.theta = accum_theta
             node._theta_version += 1
@@ -538,6 +598,7 @@ class WaveTreeMemory:
             return node.total_weight, node.theta, node.unnormalized_kappa
 
         _consolidate_node(self.root)
+        self.corpus_df = self.root.term_count.copy()
 
         # Top-down wavelet details decomposition: D_v = Theta_v - Theta_par(v)
         self.root.detail = np.zeros((self.r, self.r), dtype=np.float64)
@@ -580,6 +641,12 @@ class WaveTreeMemory:
             if n.unnormalized_kappa is not None:
                 freed_bytes += n.unnormalized_kappa.nbytes
                 n.unnormalized_kappa = None
+            if n.kappa_mass_fp is not None:
+                freed_bytes += n.kappa_mass_fp.data.nbytes
+                n.kappa_mass_fp = None
+            n.term_tf.clear()
+            n.term_count = TermCounter()
+            n.doc_len = 0
             freed_bytes += len(n.text.encode("utf-8")) + len(n.title.encode("utf-8"))
             n.text = ""
             n.title = ""
@@ -620,6 +687,12 @@ class WaveTreeMemory:
         delta_w = -w_u
         delta_theta_mass = -(w_u * theta_u)
         delta_k_unnorm = -k_unnorm_u
+        removed_term_counts = dict(removed_node.term_count._counts)
+        delta_k_fp = (
+            removed_node.kappa_mass_fp.data.copy()
+            if removed_node.kappa_mass_fp is not None
+            else None
+        )
 
         nodes_updated = 0
         curr: Optional[DocumentTreeNode] = start_parent
@@ -647,6 +720,8 @@ class WaveTreeMemory:
                 curr.detail = np.zeros((self.r, self.r), dtype=np.float64)
                 curr.kappa = np.zeros(self.dim, dtype=np.float64)
                 curr.unnormalized_kappa = np.zeros(self.dim, dtype=np.float64)
+                curr.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+                curr.term_count = TermCounter()
 
                 # Propagate full removal up if non-root node became empty
                 delta_w = -w_old
@@ -663,8 +738,17 @@ class WaveTreeMemory:
                 norm_k = float(np.linalg.norm(k_new_unnorm))
                 curr.kappa = k_new_unnorm / (norm_k + 1e-12)
 
+                if delta_k_fp is not None:
+                    if curr.kappa_mass_fp is None:
+                        curr.kappa_mass_fp = FixedPointVector(dim=self.dim, scale_bits=30)
+                    curr.kappa_mass_fp.sub_raw(delta_k_fp)
+                if removed_term_counts:
+                    curr.term_count.sub(removed_term_counts)
+
             curr = curr.parent
 
+        if removed_term_counts:
+            self.corpus_df.sub(removed_term_counts)
         self.root.detail = np.zeros((self.r, self.r), dtype=np.float64)
         return nodes_updated
 

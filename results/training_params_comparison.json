@@ -1,0 +1,112 @@
+{
+  "title": "Bảng so sánh Thông số Huấn luyện Gốc vs Cải tiến (SA-CMS -> WaveCMS + Online API)",
+  "generated_at": "2026-11-17T13:57:37.577068+00:00",
+  "sources": [
+    "results/master_results_summary.json",
+    "results/pretrained_experiment_results.json",
+    "checkpoints/full_dataset_training/training_report_full_dataset.json",
+    "checkpoints/extended_training/training_report_extended.json",
+    "checkpoints/train_20m/training_20m_manifest.json",
+    "checkpoints/train_api_expanded/api_training_report.json",
+    "results/wave_cms_vs_baselines_benchmark.json"
+  ],
+  "online_api_corpus_stats": {
+    "corpus_path": "data/online_training_corpus.json",
+    "num_documents": 2171,
+    "num_samples": 9690,
+    "online_samples_added": 8690,
+    "documents_by_source": {
+      "qasper": 200,
+      "squad_v2": 444,
+      "sciq": 533,
+      "pubmedqa": 400,
+      "arxiv": 200,
+      "openalex": 147,
+      "europepmc": 153,
+      "wikipedia_en": 47,
+      "wikipedia_vi": 47
+    },
+    "gpu_device": "NVIDIA GeForce GTX 1650 Ti",
+    "actual_tokens_trained": 500026,
+    "train_loss": 2.7024,
+    "tokens_per_sec": 2820.52,
+    "peak_vram_mb": 965.81
+  },
+  "training_comparison": [
+    {
+      "stage": "Mô hình gốc Paper Hope-CMS Fixed-Token / Pretrained Base",
+      "backbone": "SmolLM2-135M (Frozen) / Fixed-Token Hope-CMS",
+      "trainable_params": "0 (Pretrained Base / Fixed-Token [64,32,16])",
+      "update_schedule": "Fixed-Token Chunking [64, 32, 16]",
+      "corpus_docs": 135,
+      "tokens_trained": 0,
+      "lr": "N/A",
+      "final_loss": 3.1281,
+      "val_ppl_vi": 18.46,
+      "val_ppl_en": 28.23,
+      "peak_vram_mb": 350.7,
+      "throughput_tok_s": 0.0,
+      "unlearning_error": "Reindex (19.23x scaling)"
+    },
+    {
+      "stage": "SA-CMS Full-Dataset GĐ1",
+      "backbone": "SmolLM2-135M (Frozen) + 3-Level SA-CMS",
+      "trainable_params": "5,315,904 (3.80%)",
+      "update_schedule": "Structure-Aligned (Paragraph/Section/Document)",
+      "corpus_docs": 135,
+      "tokens_trained": 2966105,
+      "lr": "0.00016 -> 1.6e-05 (Batch 8)",
+      "final_loss": 1.4607,
+      "val_ppl_vi": 2.32,
+      "val_ppl_en": 8.02,
+      "peak_vram_mb": 2661.0,
+      "throughput_tok_s": 1318.3,
+      "unlearning_error": "0.0543 (Xấp xỉ L2)"
+    },
+    {
+      "stage": "SA-CMS Extended Song ngữ",
+      "backbone": "SmolLM2-135M (Frozen) + 3-Level SA-CMS",
+      "trainable_params": "5,315,904 (3.80%)",
+      "update_schedule": "Nested Multi-Frequency (6 Epochs, 2x VN Oversample)",
+      "corpus_docs": 135,
+      "tokens_trained": 3800000,
+      "lr": "0.00015 -> 1.5e-05 (Batch 8)",
+      "final_loss": 1.5192,
+      "val_ppl_vi": 2.34,
+      "val_ppl_en": 8.91,
+      "peak_vram_mb": 2243.0,
+      "throughput_tok_s": 1650.0,
+      "unlearning_error": "0.0543 (Xấp xỉ L2)"
+    },
+    {
+      "stage": "SA-CMS 20M Tokens",
+      "backbone": "SmolLM2-135M (Frozen) + 3-Level SA-CMS",
+      "trainable_params": "5,315,904 (3.80%)",
+      "update_schedule": "Continuous 166 Epochs + Cosine Decay",
+      "corpus_docs": 135,
+      "tokens_trained": 20000007,
+      "lr": "1.0e-04 (Batch 4)",
+      "final_loss": 0.0666,
+      "val_ppl_vi": 2.32,
+      "val_ppl_en": 8.02,
+      "peak_vram_mb": 888.3,
+      "throughput_tok_s": 2392.5,
+      "unlearning_error": "0.0543 (Xấp xỉ L2)"
+    },
+    {
+      "stage": "SA-CMS + WaveCMS Mở rộng Dữ liệu API Mạng",
+      "backbone": "SmolLM2-135M + 3-Level SA-CMS + WaveTreeMemory (Haar)",
+      "trainable_params": "5,315,904 (3.80%) + O(depth) WaveTree",
+      "update_schedule": "Wavelet Dyadic + Banach Equilibrium + Conformal",
+      "corpus_docs": 2306,
+      "tokens_trained": 20500033,
+      "lr": "0.0001 (Batch 4, Warm-start API)",
+      "final_loss": 2.7024,
+      "val_ppl_vi": 2.32,
+      "val_ppl_en": 8.02,
+      "peak_vram_mb": 965.81,
+      "throughput_tok_s": 2820.52,
+      "unlearning_error": "5.55e-17 (Exact <= 1e-16)"
+    }
+  ]
+}

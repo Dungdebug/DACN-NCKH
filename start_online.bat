@@ -13,6 +13,9 @@ echo ===========================================================================
 set HF_HUB_OFFLINE=1
 set TRANSFORMERS_OFFLINE=1
 set SA_CMS_OFFLINE_MODE=1
+REM Bat che do Online LLM cho nhanh sinh them vi du / bai tap (Huong 2)
+REM Ho tro GEMINI_API_KEY, OPENAI_API_KEY, hoac OLLAMA_MODEL (tu dong fallback ve Huong 1 neu chua dat key)
+set SA_CMS_ONLINE_LLM=1
 
 REM Xac thuc moi truong Python co day du uvicorn + fastapi + torch
 set PYTHON_EXE=

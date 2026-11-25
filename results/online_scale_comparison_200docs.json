@@ -1,0 +1,977 @@
+{
+  "benchmark_name": "online_scale_comparison_200docs",
+  "generated_at": "2026-11-17T14:45:15.889314+00:00",
+  "total_documents": 272,
+  "total_queries": 987,
+  "corpus_stats": {
+    "total_documents": 272,
+    "total_queries": 987,
+    "answerable_queries": 603,
+    "unanswerable_queries": 384,
+    "sources": {
+      "wikipedia_vi": 60,
+      "wikipedia_en": 50,
+      "arxiv": 51,
+      "qasper": 50,
+      "squad_v2": 61
+    },
+    "languages": {
+      "vi": 60,
+      "en": 212
+    },
+    "index_build_time_s": 318.621,
+    "conformal_calibrated_threshold": 0.42
+  },
+  "methods": {
+    "baseline_standard_rag": {
+      "total_queries": 987,
+      "answerable_count": 603,
+      "unanswerable_count": 384,
+      "overall_accuracy_pct": 25.73,
+      "answerable_accuracy_pct": 42.12,
+      "unanswerable_refusal_pct": 0.0,
+      "hallucination_rate_pct": 65.45,
+      "mean_token_f1_pct": 20.09,
+      "citation_faithfulness_pct": 100.0,
+      "mean_latency_ms": 10.014,
+      "p50_latency_ms": 7.426,
+      "p95_latency_ms": 20.58
+    },
+    "baseline_legacy_sa_cms": {
+      "total_queries": 987,
+      "answerable_count": 603,
+      "unanswerable_count": 384,
+      "overall_accuracy_pct": 39.41,
+      "answerable_accuracy_pct": 62.35,
+      "unanswerable_refusal_pct": 3.39,
+      "hallucination_rate_pct": 52.99,
+      "mean_token_f1_pct": 30.36,
+      "citation_faithfulness_pct": 100.0,
+      "mean_latency_ms": 10.865,
+      "p50_latency_ms": 7.98,
+      "p95_latency_ms": 24.212
+    },
+    "proposed_wave_hybrid": {
+      "total_queries": 987,
+      "answerable_count": 603,
+      "unanswerable_count": 384,
+      "overall_accuracy_pct": 51.57,
+      "answerable_accuracy_pct": 56.88,
+      "unanswerable_refusal_pct": 43.23,
+      "hallucination_rate_pct": 35.06,
+      "mean_token_f1_pct": 27.93,
+      "citation_faithfulness_pct": 96.71,
+      "mean_latency_ms": 15.997,
+      "p50_latency_ms": 11.584,
+      "p95_latency_ms": 36.602
+    }
+  },
+  "by_source": {
+    "arxiv": {
+      "baseline_standard_rag": {
+        "total_queries": 102,
+        "answerable_count": 51,
+        "unanswerable_count": 51,
+        "overall_accuracy_pct": 18.63,
+        "answerable_accuracy_pct": 37.25,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 65.69,
+        "mean_token_f1_pct": 19.44,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 6.703,
+        "p50_latency_ms": 6.655,
+        "p95_latency_ms": 7.845
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 102,
+        "answerable_count": 51,
+        "unanswerable_count": 51,
+        "overall_accuracy_pct": 19.61,
+        "answerable_accuracy_pct": 39.22,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 65.69,
+        "mean_token_f1_pct": 20.37,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 6.735,
+        "p50_latency_ms": 6.554,
+        "p95_latency_ms": 8.457
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 102,
+        "answerable_count": 51,
+        "unanswerable_count": 51,
+        "overall_accuracy_pct": 28.43,
+        "answerable_accuracy_pct": 39.22,
+        "unanswerable_refusal_pct": 17.65,
+        "hallucination_rate_pct": 56.86,
+        "mean_token_f1_pct": 20.37,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 8.86,
+        "p50_latency_ms": 8.697,
+        "p95_latency_ms": 11.966
+      }
+    },
+    "qasper": {
+      "baseline_standard_rag": {
+        "total_queries": 156,
+        "answerable_count": 146,
+        "unanswerable_count": 10,
+        "overall_accuracy_pct": 10.9,
+        "answerable_accuracy_pct": 11.64,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 79.49,
+        "mean_token_f1_pct": 7.12,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 11.69,
+        "p50_latency_ms": 11.181,
+        "p95_latency_ms": 16.396
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 156,
+        "answerable_count": 146,
+        "unanswerable_count": 10,
+        "overall_accuracy_pct": 18.59,
+        "answerable_accuracy_pct": 19.18,
+        "unanswerable_refusal_pct": 10.0,
+        "hallucination_rate_pct": 67.95,
+        "mean_token_f1_pct": 7.22,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 12.6,
+        "p50_latency_ms": 12.204,
+        "p95_latency_ms": 18.791
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 156,
+        "answerable_count": 146,
+        "unanswerable_count": 10,
+        "overall_accuracy_pct": 19.23,
+        "answerable_accuracy_pct": 18.49,
+        "unanswerable_refusal_pct": 30.0,
+        "hallucination_rate_pct": 55.77,
+        "mean_token_f1_pct": 6.93,
+        "citation_faithfulness_pct": 98.52,
+        "mean_latency_ms": 17.989,
+        "p50_latency_ms": 16.869,
+        "p95_latency_ms": 27.647
+      }
+    },
+    "squad_v2": {
+      "baseline_standard_rag": {
+        "total_queries": 400,
+        "answerable_count": 187,
+        "unanswerable_count": 213,
+        "overall_accuracy_pct": 22.0,
+        "answerable_accuracy_pct": 47.06,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 77.0,
+        "mean_token_f1_pct": 9.03,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 6.429,
+        "p50_latency_ms": 6.378,
+        "p95_latency_ms": 7.371
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 400,
+        "answerable_count": 187,
+        "unanswerable_count": 213,
+        "overall_accuracy_pct": 38.75,
+        "answerable_accuracy_pct": 82.35,
+        "unanswerable_refusal_pct": 0.47,
+        "hallucination_rate_pct": 61.0,
+        "mean_token_f1_pct": 14.7,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 6.188,
+        "p50_latency_ms": 6.057,
+        "p95_latency_ms": 7.632
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 400,
+        "answerable_count": 187,
+        "unanswerable_count": 213,
+        "overall_accuracy_pct": 43.5,
+        "answerable_accuracy_pct": 69.52,
+        "unanswerable_refusal_pct": 20.66,
+        "hallucination_rate_pct": 49.0,
+        "mean_token_f1_pct": 11.85,
+        "citation_faithfulness_pct": 99.39,
+        "mean_latency_ms": 8.993,
+        "p50_latency_ms": 8.937,
+        "p95_latency_ms": 12.641
+      }
+    },
+    "wikipedia_en": {
+      "baseline_standard_rag": {
+        "total_queries": 149,
+        "answerable_count": 99,
+        "unanswerable_count": 50,
+        "overall_accuracy_pct": 32.89,
+        "answerable_accuracy_pct": 49.49,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 49.66,
+        "mean_token_f1_pct": 36.78,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 13.43,
+        "p50_latency_ms": 12.667,
+        "p95_latency_ms": 21.521
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 149,
+        "answerable_count": 99,
+        "unanswerable_count": 50,
+        "overall_accuracy_pct": 55.7,
+        "answerable_accuracy_pct": 72.73,
+        "unanswerable_refusal_pct": 22.0,
+        "hallucination_rate_pct": 29.53,
+        "mean_token_f1_pct": 61.82,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 14.932,
+        "p50_latency_ms": 14.603,
+        "p95_latency_ms": 24.5
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 149,
+        "answerable_count": 99,
+        "unanswerable_count": 50,
+        "overall_accuracy_pct": 79.19,
+        "answerable_accuracy_pct": 68.69,
+        "unanswerable_refusal_pct": 100.0,
+        "hallucination_rate_pct": 2.68,
+        "mean_token_f1_pct": 56.64,
+        "citation_faithfulness_pct": 89.89,
+        "mean_latency_ms": 22.057,
+        "p50_latency_ms": 21.357,
+        "p95_latency_ms": 35.989
+      }
+    },
+    "wikipedia_vi": {
+      "baseline_standard_rag": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 45.0,
+        "answerable_accuracy_pct": 67.5,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 40.56,
+        "mean_token_f1_pct": 39.6,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 15.577,
+        "p50_latency_ms": 12.435,
+        "p95_latency_ms": 35.987
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 56.67,
+        "answerable_accuracy_pct": 85.0,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 34.44,
+        "mean_token_f1_pct": 61.2,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 18.729,
+        "p50_latency_ms": 15.249,
+        "p95_latency_ms": 42.333
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 87.78,
+        "answerable_accuracy_pct": 81.67,
+        "unanswerable_refusal_pct": 100.0,
+        "hallucination_rate_pct": 0.56,
+        "mean_token_f1_pct": 58.04,
+        "citation_faithfulness_pct": 89.83,
+        "mean_latency_ms": 28.866,
+        "p50_latency_ms": 25.107,
+        "p95_latency_ms": 62.376
+      }
+    }
+  },
+  "by_language": {
+    "en": {
+      "baseline_standard_rag": {
+        "total_queries": 807,
+        "answerable_count": 483,
+        "unanswerable_count": 324,
+        "overall_accuracy_pct": 21.44,
+        "answerable_accuracy_pct": 35.82,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 71.0,
+        "mean_token_f1_pct": 15.24,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 8.773,
+        "p50_latency_ms": 6.894,
+        "p95_latency_ms": 16.618
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 807,
+        "answerable_count": 483,
+        "unanswerable_count": 324,
+        "overall_accuracy_pct": 35.56,
+        "answerable_accuracy_pct": 56.73,
+        "unanswerable_refusal_pct": 4.01,
+        "hallucination_rate_pct": 57.13,
+        "mean_token_f1_pct": 22.7,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 9.111,
+        "p50_latency_ms": 6.846,
+        "p95_latency_ms": 18.615
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 807,
+        "answerable_count": 483,
+        "unanswerable_count": 324,
+        "overall_accuracy_pct": 43.49,
+        "answerable_accuracy_pct": 50.72,
+        "unanswerable_refusal_pct": 32.72,
+        "hallucination_rate_pct": 42.75,
+        "mean_token_f1_pct": 20.44,
+        "citation_faithfulness_pct": 97.98,
+        "mean_latency_ms": 13.127,
+        "p50_latency_ms": 10.024,
+        "p95_latency_ms": 27.826
+      }
+    },
+    "vi": {
+      "baseline_standard_rag": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 45.0,
+        "answerable_accuracy_pct": 67.5,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 40.56,
+        "mean_token_f1_pct": 39.6,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 15.577,
+        "p50_latency_ms": 12.435,
+        "p95_latency_ms": 35.987
+      },
+      "baseline_legacy_sa_cms": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 56.67,
+        "answerable_accuracy_pct": 85.0,
+        "unanswerable_refusal_pct": 0.0,
+        "hallucination_rate_pct": 34.44,
+        "mean_token_f1_pct": 61.2,
+        "citation_faithfulness_pct": 100.0,
+        "mean_latency_ms": 18.729,
+        "p50_latency_ms": 15.249,
+        "p95_latency_ms": 42.333
+      },
+      "proposed_wave_hybrid": {
+        "total_queries": 180,
+        "answerable_count": 120,
+        "unanswerable_count": 60,
+        "overall_accuracy_pct": 87.78,
+        "answerable_accuracy_pct": 81.67,
+        "unanswerable_refusal_pct": 100.0,
+        "hallucination_rate_pct": 0.56,
+        "mean_token_f1_pct": 58.04,
+        "citation_faithfulness_pct": 89.83,
+        "mean_latency_ms": 28.866,
+        "p50_latency_ms": 25.107,
+        "p95_latency_ms": 62.376
+      }
+    }
+  },
+  "statistical_tests": {
+    "p_value": 6.555082e-46,
+    "p_value_formatted": "p = 6.56e-46 (< 0.001)",
+    "cohen_d": 0.4771,
+    "ci_95_low": 22.453,
+    "ci_95_high": 29.218,
+    "improvement_abs_pct": 25.836,
+    "improvement_rel_pct": 100.394,
+    "proposed_vs_standard_rag": {
+      "n": 987,
+      "t_stat": 14.9893,
+      "p_value": 6.555082e-46,
+      "mcnemar_chi2": 181.7352,
+      "mcnemar_p_value": 2.025644e-41,
+      "mcnemar_discordant": {
+        "proposed_only_correct": 305,
+        "baseline_only_correct": 50
+      },
+      "cohen_d": 0.4771,
+      "ci_95_low": 22.453,
+      "ci_95_high": 29.218,
+      "improvement_abs_pct": 25.836,
+      "improvement_rel_pct": 100.394
+    },
+    "proposed_vs_legacy_sa_cms": {
+      "n": 987,
+      "t_stat": 8.8562,
+      "p_value": 3.783002e-18,
+      "mcnemar_chi2": 71.5202,
+      "mcnemar_p_value": 2.744339e-17,
+      "mcnemar_discordant": {
+        "proposed_only_correct": 159,
+        "baseline_only_correct": 39
+      },
+      "cohen_d": 0.2819,
+      "ci_95_low": 9.464,
+      "ci_95_high": 14.852,
+      "improvement_abs_pct": 12.158,
+      "improvement_rel_pct": 30.848
+    }
+  },
+  "online_vs_offline_comparison": {
+    "offline_static_local": {
+      "mode": "Offline (Local Static Air-Gap Corpus)",
+      "num_documents": 24,
+      "num_queries": 110,
+      "domains_covered": "Local Static Docs (SA-CMS, AI Architecture, Cryptography, Incremental Stream)",
+      "overall_accuracy_pct": 57.27,
+      "answerable_accuracy_pct": 51.76,
+      "unanswerable_refusal_pct": 76.0,
+      "mean_token_f1_pct": 7.28,
+      "citation_faithfulness_pct": 96.88,
+      "avg_fetch_ingest_latency_ms": 1.33,
+      "avg_query_latency_ms": 6.785,
+      "network_required": false,
+      "privacy_airgap": true,
+      "freshness_capability": "Tĩnh (Static Local Snapshot)",
+      "unlearning_support": "Exact Unlearning O(depth) <= 5.55e-17"
+    },
+    "online_api_corpus": {
+      "mode": "Online API (Wikipedia VI/EN, arXiv, QASPER, SQuAD v2)",
+      "num_documents": 272,
+      "num_queries": 987,
+      "domains_covered": "Wikipedia VI/EN, arXiv (AI/NLP/Crypto/Systems), QASPER, SQuAD v2",
+      "overall_accuracy_pct": 51.57,
+      "answerable_accuracy_pct": 56.88,
+      "unanswerable_refusal_pct": 43.23,
+      "mean_token_f1_pct": 27.93,
+      "citation_faithfulness_pct": 96.71,
+      "avg_fetch_ingest_latency_ms": 435.65,
+      "avg_query_latency_ms": 15.997,
+      "network_required": true,
+      "privacy_airgap": false,
+      "freshness_capability": "Real-time API Fetch (Cập nhật tức thời)",
+      "unlearning_support": "Exact Unlearning O(depth) <= 5.55e-17"
+    },
+    "hybrid_online_to_wavecms": {
+      "mode": "Hybrid Combined (Online API Fetch -> Offline WaveCMS + Hybrid Memory)",
+      "num_documents": 296,
+      "num_queries": 1097,
+      "domains_covered": "Offline Local + Wikipedia VI/EN + arXiv + QASPER + SQuAD v2",
+      "overall_accuracy_pct": 52.14,
+      "answerable_accuracy_pct": 56.25,
+      "unanswerable_refusal_pct": 45.23,
+      "mean_token_f1_pct": 25.37,
+      "citation_faithfulness_pct": 96.73,
+      "avg_fetch_ingest_latency_ms": 400.43,
+      "avg_query_latency_ms": 15.074,
+      "network_required": "Chỉ khi nạp tài liệu mới (Optional)",
+      "privacy_airgap": "Air-Gap hoàn toàn sau khi nạp vào WaveTreeMemory",
+      "freshness_capability": "Real-time API + Local Persistence",
+      "unlearning_support": "Exact Unlearning O(depth) <= 5.55e-17"
+    }
+  },
+  "sample_comparisons": [
+    {
+      "question_id": "Q_WIKI_VI_294814_0",
+      "document_id": "WIKI_VI_294814",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": true,
+      "question": "Tài liệu định nghĩa hoặc mô tả Xử lý ngôn ngữ tự nhiên như thế nào?",
+      "gold_answer": "Xử lý ngôn ngữ tự nhiên (natural language processing - NLP) là một nhánh của trí tuệ nhân tạo tập trung vào các ứng dụng trên ngôn ngữ của con người.",
+      "baseline_standard_rag": {
+        "answer": "Xử lý ngôn ngữ tự nhiên Xử lý ngôn ngữ tự nhiên (natural language processing - NLP) là một nhánh của trí tuệ nhân tạo tập tru",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Trong trí tuệ nhân tạo thì xử lý ngôn ngữ tự nhiên là một trong những phần khó nhất vì nó liên quan đến việc phải hiểu ý nghĩa ngôn ngữ-công cụ hoàn hảo nhất của tư duy và giao tiếp.",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Trong trí tuệ nhân tạo thì xử lý ngôn ngữ tự nhiên là một trong những phần khó nhất vì nó liên quan đến việc phải hiểu ý nghĩa ngôn ngữ-công cụ hoàn hảo nhất của tư duy và giao tiếp.",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.9574
+      }
+    },
+    {
+      "question_id": "Q_WIKI_VI_294814_1",
+      "document_id": "WIKI_VI_294814",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": true,
+      "question": "Theo tài liệu về Xử lý ngôn ngữ tự nhiên, nội dung chính trong mục 'Các bước xử lý' là gì?",
+      "gold_answer": "Phân tích hình thái - Trong bước này từng từ sẽ được phân tích và các ký tự không phải chữ (như các dấu câu) sẽ được tách ra khỏi các từ.",
+      "baseline_standard_rag": {
+        "answer": "Xử lý ngôn ngữ tự nhiên Xử lý ngôn ngữ tự nhiên (natural language processing - NLP) là một nhánh của trí tuệ nhân tạo tập tru",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Các bước xử lý Phân tích hình thái - Trong bước này từng từ sẽ được phân tích và các ký tự không phải chữ (như các dấu câu) sẽ được tách ra khỏi các từ.",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Các bước xử lý Phân tích hình thái - Trong bước này từng từ sẽ được phân tích và các ký tự không phải chữ (như các dấu câu) sẽ được tách ra khỏi các từ.",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.991
+      }
+    },
+    {
+      "question_id": "Q_WIKI_VI_294814_UNANS",
+      "document_id": "WIKI_VI_294814",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": false,
+      "question": "Tài liệu về Xử lý ngôn ngữ tự nhiên có công bố mã số ngân sách tài trợ cụ thể năm 2099 và chữ ký kiểm toán nội bộ không?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Xử lý ngôn ngữ tự nhiên Xử lý ngôn ngữ tự nhiên (natural language processing - NLP) là một nhánh của trí tuệ nhân tạo tập tru",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Trong trí tuệ nhân tạo thì xử lý ngôn ngữ tự nhiên là một trong những phần khó nhất vì nó liên quan đến việc phải hiểu ý nghĩa ngôn ngữ-công cụ hoàn hảo nhất của tư duy và giao tiếp.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Bằng chứng hiện có không đủ để đưa ra câu trả lời tin cậy.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_WIKI_VI_8570_0",
+      "document_id": "WIKI_VI_8570",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": true,
+      "question": "Tài liệu định nghĩa hoặc mô tả Trí tuệ nhân tạo như thế nào?",
+      "gold_answer": "Trí tuệ nhân tạo (tiếng Anh: artificial intelligence, viết tắt là AI) là khả năng của các hệ thống máy tính thực hiện các nhiệm vụ liên quan đến trí thông minh của con người, như học tập, suy luận, giải quyết vấn đề, nhận thức và đưa ra quyết định.",
+      "baseline_standard_rag": {
+        "answer": "ng robot và trí tuệ nhân tạo Danh sách sách về trí tuệ nhân tạo",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Trí tuệ nhân tạo Trí tuệ nhân tạo (tiếng Anh: artificial intelligence, viết tắt là AI) là khả năng của các hệ thống máy tính thực hiện các nhiệm vụ liên quan đến trí thông minh của con người, như học tập, suy luận, giải quyết vấn đề, nhận thức và đưa ra quyết ",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Trí tuệ nhân tạo Trí tuệ nhân tạo (tiếng Anh: artificial intelligence, viết tắt là AI) là khả năng của các hệ thống máy tính thực hiện các nhiệm vụ liên quan đến trí thông minh của con người, như học tập, suy luận, giải quyết vấn đề, nhận thức và đưa ra quyết ",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.973
+      }
+    },
+    {
+      "question_id": "Q_WIKI_VI_8570_UNANS",
+      "document_id": "WIKI_VI_8570",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": false,
+      "question": "Tài liệu về Trí tuệ nhân tạo có công bố mã số ngân sách tài trợ cụ thể năm 2099 và chữ ký kiểm toán nội bộ không?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "ng robot và trí tuệ nhân tạo Danh sách sách về trí tuệ nhân tạo",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Trí tuệ nhân tạo ban đầu được thành lập như một ngành học thuật vào năm 1956, và lĩnh vực này đã trải qua nhiều chu kỳ lạc quan trong suốt lịch sử, xen kẽ với nó là những giai đoạn thất vọng và mất nguồn tài trợ, được gọi là mùa đông AI.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Bằng chứng hiện có không đủ để đưa ra câu trả lời tin cậy.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_WIKI_VI_24278_UNANS",
+      "document_id": "WIKI_VI_24278",
+      "source": "wikipedia_vi",
+      "language": "vi",
+      "answerable": false,
+      "question": "Tài liệu về Học máy có công bố mã số ngân sách tài trợ cụ thể năm 2099 và chữ ký kiểm toán nội bộ không?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "y vẫn có các tiến bộ trong học máy như thuật toán lan truyền ngược được công bố bởi các nhà khoa học David Rumelhart, Geoffrey H",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Tối ưu hóa Hầu hết các thuật toán học máy đều được đúc kết thành một bài toán tối ưu hóa: tìm bộ tham số w của mô hình sao cho hàm mất mát (thể hiện sai số giữa dự đoán của mô hình và kết quả thực tế) đạt giá trị nhỏ nhất có thể trên tập dữ liệu huấn luyện.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Bằng chứng hiện có không đủ để đưa ra câu trả lời tin cậy.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_21652_0",
+      "document_id": "WIKI_EN_21652",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": true,
+      "question": "How does the article define or introduce Natural language processing?",
+      "gold_answer": "Natural language processing (NLP) is the processing of natural language information by a computer.",
+      "baseline_standard_rag": {
+        "answer": "Natural language processing Natural language processing (NLP) is the processing of natural language information by a computer",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Natural language processing Natural language processing (NLP) is the processing of natural language information by a computer.",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Natural language processing Natural language processing (NLP) is the processing of natural language information by a computer.",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.8498
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_21652_1",
+      "document_id": "WIKI_EN_21652",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": true,
+      "question": "According to the article on Natural language processing, what is described in the 'History' section?",
+      "gold_answer": "Natural language processing has its roots in the 1950s.",
+      "baseline_standard_rag": {
+        "answer": "History Natural language processing has its roots in the 1950s.",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "History Natural language processing has its roots in the 1950s.",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "History Natural language processing has its roots in the 1950s.",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.9908
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_21652_UNANS",
+      "document_id": "WIKI_EN_21652",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": false,
+      "question": "Does the article on Natural language processing specify the exact 2099 budget allocation code and internal audit serial number?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Natural language processing Natural language processing (NLP) is the processing of natural language information by a computer",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Natural language processing Natural language processing (NLP) is the processing of natural language information by a computer.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "The available evidence is insufficient to provide a reliable answer.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_233488_0",
+      "document_id": "WIKI_EN_233488",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": true,
+      "question": "How does the article define or introduce Machine learning?",
+      "gold_answer": "Machine learning (ML) is a field of study in artificial intelligence concerned with the development and study of statistical algorithms that can learn from  data and generalize to unseen data, and thus perform tasks without being explicitly programmed.",
+      "baseline_standard_rag": {
+        "answer": "s machine learning approaches in performance. The resulting dominance of machine learning within the field of AI from the late 2",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Machine learning models are often vulnerable to manipulation or evasion via adversarial machine learning.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Machine learning models are often vulnerable to manipulation or evasion via adversarial machine learning.",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.9116
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_233488_UNANS",
+      "document_id": "WIKI_EN_233488",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": false,
+      "question": "Does the article on Machine learning specify the exact 2099 budget allocation code and internal audit serial number?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Machine learning Machine learning (ML) is a field of study in artificial intelligence concerned with the development and stud",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Statistics and mathematical optimisation methods compose the foundations of machine learning.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "The available evidence is insufficient to provide a reliable answer.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_WIKI_EN_1164_UNANS",
+      "document_id": "WIKI_EN_1164",
+      "source": "wikipedia_en",
+      "language": "en",
+      "answerable": false,
+      "question": "Does the article on Artificial intelligence specify the exact 2099 budget allocation code and internal audit serial number?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Artificial intelligence Artificial intelligence (AI) is the capability of computational systems to perform tasks typically as",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Artificial intelligence laboratories were set up at a number of British and U.S.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "The available evidence is insufficient to provide a reliable answer.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.15
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10055v2_0",
+      "document_id": "ARXIV_2012.10055v2",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": true,
+      "question": "What problem or method is proposed in the paper 'End-to-End Speaker Diarization as Post-Processing'?",
+      "gold_answer": "This paper investigates the utilization of an end-to-end diarization model as post-processing of conventional clustering-based diarization.",
+      "baseline_standard_rag": {
+        "answer": "End-to-End Speaker Diarization as Post-Processing Abstract",
+        "refused": false,
+        "correct": true
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "End-to-End Speaker Diarization as Post-Processing",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "End-to-End Speaker Diarization as Post-Processing",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.991
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10055v2_UNANS",
+      "document_id": "ARXIV_2012.10055v2",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": false,
+      "question": "What exact GPU hourly rental price in VND is reported in 'End-to-End Speaker Diarization as Post-Processing'?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "End-to-End Speaker Diarization as Post-Processing Abstract",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "End-to-End Speaker Diarization as Post-Processing",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "The available evidence is insufficient to provide a reliable answer.",
+        "refused": true,
+        "correct": true,
+        "confidence": 0.25
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10187v1_0",
+      "document_id": "ARXIV_2012.10187v1",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": true,
+      "question": "What problem or method is proposed in the paper 'Regularized Attentive Capsule Network for Overlapped Relation Extraction'?",
+      "gold_answer": "Distantly supervised relation extraction has been widely applied in knowledge base construction due to its less requirement of human efforts.",
+      "baseline_standard_rag": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction Abstract",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.97
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10187v1_UNANS",
+      "document_id": "ARXIV_2012.10187v1",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": false,
+      "question": "What exact GPU hourly rental price in VND is reported in 'Regularized Attentive Capsule Network for Overlapped Relation Extraction'?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction Abstract",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Regularized Attentive Capsule Network for Overlapped Relation Extraction",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.9621
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10226v1_0",
+      "document_id": "ARXIV_2012.10226v1",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": true,
+      "question": "What problem or method is proposed in the paper 'Should I visit this place? Inclusion and Exclusion Phrase Mining from Reviews'?",
+      "gold_answer": "Although several automatic itinerary generation services have made travel planning easy, often times travellers find themselves in unique situations where they cannot make the best out of their trip.",
+      "baseline_standard_rag": {
+        "answer": "Should I visit this place? Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.948
+      }
+    },
+    {
+      "question_id": "Q_ARXIV_2012.10226v1_UNANS",
+      "document_id": "ARXIV_2012.10226v1",
+      "source": "arxiv",
+      "language": "en",
+      "answerable": false,
+      "question": "What exact GPU hourly rental price in VND is reported in 'Should I visit this place? Inclusion and Exclusion Phrase Mining from Reviews'?",
+      "gold_answer": "",
+      "baseline_standard_rag": {
+        "answer": "Should I visit this place? Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "Inclusion and Exclusion Phrase Mining from Reviews",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.9404
+      }
+    },
+    {
+      "question_id": "QASPER_b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54",
+      "document_id": "QASPER_1912.01214",
+      "source": "qasper",
+      "language": "en",
+      "answerable": true,
+      "question": "which multilingual approaches do they compare with?",
+      "gold_answer": "BIBREF19; BIBREF20",
+      "baseline_standard_rag": {
+        "answer": "TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-lingual transfer without pretraining BIBREF16.",
+        "refused": false,
+        "correct": true
+      },
+      "proposed_wave_hybrid": {
+        "answer": "We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-lingual transfer without pretraining BIBREF16.",
+        "refused": false,
+        "correct": true,
+        "confidence": 0.9638
+      }
+    },
+    {
+      "question_id": "QASPER_f5e6f43454332e0521a778db0b769481e23e7682",
+      "document_id": "QASPER_1912.01214",
+      "source": "qasper",
+      "language": "en",
+      "answerable": true,
+      "question": "what are the pivot-based baselines?",
+      "gold_answer": "pivoting; pivoting$_{\\rm m}$",
+      "baseline_standard_rag": {
+        "answer": "from source-pivot or pivot-target parallel data BIBREF13, BIBREF14. Although the pivot-based methods can achieve not bad perfor",
+        "refused": false,
+        "correct": false
+      },
+      "baseline_legacy_sa_cms": {
+        "answer": "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines.",
+        "refused": false,
+        "correct": false
+      },
+      "proposed_wave_hybrid": {
+        "answer": "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines.",
+        "refused": false,
+        "correct": false,
+        "confidence": 0.9853
+      }
+    }
+  ]
+}

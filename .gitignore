@@ -35,7 +35,6 @@ htmlcov/
 # Local offline runtime generated files & heavy weights (>100MB)
 local_runtime/model/*.safetensors
 local_runtime/snapshots/
-local_runtime/parsed/*.json
 local_runtime/parsed/DOC_179*
 local_runtime/parsed/LIFECYCLE_DOC_*
 local_runtime/parsed/TEST_DOC_*
@@ -60,5 +59,11 @@ scratch_bench.py
 checkpoints/train_5m/
 checkpoints/train_10m/
 checkpoints/*.pt
-checkpoints/**/STOP_TRAINING
 logs/*.log
+
+checkpoints/train_20m/*.pt
+!checkpoints/train_20m/training_20m_log.json
+!checkpoints/train_20m/training_20m_manifest.json
+checkpoints/train_api_expanded/*.pt
+!checkpoints/train_api_expanded/api_training_report.json
+!checkpoints/train_api_expanded/training_20m_log.json

@@ -1,0 +1,36 @@
+{
+  "protocol": "SA-CMS 20M Continuous Training",
+  "target_tokens": 20000000,
+  "actual_tokens_trained": 20000007,
+  "total_epochs": 166,
+  "final_train_loss": 0.0666,
+  "average_throughput_tokens_sec": 2392.52,
+  "peak_vram_mb": 888.3,
+  "completion_time_utc": "2026-11-16 09:07:42 UTC",
+  "checkpoints": [
+    {
+      "file_name": "cms_checkpoint_10.1m.pt",
+      "size_bytes": 127446850,
+      "size_mb": 121.54,
+      "sha256": "e76820d8c787f23ee1ac43a504f166323cb705c9c3dc6132bc60c82c1668c533"
+    },
+    {
+      "file_name": "cms_checkpoint_15.2m.pt",
+      "size_bytes": 127446850,
+      "size_mb": 121.54,
+      "sha256": "e33a2c295d89023f8994d7f7aa952aa483399a398a2742b13bb05ac4408ad262"
+    },
+    {
+      "file_name": "cms_checkpoint_20.0m.pt",
+      "size_bytes": 127446850,
+      "size_mb": 121.54,
+      "sha256": "92154217bcb0b19f321a14f4fc4aaee52de169938c8dcb9df972018c915edd4c"
+    },
+    {
+      "file_name": "cms_20m_tokens_final.pt",
+      "size_bytes": 127446914,
+      "size_mb": 121.54,
+      "sha256": "26729965c726f0cbbdd96b8efb67f541b72afd9fd5e0ab5e74c594a972427a56"
+    }
+  ]
+}
