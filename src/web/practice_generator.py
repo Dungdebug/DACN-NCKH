@@ -287,6 +287,49 @@ def _generate_generic_offline(
     return "\n".join(lines)
 
 
+def _generate_crypto_offline(seed: Optional[int] = None) -> str:
+    """Generates similar classical cipher (Caesar / Affine mod 26) formulas, worked example, and 2 exercises."""
+    rng = random.Random(seed)
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    k_caesar = rng.choice([3, 5, 7, 9, 11])
+    word = rng.choice(["DATA", "CODE", "SAFE", "CHAT"])
+    cipher_caesar = "".join(alphabet[(alphabet.index(ch) + k_caesar) % 26] for ch in word)
+
+    # Exercise 1: Caesar encryption with different key
+    q1_k = rng.choice([k for k in (4, 6, 8, 10) if k != k_caesar])
+    q1_word = rng.choice(["TEST", "LOCK", "HASH"])
+    q1_cipher = "".join(alphabet[(alphabet.index(ch) + q1_k) % 26] for ch in q1_word)
+
+    # Exercise 2: Affine encryption E(x) = (a*x + b) mod 26
+    a_val = rng.choice([3, 5, 7])
+    b_val = rng.choice([4, 6, 8, 11])
+    x_val = rng.choice([2, 4, 7, 10])
+    ch_in = alphabet[x_val]
+    y_val = (a_val * x_val + b_val) % 26
+    ch_out = alphabet[y_val]
+
+    return (
+        "### 🔐 Công thức suy dẫn & biến đổi tương tự (Chế độ Offline — Symbolic)\n"
+        "- **Mã hóa / Giải mã dịch vòng (Caesar mod 26):**\n"
+        "  - Mã hóa: `E(x) = (x + k) mod 26`\n"
+        "  - Giải mã: `D(y) = (y - k) mod 26` (với A=0, B=1, ..., Z=25)\n"
+        "- **Mã hóa / Giải mã Affine (mở rộng tuyến tính):**\n"
+        "  - Mã hóa: `E(x) = (a·x + b) mod 26` (với `gcd(a, 26) = 1`)\n"
+        "  - Giải mã: `D(y) = a⁻¹·(y - b) mod 26`\n\n"
+        "### 📝 Ví dụ tương tự (tự động sinh & tính toán chính xác)\n"
+        f"**Đề bài:** Dùng hệ mã dịch vòng (Caesar) với khóa `k = {k_caesar}` để mã hóa bản rõ **`{word}`**.\n"
+        f"- **Bước 1 (Ánh xạ số):** {', '.join(f'{c}={alphabet.index(c)}' for c in word)}.\n"
+        f"- **Bước 2 (Áp dụng E(x) = (x + {k_caesar}) mod 26):** "
+        f"{', '.join(f'({alphabet.index(c)}+{k_caesar}) mod 26 = {(alphabet.index(c)+k_caesar)%26} ({alphabet[(alphabet.index(c)+k_caesar)%26]})' for c in word)}.\n"
+        f"- **Kết quả:** Bản mã thu được là **`{cipher_caesar}`**.\n\n"
+        "### ✍️ Bài tập tự luyện\n"
+        f"1. **Bài 1 (Caesar):** Mã hóa bản rõ **`{q1_word}`** bằng thuật toán Caesar với khóa `k = {q1_k}`.\n"
+        f"   - *Đáp án kiểm tra:* Bản mã là **`{q1_cipher}`**.\n"
+        f"2. **Bài 2 (Affine):** Cho hệ mã Affine với `a = {a_val}, b = {b_val}`. Hãy mã hóa ký tự **`{ch_in}`** (vị trí `x = {x_val}`).\n"
+        f"   - *Đáp án kiểm tra:* `E({x_val}) = ({a_val}×{x_val} + {b_val}) mod 26 = {y_val}` → ký tự **`{ch_out}`**."
+    )
+
+
 def generate_practice_offline(
     query: str,
     context_text: str,
@@ -302,6 +345,9 @@ def generate_practice_offline(
     elif any(k in combined_norm for k in ("adn", "nucleotide", "adenin", "guanin", "lien ket hydro", "chu ky xoan", "nhan doi")):
         body = _generate_dna_offline(seed=seed)
         domain = "biology_dna"
+    elif any(k in combined_norm for k in ("mod 26", "caesar", "affine", "he ma", "ma hoa co dien", "ban ro", "ban ma")):
+        body = _generate_crypto_offline(seed=seed)
+        domain = "cryptography_classical"
     else:
         body = _generate_generic_offline(query, context_text, formulas, examples, seed=seed)
         domain = "generic_formula"

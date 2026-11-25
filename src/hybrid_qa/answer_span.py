@@ -546,6 +546,14 @@ def select_best_sentence(query: str, sentences: Sequence[str], section_titles: O
     q_low = strip_accents(query.lower())
     is_general_concept = any(w in q_low for w in ["la gi", "gioi thieu", "khai niem", "bao nhieu loai", "cac loai", "phuong phap", "phan loai"])
     quoted_matches = [strip_accents(qm.strip().lower()) for qm in re.findall(r"['\"]([^'\"]{2,60})['\"]", query or "")]
+    q_subj = re.sub(
+        r"^(?:hay\s+|cho\s+biet\s+|trinh\s+bay\s+|giai\s+thich\s+|neu\s+)?(?:khai\s+niem\s+|dinh\s+nghia\s+)?",
+        "",
+        q_low.strip().rstrip("?!."),
+    ).strip()
+    q_subj = re.sub(r"\s+(?:la\s+gi|nhu\s+the\s+nao|ra\s+sao)$", "", q_subj).strip()
+    if len(q_subj.split()) < 2 or len(q_subj.split()) > 6:
+        q_subj = ""
 
     best, best_score = "", -1.0
     for index, sentence in enumerate(sentences):
@@ -554,6 +562,13 @@ def select_best_sentence(query: str, sentences: Sequence[str], section_titles: O
             continue
         s_norm = strip_accents(sentence_clean.lower())
         score = len(q_tokens & _tokens(sentence_clean)) * 2.0
+
+        if q_subj:
+            subj_prefix = re.split(r":|\s+la\s+", s_norm, maxsplit=1)[0]
+            if s_norm.startswith(q_subj) or q_subj in subj_prefix:
+                score += 6.0
+            elif q_subj in s_norm:
+                score += 2.0
 
         # Quoted entity match bonus
         for qm in quoted_matches:

@@ -1,0 +1,19 @@
+# Bài 2: PHẢN ỨNG OXI HÓA - KHỬ VÀ BẢO TOÀN ELECTRON
+
+## 2.1. Khái niệm cơ bản
+- Chất khử (chất bị oxi hóa) là chất nhường electron, có số oxi hóa tăng sau phản ứng.
+- Chất oxi hóa (chất bị khử) là chất nhận electron, có số oxi hóa giảm sau phản ứng.
+- Quá trình oxi hóa (sự oxi hóa) là quá trình nhường electron; quá trình khử (sự khử) là quá trình nhận electron.
+- Phản ứng oxi hóa - khử là phản ứng hóa học trong đó có sự chuyển electron giữa các chất tham gia, nghĩa là quá trình nhường và nhận electron luôn diễn ra đồng thời.
+
+## 2.2. Nguyên tắc bảo toàn electron
+Trong một phản ứng oxi hóa - khử, tổng số mol electron do chất khử nhường luôn bằng tổng số mol electron do chất oxi hóa nhận:
+$\sum n(e\text{ nhường}) = \sum n(e\text{ nhận})$
+Nhờ nguyên tắc bảo toàn electron, ta không cần cân bằng toàn bộ phương trình phức tạp mà vẫn thiết lập được mối liên hệ định lượng giữa chất khử và chất oxi hóa.
+
+## Ví dụ 2.1
+Đề bài: Hòa tan hoàn toàn 11,2 gam Fe vào dung dịch HNO3 loãng dư, thu được V lít khí NO (sản phẩm khử duy nhất, đo ở ĐKC 25°C, 1 bar) và dung dịch chứa m gam muối Fe(NO3)3.
+Bước 1: Tính số mol Fe: n(Fe) = 11,2 / 56 = 0,2 mol. Quá trình oxi hóa: Fe -> Fe3+ + 3e, suy ra tổng số mol electron nhường là 0,2 * 3 = 0,6 mol e.
+Bước 2: Áp dụng bảo toàn electron: số mol electron nhận để tạo NO (N+5 + 3e -> N+2) bằng 0,6 mol e, nên n(NO) = 0,6 / 3 = 0,2 mol.
+Bước 3: Thể tích khí NO ở ĐKC (25°C, 1 bar, 1 mol khí chiếm 24,79 lít): V = 0,2 * 24,79 = 4,958 lít NO.
+Bước 4: Khối lượng muối Fe(NO3)3 thu được là m = 0,2 * 242 = 48,4 gam.

@@ -1,0 +1,11 @@
+# PHẦN 1: BỐI CẢNH VÀ BÀI TOÁN
+- Các mô hình cũ đời 1995 thường gặp tràn ngữ cảnh khi văn bản dài hơn 512 token.
+- Chi phí tìm kiếm tuyến tính O(N) làm chậm thời gian phản hồi.
+
+# PHẦN 2: KIẾN TRÚC GIẢI THÍCH WAVECMS
+- WaveCMS phân rã tài liệu theo cấu trúc mục bằng biến đổi Wavelet Haar để lưu trữ gọn nhẹ.
+- Cơ chế Sparse-LSE giúp định tuyến truy xuất trong thời gian O(log N) với độ chính xác định tuyến cao.
+- Nhờ thống kê đủ số nguyên int64 nên hệ thống xóa tri thức với sai số nhỏ hơn 5.55e-17 trong 87.2 ms.
+- Trên thực nghiệm 64 tài liệu, mô hình đạt routing hit@1 = 0.70.
+- Tuy nhiên, hệ thống đòi hỏi tài liệu đầu vào phải có đề mục phân đoạn rõ ràng.
+- Ngoài ra, bảng tham số chi tiết ghi nhận dung lượng bộ nhớ chiếm 743 MB VRAM.

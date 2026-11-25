@@ -281,8 +281,18 @@
 
     let safe = escapeHtml(rawText || "");
 
-    // Bold & inline code
+    // Collapsible answer toggle for practice exercises
+    safe = safe.replace(
+      /(?:^|\n)[ \t]*(?:[-•*][ \t]+)?\*Đáp án kiểm tra:\*[ \t]*([^\n]+)/g,
+      '\n<details class="exercise-answer-toggle"><summary>👁️ Xem đáp án kiểm tra</summary><div class="exercise-answer-body">$1</div></details>'
+    );
+
+    // Headings (### Title)
+    safe = safe.replace(/(?:^|\n)###[ \t]+([^\n]+)/g, "\n<h4>$1</h4>");
+
+    // Bold, italic & inline code
     safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    safe = safe.replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s.,;:!?)]|$)/g, "$1<em>$2</em>");
     safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
 
     // Replace [1], [2] or [DOC_ID::P001] with interactive citation pills

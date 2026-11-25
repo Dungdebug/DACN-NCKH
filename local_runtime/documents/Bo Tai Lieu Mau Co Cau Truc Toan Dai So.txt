@@ -1,0 +1,16 @@
+# PHẦN 1: ĐẠI SỐ - PHƯƠNG TRÌNH BẬC HAI
+
+## 1.1. Định nghĩa và công thức nghiệm
+Phương trình bậc hai một ẩn có dạng tổng quát là ax^2 + bx + c = 0 (với a != 0).
+Biệt thức Delta được tính theo công thức Delta = b^2 - 4ac.
+Nếu Delta > 0 thì phương trình có hai nghiệm phân biệt x1, x2.
+
+## 1.2. Hệ thức Vi-ét
+Nếu phương trình ax^2 + bx + c = 0 (a != 0) có hai nghiệm x1, x2 thì theo hệ thức Vi-ét:
+- Tổng hai nghiệm: x1 + x2 = -b / a
+- Tích hai nghiệm: x1 * x2 = c / a
+
+## Ví dụ 1.1
+Giải phương trình bậc hai: 2x^2 - 7x + 3 = 0.
+Ta có Delta = (-7)^2 - 4 * 2 * 3 = 49 - 24 = 25 > 0.
+Do đó phương trình có hai nghiệm phân biệt x1 = 3 và x2 = 0.5.

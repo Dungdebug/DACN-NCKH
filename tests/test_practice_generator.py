@@ -51,7 +51,7 @@ def test_offline_dna_generation():
     assert "Bài tập tự luyện" in res["answer"]
 
 
-def test_offline_generic_formula_generation():
+def test_offline_crypto_generation():
     ctx = (
         "Công thức mã hóa affine: E(x) = (a * x + b) mod 26.\n"
         "Ví dụ 1: Cho a = 5, b = 8, x = 2 thì E(2) = 18."
@@ -63,8 +63,25 @@ def test_offline_generic_formula_generation():
         seed=1,
     )
     assert res["engine"] == "offline_symbolic_template"
+    assert res["domain"] == "cryptography_classical"
+    assert "mod 26" in res["answer"]
+    assert "Bài tập tự luyện" in res["answer"]
+
+
+def test_offline_generic_formula_generation():
+    ctx = (
+        "Định luật II Newton: F = m * a.\n"
+        "Ví dụ 1: Một vật khối lượng m = 2 kg chịu gia tốc a = 3 m/s² thì lực F = 6 N."
+    )
+    res = generate_practice_content(
+        query="sinh thêm ví dụ tương tự và bài tập",
+        context_text=ctx,
+        mode="offline",
+        seed=1,
+    )
+    assert res["engine"] == "offline_symbolic_template"
     assert res["domain"] == "generic_formula"
-    assert "E(x) = (a * x + b) mod 26" in res["answer"]
+    assert "F = m * a" in res["answer"]
     assert "Bài tập tự luyện gợi ý" in res["answer"]
 
 

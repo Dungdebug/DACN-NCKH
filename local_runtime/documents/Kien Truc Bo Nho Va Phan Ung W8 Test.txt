@@ -1,0 +1,24 @@
+# PHẦN 1: CƠ SỞ LÝ THUYẾT CHUNG
+
+## 1.1. Tổng quan lịch sử
+- Bộ nhớ cổ điển chỉ lưu trữ theo khối kích thước cố định năm 1998.
+- Các mô hình cũ thường mất ngữ cảnh khi văn bản vượt quá 512 token.
+
+## 1.2. Hạn chế cần khắc phục
+- Độ phức tạp truy xuất tăng tuyến tính O(N) khi số đoạn tăng nhanh.
+
+# PHẦN 2: KIẾN TRÚC WAVECMS-R3 VÀ CƠ CHẾ VẬN HÀNH
+
+## 2.1. Quy trình 3 bước xử lý
+- Bước 1: Phân rã tài liệu theo cấu trúc chương mục bằng biến đổi Wavelet Haar nhị phân.
+- Bước 2: Định tuyến Sparse-LSE giúp độ phức tạp truy vấn giảm còn O(log N) với độ khớp 100%.
+- Bước 3: Kiểm soát rủi ro ảo giác bằng Mondrian Conformal Risk Control ở mức epsilon 0.10.
+
+## 2.2. Đặc điểm nổi bật và thành phần phụ trợ
+- Xóa tri thức chuẩn bit int64 với sai số nhỏ hơn 5.55e-17 trong 87.2 ms.
+- Hệ thống bảo toàn 100% thông tin gốc của phần không bị xóa.
+- Hỗ trợ 4 chế độ tư duy: Nhanh, Suy nghĩ Sâu, Tư duy Rộng và Sâu + Rộng.
+- Độ trễ trung bình khi tắt PMI đạt 28.19 ms trên GTX 1650 Ti.
+
+## Ví dụ 2.1
+Giả sử có 64 tài liệu với 1598 nút lá, bộ định tuyến Sparse-LSE đạt routing hit@1 = 0.70 trong khi mean_key sụp về 0.00.

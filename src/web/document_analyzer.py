@@ -65,7 +65,7 @@ def _extract_compound_concept_parts(query: str) -> List[str]:
         flags=re.IGNORECASE,
     ).strip()
     q = re.sub(
-        r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+gì\s+khác\s+nhau|khác\s+nhau\s+như\s+thế\s+nào)$",
+        r"\s+(?:là\s+gì|như\s+thế\s+nào|ra\s+sao|có\s+gì\s+khác\s+nhau|khác\s+nhau\s+như\s+thế\s+nào|là\s+hai\s+(?:chất|khái\s+niệm|loại)\s+khác\s+nhau|khác\s+nhau\s+ở\s+điểm\s+nào|khác\s+gì\s+nhau)$",
         "",
         q,
         flags=re.IGNORECASE,
@@ -631,7 +631,8 @@ class DocumentAnalyzer:
             ex_hits, fz_hits = _fuzzy_token_overlap(target_tokens, s_tokens)
             score = ex_hits * 2.5 + fz_hits * 1.8
             if subject_phrase_norm:
-                subj_part = s_norm.split(" la ", 1)[0] if " la " in s_norm else s_norm[:len(subject_phrase_norm) + 12]
+                subj_split = re.split(r":|\s+la\s+", s_norm, maxsplit=1)
+                subj_part = subj_split[0] if len(subj_split) > 1 else s_norm[:len(subject_phrase_norm) + 16]
                 if s_norm.startswith(subject_phrase_norm) or subject_phrase_norm in subj_part:
                     score += 10.0
                 else:
@@ -680,8 +681,26 @@ class DocumentAnalyzer:
                     score -= 6.0
             return score
 
+        q_subject_norm = re.sub(
+            r"^(?:hay\s+|cho\s+biet\s+|trinh\s+bay\s+|giai\s+thich\s+|neu\s+)?(?:khai\s+niem\s+|dinh\s+nghia\s+)?",
+            "",
+            q_norm.strip().rstrip("?!."),
+        ).strip()
+        q_subject_norm = re.sub(
+            r"\s+(?:la\s+gi|nhu\s+the\s+nao|ra\s+sao)$",
+            "",
+            q_subject_norm,
+        ).strip()
+        if len(q_subject_norm.split()) > 6 or any(sep in f" {q_subject_norm} " for sep in (" va ", " voi ", " so voi ")):
+            q_subject_norm = ""
+
         def _score_body_sentence(sent: str) -> float:
-            return _score_sentence_for_tokens(sent, q_intent_tokens, exp_tokens)
+            return _score_sentence_for_tokens(
+                sent,
+                q_intent_tokens,
+                exp_tokens,
+                subject_phrase_norm=q_subject_norm,
+            )
 
         # Compound concept decomposition fallback (e.g. "chất thử và chất oxi hóa là gì", "phân biệt A với B")
         if len(sub_query_sentences) < 2:
@@ -1078,6 +1097,7 @@ class DocumentAnalyzer:
                 "cac he", "cac he ma", "he ma", "phuong phap", "may phuong phap",
             ])
             asks_example = any(k in q_norm for k in ["vi du", "cho vi du", "minh hoa", "bai toan"])
+            asks_formula = any(k in q_norm for k in ["cong thuc", "bieu thuc", "he thuc", "tinh toan", "phuong trinh"])
             asks_concept = any(k in q_norm for k in ["la gi", "khai niem", "gioi thieu", "tong quan"])
             is_multi_facet = (asks_concept and (asks_types or asks_example)) or (asks_types and asks_example)
 
@@ -1105,25 +1125,59 @@ class DocumentAnalyzer:
                     sys_list_str = ", ".join(f"{name} {lbl}" for name, lbl in other_systems)
                     multi_facet_bullets.append(f"- **Các hệ mã hóa cụ thể trong tài liệu bao gồm:** {sys_list_str}.")
 
-            if is_multi_facet or asks_example:
-                examples_found: List[Tuple[str, str]] = []
-                for p_idx, p in enumerate(evidence_passages):
-                    p_text = getattr(p, "text", "") if hasattr(p, "text") else str(p)
-                    p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
-                    for line in p_text.splitlines():
-                        line_clean = line.strip().lstrip("-*• ")
-                        line_norm = strip_accents(line_clean.lower())
-                        if any(marker in line_norm for marker in ["cho p =", "vi du", "cong thuc ma hoa", "ta co: zi =", "p = c = k"]):
-                            if line_clean and not any(line_clean in ex for ex, _ in examples_found):
-                                examples_found.append((line_clean, p_cit))
-                                used_citation_labels.add(p_cit)
-                                if len(examples_found) >= 2:
-                                    break
-                    if len(examples_found) >= 2:
-                        break
-                if examples_found:
-                    ex_list_str = "; ".join(f"{ex} {lbl}" for ex, lbl in examples_found)
-                    multi_facet_bullets.append(f"- **Ví dụ và công thức minh họa:** {ex_list_str}.")
+            if is_multi_facet or asks_example or asks_formula or answer_mode == "detailed":
+                from src.web.formula_example_scanner import (
+                    format_example_blocks_markdown,
+                    format_formula_blocks_markdown,
+                    scan_passages_for_formulas_and_examples,
+                )
+
+                scanned_formulas, scanned_examples = scan_passages_for_formulas_and_examples(
+                    evidence_passages,
+                    passage_cit_labels=passage_to_cit_label,
+                )
+                body_norm = strip_accents(body.lower())
+
+                if (asks_formula or answer_mode == "detailed" or is_multi_facet) and scanned_formulas:
+                    fresh_formulas = [
+                        fb for fb in scanned_formulas
+                        if strip_accents(fb.expression.lower()) not in body_norm
+                    ]
+                    target_formulas = fresh_formulas if fresh_formulas else (scanned_formulas if (asks_formula or len(scanned_formulas) >= 2) else [])
+                    if target_formulas:
+                        multi_facet_bullets.append(format_formula_blocks_markdown(target_formulas))
+                        for fb in target_formulas[:5]:
+                            used_citation_labels.add(fb.citation_label)
+
+                if (asks_example or answer_mode == "detailed" or is_multi_facet) and scanned_examples:
+                    fresh_examples = [
+                        eb for eb in scanned_examples
+                        if strip_accents(eb.title.lower()) not in body_norm
+                        or any(strip_accents(st.lower()) not in body_norm for st in eb.steps)
+                    ]
+                    if fresh_examples:
+                        multi_facet_bullets.append(format_example_blocks_markdown(fresh_examples))
+                        for eb in fresh_examples[:2]:
+                            used_citation_labels.add(eb.citation_label)
+                elif is_multi_facet or asks_example:
+                    examples_found: List[Tuple[str, str]] = []
+                    for p_idx, p in enumerate(evidence_passages):
+                        p_text = getattr(p, "text", "") if hasattr(p, "text") else str(p)
+                        p_cit = passage_to_cit_label[p_idx] if p_idx < len(passage_to_cit_label) else f"[{p_idx+1}]"
+                        for line in p_text.splitlines():
+                            line_clean = line.strip().lstrip("-*• ")
+                            line_norm = strip_accents(line_clean.lower())
+                            if any(marker in line_norm for marker in ["cho p =", "vi du", "cong thuc ma hoa", "ta co: zi =", "p = c = k"]):
+                                if line_clean and not any(line_clean in ex for ex, _ in examples_found):
+                                    examples_found.append((line_clean, p_cit))
+                                    used_citation_labels.add(p_cit)
+                                    if len(examples_found) >= 2:
+                                        break
+                        if len(examples_found) >= 2:
+                            break
+                    if examples_found:
+                        ex_list_str = "; ".join(f"{ex} {lbl}" for ex, lbl in examples_found)
+                        multi_facet_bullets.append(f"- **Ví dụ và công thức minh họa:** {ex_list_str}.")
 
             if multi_facet_bullets:
                 body = f"{body}\n\n" + "\n".join(multi_facet_bullets)

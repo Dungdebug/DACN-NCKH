@@ -190,6 +190,22 @@ class DocumentChunker:
 
             sent_len = self._measure_len(clean_sent)
             sent_is_heading = self.is_heading(clean_sent)
+            is_example_step = bool(
+                re.match(
+                    r"^(?:Đề\s*bài|Bước\s*\d+|Lời\s*giải|Hướng\s*dẫn|Kết\s*luận|•)\b",
+                    clean_sent,
+                    re.IGNORECASE,
+                )
+            )
+            in_example_block = any(
+                re.match(r"^(?:Ví\s*dụ|Bài\s*toán\s*(?:mẫu|minh\s*họa)?)\b", s[0], re.IGNORECASE)
+                for s in current_sentences
+            )
+            keep_example_atomic = (
+                in_example_block
+                and is_example_step
+                and (current_len + sent_len <= int(self.chunk_size * 2.5))
+            )
 
             # 3. RULE: A heading must never be conjoined with previous section/topic sentences!
             if sent_is_heading and current_sentences:
@@ -204,6 +220,7 @@ class DocumentChunker:
             elif (
                 current_len + sent_len > self.chunk_size
                 and current_sentences
+                and not keep_example_atomic
                 and not (len(current_sentences) == 1 and self.is_heading(current_sentences[0][0]))
             ):
                 chunk_text = " ".join(s[0] for s in current_sentences).strip()
